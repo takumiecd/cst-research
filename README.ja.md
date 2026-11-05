@@ -94,3 +94,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 別研究の[座標LR pilot](docs/higgs-coordinate-lr.ja.md)はPLANNEDです。3条件をeagerで3epoch試し、条件を満たす場合だけ2seedの10epoch対比較へ進めます。固定済みCST/DST比較は変更しません。
 
 別の[深さ・層位置pilot](docs/higgs-depth-position.ja.md)はPLANNEDです。biasなし正方hidden3層で単一位置から全層CSTへ進み、新しい学習行だけで正規化し、過去の特徴量exposureを明示します。
+
+別の[Covertype転移研究](docs/covertype-transfer.ja.md)はPLANNEDです。公開runtimeのDense/CSTを有限のLR探索と3 paired seedで比べ、全9モデルのseal後だけ別heldoutを評価します。現在のdeep pilot完了とresource reviewまで実行を待ちます。

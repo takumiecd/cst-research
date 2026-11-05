@@ -108,3 +108,5 @@ Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md
 The separate [position-LR pilot](docs/higgs-coordinate-lr.md) is PLANNED: three eager3epoch arms, followed only conditionally by two10epoch paired seeds. It does not change the frozen CST/DST comparison.
 
 The separate [depth/layer-position pilot](docs/higgs-depth-position.md) is PLANNED: three bias-free square hidden layers, single-position then all-layer CST, with new train-only-normalized data and disclosed historical feature exposure.
+
+The separate [Covertype transfer study](docs/covertype-transfer.md) is PLANNED: public-runtime Dense/CST, bounded LR selection and three paired seeds; all nine models seal before separate heldout evaluation. It waits for the current deep pilot and resource review.
