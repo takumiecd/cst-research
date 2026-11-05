@@ -42,7 +42,7 @@ The [layer-position study plan](docs/higgs-layer-position-plan.md) compares
 early/middle/late hidden-layer replacements at fixed width and depth. A subsequent
 resource authorization allowed a separate bounded RTX3090 pilot alongside the
 primary L4 campaign. Its 13 cases and a separate A100 coordinate-LR followup have
-completed independent raw checks; see the
+completed independent raw checks, as has a bounded fixed-gain depth intervention; see the
 [observations and limitations](docs/bounded-validation-results.md).
 These development-only pilots do not establish a minimum alpha or complete the
 primary three-seed assessment.

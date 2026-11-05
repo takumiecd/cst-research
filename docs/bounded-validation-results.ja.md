@@ -2,7 +2,7 @@
 
 [English](bounded-validation-results.md) | **日本語**
 
-独立した探索的研究2件は、実行・回収・raw証拠の独立照合まで完了しました。
+独立した探索的研究3件は、実行・回収・raw証拠の独立照合まで完了しました。
 本命のL4・3 seed HIGGS非劣性検証は継続中です。この観測で本命を完了扱いにしたり、
 その条件を変更したりしません。両研究とも確認用tailや公式testの指標は使っていません。
 
@@ -84,9 +84,52 @@ alpha .0001へのこの判定の適用は事後的です。同じ判定を.001/.
 
 train probeで最初の置換層の初期出力RMSはCSTが約.0005、Denseが.2428でした。
 conditioningの仮説を立てる根拠ですが、表現力・初期化・最適化・activation maskの影響を
-切り分けた結果ではありません。別に固定した有限のgain実験を実行中で、この文書では
-結果を主張していません。出力gainは実効的なweightの範囲、gradientと正則化のscaleも
+切り分けた結果ではありません。別に固定した有限のgain実験の結果を以下に記録します。
+出力gainは実効的なweightの範囲、gradientと正則化のscaleも
 変えるため、純粋に初期化だけの因果実験にはなりません。
+
+## 固定gain：最小密度の全層置換でも学習するが、Denseには届かない
+
+上記A100 MIG/runtimeで、新しいDense対照、stock全3層CST、固定gain全3層CSTを、
+alpha .0001、seed17、3 epoch、LR .0003で比較しました。深層研究と完全に同じ
+train/development行とstock q1 optimizerを使います。Dense基準もこのA100 cohortの
+実測値を使い、RTX3090の値で置き換えません。密度はstock深層pilotの停止を観測した後、
+gainの結果を見る前に選んでおり、探索的な選択であることを明示します。
+
+各置換正方層に固定の正の出力gainを入れ、最初の256 train特徴で対応するDense層の
+初期RMSへ合わせます。逐次的なCPU FP64・公開`dense_weight`合成で較正し、
+ラベル・development行は使わず、clippingや目標値の探索もしません。
+gainは学習しないFP32 bufferとして全学習中固定します。実際に実行したgainは
+521.2747192382812、258.95751953125、945.0846557617188です。
+保存したstock/gainの学習可能な初期値はbyte一致し、stock tableは先行する検証済み
+深層研究とも一致しています。
+
+| Arm | 選択development CE | Accuracy | AUC |
+|---|---:|---:|---:|
+| Dense | .5476290584 | .7199800014 | .7952768061 |
+| Stock全3層CST | .6913939118 | .5295999646 | .5000000000 |
+| 固定gain全3層CST | .5910087228 | .6868199706 | .7539428246 |
+
+すべてepoch2のcheckpointを選択しています。gainはstockよりCEが.1003851891改善、
+accuracyが15.7220ポイント改善、AUCが.2539428246改善しました。一方、Denseに対しては
+CEが.0433796644、accuracyが3.3160ポイント、AUCが.0413339815劣ります。
+この予算内で観測した定数分類器の停止を解消する介入でしたが、精度差は大きく残りました。
+表現力の限界の切り分け、最小alphaの確定、gain較正のdefault採用を支持するものでは
+ありません。追加のgain epoch・seed実験は自動では行いません。
+
+全52 archive member、実source/data/runtime、較正、ordinary/stock/gain初期値、
+通常のY/dX/全gradientとfield/column norm判定、8 update・4 update再開、
+毎epochのparameter/gradient/moment/clock/CST optimizer store、選択checkpointの
+train100k/development50k予測について、rawの独立照合はPASSしました。
+Denseを含む3 armすべてで、増幅時の成分ごとの診断は失敗し、FAILED表示を維持しています。
+そのfield/column相対L2誤差は固定済み3e-4のnorm基準内でした。確認用/testは使っていません。
+
+readerだけの失敗2件も保持しています。local Torch2.13/Macで新しく構築したCST初期値が
+実Torch2.11の初期値とbyte一致しなかったこと（最大差9e-9未満）と、100k train予測を
+評価するhelperが50k行を前提にしていたことです。最終readerは保存した実初期値を
+先行stock実測へ結び、そのtensorから較正を独立に再計算し、両方の行数に同じ二値指標の
+数式を適用します。producerの数式、許容差、raw結果は変更していません。
+runtimeをまたぐ初期化のbyte一致は主張しません。
 
 ## Sourceと証拠の識別情報
 
@@ -99,9 +142,11 @@ conditioningの仮説を立てる根拠ですが、表現力・初期化・最�
 |---|---|---|---|
 | Coordinate LR | `83cb77fe84e91ae296c24f2144bd56ca9398f404` | `7ce3d76f3ea3e09084e5c2dcb37ade7581eebffbf0f22c1b74dae08b467511bd` | `b5be7229474a29e182b7978ba5270e665a941f34870d0ac9b27fcecf2ca45532` |
 | Depth13 | `f6d08ad76001a69070b0965cefe7614f192ddf3f` | `aec42b259f37bd3922a3763f4c4f5e3af9b9a926263b10128861d09b18295a15` | `95b1bf35095028623900732dfd60eca41cf80d0a896a891dc3b0f2ab75050dd3` |
+| Depth gain3 | `69d7f0636ce47db892096d7b7aacc2c2cb731b8b` | `b7b6428e80bbf18fc0cff22af2388e6818c3c9c28ad9221c98c352123666d193` | `4bfb2d41ed402fcce01b05648d52d601cee3fde820300edd6f1a15d8f80cbb7d` |
 
 Coordinate sourceは[PR7](https://github.com/takumiecd/cst-research/pull/7)、
-Depth sourceは[PR8](https://github.com/takumiecd/cst-research/pull/8)です。
+Depth sourceは[PR8](https://github.com/takumiecd/cst-research/pull/8)、
+Gain sourceは[PR9](https://github.com/takumiecd/cst-research/pull/9)です。
 再現には、この文書のcommitとは別に、測定commitのprotocolと固定inputを使います。
 新しいoutput/stateを使い、対応する資源手順に従ってください。
 CPU testやregistry validationだけではGPU結果の再現にはなりません。
@@ -115,6 +160,11 @@ CPU testやregistry validationだけではGPU結果の再現にはなりませ�
 - `higgs-depth-20261105/stats-verified-all13-01`には全13条件のcurve、case/activation
   summary、密度・位置・資源のPNG/PDF、auditがあります。先行raw auditの来歴と
   失敗したstress artifactもすべて保持しています。
+- `higgs-depth-gain-20261106/stats-actual-a100-gain-03`には全raw audit、全curve、
+  activation/gradient summary、同じcheckpointのtrain/developmentと資源のplotがあります。
+  `presentation-final-01`は適用範囲を表示した学習PNG/PDFを、そのauditと保持した
+  reader失敗の来歴へ結びます。result archive SHAは
+  `0ed924e6511005a8a780764392dcd6d6d04f8cc48b25c7e725dfbb78da4cd92f`です。
 
 Coordinate result archive SHAはseed29が
 `6300c1efd82f4804a2b4de7ea7aea654f55f574d6a8e7bcc1520697e0672ba67`、
