@@ -208,3 +208,71 @@ retain job/hardware/runtime provenance for within-job comparison controls.
 Raw source/result archives, selection inventories, masks, checkpoints, topology
 hashes and curve data remain in ignored external evidence. The registry records
 relative evidence locators, never datasets, credentials or absolute user paths.
+
+## Stage 2 assessment boundary and analysis
+
+Stage 1 remains the frozen qualification/tuning consumer at commit
+`22f2810b1bc51a599e51c8936acac310ca9455ef`. A separate Stage 2 consumer adds
+control import/retuning, independent training and the global freeze. Its
+`cst_research.experiments.higgs_dst_assessment` module provides CPU admission,
+once-only evaluation scheduling and CPU statistics. These paths have synthetic
+CPU coverage; this documentation does not claim their GPU worker has been run.
+
+The comparison-owned `original-confirmation-freeze-proof.json` is the exact
+30-model payload the unchanged original `97580582...` assessor will create,
+constructed from verified original training jobs and width freezes. It is bound
+by raw-file and canonical-JSON SHA256 in the global 78-model freeze and explicitly
+labeled a comparison-owned proof. Constructing it must not call the original
+assessor: that command creates its freeze and immediately scores the tail.
+
+The required order is:
+
+1. Finish all original and comparison training/selection; seal the 78-model manifest and the original30 proof. Run the new assessment `audit` stage, which verifies all model/data/source files without importing a benchmark or reading confirmation examples.
+2. Run the unchanged original975 `assess` once, after that global admission. Its actual30-model freeze must be canonically identical to the proof.
+3. Run the new `evaluate` stage with `--original-assessment-job`. Verify the original job's source/result archives, receipt, manifests, freeze and saved prediction metrics. Import those once-scored predictions for reused controls; never evaluate their models again. Only the 48 new DST models and any fresh alternate20-epoch controls are scored here.
+4. Run the CPU `analyze` stage on the complete saved assessment index. The original eight-configuration analysis remains separate and unchanged.
+
+A missing original assessment bundle blocks new scoring when controls are reused.
+A missing/mutated selected checkpoint, mismatched common horizon, source manifest,
+producer/reuse reference or incomplete family blocks admission. Before loading
+confirmation data, each fresh worker rechecks the complete global gate and its
+pending attempt marker. Imports are restricted to byte-verified external source
+directories for the two pinned commits. Source code from result archives is never
+executed. The official test is not loaded.
+
+The freeze seals 48 DST identities plus 30 matched-control identities, fixed
+checkpoint/metadata/learning filenames, source-manifest digests, dataset identity,
+per-width horizons and the original30 proof. `--frozen-index-sha256` must match
+that immutable artifact. `--source-index` maps each pinned commit to its verified
+cache directory and external manifest; it is not permission to run arbitrary
+source paths.
+
+Predictions, metrics, raw/array hashes and evaluation provenance are cached by
+model identity and freeze SHA. A completed result is validated and copied on
+resume without rescoring. An incomplete started attempt is preserved and refused
+rather than automatically retried; recover it explicitly before continuing.
+Reused original evaluation metadata is retained alongside the imported predictions.
+
+```bash
+python -m cst_research.experiments.higgs_dst_assessment --help
+```
+
+The stages accept these option groups:
+
+| Stage | Inputs |
+|---|---|
+| `audit` / `evaluate` | `--frozen-index`, `--frozen-index-sha256`, `--campaign-state`, `--data`, `--source-index`, `--output` |
+| `evaluate` with reused controls | Also `--original-assessment-job`, the complete verified original975 pool job |
+| `analyze` | `--assessment-index`, `--output`; reads saved predictions only |
+
+Use the authorized job driver and resource workflow for evaluation; the module
+does not allocate GPUs. CPU prediction validation/analysis uses NumPy from the
+recorded experiment environment, while registry commands remain stdlib-only.
+
+Analysis implements the fixed16 IUT and separate joint32-endpoint inferiority
+diagnostic. Direct CST–DST output includes each seed difference, mean, standard
+deviation/error and an **unadjusted pointwise two-sided95% seed-t interval**
+(df2), explicitly descriptive and conditional on the fixed examples/normal-seed
+approximation. No multiplicity-adjusted CST–DST superiority claim is made.
+Paired-example bootstrap intervals are not computed by this implementation;
+the output declares that omission rather than implying joint seed/example coverage.

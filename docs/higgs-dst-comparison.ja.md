@@ -178,3 +178,61 @@ allocated/reserved peakを残しますが、疎kernel DST実装の速度・メ�
 
 raw source/result archive、候補一覧、mask、checkpoint、topology hash、curveはignored外部証拠へ
 保存します。registryには相対locatorだけを置き、dataset・認証情報・絶対ユーザーパスは含めません。
+
+## Stage2の評価境界と解析
+
+Stage1はcommit `22f2810b1bc51a599e51c8936acac310ca9455ef`の資格確認・tuning consumerに
+固定します。別のStage2 consumerでcontrolのimport/再調整、独立学習、global freezeを追加します。
+`cst_research.experiments.higgs_dst_assessment`はCPU admission、1回限りの評価schedule、
+CPU統計を提供します。これらは合成CPU検査で確認しており、この記述はGPU workerの実行済みを
+意味しません。
+
+比較側の`original-confirmation-freeze-proof.json`は、検証済みの元学習jobと幅別freezeから
+組み立てた、変更しない元`97580582...` assessorが生成する30モデルpayloadそのものです。
+raw fileとcanonical JSONのSHA256でglobal78 freezeへ結び付け、比較側のproofと明示します。
+その生成のために元assessorを呼んではいけません。元のコマンドはfreeze生成直後に後半を評価します。
+
+順序を次に固定します。
+
+1. 元研究と比較研究の学習・選択を全て完了し、78モデルmanifestと元30モデルproofを封印する。新assessorの`audit`は全model/data/sourceを検査するが、benchmarkをimportせずconfirmation例も読まない。
+2. global admission後、変更しない元975の`assess`を1回だけ実行する。実際の30モデルfreezeのcanonical内容はproofと一致しなければならない。
+3. 新`evaluate`へ`--original-assessment-job`を渡す。元jobのsource/result archive・receipt・manifest・freeze・保存予測metricを検証し、再利用controlには既に1回評価した予測をimportする。そのモデルを再評価しない。ここで評価するのは新DST48モデルと、必要なら別途20epochで学習した新controlだけ。
+4. 完成した保存assessment indexをCPU `analyze`で解析する。元の8構成解析は独立したまま変更しない。
+
+controlを再利用する場合、元assessment bundleが欠けていれば新たな評価も止めます。
+選択checkpointの欠落・改変、共通期間・source manifest・producer/再利用参照の不一致、
+比較family未完了でもadmissionを拒否します。新workerはconfirmationを読む前に全体のgateと
+自分の未実行attempt markerを再確認します。import先は2つの固定commitについてbyte検証した
+外部source directoryだけで、result archive内のコードは実行しません。公式testも読みません。
+
+freezeにはDST48個と同期間control30個のidentity、固定checkpoint/metadata/learningファイル名、
+source-manifest digest、dataset identity、幅別期間、元30モデルproofを封印します。
+`--frozen-index-sha256`はその不変artifactと一致しなければなりません。
+`--source-index`は固定commitから検証済みcache directoryと外部manifestへの対応表であり、
+任意のsource pathを実行する許可にはしません。
+
+予測・metric・file/array hash・評価来歴をmodel identityとfreeze SHAに結び付けてcacheします。
+完了結果は再開時に検証・コピーし、再評価しません。開始済みで未完了のattemptは保全して
+拒否し、自動retryはしません。明示的に復旧してから継続します。
+元のevaluation metadataもimportした予測と一緒に保持します。
+
+```bash
+python -m cst_research.experiments.higgs_dst_assessment --help
+```
+
+stageごとのoptionは次のとおりです。
+
+| Stage | 入力 |
+|---|---|
+| `audit` / `evaluate` | `--frozen-index`, `--frozen-index-sha256`, `--campaign-state`, `--data`, `--source-index`, `--output` |
+| control再利用時の`evaluate` | 加えて`--original-assessment-job`で検証済み元975のpool job全体を指定 |
+| `analyze` | `--assessment-index`, `--output`。保存予測だけを読む |
+
+評価は承認済みjob driver・resource手順で行い、このmoduleからGPUを割り当てません。
+CPUの予測検証・解析には記録した実験環境のNumPyを使い、registry CLIは標準ライブラリだけのままです。
+
+解析は固定16構成IUTと、それから分けた32endpoint同時悪化診断を実装します。
+CST対DSTの直接比較にはseed別差・平均・標準偏差/誤差と、**多重補正しないpointwiseの
+両側95% seed-t区間**（df2）を出し、固定例・seed正規近似に条件付く記述的な値と明示します。
+多重補正したCST対DST優位は主張しません。この実装はpaired-example bootstrap区間を計算せず、
+未実施を出力に明記してseed/example joint coverageを示唆しません。
