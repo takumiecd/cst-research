@@ -138,6 +138,111 @@ class OuterEvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "trusted producer inventory"):
                 evidence.PoolJob(directory, trusted, "tracked-driver.py")
 
+    def sdk_job(self, root):
+        directory, trusted = self.make_job(root, rescued=True)
+        receipt = read(directory / "receipt.json")
+        receipt.pop("original_pool_job_status")
+        receipt.update(
+            recovery_mode="supervisor-owned SDK fresh-proxy read-only recovery",
+            credentials_scope="memory only; no cached credentials, pool database or slot state changes",
+            slot=2,
+            session="owned-session",
+            archive_bytes=(directory / "results.tar.gz").stat().st_size,
+        )
+        write(directory / "receipt.json", receipt)
+        spec = read(directory / "spec.json")
+        write(
+            directory / "recovery-intent.json",
+            {
+                "mode": "sole-supervisor-owned read-only SDK ContentsClient archive recovery with fresh proxy credentials only in memory",
+                "job": spec["id"],
+                "slot": 2,
+                "session": "owned-session",
+                "source_archive_sha256": spec["source_sha256"],
+                "cache_or_pool_state_modified": False,
+                "local_ack_client_pid": 1234,
+                "local_ack_client_state": "SIGSTOP held intentionally until full result verification",
+            },
+        )
+        write(
+            directory / "local-client-termination-after-full-verification.json",
+            {
+                "utc": "2026-11-05T10:06:23+00:00",
+                "job": spec["id"],
+                "local_client_pid": 1234,
+                "supervisor_pid": 5678,
+                "prior_state": "Ts",
+                "verified_result_directory": "/original/host/" + directory.name,
+                "remote_compute_completed_and_verified": True,
+                "pool_or_session_state_manually_modified": False,
+                "actions": [
+                    "one SIGTERM to paused owned local ACK client",
+                    "SIGCONT to deliver pending termination and return control to existing supervisor cleanup",
+                ],
+            },
+        )
+        return directory, trusted
+
+    def test_sdk_recovery_retains_sidecar_hashes_without_inventing_pool_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            directory, trusted = self.sdk_job(Path(tmp))
+            job = evidence.PoolJob(directory, trusted, "tracked-driver.py")
+            recovery = job.proof["recovery_provenance"]
+            self.assertEqual(recovery["kind"], "supervisor-sdk-fresh-proxy-recovery")
+            self.assertIsNone(recovery["original_pool_job_status"])
+            self.assertNotIn("original_pool_job_status", job.proof["receipt"])
+            self.assertEqual(
+                recovery["sidecars"]["recovery-intent.json"]["sha256"],
+                file_sha(directory / "recovery-intent.json"),
+            )
+
+    def test_sdk_recovery_rejects_mismatched_intent_and_termination(self):
+        mutations = [
+            ("recovery-intent.json", "session", "another-session"),
+            ("recovery-intent.json", "source_archive_sha256", "f" * 64),
+            ("recovery-intent.json", "slot", 1),
+            ("recovery-intent.json", "cache_or_pool_state_modified", True),
+            (
+                "local-client-termination-after-full-verification.json",
+                "job",
+                "l4job-" + "2" * 32,
+            ),
+            (
+                "local-client-termination-after-full-verification.json",
+                "local_client_pid",
+                9999,
+            ),
+            (
+                "local-client-termination-after-full-verification.json",
+                "pool_or_session_state_manually_modified",
+                True,
+            ),
+        ]
+        for name, field, value in mutations:
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as tmp:
+                directory, trusted = self.sdk_job(Path(tmp))
+                record = read(directory / name)
+                record[field] = value
+                write(directory / name, record)
+                with self.assertRaisesRegex(ValueError, "provenance differs"):
+                    evidence.PoolJob(directory, trusted, "tracked-driver.py")
+
+    def test_sdk_recovery_requires_both_regular_sidecars_and_exact_archive_bytes(self):
+        for change in ("missing", "symlink", "bytes"):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as tmp:
+                directory, trusted = self.sdk_job(Path(tmp))
+                if change == "bytes":
+                    receipt = read(directory / "receipt.json")
+                    receipt["archive_bytes"] += 1
+                    write(directory / "receipt.json", receipt)
+                else:
+                    path = directory / "recovery-intent.json"
+                    path.unlink()
+                    if change == "symlink":
+                        path.symlink_to(trusted)
+                with self.assertRaises(ValueError):
+                    evidence.PoolJob(directory, trusted, "tracked-driver.py")
+
     def test_duplicate_tar_member_and_link_escape_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "bad.tar.gz"

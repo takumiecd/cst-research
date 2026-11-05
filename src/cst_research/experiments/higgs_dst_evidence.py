@@ -50,6 +50,126 @@ def archive_files(path, expected):
     require(seen == set(expected), "archive inventory incomplete")
 
 
+def verify_recovery_provenance(directory, spec, receipt, execution):
+    """Admit only the two recorded supervisor recovery schemas, without mutation.
+
+    A fresh-proxy recovery has no recorded pool job status. Its intent and local
+    termination records authenticate that distinct path; they do not invent an
+    ACK or turn local client cleanup into a remote computation result.
+    """
+    directory = Path(directory)
+    require(not directory.is_symlink(), "symlink recovery directory")
+    job_id = spec["id"]
+    require(
+        re.fullmatch(r"l4job-[0-9a-f]{32}", job_id)
+        and execution["id"] == job_id
+        and execution["returncode"] == 0
+        and execution["timed_out"] is False,
+        "recovery execution identity differs",
+    )
+    if (
+        directory.name == job_id
+        and receipt.get("normal_pool_acknowledgment") is not False
+    ):
+        return {"kind": "normal-pool-receipt", "job_id": job_id}
+    require(
+        receipt.get("normal_pool_acknowledgment") is False,
+        "renamed job requires explicit supervisor rescue receipt",
+    )
+    mode = receipt.get("recovery_mode")
+    if "archive_bytes" in receipt:
+        require(
+            type(receipt["archive_bytes"]) is int
+            and receipt["archive_bytes"]
+            == (directory / "results.tar.gz").stat().st_size,
+            "recovery archive byte count differs",
+        )
+    if mode == "supervisor-owned read-only result recovery":
+        require(
+            receipt.get("original_pool_job_status") in ("running", "failed", "queued"),
+            "legacy supervisor rescue receipt lacks recorded pool status",
+        )
+        return {
+            "kind": "supervisor-read-only-recovery",
+            "job_id": job_id,
+            "original_pool_job_status": receipt["original_pool_job_status"],
+        }
+    require(
+        mode == "supervisor-owned SDK fresh-proxy read-only recovery"
+        and receipt.get("credentials_scope")
+        == "memory only; no cached credentials, pool database or slot state changes"
+        and type(receipt.get("archive_bytes")) is int,
+        "unsupported supervisor rescue receipt schema",
+    )
+    sidecars = {}
+    for name in (
+        "recovery-intent.json",
+        "local-client-termination-after-full-verification.json",
+    ):
+        path = safe_path(directory, name)
+        require(
+            path.is_file() and not path.is_symlink(),
+            "SDK recovery sidecar missing or unsafe",
+        )
+        sidecars[name] = {"sha256": file_sha(path), "record": read(path)}
+    intent = sidecars["recovery-intent.json"]["record"]
+    termination = sidecars["local-client-termination-after-full-verification.json"][
+        "record"
+    ]
+    require(
+        intent.get("mode")
+        == "sole-supervisor-owned read-only SDK ContentsClient archive recovery with fresh proxy credentials only in memory"
+        and intent.get("job") == job_id
+        and intent.get("slot") == receipt.get("slot")
+        and type(intent.get("slot")) is int
+        and intent["slot"] > 0
+        and intent.get("session") == receipt.get("session")
+        and isinstance(intent.get("session"), str)
+        and intent["session"]
+        and intent.get("source_archive_sha256")
+        == spec["source_sha256"]
+        == execution["source_sha256"]
+        and intent.get("cache_or_pool_state_modified") is False,
+        "SDK recovery intent identity or no-mutation provenance differs",
+    )
+    require(
+        type(intent.get("local_ack_client_pid")) is int
+        and intent["local_ack_client_pid"] > 0
+        and intent.get("local_ack_client_state")
+        == "SIGSTOP held intentionally until full result verification"
+        and termination.get("job") == job_id
+        and termination.get("local_client_pid") == intent["local_ack_client_pid"]
+        and type(termination.get("supervisor_pid")) is int
+        and termination["supervisor_pid"] > 0
+        and isinstance(termination.get("prior_state"), str)
+        and termination["prior_state"].startswith("T")
+        and termination.get("remote_compute_completed_and_verified") is True
+        and termination.get("pool_or_session_state_manually_modified") is False
+        and termination.get("actions")
+        == [
+            "one SIGTERM to paused owned local ACK client",
+            "SIGCONT to deliver pending termination and return control to existing supervisor cleanup",
+        ],
+        "SDK recovery local termination identity or no-mutation provenance differs",
+    )
+    # The physical directory may be staged elsewhere. Preserve the recorded
+    # locator rather than treating that machine-specific path as job identity.
+    require(
+        isinstance(termination.get("verified_result_directory"), str)
+        and Path(termination["verified_result_directory"]).is_absolute()
+        and isinstance(termination.get("utc"), str)
+        and termination["utc"],
+        "SDK recovery termination locator or timestamp missing",
+    )
+    return {
+        "kind": "supervisor-sdk-fresh-proxy-recovery",
+        "job_id": job_id,
+        "original_pool_job_status": receipt.get("original_pool_job_status"),
+        "normal_pool_acknowledgment": False,
+        "sidecars": sidecars,
+    }
+
+
 class PoolJob:
     """Completed downloaded pool job, verified against a trusted source inventory."""
 
@@ -76,15 +196,9 @@ class PoolJob:
             and result["timed_out"] is False,
             "pool execution incomplete",
         )
-        if self.directory.name != self.spec["id"]:
-            require(
-                self.receipt.get("normal_pool_acknowledgment") is False
-                and self.receipt.get("recovery_mode")
-                == "supervisor-owned read-only result recovery"
-                and self.receipt.get("original_pool_job_status")
-                in ("running", "failed", "queued"),
-                "renamed job requires explicit supervisor rescue receipt",
-            )
+        recovery_provenance = verify_recovery_provenance(
+            self.directory, self.spec, self.receipt, result
+        )
         require(
             file_sha(self.directory / "source.tar.gz")
             == self.spec["source_sha256"]
@@ -174,6 +288,7 @@ class PoolJob:
             "phase_file": phase_path.name,
             "phase_sha256": file_sha(phase_path),
             "receipt": self.receipt,
+            "recovery_provenance": recovery_provenance,
         }
 
     def payload(self, name):

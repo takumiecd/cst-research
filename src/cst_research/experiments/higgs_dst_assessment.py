@@ -10,7 +10,6 @@ import argparse
 import hashlib
 import json
 import math
-import re
 import shutil
 import subprocess
 import sys
@@ -654,22 +653,9 @@ def verify_original_assessment(job, freeze, state, sources):
             results / "manifest.json",
         )
     )
-    require(
-        execution["id"] == spec["id"]
-        and re.fullmatch(r"l4job-[0-9a-f]{32}", spec["id"])
-        and execution["returncode"] == 0
-        and not execution["timed_out"],
-        "original assessment job incomplete",
-    )
-    if job.name != spec["id"]:
-        require(
-            receipt.get("normal_pool_acknowledgment") is False
-            and receipt.get("recovery_mode")
-            == "supervisor-owned read-only result recovery"
-            and receipt.get("original_pool_job_status")
-            in ("running", "failed", "queued"),
-            "renamed original assessment requires explicit supervisor rescue receipt",
-        )
+    from .higgs_dst_evidence import verify_recovery_provenance
+
+    recovery_provenance = verify_recovery_provenance(job, spec, receipt, execution)
     require(
         file_sha(job / "results.tar.gz") == receipt["archive_sha256"]
         and file_sha(job / "source.tar.gz")
@@ -816,6 +802,7 @@ def verify_original_assessment(job, freeze, state, sources):
             "directory": directory,
             "evaluation": evaluation,
             "job": spec["id"],
+            "recovery_provenance": recovery_provenance,
             "receipt_recovery": {
                 key: receipt[key]
                 for key in (
@@ -854,6 +841,7 @@ def import_original_prediction(original, directory, row, freeze_sha, freeze):
         evaluation_origin="imported original975 assessment; not rescored",
         original_job=original["job"],
         original_receipt_recovery=original.get("receipt_recovery", {}),
+        original_recovery_provenance=original.get("recovery_provenance", {}),
         original_result_archive_sha256=original["result_archive_sha256"],
         original_freeze_sha256=original["original_freeze_sha256"],
         original_freeze_canonical_sha256=freeze[

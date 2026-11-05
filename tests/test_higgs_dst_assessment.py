@@ -652,6 +652,66 @@ class PredictionIntegrationTests(unittest.TestCase):
                 self.assertEqual(
                     next(iter(admitted.values()))["receipt_recovery"], recovery_fields
                 )
+                self.assertEqual(
+                    next(iter(admitted.values()))["recovery_provenance"]["kind"],
+                    "supervisor-read-only-recovery",
+                )
+                sdk_receipt = receipt | {
+                    "normal_pool_acknowledgment": False,
+                    "recovery_mode": "supervisor-owned SDK fresh-proxy read-only recovery",
+                    "credentials_scope": "memory only; no cached credentials, pool database or slot state changes",
+                    "archive_bytes": (recovered / "results.tar.gz").stat().st_size,
+                    "slot": 1,
+                    "session": "fixture-session",
+                }
+                module.write(recovered / "receipt.json", sdk_receipt)
+                intent = {
+                    "mode": "sole-supervisor-owned read-only SDK ContentsClient archive recovery with fresh proxy credentials only in memory",
+                    "job": job.name,
+                    "slot": 1,
+                    "session": "fixture-session",
+                    "source_archive_sha256": source_sha,
+                    "cache_or_pool_state_modified": False,
+                    "local_ack_client_pid": 123,
+                    "local_ack_client_state": "SIGSTOP held intentionally until full result verification",
+                }
+                termination = {
+                    "job": job.name,
+                    "local_client_pid": 123,
+                    "supervisor_pid": 456,
+                    "prior_state": "T",
+                    "remote_compute_completed_and_verified": True,
+                    "pool_or_session_state_manually_modified": False,
+                    "actions": [
+                        "one SIGTERM to paused owned local ACK client",
+                        "SIGCONT to deliver pending termination and return control to existing supervisor cleanup",
+                    ],
+                    "verified_result_directory": str(recovered.resolve()),
+                    "utc": "2026-11-05T00:00:00Z",
+                }
+                module.write(recovered / "recovery-intent.json", intent)
+                termination_file = (
+                    recovered / "local-client-termination-after-full-verification.json"
+                )
+                module.write(termination_file, termination)
+                admitted = module.verify_original_assessment(
+                    recovered, freeze, args.campaign_state, sources
+                )
+                recovery = next(iter(admitted.values()))["recovery_provenance"]
+                self.assertEqual(
+                    recovery["kind"], "supervisor-sdk-fresh-proxy-recovery"
+                )
+                self.assertIsNone(recovery["original_pool_job_status"])
+                self.assertEqual(
+                    recovery["sidecars"][termination_file.name]["sha256"],
+                    module.file_sha(termination_file),
+                )
+                module.write(termination_file, termination | {"local_client_pid": 124})
+                with self.assertRaisesRegex(ValueError, "termination identity"):
+                    module.verify_original_assessment(
+                        recovered, freeze, args.campaign_state, sources
+                    )
+                module.write(termination_file, termination)
                 job = recovered
                 destination = root / "imported"
                 destination.mkdir()
@@ -667,6 +727,7 @@ class PredictionIntegrationTests(unittest.TestCase):
                     destination, row, args.frozen_index_sha256, data_sha
                 )
                 self.assertIn("not rescored", record["evaluation_origin"])
+                self.assertEqual(record["original_recovery_provenance"], recovery)
                 (
                     admitted[module.row_key(row)]["directory"] / "predictions.npz"
                 ).write_bytes(b"changed")
