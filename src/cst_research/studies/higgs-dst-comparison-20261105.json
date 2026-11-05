@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "id": "higgs-dst-comparison-20261105",
+  "title": "HIGGS: fairly tuned matched-active-budget static and row-balanced RigL-style comparison",
+  "status": "PLANNED",
+  "status_note": "Authorized after the seed17 development pilot was observed. Protocol and qualification/tuning consumer are being prepared; no fair-tuning or three-seed confirmation result is claimed. First delivery blocks final freeze/confirm/assess until complete comparison controls are implemented and verified.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "f37729e61dc11a57e76103aa2457c2be11c4c306",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/143",
+  "runner_entrypoint": "cst_research.experiments.higgs_dst_comparison",
+  "protocol_source_path": "docs/higgs-dst-comparison.md",
+  "protocol_repository": "https://github.com/takumiecd/cst-research",
+  "implementation_boundary": {
+    "external_dst_entrypoint": "benchmarks.training.higgs_dst_reference",
+    "consumer_pool_script": "src/cst_research/experiments/higgs_dst_comparison_driver.py",
+    "runtime": "Consume pinned external torchcst source; no runtime vendoring and no public Graph API extension",
+    "consumer_identity": "Freeze a separate consumer commit/member manifest before execution; no uncommitted-source substitution",
+    "first_delivery": [
+      "qualify",
+      "tune"
+    ],
+    "freeze_width_readiness": "Verify imported original frozen-width artifact and planned common horizon; final freeze refuses until full matched-control workflow is implemented and reviewed",
+    "blocked_stages_until_complete_control_gate": [
+      "confirm",
+      "assess"
+    ],
+    "control_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "control_cell_entrypoint": "benchmarks.training.higgs_confirmation",
+    "original_study": "higgs-alpha-confirmation-20261105",
+    "original_primary_family_unchanged": true
+  },
+  "protocol": {
+    "architecture": {
+      "layers": [
+        28,
+        "N",
+        "N",
+        2
+      ],
+      "widths": [
+        1024,
+        2048
+      ],
+      "divisors": [
+        1000,
+        500,
+        200,
+        100
+      ],
+      "alphas": [
+        0.001,
+        0.002,
+        0.005,
+        0.01
+      ],
+      "methods": [
+        "static",
+        "rigl"
+      ],
+      "configuration_count": 16,
+      "middle_bias": false,
+      "all_layers_trainable": true,
+      "atom_count": "floor(N*N/divisor)",
+      "middle_active_weight_slots": "4*floor(N*N/divisor)",
+      "active_scalar_budget": "4*A+31*N+2",
+      "active_slot_definition": "Includes newborn zero-valued slots; not stored Tensor size, mathematical nonzeros or mask/index memory",
+      "initialization": "Pinned row-fan-in uniform initialization; static/RigL share initial mask and values; match ordinary-layer initial draws and data order by seed"
+    },
+    "data": {
+      "prepared_archive_sha256": "62d32a1789ed737a5997ca6a0630548e6211af86c9cd6a0a605cd057d8bd32ac",
+      "training_rows": [
+        0,
+        100000
+      ],
+      "standardization_fit_rows": [
+        0,
+        10400000
+      ],
+      "development_validation_indices": [
+        0,
+        50000
+      ],
+      "confirmation_validation_indices": [
+        50000,
+        100000
+      ],
+      "official_test_rows": [
+        10500000,
+        11000000
+      ],
+      "official_test_evaluated": false,
+      "index_convention": "zero-based half-open intervals",
+      "prior_information": "Existing seed17 DST pilot and dense/CST development curves have been observed; they are exploratory, not fresh confirmation",
+      "confirmation_prerequisite": "No confirmation-tail result has been viewed by a pilot or assessment before all new settings and checkpoints freeze; otherwise stop and amend scope"
+    },
+    "training": {
+      "development_seed": 17,
+      "confirmation_seeds": [
+        29,
+        43,
+        71
+      ],
+      "batch_size": 4,
+      "dtype": "FP32",
+      "tf32": false,
+      "cpu_math_threads": 1,
+      "accelerator": "NVIDIA L4 via authorized shared-pool allocation",
+      "base_learning_rates": [
+        0.0001,
+        0.0003,
+        0.001,
+        0.003
+      ],
+      "base_epochs": 10,
+      "checkpoint_selection": "Minimum development CE; earliest epoch on exact tie",
+      "learning_rate_selection": "Minimum best-development CE; lower LR on exact tie",
+      "edge_extension": {
+        "maximum_additions_per_group": 1,
+        "lower": 3e-05,
+        "upper": 0.01,
+        "epochs": 10,
+        "rule": "Only selected base-grid edge direction; retain final boundary flag"
+      },
+      "optimizer": {
+        "algorithm": "AdamW",
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "weight_decay": 0.01,
+        "implementation": "Pinned external dense masked reference; no cross-method byte-arithmetic identity claim"
+      },
+      "rigl": {
+        "update_frequency": 250,
+        "initial_drop_fraction": 0.3,
+        "rewire_end_fraction": 0.75,
+        "drop_schedule": "Cosine to rewiring cutoff",
+        "row_budget": "Preserve initial per-row slot count",
+        "growth": "Largest absolute full dense gradient per row; stable lower-column ties",
+        "moment_reset": "Zero every pruned/grown weight and moment including immediate regrowth; preserve survivors",
+        "event_semantics": "Topology minibatch replaces all-layer AdamW; global Adam clocks do not advance",
+        "event_bounds": "Positive minibatch step divisible by250 and strictly below floor(0.75*total_minibatches)",
+        "pruning": "Global weight-magnitude threshold; retain at least one survivor per row before restoring initial row budget"
+      },
+      "budget_axis": "Equal minibatches/example presentations; record actual optimizer updates separately",
+      "comparison_horizon": {
+        "base": 10,
+        "extended": 20,
+        "original_horizon_source": "Actual original frozen-width artifact with verified SHA, identity and full five-group configuration/LR inventory",
+        "dst_trigger_scope": "Any selected10epoch candidate among both methods times four densities at that width",
+        "trigger_best_epoch_at_least": 9,
+        "trigger_loss_epochs": [
+          8,
+          10
+        ],
+        "trigger_loss_improvement_gt": 0.001,
+        "rule": "max(original frozen width horizon, 20 if DST trigger else 10)",
+        "dst_retuning_when20": "Rerun top2 ten-epoch LRs per EVERY DST group for20 fresh epochs, including when original controls alone cause20",
+        "tail_best_epoch_at_least": 19,
+        "tail_loss_epochs": [
+          18,
+          20
+        ],
+        "tail_loss_improvement_gt": 0.001,
+        "fresh_initialization_required": true,
+        "control_same_horizon": "Reuse original frozen dense+4CST configurations/checkpoints only after source/data/config/hash checks",
+        "control_10_to20": "Separate comparison namespace; rerun original top2 development LRs for20 via unchanged97580582 cell runner, then fresh3seed models for dense+4CST; original primary study unchanged",
+        "extra_control_cost_per_affected_width": {
+          "development_runs": 10,
+          "confirmation_models": 15
+        },
+        "incomplete_controls": "Fail closed; no10epoch controls versus20epoch DST confirmation"
+      },
+      "dst_confirmation_model_count": 48,
+      "comparison_control_model_count": 30,
+      "freeze_gate": "All48 DST and30 comparison-control identities/verified reuse references, selection family, data and source identities freeze globally BEFORE any confirmation evaluator; original30 checkpoint manifest also freezes before its assessment",
+      "minibatches_per_epoch": 25000,
+      "example_presentations_per_epoch": 100000
+    },
+    "statistics": {
+      "contrast": "Each static/RigL configuration minus matched-horizon dense, paired by confirmation seed",
+      "accuracy_margin": 0.002,
+      "accuracy_margin_unit": "Probability;0.2 percentage points, not relative percent",
+      "roc_auc_margin": 0.002,
+      "primary": {
+        "method": "Intersection-union of two co-primary one-sided paired-seed noninferiority t tests",
+        "degrees_of_freedom": 2,
+        "configuration_p": "max(p_accuracy,p_roc_auc)",
+        "configuration_count": 16,
+        "familywise_alpha": 0.05,
+        "decision": "16*p_configuration<=0.05",
+        "zero_standard_error": "p=0 only if mean_difference+margin>0; otherwise p=1 including exact boundary"
+      },
+      "diagnostic_simultaneous_two_sided_endpoint_count": 32,
+      "diagnostic_note": "Inferiority diagnostic bands, pointwise intervals and paired-example bootstrap stay separate from primary IUT; no joint seed/example guarantee",
+      "original_cst_family": "Unchanged eight configurations at its own0.05 familywise level; no combined95% guarantee across24 claims",
+      "direct_cst_dst_contrasts": "Descriptive unless a separate inferential family is frozen before confirmation",
+      "assumptions": "Approximately normal IID paired training-seed differences conditional on fixed benchmark; three seeds have limited power and cannot validate normality",
+      "minimum_density_scope": "Smallest supported tested alpha only; expose lower missing/inconclusive points; no monotonicity, continuous minimum or universal law assumed"
+    },
+    "qualification": "Pinned source/data identities; maskedCPUFP64 Y/dX/dW; static/RigL eagerGraph trajectories both widths and endpoint densities; full state/gradient/topology/growth-gradient/moment-reset/clock/event checks; no guard bypass",
+    "reporting": {
+      "all_curves": "Retain everyHPO,20epoch and confirmation-training epoch; train loss and developmentCE/accuracy/AUC versus minibatches/examples and synchronized trainingseconds; actualAdamupdate count separately",
+      "curve_scope": "Development only; distinguish seed17HPO from independent trainingseeds; never repeatedly score confirmation checkpoints",
+      "timing": "Record complete updates plus topology/event audits, prep-inclusive time and available walltime; evaluation/checkpoint/per-epoch hash diagnostics separately",
+      "memory": "Capture-inclusive allocator allocated/reserved; not total GPUprocess memory",
+      "sparse_efficiency_limit": "Dense-storage masked reference with dense growth gradients, not sparse-kernel speed/memory evidence",
+      "provenance": "HPO cross-VM timing exploratory; retain job/hardware/runtime provenance for within-job controls"
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-dst-comparison-20261105",
+    "availability": "External ignored source/result manifests, complete LR inventories, all curves/masks/topology logs/checkpoints and recovery archives/receipts; no dataset or secret publication"
+  }
+}

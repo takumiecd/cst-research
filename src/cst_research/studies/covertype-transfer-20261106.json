@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "id": "covertype-transfer-20261106",
+  "title": "Covertype public-runtime Dense/CST exploratory transfer",
+  "status": "PLANNED",
+  "status_note": "Official data mechanically prepared; CPU checks only, no GPU learning or heldout evaluation.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.covertype_driver",
+  "protocol_source_path": "docs/covertype-transfer.md",
+  "implementation_boundary": {
+    "runtime": "unchanged public CSTLinear/CSTAdamW and public registry-loaded Plans; no runtime vendoring",
+    "consumer": "research-local multiclass loop/HPO/seal; generic external step/oracle helpers only; eager q1; no private Graph adapter"
+  },
+  "protocol": {
+    "version": "covertype-transfer-v1",
+    "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "data": {
+      "version": "covertype-random-transfer-v1",
+      "rows": 581012,
+      "features": 54,
+      "classes": 7,
+      "source_zip_sha256": "89a975c2457cd48e824238ae43c5a3cb762e42c4b4078d9b44a4514055105f6d",
+      "source_gzip_sha256": "614360d0257557dd1792834a85a1cdebfadc3c4f30b011d56afee7ffb5b15771",
+      "permutation": {
+        "generator": "numpy.PCG64",
+        "seed": 20261106,
+        "rows": 581012
+      },
+      "split_sizes": {
+        "train": 100000,
+        "development": 50000,
+        "heldout": 50000
+      },
+      "normalization": {
+        "columns": [
+          0,
+          10
+        ],
+        "fit": "train only",
+        "statistics_dtype": "float64",
+        "ddof": 0,
+        "std_floor": 1e-06,
+        "application": "float64 then float32",
+        "binary_columns_unchanged": [
+          10,
+          54
+        ]
+      },
+      "label_mapping": "raw1..7 to0..6",
+      "geographic_generalization": false,
+      "formal_noninferiority": false,
+      "official_benchmark_comparison": false
+    },
+    "prepared_artifacts": {
+      "train_development_sha256": "010f150bab3a700fbcde1106daf21e83cf28fe9024732d29c25756144a07e416",
+      "manifest_sha256": "4a6026b41b0abe9594a0320e6455dee17e3fc8ecddcb3aff97657a75b7ae4bcd",
+      "closed_heldout_sha256": "7220f0d7282c83732c203325f523da180e4701d8a001647ea0eff4cdc0dbee4f"
+    },
+    "architecture": [
+      54,
+      1024,
+      1024,
+      7
+    ],
+    "numerical_contract": {
+      "chart": {
+        "geometry": "flat_torus",
+        "spacing": 1.0
+      },
+      "kernel": {
+        "composition": "product",
+        "profile": "ChebyshevSpec",
+        "modes": 8,
+        "merge_factor": 2,
+        "amplitude_max": 1.0,
+        "w_c": 0.3,
+        "radius_bounds": {
+          "minimum": 0.5,
+          "birth": 4.0,
+          "maximum": 50.0,
+          "upper_floor": 1.0
+        },
+        "kappa": 3.0,
+        "lower_kappa": 3.0,
+        "upper_decay_power": 1.0,
+        "alpha_init": 0.0,
+        "radial_regularization": 0.1,
+        "activity_gain": 1.0,
+        "activity_mode": "finite_chord",
+        "dormant_expansion_rate": 0.0
+      },
+      "linear_plan": {
+        "algorithm_id": "cuda_radius_cell_mass",
+        "revision": "v1",
+        "schedule": "global_owner_window_fp32_geometry_sort32_flat_c",
+        "input_direct_levels": 2,
+        "output_direct_levels": 2
+      },
+      "update_plan": {
+        "algorithm_id": "cuda_radius_flat_torus_polar_update_fused",
+        "revision": "v2"
+      },
+      "optimizer": {
+        "ordinary_weight_decay": 0.01,
+        "atom_raw_weight_decay": 0.0,
+        "amplitude_weight_decay": 0.01,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "amsgrad": false,
+        "maximize": false,
+        "fused": true,
+        "capturable": false
+      },
+      "initialization": {
+        "ordinary_input": "seed+1",
+        "ordinary_output": "seed+2",
+        "middle": "seed+3",
+        "ordinary": "torch.nn.Linear default reset_parameters",
+        "atoms": "public CSTLinear FP32 default polar-radius initialization; no gain calibration"
+      }
+    },
+    "middle_bias": false,
+    "dense_io_trainable": true,
+    "methods": [
+      "dense",
+      "cst-1000",
+      "cst-100"
+    ],
+    "atoms": [
+      1048,
+      10485
+    ],
+    "batch_size": 4,
+    "dtype": "FP32",
+    "TF32": false,
+    "mode": "eager",
+    "position_multiplier": 1,
+    "development_seed": 17,
+    "hpo_lrs": [
+      0.0001,
+      0.0003,
+      0.001
+    ],
+    "hpo_epochs": 3,
+    "single_edge": {
+      "lower": 3e-05,
+      "upper": 0.003
+    },
+    "retune": "all methods fresh top2 LR x10epochs",
+    "confirmation_seeds": [
+      29,
+      43,
+      71
+    ],
+    "final_epochs": 10,
+    "selection": "lowest best-development CE; earliest epoch; lower LR on exact tie",
+    "heldout_gate": "all9 frozen before explicit separately invoked evaluator; no formal NI",
+    "metrics": [
+      "CE",
+      "accuracy",
+      "macroF1",
+      "macroOvRAUC"
+    ],
+    "auc": "external975 binary_auc per class on float64 softmax probabilities",
+    "selected_state_gap": "full train and dev evaluated at identical selected checkpoint outside training clock",
+    "formal_noninferiority": false,
+    "universal_alpha_optimum": false,
+    "geographic_generalization": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "covertype-transfer-20261106",
+    "availability": "ignored source/data/CPU evidence; GPU and model-quality evidence pending"
+  }
+}

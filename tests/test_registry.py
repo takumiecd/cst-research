@@ -19,7 +19,7 @@ from cst_research.registry import STUDY_ID, load_studies, validate_study
 
 class RegistryTests(unittest.TestCase):
     def setUp(self):
-        self.study = load_studies()[0]
+        self.study = next(study for study in load_studies() if study["id"] == STUDY_ID)
 
     def test_packaged_study_is_running_at_exact_external_source(self):
         self.assertEqual(validate_study(self.study), [])
@@ -142,8 +142,11 @@ class RegistryTests(unittest.TestCase):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             self.assertEqual(main(["list", "--json"]), 0)
-        self.assertEqual(json.loads(output.getvalue())[0]["status"], "RUNNING")
-        self.assertEqual(load_studies()[0], before)
+        listed = {study["id"]: study for study in json.loads(output.getvalue())}
+        self.assertEqual(listed[STUDY_ID]["status"], "RUNNING")
+        self.assertEqual(
+            next(study for study in load_studies() if study["id"] == STUDY_ID), before
+        )
 
 
 if __name__ == "__main__":
