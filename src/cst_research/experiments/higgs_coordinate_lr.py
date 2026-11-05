@@ -337,6 +337,7 @@ def qualify(runner, data, output):
     write(output / "qualification.json", record)
     # Direct LR/ULP, independent scalar Adam+Polar law, contiguous fused state.
     scalar_states = {}
+    scalar_optimizer_states = {}
     for ratio in RATIOS:
         model = runner.make_model(1024, 1000, 17, "cst").cuda()
         optimizer, _ = construct_optimizer(runner.make_optimizer, model, ratio)
@@ -391,8 +392,13 @@ def qualify(runner, data, output):
         if ratio != 1.0 and float(optimizer._last_position_clock) != 1:
             raise ValueError("CUDA shadow clock failed")
         for parameter, state in optimizer.state.items():
-            expected_mean = parameter.grad * 0.1
-            expected_square = parameter.grad.square() * 0.001
+            # CUDA fused AdamW casts beta to the parameter dtype before
+            # forming (1-beta); Python literals .1/.001 are different FP32
+            # coefficients. Keep the existing tolerances unchanged.
+            beta1, beta2 = optimizer.defaults["betas"]
+            gradient = parameter.grad
+            expected_mean = gradient * (1 - gradient.new_tensor(beta1))
+            expected_square = gradient.square() * (1 - gradient.new_tensor(beta2))
             if not torch.allclose(
                 state["exp_avg"], expected_mean, atol=1e-7, rtol=1e-6
             ) or not torch.allclose(
@@ -400,6 +406,16 @@ def qualify(runner, data, output):
             ):
                 raise ValueError("CUDA fused contiguous moment/column integrity failed")
         scalar_states[ratio] = clone_cpu(model.state_dict())
+        scalar_optimizer_states[ratio] = clone_cpu(optimizer.state_dict()["state"])
+        beta1, beta2 = optimizer.defaults["betas"]
+        record["cuda_fused_beta_rounding"] = {
+            "scope": "qualification expectation only; no optimizer, tolerance, training or selection change",
+            "dtype": str(point.dtype),
+            "beta1_stored": float(point.new_tensor(beta1)),
+            "beta2_stored": float(point.new_tensor(beta2)),
+            "first_mean_coefficient": float(1 - point.new_tensor(beta1)),
+            "first_square_coefficient": float(1 - point.new_tensor(beta2)),
+        }
         torch.save(
             {
                 "model": scalar_states[ratio],
@@ -421,6 +437,14 @@ def qualify(runner, data, output):
             }
         )
     for ratio in (0.1, 10.0):
+        stock_fields = dict(tensor_fields(scalar_optimizer_states[1.0]))
+        arm_fields = dict(tensor_fields(scalar_optimizer_states[ratio]))
+        if stock_fields.keys() != arm_fields.keys() or any(
+            not byte_equal(stock_fields[k], arm_fields[k]) for k in stock_fields
+        ):
+            raise ValueError(
+                "CUDA same-gradient stock/arm moment or master-clock bytes differ"
+            )
         if not torch.equal(
             scalar_states[ratio]["2.atom_state.atoms.p"][:, :2],
             scalar_states[1.0]["2.atom_state.atoms.p"][:, :2],
