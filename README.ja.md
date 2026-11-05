@@ -47,7 +47,9 @@ python -m unittest discover -s tests -v
 
 インストールせず確認する場合は `PYTHONPATH=src python -m cst_research list` も使えます。
 `validate`は登録内容と固定条件の検査です。学習結果、外部証拠の存在、GPUの正しさを
-検証したことにはなりません。このrepoには学習を起動する独自CLIはまだありません。
+検証したことにはなりません。正式なHIGGS campaignは固定した外部ソースで実行します。
+独立した数値admission後に変更なしのbenchmarkを呼ぶ
+[限定A100 MIG環境比較adapter](docs/higgs-gpu-comparison.ja.md)を別に用意しています。
 
 torchcstのライブラリが必要な場合だけ、固定commitのoptional extraを使えます。
 

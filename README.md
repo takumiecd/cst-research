@@ -57,7 +57,9 @@ To inspect the registry without installing, use
 `PYTHONPATH=src python -m cst_research list`.
 `validate` checks registry metadata and fixed protocol conditions. It does not
 validate training results, the existence of external evidence or GPU correctness.
-This repository does not yet provide its own training-launch command.
+The formal HIGGS campaign still runs in the pinned external source. A separate
+[bounded A100 MIG environment-comparison adapter](docs/higgs-gpu-comparison.md)
+consumes that unchanged benchmark after independent numerical admission.
 
 If you need the torchcst library, install the optional extra pinned to the study's
 source commit:
