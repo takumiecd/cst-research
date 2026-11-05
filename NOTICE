@@ -1,0 +1,11 @@
+cst-research
+Copyright 2026 takumiecd
+
+This repository contains research protocols and tooling for work using torchcst.
+The initial HIGGS protocol describes an experiment implemented in torchcst at
+commit 97580582ed28c4e494bf5c2656bbe94a85c544c3, licensed under Apache-2.0.
+No torchcst runtime implementation is included here.
+
+Source provenance:
+https://github.com/takumiecd/torchcst
+https://github.com/takumiecd/torchcst/pull/141
