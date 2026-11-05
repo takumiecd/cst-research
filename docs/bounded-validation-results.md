@@ -2,7 +2,7 @@
 
 **English** | [日本語](bounded-validation-results.ja.md)
 
-Two exploratory studies have completed execution, retrieval and independent raw
+Three exploratory studies have completed execution, retrieval and independent raw
 checks. The primary L4 three-seed HIGGS noninferiority campaign remains running;
 these observations do not complete or amend that campaign. No confirmation-tail
 or official test metric was used in these studies.
@@ -93,9 +93,57 @@ relabel the original amplified componentwise failure as a pass.
 The first replaced layer's initial CST output RMS was about .0005 versus Dense
 .2428 on the training probe. This motivates a conditioning hypothesis; it does
 not isolate capacity, initialization, optimization or activation-mask effects.
-A separately frozen finite gain experiment is running and has no result claimed
-in this note. Its output gains also change effective weight bounds and gradient/
-regularization scaling, so it cannot be a pure initialization-only causal test.
+A separately frozen finite gain experiment is reported below. Its output gains
+also change effective weight bounds and gradient/regularization scaling, so it
+cannot be a pure initialization-only causal test.
+
+## Fixed gains: the smallest all-layer case learns, but remains below Dense
+
+On the A100 MIG/runtime above, compare a new Dense control, stock all-three CST,
+and fixed-gain all-three CST at alpha .0001, seed17, three epochs and LR .0003.
+Use the depth study's exact train/development rows and stock q1 optimizer. The
+actual Dense baseline belongs to this A100 cohort; do not substitute the RTX3090
+result. This density was chosen after observing the stock depth pilot's stall,
+before seeing any gain result, and is explicitly exploratory.
+
+For each replaced square layer, a fixed positive output gain matches the
+corresponding Dense layer's initial RMS on the first256 training features.
+Calibration is sequential CPU FP64 public `dense_weight` composition, uses no
+labels or development rows, and performs no clipping or target search. Gains are
+nontrainable FP32 buffers fixed throughout learning. Actual executed gains are
+521.2747192382812, 258.95751953125 and 945.0846557617188. The actual saved stock
+and gain arms have byte-identical trainable initialization; the stock tables also
+match the prior verified depth study.
+
+| Arm | Selected development CE | Accuracy | AUC |
+|---|---:|---:|---:|
+| Dense | .5476290584 | .7199800014 | .7952768061 |
+| Stock all-three CST | .6913939118 | .5295999646 | .5000000000 |
+| Fixed-gain all-three CST | .5910087228 | .6868199706 | .7539428246 |
+
+All selected checkpoints are epoch2. Gain versus stock improves CE by .1003851891,
+accuracy by15.7220 percentage points and AUC by .2539428246. Gain still trails
+Dense by .0433796644 CE,3.3160 accuracy points and .0413339815 AUC. This intervention
+breaks the observed constant-classifier stall within this budget, while leaving
+a substantial quality gap. It does not isolate a capacity limit, establish a
+minimum alpha, or justify adopting gain calibration as a default. No extra gain
+epochs or seeds follow automatically.
+
+Independent raw checks passed for all52 archive members, actual sources/data/
+runtime, calibration, ordinary/stock/gain initialization, normal Y/dX/all-gradient
+and field/column norm gates, eight-update/four-update resume, every epoch's
+parameters/gradients/moments/clocks/CST optimizer stores, and selected full-train
+100k/development50k predictions. All three amplified componentwise diagnostics,
+including Dense, failed and remain labelled failed. Their field/column relative
+L2 errors passed the frozen3e-4 norm criterion. No confirmation/test data was used.
+
+Two reader-only failures are preserved: a fresh local Torch2.13/Mac CST constructor
+was not byte-identical to the actual Torch2.11 initializer (maximum differences
+below9e-9), and a helper assumed50k rows when scoring the100k training predictions.
+The final reader binds the actual saved initialization to the prior measured
+stock, independently recomputes calibration from those tensors, and uses the same
+binary metric equations for either row count. Producer math, tolerances and raw
+results were unchanged. Exact cross-runtime initializer bytes are not claimed.
 
 ## Source and evidence identities
 
@@ -108,9 +156,11 @@ Measured research consumers remain on their exact commits:
 |---|---|---|---|
 | Coordinate LR | `83cb77fe84e91ae296c24f2144bd56ca9398f404` | `7ce3d76f3ea3e09084e5c2dcb37ade7581eebffbf0f22c1b74dae08b467511bd` | `b5be7229474a29e182b7978ba5270e665a941f34870d0ac9b27fcecf2ca45532` |
 | Depth13 | `f6d08ad76001a69070b0965cefe7614f192ddf3f` | `aec42b259f37bd3922a3763f4c4f5e3af9b9a926263b10128861d09b18295a15` | `95b1bf35095028623900732dfd60eca41cf80d0a896a891dc3b0f2ab75050dd3` |
+| Depth gain3 | `69d7f0636ce47db892096d7b7aacc2c2cb731b8b` | `b7b6428e80bbf18fc0cff22af2388e6818c3c9c28ad9221c98c352123666d193` | `4bfb2d41ed402fcce01b05648d52d601cee3fde820300edd6f1a15d8f80cbb7d` |
 
 Coordinate source: [PR7](https://github.com/takumiecd/cst-research/pull/7).
 Depth source: [PR8](https://github.com/takumiecd/cst-research/pull/8).
+Gain source: [PR9](https://github.com/takumiecd/cst-research/pull/9).
 Reproduce with those commits' protocols and pinned inputs, separately from this
 documentation commit. Use fresh output/state directories and the required
 resource instructions. CPU tests or registry validation alone do not reproduce
@@ -125,6 +175,11 @@ Under the [external evidence convention](reproducibility.md), retain:
 - `higgs-depth-20261105/stats-verified-all13-01`: all13 curves, case/activation
   summaries, density/position/resource PNG/PDF plots and audit; earlier raw audit
   lineage and all failed stress artifacts remain retained.
+- `higgs-depth-gain-20261106/stats-actual-a100-gain-03`: full raw audit, all curves,
+  activation/gradient summaries, same-checkpoint train/development and resource
+  plots. `presentation-final-01` binds the scope-labelled learning PNG/PDF to that
+  audit and the preserved reader-failure lineage. Result archive SHA
+  `0ed924e6511005a8a780764392dcd6d6d04f8cc48b25c7e725dfbb78da4cd92f`.
 
 Coordinate result archive SHAs: seed29
 `6300c1efd82f4804a2b4de7ea7aea654f55f574d6a8e7bcc1520697e0672ba67`,

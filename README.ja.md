@@ -34,7 +34,8 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 [層位置の比較計画](docs/higgs-layer-position-plan.ja.md)では、幅・深さを固定して
 入力寄り/中央/出力寄りの隠れ層を比べます。その後の資源利用の承認により、本命L4と
 並行して、別の有限のRTX3090 pilotを実行しました。全13条件と、別のA100座標LR追加検証は
-raw証拠の独立照合まで完了しています。[観測結果と限界](docs/bounded-validation-results.ja.md)
+raw証拠の独立照合まで完了しています。有限の固定gain深層介入も同様に完了しました。
+[観測結果と限界](docs/bounded-validation-results.ja.md)
 を参照してください。developmentだけを使うpilotであり、最小alphaの確定や本命の3 seed評価の
 完了を意味しません。
 
