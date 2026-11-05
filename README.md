@@ -38,10 +38,14 @@ and [reproduction and evidence guide](docs/reproducibility.md).
 Earlier studies and raw evidence remain in their original torchcst history and
 external archives; they have not been copied wholesale into this repository.
 
-The next authorized direction is a [layer-position study plan](docs/higgs-layer-position-plan.md):
-compare early/middle/late hidden-layer replacements at a fixed width and depth,
-then test predictions formed from bounded density exploration. It starts after
-the current campaign; its runner and execution protocol are not yet frozen.
+The [layer-position study plan](docs/higgs-layer-position-plan.md) compares
+early/middle/late hidden-layer replacements at fixed width and depth. A subsequent
+resource authorization allowed a separate bounded RTX3090 pilot alongside the
+primary L4 campaign. Its 13 cases and a separate A100 coordinate-LR followup have
+completed independent raw checks; see the
+[observations and limitations](docs/bounded-validation-results.md).
+These development-only pilots do not establish a minimum alpha or complete the
+primary three-seed assessment.
 
 ## Quick start
 
