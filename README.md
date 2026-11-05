@@ -38,6 +38,11 @@ and [reproduction and evidence guide](docs/reproducibility.md).
 Earlier studies and raw evidence remain in their original torchcst history and
 external archives; they have not been copied wholesale into this repository.
 
+The next authorized direction is a [layer-position study plan](docs/higgs-layer-position-plan.md):
+compare early/middle/late hidden-layer replacements at a fixed width and depth,
+then test predictions formed from bounded density exploration. It starts after
+the current campaign; its runner and execution protocol are not yet frozen.
+
 ## Quick start
 
 Python 3.11 or later is required. The registry CLI uses only the standard library
