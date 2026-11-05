@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "id": "higgs-depth-position-20261105",
+  "title": "HIGGS depth and single/all-layer CST position pilot",
+  "status": "PLANNED",
+  "status_note": "New-row data and CPU composition/ownership checks prepared; no deep-model GPU result yet.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_depth_study",
+  "protocol_source_path": "docs/higgs-depth-position.md",
+  "implementation_boundary": {
+    "runtime": "External unchanged public torchcst975 operators; no runtime vendoring",
+    "consumer": "New architecture/training loop and distinct higgs-depth-position-v1 cohort; generic external step/evaluate helpers only",
+    "optimizer": "Stock multi-site CSTAdamW; no one-site coordinate-LR subclass or Graph guard changes"
+  },
+  "protocol": {
+    "architecture": [
+      28,
+      1024,
+      1024,
+      1024,
+      1024,
+      2
+    ],
+    "square_bias": false,
+    "relu_count": 4,
+    "all_layers_trainable": true,
+    "positions": [
+      "dense",
+      "early",
+      "middle",
+      "late",
+      "all"
+    ],
+    "alphas": [
+      0.0001,
+      0.001,
+      0.01
+    ],
+    "divisors": [
+      10000,
+      1000,
+      100
+    ],
+    "atom_counts_per_cst_layer": [
+      104,
+      1048,
+      10485
+    ],
+    "pilot_configurations": 13,
+    "seed": 17,
+    "epochs": 3,
+    "lr": 0.0003,
+    "position_multiplier": 1.0,
+    "batch_size": 4,
+    "dtype": "FP32",
+    "tf32": false,
+    "mode": "eager",
+    "sequence": "dense+9single-position cases then3all-hidden after diagnostic review",
+    "training_raw_rows": [
+      1000000,
+      1100000
+    ],
+    "development_raw_rows": [
+      1100000,
+      1150000
+    ],
+    "future_confirmation_raw_rows": [
+      1150000,
+      1200000
+    ],
+    "normalization_fit_raw_rows": [
+      1000000,
+      1100000
+    ],
+    "statistics_dtype": "float64",
+    "std_floor": 1e-06,
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "historical_feature_statistics_exposure": [
+      0,
+      10400000
+    ],
+    "globally_unseen_labels_claim": false,
+    "future_confirmation_evaluated": false,
+    "official_test_evaluated": false,
+    "formal_claim": false,
+    "admission": "new-network CPU FP64 public dense_weight Y/dX/allparameter oracle, actual-device8step/4resume/finite/ownership/clock gates",
+    "scope": "quality-first coarse exploration, no exhaustive densityLRgrid or cross-device speed-adoption claim"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-depth-20261105",
+    "availability": "Ignored raw preparation/source manifests, closed future payload, CPU admission and future per-case raw checkpoints; preparation does not imply GPU completion"
+  }
+}
