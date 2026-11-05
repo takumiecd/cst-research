@@ -4,7 +4,8 @@
 
 ## 状態と実行中の研究との関係
 
-これは新たに承認された比較プロトコルであり、完了結果ではありません。
+この比較は**RUNNING**であり、完了結果ではありません。固定Stage1 consumer22fと
+Stage2 consumer0fの全workflowをここへ統合し、最終global admissionと評価は未完了です。
 既存のseed17 DST pilotは今回の追加を促した探索的development証拠です。
 新しいheld-out結果や、DSTを調整済みのbaselineとは扱いません。
 
@@ -16,11 +17,12 @@ confirmation後半の結果をLR・学習期間・checkpoint選択に使いま�
 研究consumerは外部torchcst commit `f37729e61dc11a57e76103aa2457c2be11c4c306`
 （[PR #143](https://github.com/takumiecd/torchcst/pull/143)）のDST実装を利用します。
 runtimeを複製せず、privateな実験用CUDA Graph adapterを公開APIとして扱いません。
-最初の実装範囲はqualificationとtuningです。対応controlと比較全体のfreezeがそろうまで
+固定した最初のdeliveryの範囲はqualificationとtuningでした。別Stage2実装を後述します。
+対応controlと比較全体のfreezeがそろうまで
 confirmation・assessmentは拒否しなければなりません。この計画の記録は、後続stageの
-実装完了・実行済みを意味しません。
+実行済みを意味しません。
 
-## consumerと交換境界
+## consumerと交換境界（固定Stage1）
 
 consumer入口は`cst_research.experiments.higgs_dst_comparison`、pool wrapperは
 `src/cst_research/experiments/higgs_dst_comparison_driver.py`です。wrapperは固定consumer

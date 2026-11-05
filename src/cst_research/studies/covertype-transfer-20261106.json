@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "covertype-transfer-20261106",
   "title": "Covertype public-runtime Dense/CST exploratory transfer",
-  "status": "PLANNED",
-  "status_note": "Official data mechanically prepared; CPU checks only, no GPU learning or heldout evaluation.",
+  "status": "RUNNING",
+  "status_note": "Bounded RTX3090 screening, retuning and paired training are running at frozenbfa. Final nine-model seal, completed independent raw audit and one separately admitted heldout assessment remain required. No final transfer result is claimed.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -176,5 +176,11 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "covertype-transfer-20261106",
     "availability": "ignored source/data/CPU evidence; GPU and model-quality evidence pending"
+  },
+  "execution": {
+    "measured_consumer_commit": "bfa58dce18da85f9d2cb3a791db6d6a5126805d7",
+    "measured_consumer_manifest_sha256": "8a3c45f7677001c66cc666009d3dfa4a9027d0e1a7571eb571032be75df59d48",
+    "final_assessment_complete": false,
+    "integration_is_rerun_or_revalidation": false
   }
 }

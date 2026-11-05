@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-dst-comparison-20261105",
   "title": "HIGGS: fairly tuned matched-active-budget static and row-balanced RigL-style comparison",
-  "status": "PLANNED",
-  "status_note": "Authorized after the seed17 development pilot was observed. Protocol and qualification/tuning consumer are being prepared; no fair-tuning or three-seed confirmation result is claimed. First delivery blocks final freeze/confirm/assess until complete comparison controls are implemented and verified.",
+  "status": "RUNNING",
+  "status_note": "Qualification, development HPO/common-horizon retuning and paired confirmation training are running at separately frozen consumers. Full Stage2 implementation is included; final global78/original30 admission and assessment remain required. No final matched-family result is claimed.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "f37729e61dc11a57e76103aa2457c2be11c4c306",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/143",
@@ -27,7 +27,10 @@
     "control_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
     "control_cell_entrypoint": "benchmarks.training.higgs_confirmation",
     "original_study": "higgs-alpha-confirmation-20261105",
-    "original_primary_family_unchanged": true
+    "original_primary_family_unchanged": true,
+    "confirmation_entrypoint": "cst_research.experiments.higgs_dst_confirmation",
+    "assessment_entrypoint": "cst_research.experiments.higgs_dst_assessment",
+    "stage1_scope_is_historical": true
   },
   "protocol": {
     "architecture": {
@@ -213,5 +216,13 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-dst-comparison-20261105",
     "availability": "External ignored source/result manifests, complete LR inventories, all curves/masks/topology logs/checkpoints and recovery archives/receipts; no dataset or secret publication"
+  },
+  "execution": {
+    "stage1_consumer_commit": "22f2810b1bc51a599e51c8936acac310ca9455ef",
+    "stage1_manifest_sha256": "8e0b689790e387bb7adcadc6723905ed210befce3105735df6bf1f16f8b126a6",
+    "stage2_consumer_commit": "0f8160a8d9206100455dc6f8d05aab858e4a88d5",
+    "stage2_manifest_sha256": "e7db6b9b13a898b7e64a62c4418fa6bd514afd8cf70ebb52c1bc7640590c4983",
+    "final_assessment_complete": false,
+    "integration_is_rerun_or_revalidation": false
   }
 }

@@ -93,9 +93,9 @@ relabel the original amplified componentwise failure as a pass.
 The first replaced layer's initial CST output RMS was about .0005 versus Dense
 .2428 on the training probe. This motivates a conditioning hypothesis; it does
 not isolate capacity, initialization, optimization or activation-mask effects.
-A separately frozen finite gain experiment is reported below. Its output gains
-also change effective weight bounds and gradient/regularization scaling, so it
-cannot be a pure initialization-only causal test.
+A separately frozen finite gain experiment is reported below. Its per-site bounds
+and optimization scales change, but its unrestricted output weight preserves the
+global ideal-real function family. This is not an initialization-only causal test.
 
 ## Fixed gains: the smallest all-layer case learns, but remains below Dense
 
@@ -144,6 +144,35 @@ The final reader binds the actual saved initialization to the prior measured
 stock, independently recomputes calibration from those tensors, and uses the same
 binary metric equations for either row count. Producer math, tolerances and raw
 results were unchanged. Exact cross-runtime initializer bytes are not claimed.
+
+## Positive gains preserve the global ideal function family
+
+For the actual three bias-free square maps, ReLUs and positive fixed gains,
+positive homogeneity gives the invertible reparameterization
+
+\[
+F_g(\theta)=F_{\rm stock}(T_g\theta),\qquad
+W'_{\rm out}=G W_{\rm out},\quad b'_{\rm out}=b_{\rm out},
+\qquad G=\prod_{j=1}^{3}g_j\approx127575095.34510244.
+\]
+
+All hidden parameters stay fixed under this mapping. Because the output weight
+is unrestricted, rescaled per-site amplitude bounds do not expand the global
+ideal-real function family. The partial rescue therefore cannot be explained
+solely by a different representable function class or unchanged initial zero
+columns. Identical saved tensors still begin at different functions; gradients,
+Adam epsilon and relative-update trajectories differ. Multiplicative decoupled
+weight decay itself commutes with constant rescaling, so its isolated causal role
+is not established. Finite FP32 bitwise equivalence is not claimed.
+
+The [full derivation](positive-gain-equivalence.md) binds actual saved initialization
+and unchanged69/975 source. A public CPU-FP64 comparator on fixed synthetic linspace
+and zero4×28 inputs gave maximum absolute errors8.67e-19 and0 after transforming
+the stock output weight. No dataset/labels, task evaluation, GPU operation or new
+qualification was involved. Analytic report
+`higgs-depth-gain-20261106/stats-positive-gain-equivalence-01/analysis.json` has SHA
+`a90fa2323c706095b4975e8b81bc29c745322ae13a56fbb467dd8c8f8c05f5c7`.
+Existing seed17/three-epoch limits and failed diagnostics remain unchanged.
 
 ## Source and evidence identities
 

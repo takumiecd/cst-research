@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-coordinate-lr-20261105",
   "title": "Bounded HIGGS physical-position learning-rate pilot",
-  "status": "PLANNED",
-  "status_note": "Separate consumer implementation and CPU admission; no new GPU pilot or model-quality result yet.",
+  "status": "COMPLETED",
+  "status_note": "Completed bounded seed17 three-epoch A100 MIG pilot and conditional ten-epoch paired followups at29/43, with independent raw admission. Early q10 gains did not persist consistently; retain stock q1. Development-only exploratory evidence, no primary-family or public-runtime adoption.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -68,6 +68,15 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-coordinate-lr-20261105",
-    "availability": "Ignored source/data/result archives, CPU and future GPU admission, raw checkpoints and predictions; preparation is not a GPU result"
+    "availability": "External retained source/data/result manifests, passed independent raw audits, checkpoints/predictions and preserved negative/failed evidence; see the measured summary identities."
+  },
+  "execution": {
+    "measured_consumer_commit": "83cb77fe84e91ae296c24f2144bd56ca9398f404",
+    "measured_consumer_manifest_sha256": "7ce3d76f3ea3e09084e5c2dcb37ade7581eebffbf0f22c1b74dae08b467511bd",
+    "passed_summary_audit_sha256": "b5be7229474a29e182b7978ba5270e665a941f34870d0ac9b27fcecf2ca45532",
+    "summary_path": "docs/bounded-validation-results.md",
+    "relative_evidence_report": "stats-verified-two-followups-02",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
   }
 }

@@ -14,8 +14,9 @@ hypotheses. Licensed under [Apache-2.0](LICENSE).
 | [torchcst](https://github.com/takumiecd/torchcst) | Public modules, mathematical operator contracts, backends, autograd and kernel correctness |
 | cst-research | Study designs, models and tasks, comparison protocols, learning curves, statistics, experiment provenance and reproduction instructions |
 
-This repository does not duplicate the torchcst runtime. Future research runners
-using its public API will live here. When an experimental Graph adapter needs
+This repository does not duplicate the torchcst runtime. Research consumers and
+workflow controllers live here; their pinned operator implementations remain
+external. When an experimental Graph adapter needs
 private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
@@ -38,14 +39,26 @@ and [reproduction and evidence guide](docs/reproducibility.md).
 Earlier studies and raw evidence remain in their original torchcst history and
 external archives; they have not been copied wholesale into this repository.
 
-The [layer-position study plan](docs/higgs-layer-position-plan.md) compares
-early/middle/late hidden-layer replacements at fixed width and depth. A subsequent
-resource authorization allowed a separate bounded RTX3090 pilot alongside the
-primary L4 campaign. Its 13 cases and a separate A100 coordinate-LR followup have
-completed independent raw checks, as has a bounded fixed-gain depth intervention; see the
-[observations and limitations](docs/bounded-validation-results.md).
-These development-only pilots do not establish a minimum alpha or complete the
-primary three-seed assessment.
+The included consumer implementations and their measured histories are listed below.
+They retain their original source/data identities; integration is not a rerun or
+revalidation. See the [integration provenance](docs/integration-provenance.md).
+
+| Study | Status | Scope |
+|---|---|---|
+| [HIGGS primary](docs/reproducibility.md) | RUNNING | External975; final30-model assessment pending |
+| [HIGGS static/RigL comparison](docs/higgs-dst-comparison.md) | RUNNING | Stage1/2 consumers; common-horizon78-model gate pending |
+| [A100 MIG comparison](docs/higgs-gpu-comparison.md) | COMPLETED | Bounded one-epoch environment comparison |
+| [Coordinate LR](docs/higgs-coordinate-lr.md) | COMPLETED | Short pilot plus bounded two-seed followups; retain stock q1 |
+| [Depth/layer position](docs/higgs-depth-position.md) | COMPLETED |13 development-only cases; scope-limited stall evidence |
+| [Fixed output gain](docs/higgs-depth-gain.md) | COMPLETED |3 exploratory arms; partial rescue remains below Dense |
+| [Covertype transfer](docs/covertype-transfer.md) | RUNNING | Final all9 seal/raw audit and heldout assessment pending |
+
+The [observations and limitations](docs/bounded-validation-results.md) bind the
+completed coordinate/depth/gain results to their actual measured commits and raw
+audits. Development-selected pilots establish neither a minimum alpha nor formal
+noninferiority. Running studies stay incomplete until their final fixed-family
+admission and assessment finish. Existing frozen jobs continue using their
+original worktrees, not this combined source tree.
 
 ## Quick start
 

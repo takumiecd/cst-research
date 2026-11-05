@@ -5,7 +5,10 @@
 この別研究consumerは、変更しないtorchcst
 `97580582ed28c4e494bf5c2656bbe94a85c544c3`、そのprivate HIGGS benchmark、同じ
 SHA256固定の学習100k・検証100kデータを使う。公開runtimeと固定済みCST/DST比較は
-変更しない。現在は準備段階であり、CPU検証をGPU実行・精度結果として扱わない。
+変更しない。有限pilotと条件付き追加検証は実測consumer83で**COMPLETED**となった。
+初期のq10改善は一貫して持続せず、stock q1を維持する。
+[実観測・audit・失敗attemptの範囲](bounded-validation-results.ja.md)を参照する。
+以下は固定した再現protocolであり、研究の自動拡張を指示するものではない。
 
 ## 問いと固定予算
 

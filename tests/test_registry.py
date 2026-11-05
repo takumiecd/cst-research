@@ -137,6 +137,38 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(output.getvalue(), "")
         self.assertIn("unknown study", error.getvalue())
 
+    def test_bounded_completion_keeps_running_families_and_measured_identity_separate(
+        self,
+    ):
+        studies = {study["id"]: study for study in load_studies()}
+        self.assertEqual(len(studies), 7)
+        for identifier in (
+            STUDY_ID,
+            "higgs-dst-comparison-20261105",
+            "covertype-transfer-20261106",
+        ):
+            self.assertEqual(studies[identifier]["status"], "RUNNING")
+        for identifier in (
+            "higgs-coordinate-lr-20261105",
+            "higgs-depth-position-20261105",
+            "higgs-depth-gain-20261106",
+        ):
+            study = studies[identifier]
+            self.assertEqual(study["status"], "COMPLETED")
+            execution = study["execution"]
+            self.assertRegex(execution["measured_consumer_commit"], r"^[0-9a-f]{40}$")
+            self.assertRegex(
+                execution["measured_consumer_manifest_sha256"], r"^[0-9a-f]{64}$"
+            )
+            self.assertRegex(
+                execution["passed_summary_audit_sha256"], r"^[0-9a-f]{64}$"
+            )
+            self.assertFalse(execution["integration_is_rerun_or_revalidation"])
+            self.assertFalse(execution["confirmation_or_test_evaluated"])
+            self.assertEqual(
+                execution["summary_path"], "docs/bounded-validation-results.md"
+            )
+
     def test_list_reports_status_and_source_registry_is_unchanged(self):
         before = copy.deepcopy(self.study)
         output = io.StringIO()

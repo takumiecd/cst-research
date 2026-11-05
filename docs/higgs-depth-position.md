@@ -2,11 +2,13 @@
 
 English (canonical) | [日本語](higgs-depth-position.ja.md)
 
-This is a separate, initially PLANNED research consumer of unchanged torchcst
+This is a separate **COMPLETED** bounded research consumer of unchanged torchcst
 `97580582ed28c4e494bf5c2656bbe94a85c544c3`. Its cohort is
 `higgs-depth-position-v1`, not the older single-middle-layer HIGGS cohort.
-No public runtime or Graph eligibility rule changes. CPU checks and prepared data
-are preparation, not a deep-model GPU result.
+No public runtime or Graph eligibility rule changes. All13 seed17/three-epoch
+RTX3090 cases completed at measured consumerf6. See [the actual observations and
+admission limitations](bounded-validation-results.md), including the retained
+amplified componentwise failure and scope of the norm gate.
 
 ## Fixed architecture and initial screen
 

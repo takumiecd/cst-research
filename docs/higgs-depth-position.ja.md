@@ -3,9 +3,10 @@
 [English (canonical)](higgs-depth-position.md) | 日本語
 
 変更しないtorchcst `97580582ed28c4e494bf5c2656bbe94a85c544c3`を使う別研究consumerで、
-開始状態はPLANNED。cohortは`higgs-depth-position-v1`で、旧HIGGS単一中間層cohortと
-区別する。公開runtimeとGraph資格条件は変えない。CPU検証とデータ準備は、深いモデルの
-GPU結果を意味しない。
+有限13条件は実測consumerf6で**COMPLETED**。cohortは`higgs-depth-position-v1`で、旧HIGGS単一中間層cohortと
+区別する。公開runtimeとGraph資格条件は変えない。全13条件はseed17・3 epochのRTX3090
+実験として完了した。[実観測とadmissionの限界](bounded-validation-results.ja.md)に、
+保持したamplified成分診断の失敗とnorm gateの範囲を記録する。
 
 ## 固定構造と最初のscreen
 

@@ -13,7 +13,8 @@ CSTのスケール、精度、学習過程、速度・メモリを再現可能�
 | [torchcst](https://github.com/takumiecd/torchcst) | 公開Module・演算の数学的契約・backend・autograd・kernelの正しさ |
 | cst-research | 研究計画、モデル・タスク、比較条件、学習曲線、統計、実験の来歴と再現手順 |
 
-このrepoはtorchcstのruntimeを複製しません。公開APIを使う研究runnerを今後ここへ追加します。
+このrepoはtorchcstのruntimeを複製しません。研究consumerとworkflow controllerをここで管理し、
+演算実装は固定した外部sourceから利用します。
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
@@ -31,13 +32,23 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 [再現・証拠の扱い](docs/reproducibility.ja.md)を参照してください。
 過去の研究やraw証拠は元のtorchcst履歴・外部アーカイブに残し、ここへ一括コピーしていません。
 
-[層位置の比較計画](docs/higgs-layer-position-plan.ja.md)では、幅・深さを固定して
-入力寄り/中央/出力寄りの隠れ層を比べます。その後の資源利用の承認により、本命L4と
-並行して、別の有限のRTX3090 pilotを実行しました。全13条件と、別のA100座標LR追加検証は
-raw証拠の独立照合まで完了しています。有限の固定gain深層介入も同様に完了しました。
-[観測結果と限界](docs/bounded-validation-results.ja.md)
-を参照してください。developmentだけを使うpilotであり、最小alphaの確定や本命の3 seed評価の
-完了を意味しません。
+統合したconsumer実装と測定履歴を以下に示します。元のsource/data identityを保持し、
+統合を再実行や再検証とは扱いません。[統合の来歴](docs/integration-provenance.ja.md)を参照してください。
+
+| 研究 | 状態 | 範囲 |
+|---|---|---|
+| [HIGGS primary](docs/reproducibility.ja.md) | RUNNING | 外部975、最終30モデル評価は未完了 |
+| [HIGGS static/RigL比較](docs/higgs-dst-comparison.ja.md) | RUNNING | Stage1/2 consumer、共通期間の78モデルgateは未完了 |
+| [A100 MIG比較](docs/higgs-gpu-comparison.ja.md) | COMPLETED | 限定1-epoch環境比較 |
+| [座標LR](docs/higgs-coordinate-lr.ja.md) | COMPLETED | 短期pilotと有限2-seed追加検証、stock q1を維持 |
+| [深さ・層位置](docs/higgs-depth-position.ja.md) | COMPLETED | developmentのみの13条件、限定的なstall証拠 |
+| [固定output gain](docs/higgs-depth-gain.ja.md) | COMPLETED | 探索的3条件、部分改善後もDenseに劣る |
+| [Covertype転移](docs/covertype-transfer.ja.md) | RUNNING | 最終all9 seal/raw auditとheldout評価は未完了 |
+
+[観測結果と限界](docs/bounded-validation-results.ja.md)で、完了した座標・深さ・gain結果を
+実測commitとraw auditへ結びます。developmentで選んだpilotは最小alphaや正式な非劣性を
+確定しません。進行中の研究は最終固定familyのadmissionと評価が完了するまで未完了です。
+既存の固定ジョブは、この統合sourceではなく元のworktreeから実行し続けます。
 
 ## すぐに使う
 

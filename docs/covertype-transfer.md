@@ -1,12 +1,14 @@
-# Covertype transfer study (prepared; GPU not executed)
+# Covertype transfer study (running; final assessment pending)
 
 **English** | [日本語](covertype-transfer.ja.md)
 
 This bounded exploratory study tests whether low-density CST behavior transfers
 to another task. It does not replace the frozen HIGGS studies, establish formal
 noninferiority or a universal optimal alpha, reproduce an official benchmark,
-or test geographic generalization. GPU execution waits until the current deep
-pilot finishes and the owner reviews resources and source/data pins.
+or test geographic generalization. The bounded RTX3090 campaign is **RUNNING**
+at measured consumerbfa. Its final nine-model seal, strict independent raw audit
+and separately admitted heldout assessment remain pending. The frozen design
+below is unchanged; integration does not rerun or revalidate the campaign.
 
 ## Data fixed before results
 

@@ -5,8 +5,11 @@ English (canonical) | [日本語](higgs-coordinate-lr.ja.md)
 This separate research consumer uses unchanged torchcst
 `97580582ed28c4e494bf5c2656bbe94a85c544c3`, its private HIGGS benchmark and the
 same SHA256-pinned100k training/100k validation archive. It changes neither the
-public runtime nor the frozen CST/DST comparison. Status: preparation; no new
-GPU or model-quality result is implied by CPU checks.
+public runtime nor the frozen CST/DST comparison. The bounded pilot and
+conditional followups are **COMPLETED** at measured consumer83. The early q10
+gain did not persist consistently; retain stock q1. See the [actual observations,
+audits and failed-attempt scope](bounded-validation-results.md). The fixed design
+below remains the reproduction protocol, not an instruction to expand the study.
 
 ## Question and fixed budget
 

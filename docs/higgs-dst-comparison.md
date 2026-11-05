@@ -4,7 +4,9 @@ English (canonical) | [日本語](higgs-dst-comparison.ja.md)
 
 ## Status and relationship to the running study
 
-This is a newly authorized comparison protocol, not a completed result. The
+This comparison is **RUNNING**, not a completed result. Frozen Stage1 consumer22f
+and Stage2 consumer0f implement the full workflow now included here; final
+global admission and assessment remain pending. The
 existing seed-17 DST pilot is exploratory development evidence that motivated
 this addition; it is not a fresh held-out result or a tuned DST baseline.
 
@@ -19,18 +21,19 @@ The research consumer uses the external, pinned DST implementation at torchcst
 commit `f37729e61dc11a57e76103aa2457c2be11c4c306`
 ([PR #143](https://github.com/takumiecd/torchcst/pull/143)). It does not vendor the
 runtime or turn private experimental CUDA Graph adapters into public API.
-Qualification and tuning are the first implementation scope. Confirmation and
+Qualification and tuning were the frozen first-delivery scope. The separate
+Stage2 implementation is described below. Confirmation and
 assessment must fail closed until matching controls and the complete comparison
 freeze are available; recording this protocol does not claim those stages have
-run or are implemented.
+run.
 
-## Consumer and exchange boundary
+## Consumer and exchange boundary (frozen Stage1)
 
 The consumer entrypoint is `cst_research.experiments.higgs_dst_comparison`; the
 pool wrapper is `src/cst_research/experiments/higgs_dst_comparison_driver.py`.
 The wrapper accepts a pinned consumer commit and stage plus width/method/divisor
 selectors. Use the authorized shared-pool workflow; these modules do not allocate
-GPUs themselves. The first delivery implements `qualify` and `tune`.
+GPUs themselves. The frozen first delivery implements `qualify` and `tune`.
 `freeze-width` can expose verified original-horizon/common-horizon readiness but
 must refuse to publish a final comparison freeze until the full control workflow
 is implemented and reviewed. `confirm` and `assess` are unavailable and fail closed

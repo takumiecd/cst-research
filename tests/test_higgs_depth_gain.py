@@ -4,9 +4,9 @@ import copy
 import hashlib
 import json
 import os
-from pathlib import Path
 import sys
 import unittest
+from pathlib import Path
 
 from cst_research.experiments import higgs_depth_gain as g
 
@@ -33,7 +33,7 @@ class GainProtocolTests(unittest.TestCase):
             / "src/cst_research/studies/higgs-depth-gain-20261106.json"
         )
         study = json.loads(manifest.read_text())
-        self.assertEqual(study["status"], "PLANNED")
+        self.assertEqual(study["status"], "COMPLETED")
         self.assertEqual(
             study["runner_entrypoint"], "cst_research.experiments.higgs_depth_gain"
         )

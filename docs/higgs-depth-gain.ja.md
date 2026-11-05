@@ -2,8 +2,11 @@
 
 [English (canonical)](higgs-depth-gain.md) | 日本語
 
-**PLANNED。** 独立したconsumerとして、範囲を限定した探索実験を準備する。
-CPU確認やregistry検証はGPU適格性や学習結果を意味しない。元のdepthソース
+**COMPLETED。** 実測consumer69で有限3条件を実行し、独立raw admissionが完了した。
+固定gainはstallを部分的に改善したが、対応するDenseには届かなかった。
+[観測・audit identity・限界](bounded-validation-results.ja.md)を参照する。
+以下のprotocolは適応的選択と失敗診断の開示を維持する。
+元のdepthソース
 `f6d08ad76001a69070b0965cefe7614f192ddf3f`、13条件、正式な単一中間層CST/DST研究は変更しない。
 
 ## 問いと適応的な条件選択
@@ -58,14 +61,23 @@ raw特徴量行列、hash/行範囲のbinding、初期model、gain、逐次RMS t
 学習対象hash不変を保存する。optimizer更新とcheckpoint復元を通じてbufferを固定する。
 
 これは**forwardスケール/conditioningへの介入**で、初期化だけの因果試験ではない。
-元のamplitude制約が|a|≤1なら、実効制約は|g_j a|≤g_jになる。
-勾配スケールと、変更しないraw amplitude decayから実効関数への対応も変わる。
-元の有界weight familyを保存せず、初期化だけが原因だったとの証明にはならない。
-正gainがReLU符号を保つのは同じpre-gain入力に対してだけで、先行層が異なれば
-学習後の符号パターン一致を意味しない。
-同じparameterならbiasなし正方層/ReLU経路は正の斉次性を持ち、Dense head前の
-初期出力は3gainの積でscaleされ、最後の出力biasは変わらない。
-逐次合成に加えて、独立したCPUのproduct-gain Y/全勾配代数チェックも行う。
+各siteの実効的な振幅範囲は|a|≤1から|g_j a|≤g_jへ変わる。一方、このbiasなし正方層/
+ReLU経路、固定された正gain、制約のない最終Dense重みでは、積を出力重みに吸収できる。
+したがって**理想実数演算でのネットワーク全体の関数クラスは同じ**である。
+
+\[
+F_g(\theta)=F_{\rm stock}(T_g\theta),\qquad
+G=\prod_{j=1}^{3}g_j,\qquad W'_{\rm out}=G W_{\rm out},
+\quad b'_{\rm out}=b_{\rm out}.
+\]
+
+他の全学習parameterは同一で、逆写像は出力重みをGで割る。関数クラスの同一性であり、
+optimizer軌道やFP32 byte同値は主張しない。同じ保存tensorでも一般には異なる関数から始まり、
+勾配scale、Adam epsilon、相対updateが異なる。decoupled weight decayの乗算部分そのものは
+定数rescaleと可換で、weight decay単独が原因だとは確定しない。正gainがReLU符号を保つのは
+同じpre-gain入力に対してであり、学習後のactivation patternの一致ではない。
+[解析的導出とsourceに結び付く合成入力だけのCPU comparator](positive-gain-equivalence.ja.md)
+を参照する。元のproduct-gain Y/全勾配gateと学習・protocol・sourceの全バイトを保持する。
 
 ## データと実行前適格性
 

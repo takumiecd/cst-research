@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-depth-gain-20261106",
   "title": "HIGGS low-density all-hidden fixed output-gain intervention",
-  "status": "PLANNED",
-  "status_note": "Bounded3arm source preparation and CPU checks only; no gain GPU qualification or learning result. Adaptive density choice after stock development curves is explicitly exploratory.",
+  "status": "COMPLETED",
+  "status_note": "All3 bounded seed17 three-epoch A100 MIG arms completed with independent raw admission. Fixed gains partly rescued the low-density stall while remaining below the matched Dense control. Adaptive density selection, failed amplified componentwise diagnostics and reader failures remain disclosed; no default adoption.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -13,7 +13,7 @@
     "runtime": "unchanged external public975 operators; no runtime or kernel copy",
     "consumer": "distinct fixed-output-gain architecture/feature calibration and eager loop based on depthf6; all trainable tensors stock/gain identical initially",
     "optimizer": "stock multi-site CSTAdamW, LR.0003, q1; fixed buffers outside optimizer",
-    "interpretation": "forward-conditioning intervention changes effective amplitude range, gradient and regularization mapping; not pure initialization-only proof"
+    "interpretation": "Per-site effective amplitude bounds change, but unrestricted output Dense preserves the global ideal-real function family; initialization/gradient/Adam coordinates differ, not a pure initialization-only proof."
   },
   "protocol": {
     "version": "higgs-depth-gain-v1",
@@ -89,6 +89,18 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-depth-gain-20261106",
-    "availability": "Ignored source preparation, earlier alpha.001 preparation snapshot, future feature-calibration/full raw artifacts and deployment receipts. No GPU result yet."
+    "availability": "External retained source/data/result manifests, passed independent raw audits, checkpoints/predictions and preserved negative/failed evidence; see the measured summary identities."
+  },
+  "execution": {
+    "measured_consumer_commit": "69d7f0636ce47db892096d7b7aacc2c2cb731b8b",
+    "measured_consumer_manifest_sha256": "b7b6428e80bbf18fc0cff22af2388e6818c3c9c28ad9221c98c352123666d193",
+    "passed_summary_audit_sha256": "4bfb2d41ed402fcce01b05648d52d601cee3fde820300edd6f1a15d8f80cbb7d",
+    "summary_path": "docs/bounded-validation-results.md",
+    "relative_evidence_report": "stats-actual-a100-gain-03",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false,
+    "analytic_clarification_analysis_sha256": "a90fa2323c706095b4975e8b81bc29c745322ae13a56fbb467dd8c8f8c05f5c7",
+    "analytic_clarification_summary_path": "docs/positive-gain-equivalence.md",
+    "analytic_clarification_is_task_evaluation": false
   }
 }

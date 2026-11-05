@@ -2,8 +2,10 @@
 
 English (canonical) | [日本語](higgs-depth-gain.ja.md)
 
-**PLANNED.** This separate consumer prepares a bounded exploratory experiment.
-CPU checks or registry validation do not imply GPU admission or learning results.
+**COMPLETED.** All three bounded arms ran at measured consumer69 with independent
+raw admission. Fixed gains partly rescued the stall but remained below matched
+Dense. See [observations, audit identities and limitations](bounded-validation-results.md).
+The following protocol retains its adaptive-choice and failed-diagnostic disclosures.
 The original depth source `f6d08ad76001a69070b0965cefe7614f192ddf3f`, its
 13 cases, and the formal single-middle CST/DST studies remain unchanged.
 
@@ -67,16 +69,27 @@ sequential RMS transcript and unchanged trainable hashes are saved. Buffers stay
 fixed through optimizer steps and checkpoint restoration.
 
 This is a **forward-scale/conditioning intervention**, not an initialization-only
-causal test. If the original amplitude bound is |a|≤1, the effective scaled bound
-becomes |g_j a|≤g_j. Gradient scales and the mapping from the unchanged raw
-amplitude decay to the effective function change as well. It does not preserve
-the original bounded weight family or prove that initialization was the sole
-cause. Positive gains preserve a given layer's ReLU signs only for the same
-pre-gain input; different preceding trained layers need not share sign patterns.
-For identical parameters, the bias-free square/ReLU branch is positively
-homogeneous: its initial output before the dense head is scaled by the product
-of the three gains, while the final output bias is unchanged. A separate CPU
-product-gain Y/all-gradient algebra check supplements the explicit layer composition.
+causal test. Per-site effective amplitude bounds change from |a|≤1 to |g_j a|≤g_j.
+For this exact bias-free square/ReLU chain with fixed positive gains and an
+unrestricted final Dense weight, however, the product can be absorbed into that
+output weight. Thus the **global ideal-real function family stays the same**:
+
+\[
+F_g(\theta)=F_{\rm stock}(T_g\theta),\qquad
+G=\prod_{j=1}^{3}g_j,\qquad W'_{\rm out}=G W_{\rm out},
+\quad b'_{\rm out}=b_{\rm out}.
+\]
+
+All other trainable parameters stay unchanged, and the inverse divides the output
+weight byG. This is a function-family identity, not an optimizer-trajectory or
+FP32 byte-equivalence claim. Identical saved tensors generally start at different
+functions; gradient scales, Adam epsilon and relative updates differ. The
+multiplicative part of decoupled weight decay itself commutes with constant
+rescaling; weight decay alone is not established as the cause. Positive gains
+preserve a layer's ReLU signs for the same pre-gain input, not a shared trained
+activation pattern. See the [analytic derivation and source-bound synthetic-only
+CPU comparator](positive-gain-equivalence.md). The original product-gain
+Y/all-gradient algebra gate and all training/protocol/source bytes remain intact.
 
 ## Data and admission
 
