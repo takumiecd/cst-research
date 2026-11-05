@@ -40,10 +40,12 @@ conditioning/capacityの不確実性を引き続き開示します。後続の
 [正gainの補足](positive-gain-equivalence.ja.md)は、この構造で全体の理想実数関数クラスが
 同一であることを示すデータ不要の解析であり、別の学習結果ではありません。
 
-HIGGS primary、matched DST比較、CovertypeはRUNNINGです。assessment codeの統合を
-実評価済みとは扱いません。primary30/comparison78の固定gateと、Covertype all9 seal/raw
-admission gateが完了してから、それぞれのconfirmation/heldoutを評価します。original familyと
-comparison familyを分離し、評価結果で固定した選択規則を変えません。公式testは予約したままです。
+HIGGS primaryとmatched DST比較はRUNNINGで、primary30/comparison78のadmissionと
+評価は未完了です。Covertypeは実all9 seal/raw-admission gate、admitされたheldout評価1回、
+保存予測の独立監査が完了した後だけCOMPLETEDとしました。
+[限定された転移結果](covertype-transfer-results.ja.md)は試したCST両密度で負でした。
+original familyとcomparison familyを分離し、評価結果で固定した選択規則を変えません。
+公式testは予約したままです。
 
 ## 実測runは実測treeから再現する
 

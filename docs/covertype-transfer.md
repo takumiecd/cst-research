@@ -1,14 +1,16 @@
-# Covertype transfer study (running; final assessment pending)
+# Covertype transfer study (completed bounded exploratory scope)
 
 **English** | [日本語](covertype-transfer.ja.md)
 
 This bounded exploratory study tests whether low-density CST behavior transfers
 to another task. It does not replace the frozen HIGGS studies, establish formal
 noninferiority or a universal optimal alpha, reproduce an official benchmark,
-or test geographic generalization. The bounded RTX3090 campaign is **RUNNING**
-at measured consumerbfa. Its final nine-model seal, strict independent raw audit
-and separately admitted heldout assessment remain pending. The frozen design
-below is unchanged; integration does not rerun or revalidate the campaign.
+or test geographic generalization. The bounded RTX3090 campaign is **COMPLETED**
+at measured consumerbfa after the nine-model seal, strict independent raw audit,
+one separately admitted heldout assessment and independent saved-prediction audit.
+Both tested CST densities trail Dense in all three seeds under this fixed budget;
+see [results, per-seed resources and evidence](covertype-transfer-results.md).
+The frozen design below is unchanged; integration does not rerun the campaign.
 
 ## Data fixed before results
 

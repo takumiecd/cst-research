@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "covertype-transfer-20261106",
   "title": "Covertype public-runtime Dense/CST exploratory transfer",
-  "status": "RUNNING",
-  "status_note": "Bounded RTX3090 screening, retuning and paired training are running at frozenbfa. Final nine-model seal, completed independent raw audit and one separately admitted heldout assessment remain required. No final transfer result is claimed.",
+  "status": "COMPLETED",
+  "status_note": "Bounded screening/retuning, all9 paired-seed models, strict independent raw admission and one separately admitted heldout assessment completed. Saved predictions were independently re-scored. Both tested CST densities trail Dense in all3 seeds under the fixed10-epoch protocol; exploratory, without formal NI, universal-alpha or geographic claims.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -175,12 +175,28 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "covertype-transfer-20261106",
-    "availability": "ignored source/data/CPU evidence; GPU and model-quality evidence pending"
+    "availability": "External source/data/results archives, all17 phase receipts, strict all9 raw audit, sealed selected models and one assessed heldout prediction bundle with independent metrics audit; see execution identities and results note."
   },
   "execution": {
     "measured_consumer_commit": "bfa58dce18da85f9d2cb3a791db6d6a5126805d7",
     "measured_consumer_manifest_sha256": "8a3c45f7677001c66cc666009d3dfa4a9027d0e1a7571eb571032be75df59d48",
-    "final_assessment_complete": false,
-    "integration_is_rerun_or_revalidation": false
+    "final_assessment_complete": true,
+    "integration_is_rerun_or_revalidation": false,
+    "assessment_invocations": 1,
+    "heldout_evaluated": true,
+    "official_test_evaluated": false,
+    "training_seeds": [
+      29,
+      43,
+      71
+    ],
+    "selected_models": 9,
+    "strict_training_audit_sha256": "ebfb2a99a973aef6fc68dde0b731d42e21b9d995b5711489126f67629be5870d",
+    "heldout_freeze_sha256": "029a5e9dd7e8f71357ef49f9e31a22b26a945a94fa6c9cd8f301640dd8468030",
+    "assessment_envelope_sha256": "7e4210589a17f8d3a2cdf96d679cd8731baab2710df4caebdae5df251f75f040",
+    "assessment_archive_sha256": "6949031e3d7a4a88ba15ff7af7108982d39a5637d89d4a06ea1079c247fd6760",
+    "independent_predictions_audit_sha256": "6534b81fb590e23b49a14c5e810b24ac467d682c7221445ce33d6529d10cd1eb",
+    "summary_path": "docs/covertype-transfer-results.md",
+    "formal_noninferiority": false
   }
 }

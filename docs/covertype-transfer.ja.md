@@ -1,12 +1,14 @@
-# Covertype転移研究（実行中・最終評価は未完了）
+# Covertype転移研究（限定された探索範囲で完了）
 
 [English](covertype-transfer.md) | **日本語**
 
 低密度CSTの挙動が別タスクへ移るかを調べる限定的な探索研究である。固定済みHIGGS研究を
 置き換えず、正式な非劣性・普遍的な最適alpha・公式benchmark再現・地理的汎化を主張しない。
-有限RTX3090 campaignは実測consumerbfaで**RUNNING**であり、最終9-model seal、
-厳密な独立raw audit、別途admitするheldout評価は未完了である。以下の固定designは
-変更せず、統合をcampaignの再実行／再検証とは扱わない。
+有限RTX3090 campaignは、実測consumerbfaで9-model seal、厳密な独立raw audit、
+別途admitしたheldout評価1回、保存予測の独立監査を経て**COMPLETED**となった。固定した
+予算内ではCST両密度が全3 seedでDenseに劣った。
+[結果・seedごとの資源・証拠](covertype-transfer-results.ja.md)を参照する。以下の固定designは
+変更せず、統合をcampaignの再実行とは扱わない。
 
 ## 結果を見る前に固定するデータ
 

@@ -26,7 +26,7 @@ class CovertypePolicyTests(unittest.TestCase):
             r for r in load_studies() if r["id"] == "covertype-transfer-20261106"
         )
         self.assertEqual(study["protocol"], protocol())
-        self.assertEqual(study["status"], "RUNNING")
+        self.assertEqual(study["status"], "COMPLETED")
 
     def test_prespecified_bounded_budget_and_ties(self):
         self.assertEqual(protocol()["architecture"], [54, 1024, 1024, 7])

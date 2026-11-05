@@ -145,7 +145,6 @@ class RegistryTests(unittest.TestCase):
         for identifier in (
             STUDY_ID,
             "higgs-dst-comparison-20261105",
-            "covertype-transfer-20261106",
         ):
             self.assertEqual(studies[identifier]["status"], "RUNNING")
         for identifier in (
@@ -168,6 +167,32 @@ class RegistryTests(unittest.TestCase):
             self.assertEqual(
                 execution["summary_path"], "docs/bounded-validation-results.md"
             )
+
+    def test_completed_transfer_requires_actual_seal_and_once_assessment_provenance(
+        self,
+    ):
+        study = next(
+            s for s in load_studies() if s["id"] == "covertype-transfer-20261106"
+        )
+        self.assertEqual(study["status"], "COMPLETED")
+        evidence = study["execution"]
+        self.assertTrue(evidence["final_assessment_complete"])
+        self.assertTrue(evidence["heldout_evaluated"])
+        self.assertEqual(evidence["assessment_invocations"], 1)
+        self.assertEqual(evidence["selected_models"], 9)
+        self.assertEqual(evidence["training_seeds"], [29, 43, 71])
+        for key in (
+            "strict_training_audit_sha256",
+            "heldout_freeze_sha256",
+            "assessment_envelope_sha256",
+            "assessment_archive_sha256",
+            "independent_predictions_audit_sha256",
+        ):
+            self.assertRegex(evidence[key], r"^[0-9a-f]{64}$")
+        self.assertFalse(evidence["formal_noninferiority"])
+        self.assertFalse(evidence["official_test_evaluated"])
+        self.assertFalse(evidence["integration_is_rerun_or_revalidation"])
+        self.assertEqual(evidence["summary_path"], "docs/covertype-transfer-results.md")
 
     def test_list_reports_status_and_source_registry_is_unchanged(self):
         before = copy.deepcopy(self.study)

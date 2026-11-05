@@ -51,12 +51,12 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 | [Coordinate LR](docs/higgs-coordinate-lr.md) | COMPLETED | Short pilot plus bounded two-seed followups; retain stock q1 |
 | [Depth/layer position](docs/higgs-depth-position.md) | COMPLETED |13 development-only cases; scope-limited stall evidence |
 | [Fixed output gain](docs/higgs-depth-gain.md) | COMPLETED |3 exploratory arms; partial rescue remains below Dense |
-| [Covertype transfer](docs/covertype-transfer.md) | RUNNING | Final all9 seal/raw audit and heldout assessment pending |
+| [Covertype transfer](docs/covertype-transfer-results.md) | COMPLETED | Nine sealed models, one heldout assessment; both CST densities below Dense |
 
 The [observations and limitations](docs/bounded-validation-results.md) bind the
 completed coordinate/depth/gain results to their actual measured commits and raw
 audits. Development-selected pilots establish neither a minimum alpha nor formal
-noninferiority. Running studies stay incomplete until their final fixed-family
+noninferiority. HIGGS primary and DST stay RUNNING until their final fixed-family
 admission and assessment finish. Existing frozen jobs continue using their
 original worktrees, not this combined source tree.
 

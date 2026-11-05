@@ -43,11 +43,11 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 | [座標LR](docs/higgs-coordinate-lr.ja.md) | COMPLETED | 短期pilotと有限2-seed追加検証、stock q1を維持 |
 | [深さ・層位置](docs/higgs-depth-position.ja.md) | COMPLETED | developmentのみの13条件、限定的なstall証拠 |
 | [固定output gain](docs/higgs-depth-gain.ja.md) | COMPLETED | 探索的3条件、部分改善後もDenseに劣る |
-| [Covertype転移](docs/covertype-transfer.ja.md) | RUNNING | 最終all9 seal/raw auditとheldout評価は未完了 |
+| [Covertype転移](docs/covertype-transfer-results.ja.md) | COMPLETED | 9モデル固定・heldoutを1回評価、CST両密度はDenseに劣る |
 
 [観測結果と限界](docs/bounded-validation-results.ja.md)で、完了した座標・深さ・gain結果を
 実測commitとraw auditへ結びます。developmentで選んだpilotは最小alphaや正式な非劣性を
-確定しません。進行中の研究は最終固定familyのadmissionと評価が完了するまで未完了です。
+確定しません。HIGGS primaryとDSTは最終固定familyのadmissionと評価が完了するまでRUNNINGです。
 既存の固定ジョブは、この統合sourceではなく元のworktreeから実行し続けます。
 
 ## すぐに使う

@@ -46,12 +46,13 @@ reader failures and conditioning/capacity uncertainty remain disclosed. The late
 ideal-real function family for this exact architecture; it is data-free analysis,
 not another training result.
 
-HIGGS primary, the matched DST comparison and Covertype remain RUNNING. Included
-assessment code does not imply it has run. The fixed primary30/comparison78 gates
-and Covertype all9 seal/raw-admission gate must finish before their respective
-confirmation/heldout evaluations. Preserve original-family and comparison-family
-boundaries, and never use evaluation outcomes to change frozen selection rules.
-The official tests remain reserved.
+HIGGS primary and the matched DST comparison remain RUNNING. Their fixed
+primary30/comparison78 admission and assessment remain incomplete. Covertype is
+COMPLETED only after the real all9 seal/raw-admission gate, one admitted heldout
+assessment and independent prediction audit; its [bounded transfer results](covertype-transfer-results.md)
+are negative for both tested CST densities. Preserve original-family and
+comparison-family boundaries, and never use evaluation outcomes to change frozen
+selection rules. The official tests remain reserved.
 
 ## Reproduce a measured run from its measured tree
 
