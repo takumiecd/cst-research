@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-gpu-comparison-20261105",
   "title": "HIGGS N2048 one-epoch comparison on reserved A100 MIG and recorded L4 environment",
-  "status": "PLANNED",
-  "status_note": "Separate bounded environment comparison; numerical admission and result retrieval are required before reporting completion.",
+  "status": "COMPLETED",
+  "status_note": "Both bounded A100 MIG pilots completed after admission; source/data/archive/raw tensors and independent CPU references reverified locally. Formal L4 alpha study is unchanged.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -62,5 +62,58 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-gpu-comparison-20261105",
     "availability": "Ignored external source/result archives, manifests, raw tensors, setup and experiment logs; metadata does not imply execution complete"
+  },
+  "observation": {
+    "measured_adapter_commit": "19fb88d3e12b5a1be6403ccca3944214551794fe",
+    "torchcst_source_verified_files": 1188,
+    "runtime": {
+      "torch": "2.11.0+cu126",
+      "cuda": "12.6",
+      "triton": "3.6.0",
+      "python": "3.12.9",
+      "nvcc": "12.6.85",
+      "driver": "570.86.15",
+      "cpu": "Intel Xeon Gold6348 at2.60GHz"
+    },
+    "qualification": {
+      "tests_passed": 136,
+      "legacy_frozen_mnist_tests_skipped": 2,
+      "full_atoms": 4194,
+      "quadrature_atoms": 31,
+      "eager_graph_epoch_pairs": 4,
+      "independent_local_audit": "passed; Torch2.13 CPU references recomputed, no reader clock/hash differences"
+    },
+    "timing_seconds": {
+      "a100_mig": {
+        "dense_training": 12.252478007227182,
+        "dense_preparation_inclusive": 12.827648140490055,
+        "cst_training": 17.282989056780934,
+        "cst_preparation_inclusive": 17.410840693861246
+      },
+      "recorded_l4": {
+        "dense_training": 15.854978975000108,
+        "dense_preparation_inclusive": 16.600664804000075,
+        "cst_training": 19.997564857000043,
+        "cst_preparation_inclusive": 20.180737034000117
+      }
+    },
+    "peaks_bytes_both_environments": {
+      "dense": {
+        "allocated": 121832960,
+        "reserved": 146800640
+      },
+      "cst": {
+        "allocated": 40721408,
+        "reserved": 65011712
+      }
+    },
+    "source_archive_sha256": "edbb585de56e304887b118069b7c7ecd9e45ae5fe2e08a5afca828ad8544eb5f",
+    "adapter_archive_sha256": "5266a6833c9c6132d82f2145de3fc4f5e8c199e40fb97d32cf43de0b6894d5a0",
+    "result_archive_sha256": "59d8bfc25ab94871b1dd03e7e518291b15fd7b733cc523e51d657a2de41c88d5",
+    "result_archive_bytes": 413398429,
+    "verified_outer_manifest_files": 83,
+    "retained_raw_pt_files": 24,
+    "failed_attempt": "Header lookup failed before oracles/pilots; unchanged sources passed fresh admission with command-local job-header CPATH. Both attempts retained.",
+    "scope": "One pair/seed/epoch; environment comparison, not hardware-only causality, universal performance or final quality."
   }
 }
