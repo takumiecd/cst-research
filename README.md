@@ -38,6 +38,13 @@ and [reproduction and evidence guide](docs/reproducibility.md).
 Earlier studies and raw evidence remain in their original torchcst history and
 external archives; they have not been copied wholesale into this repository.
 
+A newly authorized [static/RigL comparison](docs/higgs-dst-comparison.md) adds
+independent LR tuning and three paired training seeds for both sparse references,
+with a matched-horizon control gate. Its first implementation scope is
+qualification and tuning; final freeze/confirmation/assessment stay blocked until
+all required controls are ready. The existing CST primary study is unchanged,
+and the earlier seed-17 DST pilot remains exploratory.
+
 The next authorized direction is a [layer-position study plan](docs/higgs-layer-position-plan.md):
 compare early/middle/late hidden-layer replacements at a fixed width and depth,
 then test predictions formed from bounded density exploration. It starts after

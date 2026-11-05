@@ -31,6 +31,12 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 [再現・証拠の扱い](docs/reproducibility.ja.md)を参照してください。
 過去の研究やraw証拠は元のtorchcst履歴・外部アーカイブに残し、ここへ一括コピーしていません。
 
+新たに承認された[Static/RigL比較](docs/higgs-dst-comparison.ja.md)では、
+両疎参照のLRを独立に調整し、3つのpaired学習seedと同期間controlで比較します。
+最初の実装範囲は資格確認とtuningで、必要なcontrolが全てそろうまで最終freeze・
+confirmation・assessmentを拒否します。元のCST主研究は変更せず、既存seed17 DST pilotは
+探索結果として扱います。
+
 次の承認済み方針は[層位置の比較計画](docs/higgs-layer-position-plan.ja.md)です。
 幅・深さを固定して入力寄り/中央/出力寄りの隠れ層を比べ、有限の密度探索から立てた予測を
 検証します。現在の実験完了後に開始し、runnerと実行プロトコルはまだ固定していません。
