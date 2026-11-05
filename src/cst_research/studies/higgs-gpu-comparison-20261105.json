@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "higgs-gpu-comparison-20261105",
+  "title": "HIGGS N2048 one-epoch comparison on reserved A100 MIG and recorded L4 environment",
+  "status": "PLANNED",
+  "status_note": "Separate bounded environment comparison; numerical admission and result retrieval are required before reporting completion.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_gpu_comparison",
+  "protocol_source_path": "docs/higgs-gpu-comparison.md",
+  "protocol_repository": "https://github.com/takumiecd/cst-research",
+  "implementation_boundary": {
+    "runtime": "External unchanged pinned torchcst archive; no runtime vendoring",
+    "benchmark": "Private pinned benchmarks.training.higgs_confirmation; not a public Graph training API",
+    "adapter": "Separate cst-research source commit and manifest frozen before execution"
+  },
+  "protocol": {
+    "width": 2048,
+    "divisor": 1000,
+    "alpha": 0.001,
+    "atoms": 4194,
+    "seed": 17,
+    "learning_rate": 0.001,
+    "epochs": 1,
+    "batch_size": 4,
+    "updates": 25000,
+    "dtype": "FP32",
+    "tf32": false,
+    "cpu_math_threads": 1,
+    "training_rows": [
+      0,
+      100000
+    ],
+    "development_indices": [
+      0,
+      50000
+    ],
+    "confirmation_evaluated": false,
+    "test_evaluated": false,
+    "data_sha256": "62d32a1789ed737a5997ca6a0630548e6211af86c9cd6a0a605cd057d8bd32ac",
+    "device": {
+      "name": "NVIDIA A100 80GB PCIe MIG 3g.40gb",
+      "sms": 42,
+      "memory_bytes": 42144366592,
+      "capability": [
+        8,
+        0
+      ]
+    },
+    "admission": "Pinned stock/topology/cohort tests; full4194-atom independent CPU FP64 Y/dX/dP; quadrature31; dense/CST eager/Graph 2x16 whole-state byte and clock checks; no guard bypass",
+    "comparison": "Environment comparison only; Python/CUDA/NVCC/driver/CPU may differ even with matched Torch2.11; no GPU-only attribution",
+    "l4_reference_job": "l4job-0ac0ee0f5deb442eb09b8d63a18d1f4a",
+    "l4_reference_cells": [
+      "budget-pilot-2048-dense",
+      "budget-pilot-2048-cst"
+    ],
+    "measurement": "Unchanged original synchronized complete-training and preparation-inclusive timing, capture-inclusive allocator allocated/reserved peaks; not total GPU process memory",
+    "resource_scope": "Already reserved A100 MIG only, bundled kyutech-a100 client, foreground timeout, job-local dependencies, no profile/global package/unrelated job changes; no alpha grid or A100 DST"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-gpu-comparison-20261105",
+    "availability": "Ignored external source/result archives, manifests, raw tensors, setup and experiment logs; metadata does not imply execution complete"
+  }
+}
