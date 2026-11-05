@@ -1,5 +1,7 @@
 # 実行元と証拠の再現
 
+[English (canonical)](reproducibility.md) | 日本語
+
 ## 現在のHIGGSはtorchcstで実行中
 
 登録したstudyは、torchcstの[固定source](https://github.com/takumiecd/torchcst/tree/97580582ed28c4e494bf5c2656bbe94a85c544c3)で

@@ -1,37 +1,47 @@
 # cst-research
 
-CSTのスケール、精度、学習過程、速度・メモリを再現可能な条件で調べる研究用repoです。
-研究計画と実験の識別情報を先に固定し、観測結果・不確実性・未検証の仮説を分けて残します。
-ライセンスは[Apache-2.0](LICENSE)です。
+English (canonical) | [日本語](README.ja.md)
 
-## torchcstとの役割分担
+Research on CST scaling, accuracy, learning dynamics, speed and memory under
+reproducible conditions. We freeze study designs and experiment identities before
+running comparisons, and distinguish observations, uncertainty and untested
+hypotheses. Licensed under [Apache-2.0](LICENSE).
 
-| repo | 役割 |
+## Relationship to torchcst
+
+| Repository | Responsibility |
 |---|---|
-| [torchcst](https://github.com/takumiecd/torchcst) | 公開Module・演算の数学的契約・backend・autograd・kernelの正しさ |
-| cst-research | 研究計画、モデル・タスク、比較条件、学習曲線、統計、実験の来歴と再現手順 |
+| [torchcst](https://github.com/takumiecd/torchcst) | Public modules, mathematical operator contracts, backends, autograd and kernel correctness |
+| cst-research | Study designs, models and tasks, comparison protocols, learning curves, statistics, experiment provenance and reproduction instructions |
 
-このrepoはtorchcstのruntimeを複製しません。公開APIを使う研究runnerを今後ここへ追加します。
-公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
-独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
+This repository does not duplicate the torchcst runtime. Future research runners
+using its public API will live here. When an experimental Graph adapter needs
+private interfaces, record those dependencies, the exact source commit and the
+scope of independent validation. Use within an experiment and adoption into a
+public API are separate decisions.
 
-## 現在の研究
+## Current study
 
-**HIGGS低密度CSTはRUNNINGです。結果は未完了で、学習runnerの移管も未実施です。**
-現在の実行元はtorchcst [PR #141](https://github.com/takumiecd/torchcst/pull/141)の
-固定commit `97580582ed28c4e494bf5c2656bbe94a85c544c3`です。
-28→N→N→2の中間層だけをCSTへ置換し、N=1024/2048、
-α=0.001/0.002/0.005/0.01を調整済みdenseと比較します。
-入力・出力はdenseのまま全層を学習します。3確認seedを使い、accuracy −0.2ポイント、
-ROC-AUC −0.002の許容差を実行前に固定しています。
+**The low-density HIGGS CST study is RUNNING. Results are incomplete, and its
+training runner has not migrated here.**
 
-[機械可読な研究計画](src/cst_research/studies/higgs-alpha-confirmation-20261105.json)と
-[再現・証拠の扱い](docs/reproducibility.ja.md)を参照してください。
-過去の研究やraw証拠は元のtorchcst履歴・外部アーカイブに残し、ここへ一括コピーしていません。
+The campaign runs from torchcst [PR #141](https://github.com/takumiecd/torchcst/pull/141),
+pinned to commit `97580582ed28c4e494bf5c2656bbe94a85c544c3`.
+It replaces only the middle layer of a 28→N→N→2 network with CST, comparing
+N=1024/2048 and α=0.001/0.002/0.005/0.01 against a tuned dense baseline.
+The input and output layers remain dense, and all layers train. Three confirmation
+seeds are used, with margins fixed before execution: −0.2 percentage points in
+accuracy and −0.002 in ROC-AUC.
 
-## すぐに使う
+See the [machine-readable protocol](src/cst_research/studies/higgs-alpha-confirmation-20261105.json)
+and [reproduction and evidence guide](docs/reproducibility.md).
+Earlier studies and raw evidence remain in their original torchcst history and
+external archives; they have not been copied wholesale into this repository.
 
-Python 3.11以上が必要です。レジストリCLIは標準ライブラリだけで動作し、GPUを使いません。
+## Quick start
+
+Python 3.11 or later is required. The registry CLI uses only the standard library
+and does not use a GPU.
 
 ```bash
 python -m venv .venv
@@ -43,24 +53,27 @@ cst-research validate --json
 python -m unittest discover -s tests -v
 ```
 
-インストールせず確認する場合は `PYTHONPATH=src python -m cst_research list` も使えます。
-`validate`は登録内容と固定条件の検査です。学習結果、外部証拠の存在、GPUの正しさを
-検証したことにはなりません。このrepoには学習を起動する独自CLIはまだありません。
+To inspect the registry without installing, use
+`PYTHONPATH=src python -m cst_research list`.
+`validate` checks registry metadata and fixed protocol conditions. It does not
+validate training results, the existence of external evidence or GPU correctness.
+This repository does not yet provide its own training-launch command.
 
-torchcstのライブラリが必要な場合だけ、固定commitのoptional extraを使えます。
+If you need the torchcst library, install the optional extra pinned to the study's
+source commit:
 
 ```bash
 python -m pip install -e '.[torchcst]'
 ```
 
-これはライブラリ依存の導入です。現在のbenchmark runnerを使うには、
-[固定torchcst sourceの取得手順](docs/reproducibility.ja.md)に従ってください。
+This installs a library dependency. To use the current benchmark runner, follow
+the [instructions for obtaining the pinned torchcst source](docs/reproducibility.md).
 
-## 外部証拠を参照する
+## External evidence
 
-データ・checkpoint・raw logs・pool状態・認証情報はGitへ入れません。
-`CST_RESEARCH_EVIDENCE_ROOT`の下にstudy IDのディレクトリを置くか、
-Git管理しない `research.local.toml` で保存先を設定します。
+Keep datasets, checkpoints, raw logs, pool state and credentials out of Git.
+Place a directory named after the study ID under `CST_RESEARCH_EVIDENCE_ROOT`, or
+configure the location in an untracked `research.local.toml`:
 
 ```toml
 [evidence]
@@ -71,8 +84,9 @@ root = "./evidence"
 cst-research --config research.local.toml show higgs-alpha-confirmation-20261105 --evidence
 ```
 
-設定は所在を解決するだけで、コピー・ダウンロード・削除は行いません。
-`--evidence`の出力にはローカル保存先が含まれるため、公開用レポートには含めないでください。
-環境変数のrootが設定されている場合はTOMLより優先します。
+The configuration resolves a location; it does not copy, download or delete
+anything. Output from `--evidence` includes the local storage path and should not
+be included in public reports. When set, the environment variable takes precedence
+over the TOML root.
 
-新しい研究・変更は[CONTRIBUTING.md](CONTRIBUTING.md)に沿ってPRで追加します。
+Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md).

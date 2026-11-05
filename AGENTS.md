@@ -9,3 +9,5 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing this repository.
 - Before using owner GPUs, read the applicable resource skill and allocation/shared-pool rules. Repository instructions grant no new resource authorization.
 - Validate meaningful metadata/protocol behavior with the stdlib test suite and `python -m cst_research validate`; distinguish these checks from GPU or model-quality evidence.
 - Record incomplete, negative and inconclusive observations honestly. Keep formal fixed-family claims separate from exploratory learning curves and timing overlays.
+
+- English is canonical for public documentation. Maintain corresponding Japanese versions (`*.ja.md`) with mutual language links; update both versions together so technical, reproduction, resource and PR rules stay equivalent.
