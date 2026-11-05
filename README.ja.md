@@ -90,3 +90,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 環境変数のrootが設定されている場合はTOMLより優先します。
 
 新しい研究・変更は[CONTRIBUTING.ja.md](CONTRIBUTING.ja.md)に沿ってPRで追加します。
+
+別研究の[座標LR pilot](docs/higgs-coordinate-lr.ja.md)はPLANNEDです。3条件をeagerで3epoch試し、条件を満たす場合だけ2seedの10epoch対比較へ進めます。固定済みCST/DST比較は変更しません。

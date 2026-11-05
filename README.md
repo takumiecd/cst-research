@@ -104,3 +104,5 @@ be included in public reports. When set, the environment variable takes preceden
 over the TOML root.
 
 Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The separate [position-LR pilot](docs/higgs-coordinate-lr.md) is PLANNED: three eager3epoch arms, followed only conditionally by two10epoch paired seeds. It does not change the frozen CST/DST comparison.

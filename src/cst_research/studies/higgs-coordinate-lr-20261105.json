@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "higgs-coordinate-lr-20261105",
+  "title": "Bounded HIGGS physical-position learning-rate pilot",
+  "status": "PLANNED",
+  "status_note": "Separate consumer implementation and CPU admission; no new GPU pilot or model-quality result yet.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_coordinate_lr",
+  "protocol_source_path": "docs/higgs-coordinate-lr.md",
+  "implementation_boundary": {
+    "runtime": "Unchanged external975 Git archive; no public runtime copy or edits",
+    "adapter": "Benchmark-only direct physical-position LR recomputation from contiguous old state; stock control and all arms eager",
+    "coupling": "s,t jointly encode amplitude/activity; no independent physical amplitude/radius LR or Graph eligibility claim"
+  },
+  "protocol": {
+    "width": 1024,
+    "divisor": 1000,
+    "atoms": 1048,
+    "batch_size": 4,
+    "dtype": "FP32",
+    "tf32": false,
+    "training_rows": [
+      0,
+      100000
+    ],
+    "development_validation_indices": [
+      0,
+      50000
+    ],
+    "data_sha256": "62d32a1789ed737a5997ca6a0630548e6211af86c9cd6a0a605cd057d8bd32ac",
+    "position_multipliers": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "ordinary_and_coupled_polar_lr": 0.0003,
+    "amplitude_weight_decay": 0.01,
+    "pilot": {
+      "seed": 17,
+      "epochs": 3,
+      "arms": 3,
+      "mode": "eager"
+    },
+    "advance": {
+      "minimum_development_ce_gain": 0.001,
+      "maximum_development_auc_drop": 0.001,
+      "requires_finite_correctness_resume": true,
+      "selection": "lowest eligible best-dev CE; control wins control tie; lower noncontrol ratio on exact tie"
+    },
+    "conditional_followup": {
+      "seeds": [
+        29,
+        43
+      ],
+      "epochs": 10,
+      "arms_per_seed": 2,
+      "runs": 4,
+      "automatic_submission": false,
+      "requires_reviewed_pilot_decision_sha256": true
+    },
+    "confirmation_evaluated": false,
+    "test_evaluated": false,
+    "formal_noninferiority": false,
+    "scope": "Short-budget exploratory gate then bounded longer development replication; no speed adoption or original CST/DST family change"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-coordinate-lr-20261105",
+    "availability": "Ignored source/data/result archives, CPU and future GPU admission, raw checkpoints and predictions; preparation is not a GPU result"
+  }
+}
