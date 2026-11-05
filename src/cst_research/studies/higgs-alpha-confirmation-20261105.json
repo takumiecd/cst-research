@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "id": "higgs-alpha-confirmation-20261105",
+  "title": "HIGGS: low-density CST middle-layer scaling and quality confirmation",
+  "status": "RUNNING",
+  "status_note": "Registered while the frozen torchcst campaign is running. Results are incomplete; training has not migrated to this repository.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "benchmarks.training.higgs_confirmation_campaign",
+  "protocol_source_path": "docs/research-history/cuda-linear/higgs-alpha-confirmation-20261105.ja.md",
+  "implementation_boundary": {
+    "library": "Public torchcst modules define operator mathematics and parameter ownership.",
+    "experiment": "The pinned torchcst benchmark owns this study's model, optimizer, data splits and selection rules.",
+    "graph_adapter": "Private experiment-cohort Graph adapter at the pinned source; not a supported public torchcst training API.",
+    "migration": "Future runners may move to cst-research through separate validated changes. Do not move or modify the running frozen campaign."
+  },
+  "protocol": {
+    "architecture": {
+      "layers": [
+        28,
+        "N",
+        "N",
+        2
+      ],
+      "widths": [
+        1024,
+        2048
+      ],
+      "activations": "ReLU after each hidden layer",
+      "cst_location": "middle layer only; dense input/output layers",
+      "all_layers_trainable": true,
+      "middle_bias": false,
+      "alphas": [
+        0.001,
+        0.002,
+        0.005,
+        0.01
+      ],
+      "divisors": [
+        1000,
+        500,
+        200,
+        100
+      ],
+      "atom_count": "floor(N*N/divisor)",
+      "parameter_counts": {
+        "dense": "N*N+31*N+2",
+        "cst": "4*A+31*N+2"
+      },
+      "initialization": "Stock public CST radius initialization and standard dense initialization; shared ordinary-layer initial values within width/seed; no activation gain calibration",
+      "kernel": "radius cell integral M8; spacing=1; physical radius in [0.5,50]",
+      "optimizer": "Pinned AdamW proposal and CST Polar update; ordinary/dense WD=0.01, atom raw WD=0, logical amplitude WD=0.01; exact remaining contract is in the pinned runner"
+    },
+    "data": {
+      "dataset": "Official HIGGS, 11000000 ordered rows",
+      "prepared_archive_sha256": "62d32a1789ed737a5997ca6a0630548e6211af86c9cd6a0a605cd057d8bd32ac",
+      "training_rows": [
+        0,
+        100000
+      ],
+      "standardization_fit_rows": [
+        0,
+        10400000
+      ],
+      "official_validation_rows": [
+        10400000,
+        10500000
+      ],
+      "development_validation_indices": [
+        0,
+        50000
+      ],
+      "confirmation_validation_indices": [
+        50000,
+        100000
+      ],
+      "official_test_rows": [
+        10500000,
+        11000000
+      ],
+      "official_test_evaluated": false,
+      "index_convention": "zero-based half-open intervals",
+      "data_note": "Prior validation prefix 8192 belongs to development; no raw data is included in this repository. Archive decompression may touch the full validation array; selection references only its development slice."
+    },
+    "training": {
+      "development_seed": 17,
+      "confirmation_seeds": [
+        29,
+        43,
+        71
+      ],
+      "batch_size": 4,
+      "dtype": "FP32",
+      "tf32": false,
+      "cpu_math_threads": 1,
+      "accelerator": "NVIDIA L4",
+      "concurrent_gpus": 1,
+      "base_learning_rates": [
+        0.0001,
+        0.0003,
+        0.001,
+        0.003
+      ],
+      "base_epochs": 10,
+      "edge_extension": {
+        "maximum_additions_per_group": 1,
+        "lower": 3e-05,
+        "upper": 0.01,
+        "epochs": 10,
+        "rule": "Extend only in the direction of a selected base-grid edge; retain an edge flag if final best is still on evaluated boundary."
+      },
+      "checkpoint_selection": "Minimum development cross-entropy, earliest epoch on exact tie",
+      "learning_rate_selection": "Minimum best-development cross-entropy, lower learning rate on exact tie",
+      "common_horizon_per_width": {
+        "base": 10,
+        "extended": 20,
+        "trigger": "After all 5 development groups finish, ANY selected candidate has best_epoch>=9 AND dev_CE(epoch8)-dev_CE(epoch10)>0.001",
+        "retuning": "If triggered, rerun top 2 development LRs per group for 20 epochs; choose by the same development rule; use the same 20-epoch horizon for all configurations at that width.",
+        "still_improving_at20": "best_epoch>=19 AND dev_CE(epoch18)-dev_CE(epoch20)>0.001; report an unresolved tail, do not silently extend after confirmation.",
+        "trigger_best_epoch_at_least": 9,
+        "trigger_loss_epochs": [
+          8,
+          10
+        ],
+        "trigger_loss_improvement_gt": 0.001,
+        "retune_top_k": 2,
+        "tail_best_epoch_at_least": 19,
+        "tail_loss_epochs": [
+          18,
+          20
+        ],
+        "tail_loss_improvement_gt": 0.001
+      },
+      "confirmation_model_count": 30,
+      "confirmation_freeze": "Freeze all 30 checkpoint hashes, hyperparameters, horizons and data identities before evaluating confirmation 50k; per-seed checkpoint selection uses development only."
+    },
+    "statistics": {
+      "difference": "CST minus dense for paired training seed",
+      "accuracy_margin": 0.002,
+      "accuracy_margin_unit": "probability; 0.2 percentage points, not a relative percentage",
+      "roc_auc_margin": 0.002,
+      "primary": {
+        "method": "intersection-union of two co-primary one-sided paired-seed noninferiority t tests",
+        "degrees_of_freedom": 2,
+        "configuration_p": "max(p_accuracy,p_roc_auc)",
+        "configuration_count": 8,
+        "familywise_alpha": 0.05,
+        "decision": "8*p_configuration<=0.05",
+        "zero_standard_error": "p=0 if mean_difference+margin>0; otherwise p=1 including the exact boundary"
+      },
+      "diagnostics": {
+        "simultaneous_seed_t": "Two-sided95% Bonferroni over 16 endpoints, df2, critical approximately 17.8466; inferiority supported if either upper bound is below -margin",
+        "pointwise_seed_t": "One-sided95% lower bound; diagnostic only",
+        "paired_case_bootstrap": {
+          "replicates": 2000,
+          "random_seed": 20261105,
+          "confidence": 0.95,
+          "method": "Shared resampled example weights across both methods and all 3 seeds; exact weighted tie-aware empirical AUC; mean single-seed metrics",
+          "scope": "Conditional on the six fixed learned models; no joint seed/example confidence guarantee"
+        },
+        "empirical_candidate": "All3 seed point estimates within both margins; not formal support",
+        "simultaneous_seed_t_endpoint_count": 16
+      },
+      "assumptions": "Approximately normal IID paired seed differences, conditional on the fixed confirmation benchmark; three seeds have limited power and cannot validate normality.",
+      "labels": [
+        "supported",
+        "inferior",
+        "inconclusive"
+      ],
+      "minimum_alpha_scope": "Smallest supported tested point only; smaller inconclusive points leave boundary unresolved. If 0.001 passes, required density may be below 0.001. No monotonicity or universal/continuous optimum is assumed.",
+      "family_frozen": true,
+      "adaptive_alpha_additions": "Exploratory and excluded from this formal family",
+      "references": [
+        "https://www.fda.gov/media/162416/download?attachment=",
+        "https://www.itl.nist.gov/div898/handbook/prc/section4/prc473.htm"
+      ]
+    },
+    "correctness": "Independent public CPU FP64 and quadrature Y/dX/all-parameter-gradient references; eager/Graph whole-step parameter/optimizer/gradient/clock byte comparisons; qualification may use dev32, production requires dev50000",
+    "measurement": {
+      "training_time": "Synchronized complete gather/forward/loss/backward/update/metric time; excludes evaluation/checkpoint/hash diagnostics",
+      "adoption_time": "Training plus preparation/capture/restoration/retirement; excludes evaluation/checkpoint/hash diagnostics",
+      "memory": "CUDA allocator allocated/reserved peaks including capture; not total GPU process memory",
+      "hpo_timing_caveat": "HPO groups can span separate L4 VMs; CPU host model was not recorded. Cross-job HPO timing overlays are exploratory.",
+      "primary_timing_comparison": "Within-job dense versus all 4 CST configurations at each width/confirmation seed; preserve job provenance and paired seeds.",
+      "learning_curves": "Development-only curves; do not change frozen selection rules or treat tail diagnostics as mathematical optimization convergence."
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-alpha-confirmation-20261105",
+    "availability": "External local/managed storage; raw data, checkpoints and pool credentials are not published here.",
+    "expected_records": [
+      "frozen-source-manifest.json",
+      "submissions.jsonl",
+      "pool job result manifests",
+      "recovery-state.tar.gz",
+      "recovery-state-receipt.json",
+      "learning.json",
+      "best-dev checkpoint hashes",
+      "confirmation-freeze.json when frozen",
+      "assessment index/predictions when complete"
+    ],
+    "absence_policy": "Registry validation does not assert that external evidence exists or that the running experiment has completed."
+  },
+  "archive_provenance": {
+    "historical_source": "Earlier experiments remain in torchcst history and ignored evidence archives; they were not copied into this repository.",
+    "result_policy": "Existing results remain tied to their original source commit, dataset, workload, hardware and job. Registration here is not rerunning, adopting or verifying those results."
+  }
+}
