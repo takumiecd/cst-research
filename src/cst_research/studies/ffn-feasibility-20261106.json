@@ -202,7 +202,7 @@
       "confirmation_scope": "SeparateR11mainwidth3seedfamily launched; no completed3seedresults yet. Aspectpilots remainone-seed development."
     },
     "main_width_confirmation": {
-      "status": "STOPPED_BY_OWNER_INCOMPLETE_CURRENT_SEED29_FINALIZING",
+      "status": "STOPPED_BY_OWNER_INCOMPLETE_SEED29_AUDITED_RETRIEVED",
       "selection_boundary": "Fixed after development seed17 evidence and before the first confirmation run; no recipe or budget selection using confirmation outcomes.",
       "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
       "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
@@ -263,7 +263,30 @@
         "cancelled_unstarted_width_seed_cases": 6,
         "source_preservation": "Original nine-case request/controller/journal preserved; supervisor stopped by exactPID only; unchanged current learner finishes, separate finish-only supervisor performs terminal audit/bundle.",
         "next": "Afterseed29retrieval, bounded N256seed17~1M comparison of allAtom16 versusamplitude-direction1/centers16, samePolaroutertime and20MLR/datahorizon. Independentoptimizer/reference/native/resume gates before learning, then publicAPI design.",
-        "public_API_preference": "Absolutefield_lrs withsemanticrolesdeclaredbyparameterization/chart; notimplemented/adopted."
+        "public_API_preference": "Absolutefield_lrs withsemanticrolesdeclaredbyparameterization/chart; notimplemented/adopted.",
+        "finished_after_owner_stop": {
+          "width_seed_cases": [
+            [
+              128,
+              29
+            ],
+            [
+              256,
+              29
+            ],
+            [
+              512,
+              29
+            ]
+          ],
+          "learning_runs": 9,
+          "actual_updates_per_arm": 4882,
+          "actual_tokens_per_arm": 4999168,
+          "trained_CST_projection_VJPs": 24,
+          "all9_serialized_resume_max_parameter_error": 0,
+          "retrieved_manifest_verified_raw_files": 33,
+          "three_seed_claim": false
+        }
       }
     }
   },

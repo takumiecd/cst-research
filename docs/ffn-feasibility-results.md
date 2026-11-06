@@ -303,12 +303,36 @@ The main-width confirmation family planned widths128/256/512, seeds29/43/71
 and all three arms at5M each (27 fresh runs). Its recipe, budget, retention rules
 and usefulness criterion were fixed in commit5654fc4 before the first run. The
 owner subsequently cancelled the six unstarted seed43/71 cases to prioritize
-short field-LR experiments. N128/N256 seed29 completed/audited/retrieved; the
-in-flight N512 seed29 is finishing unchanged with a terminal audit. The family
+short field-LR experiments. All three seed29 widths
+completed unchanged, passed terminal audits and were retrieved/hash verified. The family
 is stopped and incomplete, with no three-seed claim or numerical-failure claim.
 See the study plan for the explicit owner amendment. The raw R10 parent
 receipt SHA256 is `7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f`;
 archive/request/reporter hashes are retained in the derived figure manifest.
+
+## Retained seed29 observations after the owner stop (R11)
+
+All three widths completed their fresh Dense/no-FFN/CST arms at4882 updates and
+4,999,168 tokens per arm. The finish-only worker passed the frozen terminal audit
+for N512 after the original supervisor stopped. Across the retained nine arms,
+all24 trained CST projection VJPs and all optimizer/load/next-task-step audits
+passed; maximum resumed parameter difference was0 in every arm. All33 retrieved
+raw files matched their manifests. No seed43/71 learner started.
+
+The [retained one-seed report](ffn-feasibility-r11-seed29-20261107.md) includes
+all token/time curves, fixed-prompt samples, parameter counts and allocated/
+reserved observations. Confirmation CE Dense/CST/no-FFN is2.92656/3.03691/3.30066
+atN128,2.65688/2.77403/2.96877 atN256 and2.48887/2.60475/2.74543 atN512.
+CST improves on no-FFN at each observed width, with Dense gaps around0.11–0.12CE.
+This retains a linear FFN Atom/parameter budget over these finite widths; it is
+not three-seed repeatability, convergence, a lower bound or a universal scaling law.
+Current eager FP32 still shows no speed or measured GPU-memory advantage.
+
+The separate stopped-family observation adapter verifies every individual run
+with the strict reader and links the owner-stop/finalizer proofs. It reuses the
+renderers while leaving the formal three-seed aggregation gate unchanged.
+No seed SD is estimated from one seed. The next stage is the explicitly separate
+short field-LR mechanism comparison before public API creation.
 
 ## Native scope and remaining work
 

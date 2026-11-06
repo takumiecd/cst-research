@@ -32,7 +32,15 @@
     "shapes-r10-development-versus-time.png": "c9bb7b7714ccebc224211a1b45786adf8de4cffd4debb9a1a428d659ebdd868a",
     "shapes-r10-development-versus-time.svg": "e1f40c4d1bd96ff86d254ea1035bad7b97980ec6450bf450afb3e26bd72c038c",
     "shapes-r10-resource-observations.png": "04be201c3b4d95388289adbc44f69119306228bcd17c569ad882bd4f39e67dcc",
-    "shapes-r10-resource-observations.svg": "1dcbd1a594ac37caa65df613db0128d8ffde81f0681e5b5d54036e730c31afe1"
+    "shapes-r10-resource-observations.svg": "1dcbd1a594ac37caa65df613db0128d8ffde81f0681e5b5d54036e730c31afe1",
+    "stopped-r11-development-curves.png": "613d5c2e5380001fa9ba732d78e8e7b83ebecb3beb34cf0e7bc6e7371d75940c",
+    "stopped-r11-development-curves.svg": "aeec611267c2ca0fd698edf414e681c09ac3a4320d7a75ad6f042bf37cd10db8",
+    "stopped-r11-training-curves.png": "0c4ac3a63d25bd068097f900a7f7ccd650cc7ff41a3a2ef4ade8770f5a857825",
+    "stopped-r11-training-curves.svg": "cfd5f5d2aad2a8422b961638467c3977919e1af9302cf58b20f3dcf2526dd410",
+    "stopped-r11-development-versus-time.png": "35e5e890b590f44efe67ed2cf7dd7d2e44a2f2acd09bf4dbb27c18f79dd2919f",
+    "stopped-r11-development-versus-time.svg": "c78f8a94905d770142a8c8062027cc19d7c4a6fd3251feeef2e0bf6b26db4271",
+    "stopped-r11-resource-observations.png": "e7ff5d5a49a815245ab0b24a5217d6e7488114b8331ae252bae14a43613da9e8",
+    "stopped-r11-resource-observations.svg": "4fd6b757933e2f2575d9758dec9cf3c2bf033fa78f97a248034dcdf4f37c7158"
   },
   "selected_r8": {
     "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
@@ -63,6 +71,27 @@
       "ffn_report.py": "4e03c2e4710edd1c9b62169c301323befb420c26b58c9f001ef406782f3444e5",
       "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
     },
+    "plotting_runtime": {
+      "matplotlib": "3.11.1",
+      "python": "3.11.15"
+    }
+  },
+  "owner_stopped_r11_seed29": {
+    "scope": "ActualN128/256/512 seed29 all9arms5M, audited/retrieved33rawfiles. Planned3seedfamily explicitlySTOPPED_BY_OWNER/INCOMPLETE, no3seedclaim. Separateobservationadapter rerunsstrictindividualread_run andowner-stopproof, reusesrenderersonly; formalaggregateadmissionunchanged.",
+    "owner_stop_record_sha256": "0503e0c7a1d3032eb8016c63211d5d17381237e5d6b4c2d1556ee12bed30d4e8",
+    "finish_only_receipt_sha256": "59d7a4e28c60d84b8a92bdd1b442abbe74c81daeb8267fcaf8b51ff8674b7f27",
+    "raw_archives": {
+      "width128-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "ee3530b7451713f2dc0f70251ab49b4d1e3216d95ee24b848998d2628c3521e1",
+      "width256-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "3390ce264fa24cfe84d99041d9ba83abb2fc55947296493af8a977cb1d2890ab",
+      "width512-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "a1973aac3b176ba1e63a66373cd67a7305f9c9813335b7fbd09afb4709dbca74"
+    },
+    "request_sha256": "ba1b60176eb52b20c45520901cfad57425c0209cccc1a3efa7c7aeb6120983be",
+    "observation_adapter_sha256": "6edee2d20d30c2a66ea1b0c0982de0761ba0a568506eef7f7364c6fea505447b",
+    "reporter_source_sha256": {
+      "ffn_report.py": "586f25564c90bd131f95c49dc932d565fc1a9064ac99d273fc948213b2ad6664",
+      "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
+    },
+    "report_json_sha256": "884c89241cc63768cbb1edeb09eedca87019697e436964e7757f449b45adc079",
     "plotting_runtime": {
       "matplotlib": "3.11.1",
       "python": "3.11.15"

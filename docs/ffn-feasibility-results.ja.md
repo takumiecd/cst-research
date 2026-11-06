@@ -264,11 +264,31 @@ Atomごとの学習座標4つと通常のbiasから、\(P_{\mathrm{CST,FFN}}=32A
 主幅確認は幅128/256/512、seed29/43/71、3条件を各5M（新規27 run）と計画し、
 設定・学習量・全seedの保持・有効性基準を最初の確認run前にcommit5654fc4で固定しました。
 その後、所有者は短期field別LR実験を優先し、未着手のseed43/71の6条件を中止しました。
-N128/N256のseed29は完了・監査・回収済みで、進行中のN512 seed29は変更せず完走・終了監査します。
+seed29の全3幅が変更せず完走し、終了監査・回収・hash照合まで完了しました。
 系列は停止・未完了で、3 seedの主張や数値的失敗の主張はありません。研究計画に所有者の変更指示を
 明示しています。R10親receipt SHA256は
 `7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f`で、
 archive/request/reporterのhashは派生図manifestに保持します。
+
+## 所有者の停止後に保持したseed29観測（R11）
+
+全3幅の新しいDense/FFNなし/CSTが、各4882 update・4999168 tokenまで完了しました。
+元supervisor停止後、終了処理専用workerがN512の固定した終了監査を通しました。
+保持した9条件全体で、学習済みCST全24射影のVJPとoptimizer/load/次task stepの監査が通り、
+resume後のParameter最大差は全条件0でした。回収したraw全33ファイルをmanifestと照合しました。
+seed43/71の学習は起動していません。
+
+[保持した1 seedの全報告](ffn-feasibility-r11-seed29-20261107.ja.md)に、token数・時間に対する
+全曲線、固定prompt例、Parameter数、allocated/reserved観測を残しています。
+確認用CEはDense/CST/FFNなしでN128が2.92656/3.03691/3.30066、N256が
+2.65688/2.77403/2.96877、N512が2.48887/2.60475/2.74543です。観測した全幅でCSTは
+FFNなしより改善し、Denseとの差は約0.11～0.12CEでした。この有限範囲で線形FFN Atom/Parameter
+予算を保った観測であり、3 seed再現性・収束・下限・普遍的スケーリング則は示しません。
+現在のeager FP32では速度・実測GPUメモリの優位もありません。
+
+停止系列専用の観測adapterは厳密なreaderで各runを検証し、owner-stop/finalizer証拠を結びます。
+描画部分を再利用し、正式な3 seed集計の条件は変更しません。1 seedからseed間SDは推定しません。
+次段階は公開API作成前の、別の短期field別LR機構比較です。
 
 ## native検証の範囲と残作業
 

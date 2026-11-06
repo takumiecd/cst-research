@@ -568,7 +568,7 @@ def render_plots(result, output):
             squeeze=False,
             layout="constrained",
         )
-        for ax, shape in zip(axes.flat, shapes):
+        for panel_index, (ax, shape) in enumerate(zip(axes.flat, shapes)):
             for kind in ("dense", "cst", "none"):
                 members = [
                     r
@@ -645,7 +645,7 @@ def render_plots(result, output):
                 xlabel="Recorded elapsed seconds"
                 if metric_name == "elapsed"
                 else "Seen tokens (millions)",
-                ylabel="Cross-entropy (lower is better)",
+                ylabel="Cross-entropy" if panel_index % cols == 0 else "",
             )
             if metric_name == "elapsed":
                 ax.set_xscale("log")
