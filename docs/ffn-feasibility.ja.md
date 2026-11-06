@@ -52,6 +52,19 @@ Denseの標準偏差0.02に対応させ、両条件で残差出力射影を`1/sq
 縦横比1:1、1:4/4:1、1:16/16:1も限定確認します。縦横比を固定した幅の実験だけでは、
 幾何平均と他の同次予算式を区別できません。
 
+準備した拡張はtorchcst commit `2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`
+（[PR150](https://github.com/takumiecd/torchcst/pull/150)）の明示的な
+`GLOBAL_ACTIVE_GRAD4_NATIVE_RECTANGULAR_2048`です。既存のrecipe項目・Planのguard・
+native演算を保ちます。N512とN128のexpansion16を含む拡張12条件を検証してから、
+そのsourceで学習します。初期R2の幅256 pilotは元のresearch/operator snapshotで続け、
+途中で移行しません。
+
+主実験のexpansion4の幅比較に加え、N128のexpansion1・16でもc=8を保ち、
+development seed17・100万tokenに限ったpilotを行います。縦横比への適用を確認するもので、
+最適な式や最小係数は求めません。並列に使うA100 MIG40GB条件では、その環境での数値・
+runtime検証、厳密なGPU確認、対応する3条件の実行が必要です。速度・メモリはデバイス別に
+記録し、異なるGPUを混ぜて幅スケーリング曲線にはしません。
+
 ## 学習と証拠の計画
 
 TinyStoriesのdataset revision・tokenizer・tokenファイルのハッシュを固定します。

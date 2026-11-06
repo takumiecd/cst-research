@@ -1,6 +1,7 @@
 """Geometric Atom budgets, rectangular symmetry and honest scope accounting."""
 
 import unittest
+
 from cst_research.experiments.ffn_contract import ModelConfig, atom_count
 
 
@@ -21,12 +22,16 @@ class FFNContractTests(unittest.TestCase):
             budget = config.ffn_parameter_budget()
             self.assertEqual(config.atoms_per_projection, 16 * width)
             if previous:
-                self.assertEqual(budget['cst_parameters'], previous['cst_parameters'] * 2)
-                self.assertGreater(budget['dense_parameters'], previous['dense_parameters'] * 3)
+                self.assertEqual(
+                    budget["cst_parameters"], previous["cst_parameters"] * 2
+                )
+                self.assertGreater(
+                    budget["dense_parameters"], previous["dense_parameters"] * 3
+                )
             previous = budget
 
     def test_geometry_and_invalid_model_dimensions(self):
         self.assertEqual(atom_count(128, 512), atom_count(256, 256))
-        for kwargs in ({'width': 129}, {'context': 0}, {'q': 1.1}):
+        for kwargs in ({"width": 129}, {"context": 0}, {"q": 1.1}):
             with self.assertRaises(ValueError):
                 ModelConfig(**kwargs)

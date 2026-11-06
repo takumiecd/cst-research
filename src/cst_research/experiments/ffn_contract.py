@@ -31,7 +31,11 @@ class ModelConfig:
         for key, value in asdict(self).items():
             if key not in ("q", "init_std") and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
-        if self.width % self.heads or not 0 <= self.q <= 1 or not 0 < self.init_std <= 1:
+        if (
+            self.width % self.heads
+            or not 0 <= self.q <= 1
+            or not 0 < self.init_std <= 1
+        ):
             raise ValueError("invalid head divisibility, q or initialization scale")
 
     @property
@@ -47,6 +51,7 @@ class ModelConfig:
         return {
             "atoms_per_projection": self.atoms_per_projection,
             "cst_parameters": self.layers * (8 * self.atoms_per_projection + bias),
-            "dense_parameters": self.layers * (2 * self.width * self.intermediate + bias),
+            "dense_parameters": self.layers
+            * (2 * self.width * self.intermediate + bias),
             "scope": "FFN only; Dense attention and vocabulary weights are excluded",
         }

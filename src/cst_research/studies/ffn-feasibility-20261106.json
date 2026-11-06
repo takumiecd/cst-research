@@ -2,11 +2,11 @@
   "schema_version": 1,
   "id": "ffn-feasibility-20261106",
   "title": "CST FFN feasibility with geometric-mean Atom budgets",
-  "status": "PLANNED",
-  "status_note": "Owner-approved plan. CPU preparation is underway; native qualification and language-model learning have not completed. HIGGS lower-bound and DST campaigns remain stopped.",
+  "status": "RUNNING",
+  "status_note": "Initial4090 rectangular/all-Atom/optimizer/resume gates and3-arm fixed-batch diagnostics completed at researchf75/operator9cb. One-million-token pilot is running in that frozen R2 snapshot. The new2048-route expanded qualification is prepared separately, not yet admitted. HIGGS lower-bound/DST campaigns remain stopped.",
   "source_repository": "https://github.com/takumiecd/torchcst",
-  "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
-  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
+  "source_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/150",
   "runner_entrypoint": "cst_research.experiments.ffn_qualification",
   "protocol_source_path": "docs/ffn-feasibility.md",
   "protocol": {
@@ -40,8 +40,10 @@
     "development_seed": 17,
     "lower_bound_search": false,
     "attention_replacement": false,
-    "native_dependency": "internal GLOBAL_ACTIVE_GRAD4_NATIVE + RADIUS_FLAT_TORUS_FUSED coordinate update; no dispatcher-default adoption",
-    "blocked_width": "N512 requires explicit rectangular 2048-site route extension and qualification"
+    "native_dependency": "internal GLOBAL_ACTIVE_GRAD4_NATIVE, explicit scoped RECTANGULAR_2048 candidate + RADIUS_FLAT_TORUS_FUSED coordinate update; no dispatcher-default adoption",
+    "initial_operator_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
+    "bounded_aspect_learning": "N128 expansion1/16 development seed17 one-million-token pilots; main expansion4 at N128/256/512",
+    "blocked_width": "N512 and N128 expansion16 require explicit rectangular2048 route GPU qualification before learning"
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",

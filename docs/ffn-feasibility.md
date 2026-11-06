@@ -62,6 +62,21 @@ that cohort, without interpreting an unsupported shape as a capacity failure.
 Bounded aspect checks include 1:1, 1:4/4:1 and 1:16/16:1. Fixed-ratio width
 experiments alone cannot select geometric mean over other homogeneous budgets.
 
+The prepared extension is the explicit
+`GLOBAL_ACTIVE_GRAD4_NATIVE_RECTANGULAR_2048` route at torchcst commit
+`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440` ([PR150](https://github.com/takumiecd/torchcst/pull/150)).
+It preserves old recipe fields/Plan guards and the existing native arithmetic.
+Qualify all12 expanded fixtures, including N512 and N128 expansion16, before
+using that source for learning. The initial R2 width256 pilots retain their
+original research/operator snapshots; they are not silently migrated.
+
+Beyond the main expansion4 width cohorts, run bounded one-million-token,
+development-seed17 pilots at N128 expansion1 and16 with the same c=8. These
+check aspect-ratio applicability, not an optimal formula or minimum coefficient.
+Any parallel A100 MIG40GB cohort needs its own numerical/runtime qualification,
+exact GPU check and all three paired arms. Keep speed/memory results separate
+by device; do not pool different GPUs into a width-scaling curve.
+
 ## Learning and evidence plan
 
 Use TinyStories with a frozen dataset revision, tokenizer identity and token-file
