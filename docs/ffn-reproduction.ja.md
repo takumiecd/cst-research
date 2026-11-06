@@ -13,7 +13,7 @@
 
 - cst-research：`70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`。
 - torchcst：`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`。
-- 実測環境：Python3.12.9、Torch2.11.0+cu126、CUDA12.6、NVIDIA GeForce RTX4090、
+- 実測環境：Python3.12.9、NumPy2.0.2、Torch2.11.0+cu126、CUDA12.6、NVIDIA GeForce RTX4090、
   24GB級、CC8.9。TF32無効、FP32学習、CPU4 threadです。
 
 対応するTorch/CUDA build、CUDA compiler・headerを用意した独立環境で、operatorとconsumerを
@@ -22,7 +22,7 @@
 ```bash
 python -m pip install 'torchcst[cuda] @ git+https://github.com/takumiecd/torchcst.git@2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440'
 python -m pip install 'cst-research @ git+https://github.com/takumiecd/cst-research.git@70e02d864e661d3a87cd8aea322b49ae3f4a1f8f'
-python -m pip install 'tiktoken==0.12.0' numpy ninja
+python -m pip install 'tiktoken==0.12.0' 'numpy==2.0.2' ninja
 ```
 
 consumerの過去の`[torchcst]` extraは旧HIGGSソースを指すため、この研究には使いません。
@@ -104,6 +104,19 @@ betas(.9,.95)、eps1e-8、decay0、global clipping1、warmup/cosineは固定runn
 horizonも決めるので、変更すると初期の学習軌道も変わります。この精度・resource比較では固定batchの
 繰り返しやupdateごとの振幅サンプリングを有効にしません。部分状態や失敗を保持し、黙って再開・再試行・
 学習量増加をしません。
+
+実環境はNumPy2.0.2/PCG64です。予定20M tokenはcontext128の156250 windowなので、
+データ順序を`np.random.default_rng(seed + 888).permutation(156250)`で生成します。
+全permutationをlittle-endian int64で表したSHA256は以下です。各5M条件は最初の39056 window
+（1 updateあたり8個）を消費し、同じseedの3つのFFN条件で同じ順序になります。
+元のhost・学習時のimport pathで順序生成を再計算した確認で、追加の学習runではありません。
+
+| Seed | 全permutation SHA256（int64 little-endian） |
+| ---: | --- |
+| 17 | `927ba5aad87c2f72f89d416c4ee33c7f7d8ec183e3419827258b1b868089a324` |
+| 29 | `296658bd662fd307b5b83150976b9a39ede0f7462c738e9d05014325eeb9e43d` |
+| 43 | `1c439d39af4529f43c63225ed3eaeeb58c49490fa273e01aac07adf91410cf41` |
+| 71 | `7ea85e999c4a2e2d7fa6490e4969e8531a95a597418219b58bec50115537b688` |
 
 固定した確認gridはseed29/43/71×幅128/256/512、expansion4、c8、3条件を各5Mで、新規27学習runです。
 各caseのqualification・preflight・終了監査を通してから次へ逐次実行します。縦横比の確認である
