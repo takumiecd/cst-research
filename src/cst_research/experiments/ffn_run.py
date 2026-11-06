@@ -167,6 +167,9 @@ def main(argv=None):
     parser.add_argument(
         "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
     )
+    parser.add_argument("--field-lr-arm", choices=("all16", "amplitude1-centers16"))
+    parser.add_argument("--field-qualification", type=Path)
+    parser.add_argument("--field-qualification-sha256")
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--tokens", type=int, default=1000000)
     parser.add_argument("--schedule-tokens", type=int, default=None)
@@ -223,6 +226,40 @@ def main(argv=None):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
         )
+    field_recipe = None
+    if args.field_lr_arm is not None:
+        from .ffn_field_lr import FieldRateRecipe
+
+        if args.kind != "cst" or requested.atom_lr_multiplier != 16.0:
+            parser.error("field LR arm requires CST with outer Atom multiplier16")
+        if (
+            args.field_qualification is None
+            or sha(args.field_qualification) != args.field_qualification_sha256
+        ):
+            parser.error("field LR arm requires its exact separate qualification")
+        field_recipe = FieldRateRecipe(
+            amplitude=0.0003 if args.field_lr_arm == "amplitude1-centers16" else 0.0048
+        )
+        field_qualification = json.loads(args.field_qualification.read_text())
+        if (
+            field_qualification["state"] != "passed"
+            or field_qualification["gpu"] != args.expected_gpu
+            or field_qualification["torch"] != torch.__version__
+            or field_qualification["data_manifest_sha256"] != args.data_manifest_sha256
+            or field_qualification["config"] != asdict(requested)
+            or field_qualification["arms"][args.field_lr_arm]["recipe"]
+            != field_recipe.manifest()
+            or any(
+                sha(Path(__file__).parent / name) != digest
+                for name, digest in field_qualification["source_sha256"].items()
+            )
+        ):
+            parser.error("field LR recipe/source/runtime differs from qualification")
+    elif (
+        args.field_qualification is not None
+        or args.field_qualification_sha256 is not None
+    ):
+        parser.error("field qualification only belongs to an explicit field LR arm")
     args.output.mkdir(parents=True, exist_ok=False)
     began = time.monotonic()
     torch.set_num_threads(4)
@@ -251,14 +288,19 @@ def main(argv=None):
     assert actual_ffn_parameters == expected_ffn_parameters
     if args.kind == "cst":
         configure_native(model)
-        optimizer = cst_optimizer(
-            model,
-            atom_lr_multiplier=config.atom_lr_multiplier,
-            lr=0.0003,
-            betas=(0.9, 0.95),
-            weight_decay=0.0,
-            foreach=False,
-        )
+        if field_recipe is not None:
+            from .ffn_field_lr import FieldRateOptimizer
+
+            optimizer = FieldRateOptimizer(model, field_recipe)
+        else:
+            optimizer = cst_optimizer(
+                model,
+                atom_lr_multiplier=config.atom_lr_multiplier,
+                lr=0.0003,
+                betas=(0.9, 0.95),
+                weight_decay=0.0,
+                foreach=False,
+            )
     else:
         optimizer = torch.optim.AdamW(
             model.parameters(),
@@ -326,6 +368,8 @@ def main(argv=None):
     }
     summary["peak_allocated_bytes"] = 0
     summary["peak_reserved_bytes"] = 0
+    if field_recipe is not None:
+        summary["optimizer_variant"] = field_recipe.manifest()
     curves = (args.output / "curves.jsonl").open("x")
 
     def save():
@@ -352,6 +396,11 @@ def main(argv=None):
                 "data_manifest_sha256": summary["data_manifest_sha256"],
                 "torch_rng_state": torch.get_rng_state(),
                 "cuda_rng_state": torch.cuda.get_rng_state(),
+                **(
+                    {"optimizer_variant": field_recipe.manifest()}
+                    if field_recipe is not None
+                    else {}
+                ),
             },
             temporary,
         )

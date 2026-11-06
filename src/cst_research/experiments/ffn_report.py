@@ -92,6 +92,11 @@ def read_run(root, request, run):
         require(digest(artifacts / name) == command[key], "changed " + name)
     summary = json.loads((artifacts / "summary.json").read_text())
     require(
+        summary.get("optimizer_variant") is None
+        and summary["arguments"].get("field_lr_arm") is None,
+        "field LR experiments require their separate observation report",
+    )
+    require(
         summary["state"] == "completed_execution_not_scientific_admission"
         and not summary["arguments"]["repeat_fixed_batches"],
         "partial execution or fixed-batch smoke cannot enter learning reports",

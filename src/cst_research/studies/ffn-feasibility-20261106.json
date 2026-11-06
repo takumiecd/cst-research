@@ -293,5 +293,38 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-feasibility-20261106"
+  },
+  "field_lr_development": {
+    "state": "PREPARED_NOT_GPU_QUALIFIED_NOT_TRAINED",
+    "owner_authorization": "Stop six unstarted long cases; short field comparison before API. Owner reaffirmed4090 and authorized API if short results look good.",
+    "protocol": "docs/ffn-field-lr.md",
+    "shape": {
+      "width": 256,
+      "expansion": 4,
+      "layers": 4,
+      "CST_projections": 8,
+      "coefficient": 8
+    },
+    "seed": 17,
+    "actual_tokens_per_arm": 999424,
+    "planned_tokens": 20000000,
+    "arms": [
+      "dense",
+      "none",
+      "all16",
+      "amplitude1-centers16"
+    ],
+    "peak_rates": {
+      "ordinary": 0.0003,
+      "input_center": 0.0048,
+      "output_center": 0.0048,
+      "outer_clock": 0.0048,
+      "amplitude_by_arm": {
+        "all16": 0.0048,
+        "amplitude1-centers16": 0.0003
+      }
+    },
+    "API_gate": "All correctness gates pass; separated arm useful vs noFFN and final DEVCE <= all16+0.03. Confirmation not used for next-rate selection. No publicdefault adoption.",
+    "restriction": "One4090 scientific worker; new frozen consumer; old70e/2b snapshots unchanged. Cancelled long cases remain stopped; no lower-bound orAttention study."
   }
 }

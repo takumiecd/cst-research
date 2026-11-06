@@ -258,6 +258,17 @@ class ReportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "changed summary"):
             aggregate(self.root, request)
 
+    def test_field_lr_variant_cannot_masquerade_as_old_selected_recipe(self):
+        request = self.request()
+        run = request["runs"][-1]
+        path = self.root / run["artifacts"] / "summary.json"
+        summary = json.loads(path.read_text())
+        summary["optimizer_variant"] = {"peak_field_lrs": {"amplitude": 0.0003}}
+        self.write(path, summary)
+        self.rehash(run)
+        with self.assertRaisesRegex(ValueError, "field LR experiments"):
+            aggregate(self.root, request)
+
     def test_rehashed_protocol_drift_and_smoke_still_fail(self):
         request = self.request()
         run = request["runs"][0]
