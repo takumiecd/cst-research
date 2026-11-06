@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "higgs-width-amplitude-init-20261106",
+  "title": "HIGGS deep raw width-aware amplitude initialization versus old and fixed gain",
+  "status": "PLANNED",
+  "preparation_status": "PREPARED",
+  "status_note": "CPU preparation; separate paired four-arm seed17/oneepoch cohorts on RTX4090 and A100 MIG; no GPU result claimed.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_width_amplitude_run",
+  "protocol_source_path": "docs/higgs-width-amplitude-init.md",
+  "protocol": {
+    "version": "higgs-width-amplitude-init-v1",
+    "arms": [
+      "dense-control",
+      "old-init",
+      "width-init",
+      "old-init-gain"
+    ],
+    "initialization": [
+      {
+        "arm": "dense-control",
+        "model_contract_case": "dense-none",
+        "physical_amplitude_std": null,
+        "formula": "Dense legacy",
+        "normalization": "none",
+        "gain": "all ones",
+        "ordinary_IO_initializer": "unchanged legacy-linear-default",
+        "coordinate_draws_and_standardized_amplitude_draws_paired": true,
+        "radius_changes_with_new_amplitude_intentionally_allowed": false,
+        "symmetric_clip": [
+          -0.999999,
+          0.999999
+        ]
+      },
+      {
+        "arm": "old-init",
+        "model_contract_case": "cst-none",
+        "physical_amplitude_std": 0.0015625,
+        "formula": "0.1/sqrt(A)",
+        "normalization": "none",
+        "gain": "all ones",
+        "ordinary_IO_initializer": "unchanged legacy-linear-default",
+        "coordinate_draws_and_standardized_amplitude_draws_paired": true,
+        "radius_changes_with_new_amplitude_intentionally_allowed": false,
+        "symmetric_clip": [
+          -0.999999,
+          0.999999
+        ]
+      },
+      {
+        "arm": "width-init",
+        "model_contract_case": "cst-none",
+        "physical_amplitude_std": 0.05,
+        "formula": "0.1/sqrt(A/N)",
+        "normalization": "none",
+        "gain": "all ones",
+        "ordinary_IO_initializer": "unchanged legacy-linear-default",
+        "coordinate_draws_and_standardized_amplitude_draws_paired": true,
+        "radius_changes_with_new_amplitude_intentionally_allowed": true,
+        "symmetric_clip": [
+          -0.999999,
+          0.999999
+        ]
+      },
+      {
+        "arm": "old-init-gain",
+        "model_contract_case": "cst-fixed-gain",
+        "physical_amplitude_std": 0.0015625,
+        "formula": "0.1/sqrt(A)",
+        "normalization": "none",
+        "gain": "same fixed256 TRAIN pre-ReLU Dense RMS calibration as prior study",
+        "ordinary_IO_initializer": "unchanged legacy-linear-default",
+        "coordinate_draws_and_standardized_amplitude_draws_paired": true,
+        "radius_changes_with_new_amplitude_intentionally_allowed": false,
+        "symmetric_clip": [
+          -0.999999,
+          0.999999
+        ]
+      }
+    ],
+    "width": 1024,
+    "hidden_layers": 8,
+    "internal_CST_maps": 7,
+    "atoms_per_CST_map": 4096,
+    "seed": 17,
+    "epochs": 1,
+    "task_updates_per_arm": 25000,
+    "total_task_updates": 100000,
+    "batch_size": 4,
+    "learning_rate": 0.0003,
+    "position_multiplier": 1,
+    "optimizer": "unchanged stockq1 fused CSTAdamW/AdamW, eps1e-8, ordinary/amplitude WD0.01, raw-Atom WD0",
+    "dtype": "FP32",
+    "TF32": false,
+    "mode": "eager",
+    "milestones": [
+      0,
+      1000,
+      5000,
+      10000,
+      15000,
+      20000,
+      25000
+    ],
+    "selection": "fixedfinal25000; no bestDEV, HPO or earlystop",
+    "probes": "same first TRAIN B4 on loaded copies at0/1000/5000/10000/15000/20000/25000; no optimizer update in probes; source fullcore remains unchanged",
+    "native_qualification": "fresh full-network FP64 manual VJP dy1/dy1e24 with unchanged gates, independent31Atom quadrature and scalarAdam, 8bare vs4load4 vsobservedfirst+7 exact fullcores before task training",
+    "task_data": "TRAIN100k rows[1000000,1100000), DEV50k[1100000,1150000); no primary confirmation or officialtest",
+    "precision_scope": "retained arrays independently recountable; denominator summaries are accepted-state reconstructions, not native intermediate captures",
+    "timing_memory_scope": "diagnostic synchronized bare updates and allocated/reserved peaks; probe, evaluation, calibration and IO cost separate",
+    "raw_cap_bytes": 6442450944,
+    "JSON_cap_bytes": 67108864,
+    "automatic_followup": false,
+    "formal_NI_Atomorder_or_initialization_optimality_claim": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-width-amplitude-init-20261106",
+    "availability": "PREPARED; GPU and independent raw admission pending"
+  }
+}

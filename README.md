@@ -118,3 +118,5 @@ be included in public reports. When set, the environment variable takes preceden
 over the TOML root.
 
 Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The [width-aware amplitude initialization study](docs/higgs-width-amplitude-init.md) compares raw `0.1/sqrt(A/N)` without gain/LayerNorm against the old initializer and the prior fixed-gain control. GPU evidence is pending.
