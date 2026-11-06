@@ -55,6 +55,7 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 | [Eight-update normalization diagnostic](docs/higgs-depth-normalization-diagnostic-results.md) | COMPLETED | Nine cases ×8 task updates; mechanism evidence, no quality selection or default adoption |
 | [Three-epoch normalization followup](docs/higgs-depth-normalization-learning.md) | PLANNED / PREPARED | Nine development-only cases; inherited qualification plus fresh-prefix admission required, no learning result yet |
 | [Normalization load-contract recovery](docs/higgs-normalization-learning-recovery.md) | PLANNED / PREPARED | Parent remains incomplete; admitted300k reused, selected-state correction before only375k remaining updates |
+| [Linear Atom count](docs/higgs-linear-atom-scaling.md) | PLANNED / PREPARED | New16 native qualification first; A=cN, H4/H8; no400k task training yet |
 
 The [observations and limitations](docs/bounded-validation-results.md) bind the
 completed coordinate/depth/gain results to their actual measured commits and raw

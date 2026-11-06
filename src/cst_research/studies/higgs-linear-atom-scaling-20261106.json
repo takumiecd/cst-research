@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "higgs-linear-atom-scaling-20261106",
+  "title": "HIGGS deep exact A=cN stock pilot: native16 admission first",
+  "status": "PLANNED",
+  "preparation_status": "PREPARED",
+  "status_note": "StageA qualification-only implementation; no nativeGPU admission or400k task updates executed. StageB separate reviewed consumer pending; fixed16 NONE/gains1 legacy-init pilot.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_linear_atom_driver",
+  "protocol_source_path": "docs/higgs-linear-atom-scaling.md",
+  "implementation_boundary": {
+    "runtime": "external unchanged public975, no runtime/vendor/default/Graph changes",
+    "consumer": "new parameterized H4/H8 model/manual fullwidth/allatoms FP64 reverse/state/qualifier/foregrounddriver; old30numerical modules10registries unchanged",
+    "execution": "StageA only16actualnativecases, twoVJPscales/scalar/quadrature/fresh8normalCE+4resume; no taskdata decoded or learnedquality scored"
+  },
+  "protocol": {
+    "version": "higgs-linear-atom-scaling-draft-v1",
+    "status": "PREPARED_STAGE_A_QUALIFICATION_ONLY_NOT_EXECUTED",
+    "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "external_source_manifest_sha256": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+    "architecture": "28→N×H→2; Hhidden=4/8, L=H−1=3/7 biasfree internal maps, HReLUs, allDenseIO trainable",
+    "widths_planned": [
+      1024,
+      2048,
+      4096
+    ],
+    "later_width_not_pilot": 8192,
+    "atom_rule": "exact A=cN per CST map, no rounding",
+    "parameter_formulas": {
+      "dense": "L*N^2+31*N+2",
+      "cst": "(4*c*L+31)*N+2",
+      "no_affine_norm_trainable_overhead": 0,
+      "fixed_gain_buffer_scalars": "L, not learned parameters"
+    },
+    "parameter_scaling_scope": "linear N only for fixed c AND fixed L; linear L at fixed N/c; not measured O(N) time/peak memory",
+    "kernel": {
+      "factory": "unchanged public975 make_radius_cst",
+      "cell_mass": true,
+      "Chebyshev_modes": 8,
+      "merge_factor": 2,
+      "w_c": 0.3,
+      "spacing": 1.0,
+      "plan": "GLOBAL_OWNER_WINDOW_FP32_GEOMETRY_SORT32_FLAT_C",
+      "optimizer": "unchanged stockCSTAdamW q1; no position-LR adapter"
+    },
+    "construction_seed_streams": {
+      "input": "seed+1",
+      "output": "seed+2",
+      "Dense_internal_j": "seed+100+j",
+      "CST_internal_j": "seed+1000+j"
+    },
+    "legacy_H4_exact_compatibility_c": {
+      "A104_at_N1024": "13/128",
+      "A1048_at_N1024": "131/128"
+    },
+    "recipe_sealed": false,
+    "normalization_choice": "none",
+    "fixed_gain_calibration_choice": "none; unit fixed gains",
+    "ordinary_initialization_choice": "legacy-linear-default",
+    "prototype_initializer": {
+      "implemented": "legacy-linear-default",
+      "public_behavior": "unchanged torch.nn.Linear reset_parameters; biasfree internal Uniform±1/sqrt(N), not He-ReLU gain",
+      "H8_adequacy": "UNMEASURED; do not assume a usable deepDense baseline or silently change initialization"
+    },
+    "planned_candidate_pilot_NOT_authorized_for_execution": {
+      "widths": [
+        1024,
+        2048
+      ],
+      "hidden_layers": [
+        4,
+        8
+      ],
+      "c": [
+        1,
+        4,
+        16
+      ],
+      "seed": 17,
+      "proposed_epochs": 1,
+      "proposed_B4_updates_per_case": 25000,
+      "CST_cases": 12,
+      "Dense_stock_controls": 4,
+      "additional_matched_norm_Dense_controls": 0,
+      "total_cases": 16,
+      "total_main_updates": 400000,
+      "lr": 0.0003,
+      "normalization": "none",
+      "fixed_gains": 1,
+      "calibration": false,
+      "width4096_or8192_included": false,
+      "short_budget_role": "screen fitting/conditioning only; no Dense-quality or threshold claim"
+    },
+    "before_any_training": [
+      "completed current9 evidence reviewed; NONE user correction recorded, source/native qualification still pending",
+      "confirm usable Dense-stock and matched-norm Dense when nontrivial norm is chosen",
+      "new width/depth independent Y/dX/all-parameter VJP +complete-step/moment/clock/resume GPU admission; currentH4 qualification does not coverH8/newwidth",
+      "freeze source/data/recipe/budget/runtime and resource review; no hidden initialization adjustment"
+    ],
+    "final_quality_claim_requires": [
+      "proper independent Dense/CST LR tuning at common budgets",
+      "paired3seeds and frozen family/margins before fresh final evaluation",
+      "fixedc width validation4096, later8192 only separately approved"
+    ],
+    "recipe_selection_evidence_sha256": "eefdef7e8b7598232c137a6f8589c74f1a511051d13bcbd8fe0b5a9a01dc8e84",
+    "pre_GPU_user_steering": "tentative LN20-case idea superseded before execution; main NONE16cases, LN only separate later conditional diagnostic with matchedDense, never automaticfallback",
+    "qualification_cotangent_scales": [
+      1.0,
+      1e+24
+    ],
+    "pre_GPU_cotangent_decision_sha256": "b86e9d69f211768239aaeda30b76863d16519f1bb13ee27ce0a25b30f79eeb31",
+    "amplified_cotangent_used_for_optimizer": false,
+    "raw_evidence_budget_bytes": 8589934592,
+    "storage_plan": "retain all compressed SHA-bound raw locally + immutable remote source; per-case owned temporary extraction/admission, no permanent whole decompressed duplicate; freshfree minus conservativecompressed/maxscratch/primaryreserve mustleave>=8GiB; rootseals actualvalues",
+    "stage_A": {
+      "entrypoint": "cst_research.experiments.higgs_linear_atom_driver",
+      "scope": "new16 actualwidth/depth/count native qualification only; no400k task training",
+      "requires_native_GPU": true,
+      "normal_elementwise": "abs(error)<=3e-5+3e-4*abs(reference), mandatory",
+      "relative_each_gradient_and_each_packed_column": "relativeL2<=3e-4 AND maxerror/refmax<=3e-4; FP64 normalized norms; exactzero reference requires exactzeroactual",
+      "amplified_componentwise": "record every failure; diagnostic, never relabel as passed",
+      "material_critical_fields": "dy1e24 dX/everypackedcolumn: any abs(reference)>3e-5+3e-4*abs(reference) AND anyactualnonzero; allnormalFP32rounded-zero tails reported",
+      "independent_bridge": "48-point polynomial quadrature actual31atoms perN/c, fullY/dX/all31packedP; first31actualP fingerprint shared acrossdepth only if exact",
+      "optimizer": "fresh synthetic32inputs/labels/8B4orders retained,8normalCE and4resume; NO amplifiedgradient optimizer step; fullmodel/grad/m/v/clock/nativeownerstore bytes",
+      "load": "only exactdeclared actual3/7CST owners max(before+1,saved); allothercorebytesliteral; actualPOSTLOAD baseline",
+      "outputs": "rawinitial0/twoactual+expectedVJPs/syntheticinputs/normal4/normal8/resumed8/quadrature/scalar/proof+source/runtime/dataidentities",
+      "Stage_B": "separate reviewedsource must preserve allStageAfiles and bind actualpassedraw16/source/runtime/data; taskstarts fresh0, neverstate8"
+    },
+    "training_entrypoint_implemented": false,
+    "protocol_inspection_GPU_operations": false,
+    "confirmation_or_test_payload_staged_or_scored": false,
+    "formal_claim": false
+  },
+  "timing": "qualification/reference/compile walltime only; no training throughput. StageB training/preparation/evaluation/checkpoint clock scopes require separate reviewed source.",
+  "memory": "8GiB raw planning cap; no measured O(N) claim; immutable compressed source + sequential owned-scratch CPU admission planned, root actualfree after compressed/maxscratch/primaryreserve mustleave>=8GiB.",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-linear-atom-scaling-20261106",
+    "availability": "CPU prototype/synthetic16 preflight only. Native admission and main16x25000 updates not executed."
+  }
+}
