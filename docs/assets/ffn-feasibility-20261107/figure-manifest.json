@@ -11,6 +11,11 @@
     "mechanism-r6-learning-curves.svg": "c21a7c6bbf3ac67442579a9e69254fa01ea7b34ffe30fc0f5acf029c4b2897da",
     "mechanism-r6-motion-curves.png": "062e80422cf53cab65e3bcd9cd30c50e0e2b408ba72766b953f684d50877631c",
     "mechanism-r6-motion-curves.svg": "867f45574812206bff1a79c7aaaa33d28c6db63fc47123d39ecd5d2103467c9c",
-    "external-script:plot-mechanism-r6.py": "5e02cfc1fe763268b532af1b5b3316c0e2e1abadd7c099671adf623cd836f27f"
+    "external-script:plot-mechanism-r6.py": "5e02cfc1fe763268b532af1b5b3316c0e2e1abadd7c099671adf623cd836f27f",
+    "recipe-family-r7-learning-curves.png": "523e5ad12cdfe2c957832483c4b0216006ad7a41604cfb4e8d29490449719b7d",
+    "recipe-family-r7-learning-curves.svg": "d72efcd0d18fdbf3d887c2f3a6f76c91d2748b7273c8276233cbdc168006c4b3",
+    "recipe-family-r7-activation-rms.png": "1622880fe8c6bb6aa7f8197dfaaeb624ab8fb70e39bdc9cdeec2aef55c1703cd",
+    "recipe-family-r7-activation-rms.svg": "7a9b0eed8f81a738365b3ab6ec4fe57d17697d446ebdb8049e67d002977fe557",
+    "external-script:plot-recipes-r7.py": "4c88499c2c0dbccc3a3482d16be9b0cec181494a78e67f261b32b58b94400bb0"
   }
 }

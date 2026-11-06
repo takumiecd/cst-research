@@ -108,7 +108,7 @@ $$
 Each layer's statistic is divided by that layer's initial amplitude RMS, then
 combined by RMS across layers. This measures total variation of sampled
 amplitudes; it does not measure oscillation frequency or prove useless motion.
-q0 ends near5.2e-8. For initial q.5, mean q falls.500→.176 and mean physical
+q0 ends near5.2e-8. For initial q.5, mean q falls.500→.176 and mean physical input-axis
 up/down radii fall7.106/9.643→2.707/3.796 cells. Initial q.25 similarly shrinks.
 Thus the broader initial conditions do not stay broad throughout training.
 q0 is the amplitude-dependent lower radius, not the hard physical minimum.5.
@@ -148,6 +148,69 @@ Once upon a time, there was a little girl named Lily. One day, Lily wanted to he
 Lily was playing with a little girl named Lily. She had a lot of fun with her toys and said, "Look, Lily?" Her mommy said, Lily and Lily was so happy. Lily looked around the
 ```
 
+## Bounded recipe comparison (R7)
+
+The five CST recipes in the study plan, plus fresh Dense, permuted-Dense and
+no-FFN controls, each completed976 updates/999,424 tokens. All retain c8,
+width256, seed17, the common planned20M-token LR/data horizon and the same Dense
+moment targets. Each CST recipe first passed native qualification in both actual
+FFN directions (including down std.02/sqrt(8)), independent polynomial quadrature,
+mixed ordinary/Atom optimizer reference checks, small serialized model resume
+and a two-update full four-block preflight.
+
+| FFN recipe | Development CE | Perplexity |
+| --- | ---: | ---: |
+| Dense | 3.58196 | 35.94 |
+| Dense, permuted | 3.57049 | 35.53 |
+| No FFN | 4.03015 | 56.27 |
+| CST reference | 3.96004 | 52.46 |
+| CST birth1 | 3.93924 | 51.38 |
+| CST wide q1/bound4 | 4.12193 | 61.68 |
+| CST permuted | 3.95231 | 52.06 |
+| CST Atom LR16 | 3.67351 | 39.39 |
+
+![Audited recipe learning curves](assets/ffn-feasibility-20261107/recipe-family-r7-learning-curves.png)
+
+Atom LR16 is the strongest development result in this bounded family. Its CE
+is.09155 above contiguous Dense, versus.37808 for the reference CST recipe.
+Ordinary parameters retain the same base LR. The multiplier acts on complete
+Atom Parameters, including centers and angular coordinates, and changes the
+Polar policy's outer time. The result does not isolate amplitude LR or establish
+that16 is optimal. Select it for a longer fresh5M-token followup, not as a new
+public default or a completed three-seed result. Keep the planned20M horizon.
+
+The calibrated wide recipe actually began with mean input-axis radii31.601/40.325
+cells in up/down projections, ending at12.432/16.255. Radius4 was a birth setting,
+not a hard upper bound. This much broader condition is worse than no-FFN at1M;
+more radius alone is not the demonstrated remedy. Because amplitude bound and
+w_c also change, it is not an isolated radius intervention.
+
+![FFN fixed-probe activation RMS](assets/ffn-feasibility-20261107/recipe-family-r7-activation-rms.png)
+
+The separate fixed training-window probe shows reference CST down-output RMS
+.0457→.0531, versus.0457→.1753 for Atom LR16 and.0389→.2111 for Dense, after
+RMS aggregation across the four layers. The wide recipe already has initial
+up/down probe RMS.862/.380, compared with Dense.319/.039, despite matching the
+initializer's expected weight-energy target. Expected second-moment matching
+does not guarantee the same activations on correlated task inputs. These probes
+are mechanism observations, not an independent heldout measure or a unique
+causal explanation. CST motion sampling adds wall cost; these pilot timing
+panels do not establish a practical speed advantage.
+
+The terminal audit passed all eight pilots,40 trained CST projection Y/dX/all
+Atom VJPs, exact payload/cache-generation load checks and independent development/
+confirmation CE recomputation. Two extra task updates were made only in disposable
+copies: after in-memory serialization, the next-step losses, optimizer moments/
+counters and parameter payloads agreed; maximum parameter difference was0 for
+all eight arms. Original checkpoints were not resumed or overwritten.
+
+The first audit attempt stopped because it incorrectly required gradients for
+`norm2` parameters intentionally unused by the no-FFN control. That failed audit
+and log remain retained. A CPU architecture/optimizer-state check established
+the exact unused set; corrected audit02 allows missing gradients/state only
+for those no-FFN parameters and reran all eight arms. It does not relax any CST
+Atom or used ordinary-parameter check.
+
 ## Native scope and remaining work
 
 R5 qualification passed both FFN directions at B2 T128, q0/.25/.5, Y/dX/all Atom
@@ -156,10 +219,11 @@ scoped2048 route passed all12 expanded R3 native cases on RTX4090, including
 512↔2048 and128↔2048. This does not establish full language-model feasibility
 at width512, or qualify a different consumer/q recipe automatically.
 
-The R6 five-arm sequence and read-only audit are complete. The bounded R7 recipe
-family tests a narrower birth radius, calibrated much wider radii, fixed feature
-permutations and an Atom LR multiplier after per-recipe native/task gates. These
-are exploratory learning interventions, not adopted defaults. Width128/256/512, bounded aspect-ratio learning, three-seed
+The R6 and R7 sequences and terminal audits are complete. R7 selects Atom LR16
+for a fresh5M followup after per-recipe native/task gates; public defaults remain
+unchanged. Width512 reference complete-task smoke and trained-state audit also
+passed under the separate R8 consumer and explicit2048 operator. A20-update
+fixed-batch smoke is not heldout feasibility or a primary performance result. Width128/256/512, bounded aspect-ratio learning, three-seed
 confirmation and final performance/memory validation remain incomplete.
 
 ## Additional CPU mechanism checks
@@ -211,8 +275,12 @@ TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`, tiktoken0.12.0
 GPT-2 encoding, whole-story deduplicated splits. Token manifest SHA256:
 `5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01`.
 
-- Operator for R2/R5/R6: `9cb6de727ddbf5c2178fe18db6d580c9e181b926`.
+- Operator for R2/R5/R6/R7: `9cb6de727ddbf5c2178fe18db6d580c9e181b926`.
 - R2 consumer: `f75c1d2efe54767f6b9f65804c234924e6f6e191`.
+- R7 consumer: `0e1d30279c213ad8f2ea9fc7895d3ccdea572c24`.
+- R7 terminal receipt SHA256: `be725100159cc024f68d79895897357b143a5d6ba5949fca47a8e70127883180`.
+- R7 trained-state audit02 SHA256: `b5721388307aded0c3cd121ca8351c1e4fa5635576ce7a49bf64308b4a573cb6`.
+- R7 retrieved evidence archive SHA256: `66eb7c3df1e14e1ea87b528963b7af4625839cc7a3d6ed95959c4161a51a09e8`.
 - R6 consumer: `f8de9b7f0e114e7c55035858f9544270ae381c21`.
 - R6 terminal manifest SHA256: `2f2ff1be72d443f8a08212d5a559e177d55644fa488f3968d0361fd76f6122ed`.
 - R6 trained-state audit SHA256: `b03d1bffa9a7f8d1017db47a7042aa3ca71aa748dbf46a1a28fd71a4552bbd67`.

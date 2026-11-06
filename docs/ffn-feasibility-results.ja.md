@@ -99,7 +99,7 @@ $$
 
 各層の統計量をその層の初期振幅RMSで割ってから、層間のRMSを取っています。
 サンプリングした振幅の総変動を測るもので、振動周波数や無駄な移動の証明ではありません。
-q0は最終でも約5.2e-8です。初期q.5では平均qが.500→.176、物理半径のup/down平均が
+q0は最終でも約5.2e-8です。初期q.5では平均qが.500→.176、物理半径のinput軸up/down平均が
 7.106/9.643→2.707/3.796 cellに減りました。初期q.25でも同様に縮みます。
 広く始めた条件が学習中ずっと広いわけではありません。q0は振幅に依存する半径下限で、
 物理的なhard minimumの.5とは異なります。弱い振幅ではbirth値4近辺の半径も残ります。
@@ -136,6 +136,58 @@ Once upon a time, there was a little girl named Lily. One day, Lily wanted to he
 Lily was playing with a little girl named Lily. She had a lot of fun with her toys and said, "Look, Lily?" Her mommy said, Lily and Lily was so happy. Lily looked around the
 ```
 
+## 限定した設定比較（R7）
+
+計画したCSTの5設定と、新しいDense・固定順序のDense・FFNなしの対照を、各976 update・
+999,424 tokenで学習しました。c8、幅256、seed17、共通予定20M-tokenのLR・データhorizon、
+Denseの二乗平均目標は共通です。各CST設定は先に、実FFNの両方向（downのstd.02/sqrt(8)を
+含む）のnative検証、独立polynomial quadrature、普通のParameterとAtomを混在させた
+optimizer参照比較、小型モデルのserialized resume、実4 blockの2 update検証を通しました。
+
+| FFN recipe | Development CE | Perplexity |
+| --- | ---: | ---: |
+| Dense | 3.58196 | 35.94 |
+| Dense, permuted | 3.57049 | 35.53 |
+| No FFN | 4.03015 | 56.27 |
+| CST reference | 3.96004 | 52.46 |
+| CST birth1 | 3.93924 | 51.38 |
+| CST wide q1/bound4 | 4.12193 | 61.68 |
+| CST permuted | 3.95231 | 52.06 |
+| CST Atom LR16 | 3.67351 | 39.39 |
+
+![監査済み設定別学習曲線](assets/ffn-feasibility-20261107/recipe-family-r7-learning-curves.png)
+
+この限定比較ではAtom LR16がdevelopmentで最も良い結果です。通常順序のDenseとのCE差は
+.09155で、標準CSTの差.37808より小さくなりました。普通のParameterの基本LRは共通です。
+倍率は中心や角度を含むAtom Parameter全体にかかり、Polar policyのouter timeも変えます。
+振幅だけのLR効果や、16が最適であることの証明ではありません。共通予定20M horizonのまま、
+新しい5M-tokenの追加比較に進める候補とし、公開の標準設定や3 seed確認済みとは扱いません。
+
+広い設定の実際の初期input軸平均半径はup/downで31.601/40.325 cell、最後は12.432/16.255でした。
+4はbirth側の設定で、hard upper boundではありません。この大幅に広い条件は1M時点でFFNなし
+より悪く、半径を増やすだけでは改善を示していません。振幅上限とw_cも変えており、半径だけの
+独立介入ではありません。
+
+![FFN固定probeのactivation RMS](assets/ffn-feasibility-20261107/recipe-family-r7-activation-rms.png)
+
+別の固定学習windowのprobeで、down出力RMSを4層のRMSとして集計すると、標準CSTは
+.0457→.0531、Atom LR16は.0457→.1753、Denseは.0389→.2111でした。広い設定では、初期化の
+期待weight energyを目標に合わせても、初期up/down probe RMSが既に.862/.380で、Denseの
+.319/.039と異なります。期待二乗平均の一致だけでは、相関するタスク入力でのactivationの一致を
+保証しません。機構の観測であり、独立したheldout測定や原因が一つに決まる証拠ではありません。
+CSTの振幅サンプリングがwall時間に加わるため、pilotの時間軸から実用上の速度優位を主張しません。
+
+終了後の監査で、8つのpilotすべて、学習済みCST全40射影のY/dX/全Atom VJP、厳密なpayload/
+cache generationのload、development/confirmation CEの独立再計算を確認しました。追加の
+2タスクupdateは使い捨てのコピー上だけで行い、メモリ内のserialize後の次stepの損失・optimizer
+moment/counter・Parameterが一致しました。8条件すべてでParameterの最大差は0です。
+元のcheckpointを再開したり書き戻したりはしていません。
+
+最初の監査は、FFNなし対照で意図的に使われない`norm2`にも勾配を要求した不備で停止しました。
+失敗した監査とlogは保持しています。CPUで構成とoptimizer状態から未使用集合を厳密に確認し、
+修正版の監査02ではこのFFNなしParameterにだけ勾配・状態の欠如を認め、8条件をすべて再監査
+しました。CST Atomや使う普通のParameterの確認を緩めたわけではありません。
+
 ## native検証の範囲と残作業
 
 R5では両FFN方向、B2 T128、q0/.25/.5でY/dX/全Atom VJP、polynomial quadrature、
@@ -143,10 +195,10 @@ optimizer/model resumeの検証を通りました。別途、範囲を限定し�
 RTX4090でR3の拡大12条件すべてを通り、512↔2048と128↔2048を含みます。これだけで
 幅512の言語モデルの有効性や、別consumer/q設定の検証済みを意味しません。
 
-R6の5条件と読み取り専用監査は完了しました。限定したR7の条件比較では、birth半径を
-狭める、大幅に広い半径を校正する、特徴を固定の順序で並べ替える、Atom LRを16倍にする
-介入を、それぞれnative/task検証を通してから試します。探索用で、標準設定の採用では
-ありません。幅128/256/512、縦横比を変えた
+R6とR7の比較・終了後の監査は完了しました。R7のAtom LR16を、native/task検証後の
+新しい5M比較に進めます。公開の標準設定は変更していません。別のR8 consumerと明示的な
+2048 operatorで、幅512の実タスクsmokeと学習済み状態監査も通りました。20 updateの
+固定batch smokeはheldoutでの有効性や速度の主比較ではありません。幅128/256/512、縦横比を変えた
 学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
 
 ## CPUでの追加機構確認
@@ -194,8 +246,12 @@ TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`、tiktoken0.12.0
 GPT-2 encoding、story単位で重複を排除したsplitを用います。token manifest SHA256は
 `5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01`です。
 
-- R2/R5/R6 operator：`9cb6de727ddbf5c2178fe18db6d580c9e181b926`。
+- R2/R5/R6/R7 operator：`9cb6de727ddbf5c2178fe18db6d580c9e181b926`。
 - R2 consumer：`f75c1d2efe54767f6b9f65804c234924e6f6e191`。
+- R7 consumer：`0e1d30279c213ad8f2ea9fc7895d3ccdea572c24`。
+- R7終了receipt SHA256：`be725100159cc024f68d79895897357b143a5d6ba5949fca47a8e70127883180`。
+- R7学習済み状態監査02 SHA256：`b5721388307aded0c3cd121ca8351c1e4fa5635576ce7a49bf64308b4a573cb6`。
+- R7回収証拠archive SHA256：`66eb7c3df1e14e1ea87b528963b7af4625839cc7a3d6ed95959c4161a51a09e8`。
 - R6 consumer：`f8de9b7f0e114e7c55035858f9544270ae381c21`。
 - R6終了manifest SHA256：`2f2ff1be72d443f8a08212d5a559e177d55644fa488f3968d0361fd76f6122ed`。
 - R6学習済み状態監査 SHA256：`b03d1bffa9a7f8d1017db47a7042aa3ca71aa748dbf46a1a28fd71a4552bbd67`。
