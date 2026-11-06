@@ -13,7 +13,7 @@ no A100/old4090 state, calibration or qualification marker is relabeled or reuse
 
 The seven original conditioning implementation/driver files from
 `a43d6a938db7ff1bbf3522343cd35f10f3dcac1c` remain byte-identical and are SHA-checked
-before imports/execution. New source only orchestrates the4090 cohort and strict
+before model construction and numerical execution. New source only orchestrates the4090 cohort and strict
 foreground deployment. It directly calls unchanged `qualification.qualify_all`,
 `base.run_case`, `base.calibration_features`, activations and budget helpers.
 There is no monkeypatch, attribute override, copied numerical runtime or Graph change.

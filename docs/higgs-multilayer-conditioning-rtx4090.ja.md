@@ -11,7 +11,7 @@
 ## 変更しない科学的契約
 
 `a43d6a938db7ff1bbf3522343cd35f10f3dcac1c` の元conditioning実装/driverの7ファイルを
-byte単位で維持し、import/実行前にSHAを検査します。新sourceは4090 cohortのorchestrationと
+byte単位で維持し、model構築・数値実行前にSHAを検査します。新sourceは4090 cohortのorchestrationと
 厳格なforeground deploymentだけです。変更なしの `qualification.qualify_all`、`base.run_case`、
 `base.calibration_features`、activations、budget helperを直接呼びます。
 monkeypatch・属性override・数値runtimeコピー・Graph変更はありません。
