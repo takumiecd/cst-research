@@ -31,6 +31,22 @@
     "layer-signals.pdf": "9785167241e39135c6a038ae5fd6bcbaa6e4eb2b29b50656bc26f78c00143318",
     "layer-signals.png": "460ce592e29fe4668e48df848933ec0688b2fe1ca07a93307d769b1a948ad2f0",
     "learning-curves.pdf": "9c276f4f5f944793abbdfa9beaebf676250f7416fcc2d2c7cf506338f53f3b73",
+    "calibration.csv": "fdd021615ef91a8edb3479adc4f328c812b1d2b999dcdcf02f159cd2e1622ee1",
+    "learning-curves.png": "b9655de3adf293d946dce2009e24e98d00ea05323d209e526c3b3a79b26fac4a",
+    "layer-probes.csv": "d0587f838a0e95988d661f846e5a0fc22393f5a729d6830bf42f891daa5178a2",
+    "parameter-gradients.csv": "d4f32d056bc147a2c656ea04b3a1d1e079f35a2bbfaec43736dc866883e024b4",
+    "resources.csv": "8e23dcbaecd599ae3da3cdaeca1ea35f119e8f374497ea3e219accdf00a4f7d1",
+    "endpoints.csv": "9c8a37b71aa0c2df13b52fc047cfc27ecd897a0a316d530d5f6708fe4d4138dd",
+    "learning-curves.csv": "83d56f3983855b9f77af03334a0a0fa584676dff57c75ab112bab5701fffef9f"
+  },
+  "derived_artifacts_not_raw_predictions_or_checkpoints": true,
+  "one_seed_one_epoch": true,
+  "no_official_test_or_confirmation_scored": true,
+  "public_torchcst_API_is_separate_source": "ab7e9546c1c167576d2652f0b72383c9a2d465cb",
+  "source_derived_files_before_csv_newline_normalization": {
+    "layer-signals.pdf": "9785167241e39135c6a038ae5fd6bcbaa6e4eb2b29b50656bc26f78c00143318",
+    "layer-signals.png": "460ce592e29fe4668e48df848933ec0688b2fe1ca07a93307d769b1a948ad2f0",
+    "learning-curves.pdf": "9c276f4f5f944793abbdfa9beaebf676250f7416fcc2d2c7cf506338f53f3b73",
     "calibration.csv": "226d63cc554b05e31715c67aa1270d9121482eae5e91ad1d5c024c6ff95aa0cb",
     "learning-curves.png": "b9655de3adf293d946dce2009e24e98d00ea05323d209e526c3b3a79b26fac4a",
     "layer-probes.csv": "b1677252f3140b9592087313e3541508c4b32d44beb407b85961bcc45ccb3c63",
@@ -39,8 +55,5 @@
     "endpoints.csv": "900c0bfc000d1455fbe4b23fea806ef9e11630dbac835eece33d366c81c38f4e",
     "learning-curves.csv": "35c7d0dac81c06714942ccd7a253809c8ae94eed8e774a4e1fc984e6c084e833"
   },
-  "derived_artifacts_not_raw_predictions_or_checkpoints": true,
-  "one_seed_one_epoch": true,
-  "no_official_test_or_confirmation_scored": true,
-  "public_torchcst_API_is_separate_source": "ab7e9546c1c167576d2652f0b72383c9a2d465cb"
+  "serialization_note": "Published CSVs use LF rather than the source artifact CRLF; parsed rows and values are unchanged. Original derived artifact hashes are retained separately."
 }
