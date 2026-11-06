@@ -11,8 +11,15 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-import numpy as np
-import torch
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
+try:
+    import torch
+except ImportError:
+    torch = None
 
 from cst_research.experiments import higgs_depth_normalization_learning as study
 from cst_research.experiments import higgs_depth_normalization_learning_driver as driver
@@ -84,6 +91,9 @@ class EvidenceTests(unittest.TestCase):
                     )
             self.assertEqual(target.read_bytes(), b"keep")
 
+    @unittest.skipUnless(
+        torch is not None, "optional Torch required for tensor-byte gate"
+    )
     def test_recursive_metadata_and_tensor_bits_are_both_required(self):
         state = {
             "model": {
@@ -153,6 +163,9 @@ class LearningPolicyTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 study.selected_epoch(invalid)
 
+    @unittest.skipUnless(
+        np is not None, "optional NumPy required for prediction-array gate"
+    )
     def test_prediction_reloads_require_array_bytes_labels_rows_and_dtype(self):
         expected = {
             "logits": np.array([[1.0, -1.0]], dtype=np.float32),
