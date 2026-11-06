@@ -86,12 +86,14 @@ to Dense, but its down-projection RMS stayed near0.04–0.05 while Dense grew to
 duration caused the gap. Its976-update cosine schedule already decayed to3e-5,
 so it cannot isolate a duration effect from a longer schedule.
 
-Before width/seed expansion, compare N256 coefficients c8/16/32
+The initial followup plan proposed comparing N256 coefficients c8/16/32
 (4096/8192/16384 Atoms per projection) under the same q0, target variance, base
-LR, data and seen-token budget. Reinitialize each Atom budget to the same Dense
-moment target and report actual initial activations. This is bounded practical
-recipe selection, not renewed lower-bound/Big-Omega research. Atom-coordinate
-LR interventions are deferred while these hypotheses are checked.
+LR, data and seen-token budget. Subsequent owner discussion prioritized the
+bounded R7 radius/order/Atom-LR recipe family below before increasing Atom count.
+The coefficient alternatives remain available if that family is insufficient.
+Reinitialize each Atom budget to the same Dense moment target and report actual
+initial activations. This is bounded practical recipe selection, not renewed
+lower-bound/Big-Omega research.
 
 Use a common planned20million-token learning-rate AND data-order horizon, even
 for an early checkpoint. `--schedule-tokens 20000000` controls warmup/cosine and
@@ -272,3 +274,21 @@ pass. Keep R6's running source and outputs unchanged. New scalar settings,
 feature ordering or LR multipliers require new qualification; older receipts
 cannot silently admit them. Width/aspect and three-seed checks remain required
 after selecting a working recipe.
+
+## Qualifying a selected width and aspect ratio
+
+The recipe cohort also accepts `--width 128|256|512`, `--expansion 1|4|16`
+and `--coefficient 8|16|32`. It qualifies both actual FFN directions at B2T128,
+using std.02 for up and .02/sqrt(8) for down, including expansion1 where the
+two square projections have different initialization targets. Other cohorts
+reject nondefault values of these flags rather than silently ignoring them.
+Keep the selected q/bounds/order/Atom-LR flags identical in qualification and
+learning. A receipt for one shape or Atom count cannot admit another.
+
+For example, after selecting a recipe and using the qualified explicit2048
+operator source, qualify width512 with
+`ffn_qualification --cohort recipe --width 512 --expansion 4 --coefficient 8`
+plus that recipe's flags. Follow with actual four-block task updates and a
+checkpoint audit before a long run. These flags do not extend backend support;
+unsupported combinations still fail qualification. Preparing this entry point
+does not demonstrate width/aspect learning or validate a new Atom count.

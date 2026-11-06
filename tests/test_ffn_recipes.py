@@ -69,6 +69,46 @@ class FeatureOrderTests(unittest.TestCase):
             row = independent_quadrature_check(**settings)
             self.assertLess(row["max_dp_error"], 2e-9)
 
+    def test_actual_width_and_aspect_qualification_covers_both_target_scales(self):
+        import math
+
+        from cst_research.experiments.ffn_contract import atom_count
+        from cst_research.experiments.ffn_qualification import recipe_case_specs
+
+        for width, expansion in [(128, 1), (128, 4), (256, 4), (512, 4), (128, 16)]:
+            config = ModelConfig(width=width, expansion=expansion, q=0.5)
+            rows = recipe_case_specs(width=width, expansion=expansion, q=0.5)
+            self.assertEqual(len(rows), 2)
+            self.assertEqual(
+                [r[:2] for r in rows],
+                [
+                    (config.width, config.intermediate),
+                    (config.intermediate, config.width),
+                ],
+            )
+            self.assertEqual([r[-1] for r in rows], [0.02, 0.02 / math.sqrt(8)])
+            receipt = {
+                "task_recipes": [config.recipe()],
+                "cases": [
+                    {
+                        "in": ni,
+                        "out": no,
+                        "atoms": atom_count(ni, no, c),
+                        "coefficient": c,
+                        "q": q,
+                        "amplitude_max": 1.0,
+                        "w_c": 0.3,
+                        "radius_birth": 4.0,
+                    }
+                    for ni, no, _, c, q, _ in rows
+                ],
+            }
+            self.assertTrue(qualification_covers_model(receipt, config))
+            if width != 256 or expansion != 4:
+                self.assertFalse(
+                    qualification_covers_model(receipt, ModelConfig(q=0.5))
+                )
+
     def test_atom_lr_group_does_not_change_ordinary_parameter_rates(self):
         from torchcst import CSTLinear
 

@@ -507,6 +507,24 @@ def task_step_and_resume_check(
     }
 
 
+def recipe_case_specs(*, width=256, expansion=4, coefficient=8, q=0.0):
+    """Both actual FFN directions, including the residual output's target std."""
+    from .ffn_contract import ModelConfig
+
+    config = ModelConfig(width=width, expansion=expansion, coefficient=coefficient, q=q)
+    return [
+        (config.width, config.intermediate, 128, coefficient, q, config.init_std),
+        (
+            config.intermediate,
+            config.width,
+            128,
+            coefficient,
+            q,
+            config.init_std / math.sqrt(2 * config.layers),
+        ),
+    ]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--output", type=Path, required=True)
@@ -531,7 +549,16 @@ def main(argv=None):
     parser.add_argument(
         "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
     )
+    parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
+    parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
+    parser.add_argument("--coefficient", type=int, choices=(8, 16, 32), default=8)
     args = parser.parse_args(argv)
+    if args.cohort != "recipe" and (args.width, args.expansion, args.coefficient) != (
+        256,
+        4,
+        8,
+    ):
+        parser.error("explicit width/expansion/coefficient apply only to recipe cohort")
     if args.cohort == "radius" and args.q != 0.0:
         parser.error("radius cohort declares its own q0/.25/.5 family")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -609,10 +636,12 @@ def main(argv=None):
                 for ni, no in ((256, 1024), (1024, 256))
             ]
         if args.cohort == "recipe":
-            radius_cases = [
-                (ni, no, 128, 8, args.q, 0.02 if ni < no else 0.02 / math.sqrt(8))
-                for ni, no in ((256, 1024), (1024, 256))
-            ]
+            radius_cases = recipe_case_specs(
+                width=args.width,
+                expansion=args.expansion,
+                coefficient=args.coefficient,
+                q=args.q,
+            )
         for ni, no, tokens, coefficient, q, std in radius_cases:
             result["cases"].append(
                 qualify_case(
