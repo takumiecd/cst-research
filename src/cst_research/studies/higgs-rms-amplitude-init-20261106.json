@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-rms-amplitude-init-20261106",
   "title": "Raw CST amplitude initialization matched to initial Dense RMS without gain or LayerNorm",
-  "status": "PLANNED",
-  "status_note": "CPU preparation; native RMS/VJP and actual learning pending. Separate RTX4090 follow-up to fixed0.1 initializer.",
+  "status": "COMPLETED",
+  "status_note": "Bounded one-seed/one-epoch execution, normal completion and independent complete saved-evidence CPU audits finished; no formal quality/scaling claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -92,6 +92,24 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-rms-amplitude-init-20261106",
-    "availability": "PREPARED; native and independently admitted learning evidence pending"
+    "availability": "COMPLETED bounded cohorts; full raw source/data/state/prediction evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "2c5ec2cfbe8e31e776ad41161ef5e00d6b518cd5",
+    "admissions": {
+      "rtx4090": {
+        "status": "admitted-complete-remote-saved-evidence-CPU-audit",
+        "archive_sha256": "9b1e86518b6dd954d7bd5cc46e50b66e7480d709e15a8f92461b3ea5811396a6",
+        "audit_sha256": "2b45ef20f2ad2524a5aeefbdd06de4aa903024206f9d63a1de514d214e5dd603",
+        "outer_sha256": "7f7e2a8228dbf0819795818cacf986127a8daf4f8980e36a6f820544be0d3e59",
+        "reader_files_checked": 12,
+        "payload_files_checked": 76,
+        "task_updates": 25000,
+        "local_scope": "Compact proof transfer and root binding checks; full byte/tensor audit ran CPU-only on the source server. No new inference, training or scoring."
+      }
+    },
+    "summary_path": "docs/higgs-initialization-results.md",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
   }
 }

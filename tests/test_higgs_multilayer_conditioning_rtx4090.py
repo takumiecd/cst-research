@@ -118,7 +118,9 @@ class RTX4090CohortPolicy(unittest.TestCase):
             ).read_text()
         )
         self.assertEqual(record["protocol"], cohort.protocol())
-        self.assertEqual(record["status"], "PLANNED")
+        self.assertEqual(record["status"], "COMPLETED")
+        self.assertEqual(record["execution"]["task_updates"], 150000)
+        self.assertFalse(record["execution"]["confirmation_or_test_evaluated"])
         self.assertEqual(record["source_commit"], base.stock.SOURCE)
         self.assertEqual(
             record["runner_entrypoint"],

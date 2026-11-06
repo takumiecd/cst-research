@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "higgs-fan-initialization-20261106",
   "title": "Data-free He/Xavier CST initialization with configurable q",
-  "status": "PLANNED",
-  "status_note": "New source-pinned paired Dense/CST H8 pilots; native qualification and learning pending.",
+  "status": "COMPLETED",
+  "status_note": "Bounded one-seed/one-epoch execution, normal completion and independent complete saved-evidence CPU audits finished; no formal quality/scaling claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -140,6 +140,38 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-fan-initialization-20261106",
-    "availability": "CPU preparation; GPU and independent audit pending"
+    "availability": "COMPLETED bounded cohorts; full raw source/data/state/prediction evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "7f562481db09321e658a80051275dee21b0ec26a",
+    "admissions": {
+      "rtx4090": {
+        "status": "root-admitted-complete-saved-evidence-CPU-audit",
+        "archive_sha256": "c7f6ba086697f25b0da4c25c6c0d2af64bf83cab58dc69c9a56d8d8b46261271",
+        "audit_sha256": "4d73c97596f6b02cec69c361015a1e651df56a61852fe592ffed57f425a2eca7",
+        "outer_sha256": "b5b0b5fa4750ab51194c89dd5cac319db54b3ef01afe1769361ff910fa8764fc",
+        "payload_files": 137,
+        "task_updates": 50000,
+        "native_qualification_synthetic_updates": 40,
+        "metrics": 28,
+        "layer_probes": 14,
+        "source_commit": "7f562481db09321e658a80051275dee21b0ec26a"
+      },
+      "a100": {
+        "status": "root-admitted-complete-saved-evidence-CPU-audit",
+        "archive_sha256": "64809b89e9b879e5098278c05f2cae3aff299c6cbcb05662e968a2d3cf4f6c4d",
+        "audit_sha256": "aa7b22b60184a1937f336b5363839134dfcd710b1ea45d934b689186d6078692",
+        "outer_sha256": "7cf3b15195af61f7dfe683e26948532bfeb8775077d4d6b7a43df45ddcdeb080",
+        "payload_files": 137,
+        "task_updates": 50000,
+        "native_qualification_synthetic_updates": 40,
+        "metrics": 28,
+        "layer_probes": 14,
+        "source_commit": "7f562481db09321e658a80051275dee21b0ec26a"
+      }
+    },
+    "summary_path": "docs/higgs-initialization-results.md",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
   }
 }

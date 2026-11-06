@@ -2,9 +2,8 @@
   "schema_version": 1,
   "id": "higgs-multilayer-conditioning-rtx4090-20261106",
   "title": "HIGGS H8 scale versus bare LayerNorm: fresh paired RTX4090 diagnostic",
-  "status": "PLANNED",
-  "preparation_status": "PREPARED",
-  "status_note": "Separate new RTX4090 cohort preparation; identical six-arm numerical functions from a43d. Fresh all-six native qualification and 150k task updates pending; no A100 state/result reuse.",
+  "status": "COMPLETED",
+  "status_note": "Six bounded fresh arms completed and independently admitted; one seed/epoch, no universal normalization/quality claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -98,6 +97,17 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-multilayer-conditioning-rtx4090-20261106",
-    "availability": "PREPARED only; new independently paired RTX4090 native/quality evidence pending"
+    "availability": "COMPLETE six-arm source/runtime-bound saved evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "4845e0c6649ecf3e822f014a554482478e2fe2cf",
+    "source_files": 137,
+    "independent_CPU_audit_sha256": "2163b6e1a026d2b2dea8316f04f758582682a0716a17b69314fb05aa2ed59d43",
+    "normal_outer_sha256": "e91b1815138e057e7a69edcc80d5fb3eb4107055a4a6e53ebf00a82b739c26bd",
+    "metrics_checked": 84,
+    "task_updates": 150000,
+    "summary_path": "docs/higgs-initialization-results.md",
+    "confirmation_or_test_evaluated": false,
+    "integration_is_rerun_or_revalidation": false
   }
 }

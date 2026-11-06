@@ -70,3 +70,7 @@ GPU trajectories or reopen evaluation data. Raw data, models, credentials and
 machine-specific operational helpers remain in ignored external evidence under
 the [evidence convention](reproducibility.md). Historical protocols retain their
 mathematics/budgets; updated status preambles point to subsequent measured results.
+
+## Initialization and consolidation checkpoint
+
+The consolidation includes the earlier result-integration parent and the latest He/Xavier consumer without changing any experimental Python module. Earlier draft PR heads remain merge ancestors; frozen raw evidence and branches are retained. The [completed initialization results](higgs-initialization-results.md) record actual measured sources, normal outers and independent audit identities. Registry completion applies only to the bounded admitted cohorts. Primary/DST assessment remains paused; repository integration does not finish it. The public initializer lives in torchcst PR149, not in a copied runtime here.

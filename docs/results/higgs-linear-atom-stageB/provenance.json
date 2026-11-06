@@ -1,0 +1,146 @@
+{
+  "scope": "Published derived metadata and figures only; no new training, inference, raw checkpoint read, or revalidation of the measured source. Original frozen registries are unchanged.",
+  "measured_identity": {
+    "cohort": "higgs-linear-atom-learning-stageB-v1",
+    "consumer_commit": "d00a98bc97ec1cc6be4e2ebdfbea114758b2fca3",
+    "consumer_manifest_sha256": "43093391649a1270fcb70f17461ebc5fbf14ca8b019febeeb851025708969ff4",
+    "protocol_sha256": "5f65f47b9975a1e642b0a6e020d550ffbad5bea668053221a844173a0da44b1c",
+    "inherited_native_qualification_identity": {
+      "stage": "A-new-native16-qualification-only",
+      "consumer_commit": "446f25f1ec339f1e3acb4cf84d96ac5825306ab7",
+      "consumer_manifest_sha256": "717bcbcb88dde83fe619cad547bd9ffbc9092e35be5787fdcad7f1eda2859db4",
+      "protocol_sha256": "9a34b7fc5a30d58b47c36db25ed15b148dae7c347fbd4898beb0fda8e7bc7b28",
+      "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+      "external_source_manifest_sha256": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+      "runtime_fingerprint": {
+        "python": "3.12.9",
+        "torch": "2.11.0+cu126",
+        "cuda": "12.6",
+        "triton": "3.6.0",
+        "numpy": "2.0.2",
+        "driver": "570.133.20",
+        "gpu": "NVIDIA GeForce RTX 4090",
+        "capability": [
+          8,
+          9
+        ],
+        "multiprocessors": 128,
+        "total_memory_bytes": 25262096384
+      },
+      "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+      "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+      "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+      "verified_inputs": {
+        "original-source.tar.gz": "edbb585de56e304887b118069b7c7ecd9e45ae5fe2e08a5afca828ad8544eb5f",
+        "original-source-manifest.json": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+        "train-development.npz": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+        "data-manifest.json": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+        "runtime-pin.json": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+        "recipe-selection-audit.json": "eefdef7e8b7598232c137a6f8589c74f1a511051d13bcbd8fe0b5a9a01dc8e84",
+        "cotangent-decision.json": "b86e9d69f211768239aaeda30b76863d16519f1bb13ee27ce0a25b30f79eeb31",
+        "consumer-source-manifest.json": "717bcbcb88dde83fe619cad547bd9ffbc9092e35be5787fdcad7f1eda2859db4"
+      }
+    },
+    "StageA_independent_CPU_admission_sha256": "fe2283c9342cffff3f4aaa72949e81b2bad2173e8ffb24e04d1f3e26583b0fa9",
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "runtime_fingerprint": {
+      "python": "3.12.9",
+      "torch": "2.11.0+cu126",
+      "cuda": "12.6",
+      "triton": "3.6.0",
+      "numpy": "2.0.2",
+      "driver": "570.133.20",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "capability": [
+        8,
+        9
+      ],
+      "multiprocessors": 128,
+      "total_memory_bytes": 25262096384
+    },
+    "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "external_source_manifest_sha256": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+    "verified_inputs": {
+      "original-source.tar.gz": "edbb585de56e304887b118069b7c7ecd9e45ae5fe2e08a5afca828ad8544eb5f",
+      "original-source-manifest.json": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+      "train-development.npz": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+      "data-manifest.json": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+      "runtime-pin.json": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+      "recipe-selection-audit.json": "eefdef7e8b7598232c137a6f8589c74f1a511051d13bcbd8fe0b5a9a01dc8e84",
+      "cotangent-decision.json": "b86e9d69f211768239aaeda30b76863d16519f1bb13ee27ce0a25b30f79eeb31",
+      "stage-a-admission.json": "fe2283c9342cffff3f4aaa72949e81b2bad2173e8ffb24e04d1f3e26583b0fa9",
+      "stage-a-file-release.json": "d18e2d4b27b55bb1ca72b5366d1546c0eb7a4986d36fb3b37211abb7b6eb5f91",
+      "consumer-source-manifest.json": "43093391649a1270fcb70f17461ebc5fbf14ca8b019febeeb851025708969ff4"
+    }
+  },
+  "raw_archive_sha256": "df644c61d9700a561f8e3fba22b77159b3886b19a9d76fc9aa5998a426ef3a16",
+  "evidence_relative_path": "higgs-linear-atom-learning-20261106",
+  "upstream_reports": {
+    "independent_B16_CPU_admission": "003b2a9ae6d09acf57c3d5d20a3a4db4b0defb5a23488a43d4fc705300ca3d95",
+    "root_independent_review": "e412afd5b5fcb840f4c855e7d618c4f7a7da75c4cae090b723325576539011ee",
+    "derived16_endpoints": "c859d06d32b85bf22441fe489810c8f14cbb82f2868e85ddec42a141a7b969f7",
+    "root_derived_review": "f4a92eb6de266fe9045cdf817e9fd288213c83321284b5f672b7767cef67614b",
+    "H8_mechanism": "2d2a32763820de32434b97541db77c1eeaa532ebb5f05e457f0744fd5d997df1",
+    "root_H8_review": "191405fb1156332a0ebc48c845f4a029a373ebb284f71ef7421b79127b66b4db",
+    "source_only_energy_review": "32db69aadf63ac935171e45cce03b6274ebd78a4f5c9ec5c5f22650099d0ae82"
+  },
+  "artifacts": {
+    "selected-quality-resources.csv": {
+      "sha256": "d467fcdbbd7792bef6fb6d0be93db46908ca74e111341842513eff741f68d399",
+      "bytes": 6899,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "split-metrics.csv": {
+      "sha256": "1ae79eeb7ef02744841975a5e9e1144514ffd4f2445fced9250f444688c673f0",
+      "bytes": 5508,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "linear-activation-summaries.csv": {
+      "sha256": "d9051f99b980dba6e202e2ea646f935db041c5d3eee622edfe5a3b19d9a77e0f",
+      "bytes": 40476,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "accepted-gradient-moments.csv": {
+      "sha256": "cb80ba0ea3f643d9d5b26c86eae96038d3cd1e0ab4fc6130a7eefea7a10d7768",
+      "bytes": 46455,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "selected-quality-and-memory.png": {
+      "sha256": "350c51392e163141e164893ed26cc4734142fdbb3f4bba5eb501ee52f051a811",
+      "bytes": 313242,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "selected-quality-and-memory.pdf": {
+      "sha256": "cb2b80e2b15d05bb998657b4c1f1ee653c0340991a8d3f44c4be1384d6e4c429",
+      "bytes": 35041,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "retained-linear-RMS-depth-profiles.png": {
+      "sha256": "681fc0b503784dfefaa1bc9dbbf0ebfcf30794aef25f513de40cd7afa21ed2ad",
+      "bytes": 565532,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "retained-linear-RMS-depth-profiles.pdf": {
+      "sha256": "55f8fc96127a706a5f667c2b0a0945a25719b6e6ab68e8fd90d414c233dee956",
+      "bytes": 47752,
+      "source_directory": "derived16-endpoints-01"
+    },
+    "all32-logit-counts.csv": {
+      "sha256": "c88e968c199ca89fab9423c36417a51d439bfd43992de75c8e78f41c9ed0073e",
+      "bytes": 5699,
+      "source_directory": "H8-mechanism-diagnostics-01"
+    },
+    "H8-six-conditional-probe-head-bounds.csv": {
+      "sha256": "f805a8e0e904f78c3c67a13c8828ad5e5772cb49940793f7a1508ef4889d44de",
+      "bytes": 3823,
+      "source_directory": "H8-mechanism-diagnostics-01"
+    },
+    "H8-six-endpoint-denominator-fields.csv": {
+      "sha256": "5a9b50e400c93b1cbdba8df069d7ccb7f63d63f403e48f83069c1be390774caf",
+      "bytes": 68904,
+      "source_directory": "H8-mechanism-diagnostics-01"
+    }
+  }
+}

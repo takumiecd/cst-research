@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](higgs-width-amplitude-init.ja.md)
 
+Completed bounded execution and independent saved-evidence audit. See [results and limitations](higgs-initialization-results.md). The protocol below retains its original design; preparation/future-tense statements are historical.
+
 This separate exploratory study compares the requested raw amplitude standard
 deviation `0.1/sqrt(A/N)` against `0.1/sqrt(A)` and the previously measured fixed
 gain recipe. It does not use the unexecuted He/self-energy prototype.

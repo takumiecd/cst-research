@@ -2,9 +2,8 @@
   "schema_version": 1,
   "id": "higgs-width-amplitude-init-20261106",
   "title": "HIGGS deep raw width-aware amplitude initialization versus old and fixed gain",
-  "status": "PLANNED",
-  "preparation_status": "PREPARED",
-  "status_note": "CPU preparation; separate paired four-arm seed17/oneepoch cohorts on RTX4090 and A100 MIG; no GPU result claimed.",
+  "status": "COMPLETED",
+  "status_note": "Bounded one-seed/one-epoch execution, normal completion and independent complete saved-evidence CPU audits finished; no formal quality/scaling claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -118,6 +117,34 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-width-amplitude-init-20261106",
-    "availability": "PREPARED; GPU and independent raw admission pending"
+    "availability": "COMPLETED bounded cohorts; full raw source/data/state/prediction evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "ee5422e41971f97c2f48857e2e23d225b9602571",
+    "admissions": {
+      "rtx4090": {
+        "status": "admitted-complete-remote-saved-evidence-CPU-audit",
+        "archive_sha256": "5caa080dd95576b9a740dd6eb9462ff7fa60ff1d02fd68e46927f0c0319eb65a",
+        "audit_sha256": "9b1a82f7ba32839724a874ff676f18557ecb8bed0f1991c42d10726e2c730ed5",
+        "outer_sha256": "2ca5a5275f0084c83714bfa79170b9826514274b46f9883e4b2e46e815bbbbf5",
+        "reader_files_checked": 10,
+        "payload_files_checked": 264,
+        "task_updates": 100000,
+        "local_scope": "Compact proof transfer and root binding checks; full byte/tensor audit ran CPU-only on the source server. No new inference, training or scoring."
+      },
+      "a100": {
+        "status": "admitted-complete-remote-saved-evidence-CPU-audit",
+        "archive_sha256": "ccc90d0bc3033d6453ea4c3300fac3a71afb8983e57cb7069d6ff13dfdc40cad",
+        "audit_sha256": "6e636ffba0f4e9ccd98b8d25f7b257c3db9103c6050de37932e0a78324a4a1a4",
+        "outer_sha256": "1fec03b4fa8bf29f17b3912ff0e49bad0344271a5f01425c3f935a3d458b8873",
+        "reader_files_checked": 10,
+        "payload_files_checked": 264,
+        "task_updates": 100000,
+        "local_scope": "Compact proof transfer and root binding checks; full byte/tensor audit ran CPU-only on the source server. No new inference, training or scoring."
+      }
+    },
+    "summary_path": "docs/higgs-initialization-results.md",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
   }
 }

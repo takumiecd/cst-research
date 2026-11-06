@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](higgs-multilayer-conditioning-rtx4090.ja.md)
 
+Completed bounded execution and independent saved-evidence audit. See [results and limitations](higgs-initialization-results.md). The protocol below retains its original design; preparation/future-tense statements are historical.
+
 **PLANNED / PREPARED; no execution result.** This cohort repeats the exact
 [paired six-arm A100 design](higgs-multilayer-conditioning.md) on RTX4090. The user
 requested parallel use of the available4090. N=1024, H=8 and A=4N=4096 are held

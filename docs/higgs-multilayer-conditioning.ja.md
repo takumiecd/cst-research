@@ -2,6 +2,8 @@
 
 [English (canonical)](higgs-multilayer-conditioning.md) | 日本語
 
+限定した実行・独立した全保存証拠の検証は完了しています。[結果と限界](higgs-initialization-results.ja.md)を参照してください。以下のprotocolは元の設計を保持し、準備中・将来形の記述は当時の記録です。
+
 **PLANNED / PREPARED、未実行。** 問いは、複数CST写像がstallするとき何を直すべきかであり、
 LayerNormの必要性を仮定しない。従来の正規化条件はLNとcalibrate済み固定gainを組み合わせていたため、
 bare-LN単独の効果を特定しない。この別研究でも旧数値consumer・registryを維持し、

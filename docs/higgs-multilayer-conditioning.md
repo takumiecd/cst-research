@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](higgs-multilayer-conditioning.ja.md)
 
+Completed bounded execution and independent saved-evidence audit. See [results and limitations](higgs-initialization-results.md). The protocol below retains its original design; preparation/future-tense statements are historical.
+
 **PLANNED / PREPARED, not executed.** The question is what needs correction when
 multiple CST maps stall, rather than assuming LayerNorm is necessary. Earlier
 normalization cases combined LN with calibrated fixed gains, so they do not

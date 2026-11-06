@@ -59,3 +59,7 @@ fixtureは公開modelの所有権、optimizer/retraction、checkpoint契約を�
 再現したり評価データを再び開いたりしません。raw data、model、認証情報、machine固有の
 運用helperは[証拠規約](reproducibility.ja.md)に従ってignored外部証拠へ残します。歴史的protocolの
 数学・予算は維持し、更新した状態の前書きから後続の実測結果を参照します。
+
+## 初期化と統合のcheckpoint
+
+以前の結果統合parentと最新He／Xavier consumerを、実験用Python moduleを変更せずに統合します。以前のDraft PR headをmerge祖先として保持し、固定raw証拠とbranchを残します。[完了した初期化結果](higgs-initialization-results.ja.md)に実測source・正常終了outer・独立auditのidentityを記録します。registryの完了は検証済みの限定cohortだけに適用します。primary/DST評価は停止したままで、repo統合をその完了と扱いません。公開初期化はtorchcst PR149にあり、runtimeをこちらへコピーしません。

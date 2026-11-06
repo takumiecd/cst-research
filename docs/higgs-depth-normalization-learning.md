@@ -2,7 +2,12 @@
 
 English (canonical) | [日本語](higgs-depth-normalization-learning.ja.md) · [Exact JSON](../src/cst_research/studies/higgs-depth-normalization-learning-20261106.json)
 
-**PREPARED; implementation and CPU checks only, no new GPU execution or learning result.** Study ID:
+**STOPPED: the original source ea0 attempt remains at exit 1 and incomplete after 300,000 main updates.**
+The three Dense selected evaluations completed; CST-stock selected evaluation was completed
+only by the [separate recovery lineage](higgs-normalization-learning-recovery.md).
+See the [combined bounded results](higgs-depth-normalization-learning-results.md).
+The protocol below records the original frozen recipe and admission requirements;
+it does not authorize retry or relabel the failed parent. Study ID:
 `higgs-depth-normalization-learning-20261106`. This separate three-epoch followup
 was chosen **after** the completed 4f eight-update observations and earlier f6/69
 development results. It asks whether the early motion differences persist into

@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](higgs-rms-amplitude-init.ja.md)
 
+Completed bounded execution and independent saved-evidence audit. See [results and limitations](higgs-initialization-results.md). The protocol below retains its original design; preparation/future-tense statements are historical.
+
 This follow-up changes only initial Atom amplitudes to match initial Dense
 pre-ReLU RMS, keeping runtime gains equal to1 and normalization NONE. It is a
 separate exploratory initialization condition, not a public default change.

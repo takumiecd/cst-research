@@ -2,6 +2,8 @@
 
 [English (canonical)](higgs-fan-initialization.md) | 日本語
 
+限定した実行・独立した全保存証拠の検証は完了しています。[結果と限界](higgs-initialization-results.ja.md)を参照してください。以下のprotocolは元の設計を保持し、準備中・将来形の記述は当時の記録です。
+
 研究用の初期化であり、torchcstの公開defaultは変更しません。
 `q`・`s`・`t`は小文字で表記します。0〜1で指定する割合qはPolarの
 `alpha_init`に対応し、Atom密度alpha=A/N²とは区別します。学習前に

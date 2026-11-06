@@ -2,9 +2,8 @@
   "schema_version": 1,
   "id": "higgs-multilayer-conditioning-20261106",
   "title": "HIGGS H8 scale versus bare LayerNorm: fresh paired A100 diagnostic",
-  "status": "PLANNED",
-  "preparation_status": "PREPARED",
-  "status_note": "Newsix-case CPUimplementation/protocol only. FreshA100 nativeadmission and150k taskupdates NOTexecuted. BareLN separatedfromfixedgain+LN; no publicruntime/default adoption.",
+  "status": "COMPLETED",
+  "status_note": "Six bounded fresh arms completed and independently admitted; one seed/epoch, no universal normalization/quality claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -87,6 +86,17 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-multilayer-conditioning-20261106",
-    "availability": "CPU source/tests/preflight preparation only; actualnative/quality evidence pending"
+    "availability": "COMPLETE six-arm source/runtime-bound saved evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "a43d6a938db7ff1bbf3522343cd35f10f3dcac1c",
+    "source_files": 131,
+    "independent_CPU_audit_sha256": "0084d9faeab476c493e86c4f9b82194ac0c36f9e37002de4a444268e6c6f0844",
+    "normal_outer_sha256": "f9acadf940c2f3e6d6b72536a8062476151b32b78e4a3c685a32ccaef87e2c2e",
+    "metrics_checked": 84,
+    "task_updates": 150000,
+    "summary_path": "docs/higgs-initialization-results.md",
+    "confirmation_or_test_evaluated": false,
+    "integration_is_rerun_or_revalidation": false
   }
 }

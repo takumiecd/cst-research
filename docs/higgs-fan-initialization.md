@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](higgs-fan-initialization.ja.md)
 
+Completed bounded execution and independent saved-evidence audit. See [results and limitations](higgs-initialization-results.md). The protocol below retains its original design; preparation/future-tense statements are historical.
+
 This is an experimental research initializer, not a public torchcst default.
 Use lowercase `q`, `s`, `t`. The configurable fraction `q` in [0,1] is the
 Polar `alpha_init`, distinct from Atom density alpha=A/N². Before training,

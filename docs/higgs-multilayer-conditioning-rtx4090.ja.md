@@ -2,6 +2,8 @@
 
 [English (canonical)](higgs-multilayer-conditioning-rtx4090.md) | 日本語
 
+限定した実行・独立した全保存証拠の検証は完了しています。[結果と限界](higgs-initialization-results.ja.md)を参照してください。以下のprotocolは元の設計を保持し、準備中・将来形の記述は当時の記録です。
+
 **PLANNED / PREPARED、実行結果ではありません。**
 [対応するA100の6条件設計](higgs-multilayer-conditioning.ja.md)を正確にRTX4090で反復します。
 利用可能な4090の並行利用をuserが要求したためです。N=1024、H=8、A=4N=4096を固定し、

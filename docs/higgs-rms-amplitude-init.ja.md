@@ -2,6 +2,8 @@
 
 [English (canonical)](higgs-rms-amplitude-init.md) | 日本語
 
+限定した実行・独立した全保存証拠の検証は完了しています。[結果と限界](higgs-initialization-results.ja.md)を参照してください。以下のprotocolは元の設計を保持し、準備中・将来形の記述は当時の記録です。
+
 Atomの初期amplitudeを調整して初期DenseのReLU前RMSに合わせます。
 実行時gainは1・正規化はNONEです。独立の探索的な初期化条件であり、
 公開defaultは変更しません。以前の係数0.1固定の幅対応実験は元sourceで固定します。

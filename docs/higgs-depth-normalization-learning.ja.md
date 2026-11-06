@@ -2,7 +2,10 @@
 
 [English (canonical)](higgs-depth-normalization-learning.md) | 日本語 · [正確なJSON](../src/cst_research/studies/higgs-depth-normalization-learning-20261106.json)
 
-**PREPARED。実装とCPUチェックのみ。新たなGPU実行・学習結果はまだない。** Study IDは
+**STOPPED。元ea0 attemptはmain300000更新後にexit1・未完了のまま保持する。**
+Dense3条件の選択評価は完了し、CST-stockの選択評価は[別recovery系譜](higgs-normalization-learning-recovery.ja.md)
+でのみ完了した。[結合した範囲固定結果](higgs-depth-normalization-learning-results.ja.md)を参照。
+以下は元の固定recipe・admission要件の記録で、retryを許可せず、失敗parentを完了へ読み替えない。Study IDは
 `higgs-depth-normalization-learning-20261106`。完了済み4fの8更新観測と過去f6/69の
 development結果を**見た後**に選んだ、別の3epoch追試である。初動の動きの差が、
 限られた学習・精度の差に続くかを見る。過去に確認したdevelopmentを意図的に再利用し、

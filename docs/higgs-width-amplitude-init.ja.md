@@ -2,6 +2,8 @@
 
 [English (canonical)](higgs-width-amplitude-init.md) | 日本語
 
+限定した実行・独立した全保存証拠の検証は完了しています。[結果と限界](higgs-initialization-results.ja.md)を参照してください。以下のprotocolは元の設計を保持し、準備中・将来形の記述は当時の記録です。
+
 指定されたamplitude標準偏差`0.1/sqrt(A/N)`を、従来の`0.1/sqrt(A)`、
 および以前測定した固定gainと比較する独立の探索実験です。未実行の
 He・自己エネルギー方式の試作は使用しません。
