@@ -2,7 +2,10 @@
 
 English (canonical) | [日本語](higgs-normalization-learning-recovery.ja.md)
 
-**PREPARED; no recovery GPU execution or completed nine-case result.** This is a
+**COMPLETED: the bounded nine-case recovery exited with code 0 and passed independent audit.**
+The source ea0 parent remains at exit 1 and incomplete; 300,000 retained plus 375,000 new main updates
+complete only this explicit lineage. See the [results and limits](higgs-depth-normalization-learning-results.md).
+This is a
 corrective adapter for the [bounded learning study](higgs-depth-normalization-learning.md),
 not a new normalization recipe, selection rule or longer budget. The immutable
 parent consumer is `ea0d5701c45b188d619853ebd303767f224e36b8`, source manifest
@@ -89,8 +92,8 @@ identity. A narrowly scoped replacement of the parent runner's selected evaluato
 is explicit in the amendment provenance (old/new function names and source hashes)
 and restored in `finally`; model, optimizer, bare step, epoch loop and original
 comparisons are unchanged. The new consumer/attempt identity and references to
-old producer artifacts are separate. A completed recovery would describe this
-mixed producer lineage, never pretend all nine cases executed under one source.
+old producer artifacts are separate. The completed recovery records this
+mixed producer lineage; all nine cases did not execute under one source.
 
 The original full DEV selection (earliest minimum CE over epochs1..3), data,
 calibration, device/runtime, learning rate, normalization epsilon, optimizer,
@@ -99,7 +102,7 @@ seed/epoch/density, throughput/default adoption, minimum-Atom law or formal NI
 claim is added. Root remains sole GPU operator; a successful source review alone
 is neither execution nor permission to fabricate a parent-admission certificate.
 
-## Prepared foreground driver
+## Pinned foreground driver
 
 Exactly eleven staged inputs are permitted: the original ten SHA-bound learning
 inputs plus `parent-admission.json`, whose required SHA is the actual report above.
@@ -115,8 +118,9 @@ python -B src/cst_research/experiments/higgs_normalization_learning_recovery_dri
   --cache-root OWNED_CORRECTION_CACHE --output FRESH_CORRECTION_OUTPUT --timeout 7200
 ```
 
-This is preparation only; no upload, new GPU execution or automatic recovery is
-claimed. The owner must review/freeze the new source and operational seal first.
+The command records the reviewed, sealed recovery entrypoint. That bounded attempt
+completed; it is not authorization for another run or automatic retry. Source, raw
+evidence and the failed parent remain pinned to their original identities.
 
 Timing records source/runtime guards, prior151 admission, failed-parent75 admission,
 data/calibration-metadata/device transfer, and two synchronized native restores

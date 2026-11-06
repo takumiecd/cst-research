@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "derived-public-results-only-no-raw-data",
+  "independent_combined_audit_sha256": "eefdef7e8b7598232c137a6f8589c74f1a511051d13bcbd8fe0b5a9a01dc8e84",
+  "derived_report_sha256": "b23a58b490c0d852fc18cd96928b27d5443ef667588e95f14ad9cb5089987b92",
+  "root_derived_review_sha256": "9c81c79b42e7088c887562d87d93dfd16397b2daec76854835a41436ddae56d3",
+  "source_note02_EN_sha256": "19700cfbd05af69f84b4e9bdf44f926795a8b374add5260ff1848912242177f6",
+  "source_note02_JA_sha256": "ee66014e386f5a9ea91f5cad6248503387731ab7b993e51d0b3bb10f46c1088a",
+  "files": {
+    "matched-normalization-learning-curves.pdf": {
+      "source_sha256": "b1113d84a80b33f6b60f97bd3cf31edd1b90db80bcee5ae1bd8a463efb283955",
+      "published_sha256": "b1113d84a80b33f6b60f97bd3cf31edd1b90db80bcee5ae1bd8a463efb283955",
+      "bytes": 48802,
+      "copy": "byte-identical"
+    },
+    "all-nine-learning-curves.pdf": {
+      "source_sha256": "5790ca9b053389fa72e281725ea3ef0cac28ffef5b51d4c188a4b05c44d8aad0",
+      "published_sha256": "5790ca9b053389fa72e281725ea3ef0cac28ffef5b51d4c188a4b05c44d8aad0",
+      "bytes": 58967,
+      "copy": "byte-identical"
+    },
+    "matched-normalization-learning-curves.png": {
+      "source_sha256": "677c603da2e982a4b4eb8781866cd01f246c111694d2572c3e1c2aa978736e82",
+      "published_sha256": "677c603da2e982a4b4eb8781866cd01f246c111694d2572c3e1c2aa978736e82",
+      "bytes": 438536,
+      "copy": "byte-identical"
+    },
+    "all-nine-learning-curves.png": {
+      "source_sha256": "e46504c8a14fc75aa9170b8992753b91bc2bfefc1bac0e5c5f29b05e8f92a642",
+      "published_sha256": "e46504c8a14fc75aa9170b8992753b91bc2bfefc1bac0e5c5f29b05e8f92a642",
+      "bytes": 555412,
+      "copy": "byte-identical"
+    },
+    "gain-density-learning-curves.pdf": {
+      "source_sha256": "27da75841e78faf9b9e6be925b93fb674e6d95104df07a14e43851437ca660e2",
+      "published_sha256": "27da75841e78faf9b9e6be925b93fb674e6d95104df07a14e43851437ca660e2",
+      "bytes": 45503,
+      "copy": "byte-identical"
+    },
+    "gain-density-learning-curves.png": {
+      "source_sha256": "104bfaf26faac6eda7e5dc9c994c8234e619664a8d13f40205650a9833af5430",
+      "published_sha256": "104bfaf26faac6eda7e5dc9c994c8234e619664a8d13f40205650a9833af5430",
+      "bytes": 435710,
+      "copy": "byte-identical"
+    },
+    "selected-quality.csv": {
+      "source_sha256": "a30b015ab00d849cb7dd0af5f8a32aac96b9dfdc8456a0344684c7480a890696",
+      "published_sha256": "0e432a7d3af19993d3b203e5db41c1cdf99d63e398c383b092cc55654bdac620",
+      "bytes": 1418,
+      "copy": "CRLF-to-LF only; parsed records identical"
+    },
+    "resources.csv": {
+      "source_sha256": "c5190e6a44446943dc0b6a08e8d5af16e50c19c5b79e7696ccea2c12f45b3ac8",
+      "published_sha256": "0704be7bbb29644192ac8fc91e3adf0bef110bb4a4e3397e9746a7926930995c",
+      "bytes": 3338,
+      "copy": "CRLF-to-LF only; parsed records identical"
+    },
+    "all-curves.csv": {
+      "source_sha256": "31202cb2474bd46a46c165042f6fafcc6053bdc5b7d8176add331aaacdb9148e",
+      "published_sha256": "2260c6395e5aa5f1cd2cd14e66fe01deb0e4d091156871e0848c543b6db696bd",
+      "bytes": 4197,
+      "copy": "CRLF-to-LF only; parsed records identical"
+    }
+  },
+  "raw_evidence_locator": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-normalization-learning-recovery-20261106/evidence-index.json"
+  },
+  "integration_is_rerun_or_new_admission": false,
+  "contains_raw_predictions_checkpoints_datasets_logs_or_private_paths": false,
+  "data_scope": {
+    "manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "source_compressed_sha256": "ea302c18164d4e3d916a1e2e83a9a8d07069fa6ebc7771e4c0540d54e593b698",
+    "zero_based_half_open_rows": {
+      "training": [
+        1000000,
+        1100000
+      ],
+      "development": [
+        1100000,
+        1150000
+      ],
+      "future_confirmation": [
+        1150000,
+        1200000
+      ]
+    },
+    "input_standardization_fit_rows": [
+      1000000,
+      1100000
+    ],
+    "training_artifact_contains_future_confirmation": false,
+    "future_confirmation_scored": false,
+    "prior_aggregate_feature_statistics_rows": [
+      0,
+      10400000
+    ],
+    "claim_unseen_by_all_history": false,
+    "within_network_normalization_is_separate_from_input_standardization": true
+  }
+}

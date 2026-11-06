@@ -229,14 +229,14 @@ class LearningPolicyTests(unittest.TestCase):
             self.assertEqual(list(prior.iterdir()), [])
             self.assertEqual(list(source.iterdir()), [])
 
-    def test_registry_is_prepared_not_a_completed_learning_result(self):
+    def test_registry_preserves_stopped_parent_and_frozen_recipe(self):
         file = (
             Path(__file__).resolve().parents[1]
             / "src/cst_research/studies/higgs-depth-normalization-learning-20261106.json"
         )
         registered = json.loads(file.read_text())
         self.assertEqual(registered["protocol"], study.protocol())
-        self.assertEqual(registered["status"], "PLANNED")
+        self.assertEqual(registered["status"], "STOPPED")
         self.assertEqual(registered["preparation_status"], "PREPARED")
 
 

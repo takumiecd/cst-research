@@ -2,9 +2,9 @@
   "schema_version": 1,
   "id": "higgs-depth-normalization-learning-20261106",
   "title": "HIGGS bounded three-epoch normalization learning followup",
-  "status": "PLANNED",
+  "status": "STOPPED",
   "preparation_status": "PREPARED",
-  "status_note": "Separate post-observation development-only followup. Source/CPU preparation only; no new GPU prefix reproduction, learning, quality or independent-oracle result yet. No HPO, heldout, NI or automatic extension.",
+  "status_note": "The original ea0 attempt remains exit 1 and incomplete after four cases trained for 300,000 main updates and all nine prefix reproductions added 72 updates. Three Dense selected evaluations completed. The selected CST A104 stock evaluation was blocked by the native layout-generation restore checker and completed only through the separate explicit recovery lineage. The parent was neither relabelled complete nor retrained.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -98,8 +98,31 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-depth-normalization-learning-20261106",
-    "availability": "Preparation only; prior151 files are referenced in place. New compact reproduction hashes, state0/three epochs/selected arrays/recovery index pending authorized execution."
+    "availability": "The 75 failed-parent raw files, all nine prefix records and four trained cases remain external. The independently admitted 300,000 updates are retained; completion of the combined nine cases belongs only to higgs-normalization-learning-recovery-20261106."
   },
   "proposal_sha256": "f36bf8f456c80f2f40a98e1ef6fa7bd7435e0790204ae18f530adb19954d695e",
-  "prior_studies_unchanged": true
+  "prior_studies_unchanged": true,
+  "execution": {
+    "measured_consumer_commit": "ea0d5701c45b188d619853ebd303767f224e36b8",
+    "measured_consumer_manifest_sha256": "68bf4e7eb80ed9c48ce4c27fc26bd549f55a309276ddd519d63d00dcf2860fb0",
+    "original_exit_code": 1,
+    "original_run_complete": false,
+    "trained_cases": 4,
+    "main_updates": 300000,
+    "prefix_updates": 72,
+    "complete_selected_cases": [
+      "dense-stock",
+      "dense-rms",
+      "dense-ln"
+    ],
+    "selected_CST104stock_epoch": 2,
+    "selected_CST104stock_evaluation_completed_in_parent": false,
+    "outer_receipt_sha256": "18403283955ab2a4d6f5dbdfe9f2094cec54efe9aadbeb3bff15e5285275bcab",
+    "full_file_admission_sha256": "dbe3081a726d6e175f880d483b298ce86319eb28cf4bdbca98090769553ea4fb",
+    "independent_CPU_audit_sha256": "7d69415094ec9bdf31e5ecd66654d3aac2d792e46d92836dd016c2abe780b6b7",
+    "completed_separate_recovery_study": "higgs-normalization-learning-recovery-20261106",
+    "summary_path": "docs/higgs-depth-normalization-learning-results.md",
+    "heldout_or_test_evaluated": false,
+    "integration_is_rerun_or_revalidation": false
+  }
 }

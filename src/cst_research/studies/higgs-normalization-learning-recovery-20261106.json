@@ -2,9 +2,9 @@
   "schema_version": 1,
   "id": "higgs-normalization-learning-recovery-20261106",
   "title": "HIGGS post-failure selected-state load-contract correction",
-  "status": "PLANNED",
+  "status": "COMPLETED",
   "preparation_status": "PREPARED",
-  "status_note": "Separate explicit corrective adapter; original ea0 attempt remains exit1/incomplete. Actual75-file fourcase CPU evidence passed independently; new selectedCSTstock evaluation and remaining375k GPU updates are NOT executed. Recipe/horizon/selection unchanged.",
+  "status_note": "The bounded nine-case development-only study completed through explicit recovery: four parent cases supplied 300,000 training updates and five fresh cases supplied 375,000. Three parent Dense selected references were reused; the parent CST stock selected evaluation passed before new training. Independent raw/prediction and root reviews passed. The parent remains exit 1 and incomplete. No formal noninferiority or default normalization adoption is claimed.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -63,6 +63,43 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-normalization-learning-recovery-20261106",
-    "availability": "Preparation only; originalfailed75raw and4f151raw remain readonly; actual4case CPUadmission and narrowload diagnosis retained externally; no recoveryGPU result yet"
+    "availability": "The 89 normal recovery raw members, 75 immutable failed-parent members and 151 inherited source-4f members remain external. Published derived outputs contain nine quality rows, nine resource rows, 27 curve rows and six figures; no raw datasets, checkpoints, predictions or logs are in Git."
+  },
+  "execution": {
+    "measured_consumer_commit": "32428aa8112ea6f0e206f0e1c12cda0206d920a0",
+    "measured_consumer_manifest_sha256": "a2995731b62c601cadf7e7baafa86390bf54991bac7bd9f935e1dbe5e73008db",
+    "recovery_protocol_sha256": "80afd04557b70b13b82df9efb2104864562e9d5f638b9bdb8bae6b829e7be629",
+    "unchanged_training_recipe_protocol_sha256": "c2e27deeed740cc299471a2fc1b7f13c03864a678a293d45f05986353911fd4d",
+    "exit_code": 0,
+    "bounded_combined_cases": 9,
+    "parent_trained_cases": 4,
+    "new_fresh_cases": 5,
+    "parent_main_updates": 300000,
+    "new_main_updates": 375000,
+    "combined_main_updates": 675000,
+    "inherited_prefix_updates": 72,
+    "new_prefix_updates": 0,
+    "training_seeds": [
+      17
+    ],
+    "epochs_per_case": 3,
+    "parent_original_exit_code": 1,
+    "parent_relabelled_complete": false,
+    "parent75_members_unchanged": true,
+    "normal_recovery_members": 89,
+    "stock_selected_evaluation_gate_before_new_training": true,
+    "normal_outer_receipt_sha256": "32f30113088d08e030522016062a8d5e3176a467a8d790715a8a024a1e2d0ef9",
+    "summary_sha256": "b1e4f20f6f83b37efa7a4de4fdda752dda04c57258e0ea28518ffe0fa21c0f33",
+    "full_file_admission_sha256": "0bce347e75b7ed9ab666c97a1233028723ed918abd09aa8bd736fe937836741e",
+    "independent_combined_CPU_audit_sha256": "eefdef7e8b7598232c137a6f8589c74f1a511051d13bcbd8fe0b5a9a01dc8e84",
+    "root_independent_science_review_sha256": "ac19830c54f67610319a02fc334c74322a5ddf0077239cf11aefd476b8d2daa6",
+    "derived_report_sha256": "b23a58b490c0d852fc18cd96928b27d5443ef667588e95f14ad9cb5089987b92",
+    "root_derived_review_sha256": "9c81c79b42e7088c887562d87d93dfd16397b2daec76854835a41436ddae56d3",
+    "summary_path": "docs/higgs-depth-normalization-learning-results.md",
+    "external_evidence_index": "higgs-normalization-learning-recovery-20261106/evidence-index.json",
+    "heldout_or_test_evaluated": false,
+    "formal_NI": false,
+    "normalization_default_adopted": false,
+    "integration_is_rerun_or_revalidation": false
   }
 }

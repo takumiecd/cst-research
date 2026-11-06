@@ -2,7 +2,9 @@
 
 [English (canonical)](higgs-normalization-learning-recovery.md) | 日本語
 
-**PREPARED。recovery GPU実行も9条件完了結果もまだない。**
+**COMPLETED。範囲固定9条件のrecoveryは正常exit0で完了し、独立監査も合格した。**
+Ea0 parentはexit1・未完了を維持し、保持300000と新375000 main更新の完了はこの明示的系譜に限る。
+[結果と限界](higgs-depth-normalization-learning-results.ja.md)を参照。
 [範囲固定の学習研究](higgs-depth-normalization-learning.ja.md)のadapter修正であり、
 正規化recipe・選択規則・学習予算の変更ではない。凍結parent consumerは
 `ea0d5701c45b188d619853ebd303767f224e36b8`、source manifestは
@@ -75,8 +77,8 @@ receipt自身）を回収・独立admitし、元source/data/runtimeと保存stat
 Parent prefix証拠はea0 identityと継承4f oracle identityを維持する。Parent runnerの
 selected evaluatorだけを狭いscopeで置き換えることを、旧/新function名・source hash付きで
 amendment provenanceへ明記し、`finally`で復元する。Model・optimizer・bare step・epoch loop・
-元照合は変えない。新consumer/attempt identityと元producer参照は別である。Recoveryが完了
-しても、この混合producer lineageを記録し、9条件を単一sourceで実行したとは見せない。
+元照合は変えない。新consumer/attempt identityと元producer参照は別である。完了したrecoveryも
+この混合producer lineageを記録し、9条件を単一sourceで実行したとは見せない。
 
 元の全DEV選択（epoch1..3の最小CE、同点は早いepoch）、data、calibration、device/runtime、
 学習率、normalization epsilon、optimizer、保持、計時、解釈は同じ。Heldout、HPO、追加seed/
@@ -84,7 +86,7 @@ epoch/density、throughput/default採用、最小Atom則、formal NI主張は追
 RootがGPUの唯一のoperatorを維持する。Source review成功だけでは実行済みにならず、
 parent-admission証明を捏造してよいことにもならない。
 
-## 準備済みforeground driver
+## 固定foreground driver
 
 Staging入力は厳密に11個。元のSHA固定済み学習入力10個に`parent-admission.json`を加え、
 後者のSHAは上記の実reportに固定する。失敗parent75と旧4f151のraw treeは、別々のreadonly
@@ -99,8 +101,8 @@ python -B src/cst_research/experiments/higgs_normalization_learning_recovery_dri
   --cache-root OWNED_CORRECTION_CACHE --output FRESH_CORRECTION_OUTPUT --timeout 7200
 ```
 
-これは準備のみであり、upload、新GPU実行、自動recoveryを主張しない。Ownerが新sourceと
-運用sealをreview・凍結してから実行する。
+このcommandはreview・seal済みrecoveryの実entrypointを記録する。その有限attemptは完了したが、
+追加実行や自動retryの許可ではない。Source・raw証拠・失敗parentは元identityへ固定して保持する。
 
 Source/runtime guard、旧151 admission、失敗parent75 admission、data/calibration metadata/
 device転送、厳密state admitを含む同期したnative restore2回の秒を記録する。各評価、cache済み

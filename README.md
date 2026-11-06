@@ -53,8 +53,8 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 | [Fixed output gain](docs/higgs-depth-gain.md) | COMPLETED |3 exploratory arms; partial rescue remains below Dense |
 | [Covertype transfer](docs/covertype-transfer-results.md) | COMPLETED | Nine sealed models, one heldout assessment; both CST densities below Dense |
 | [Eight-update normalization diagnostic](docs/higgs-depth-normalization-diagnostic-results.md) | COMPLETED | Nine cases ×8 task updates; mechanism evidence, no quality selection or default adoption |
-| [Three-epoch normalization followup](docs/higgs-depth-normalization-learning.md) | PLANNED / PREPARED | Nine development-only cases; inherited qualification plus fresh-prefix admission required, no learning result yet |
-| [Normalization load-contract recovery](docs/higgs-normalization-learning-recovery.md) | PLANNED / PREPARED | Parent remains incomplete; admitted300k reused, selected-state correction before only375k remaining updates |
+| [Three-epoch normalization followup](docs/higgs-depth-normalization-learning.md) | STOPPED | Original source ea0 remains at exit 1 and incomplete after 300,000 main updates; retained evidence reused only through separate recovery |
+| [Normalization load-contract recovery](docs/higgs-depth-normalization-learning-results.md) | COMPLETED | Nine exploratory cases through mixed lineage; A104 RMS/LN rescue remains below Dense; no normalization default adopted |
 
 The [observations and limitations](docs/bounded-validation-results.md) bind the
 completed coordinate/depth/gain results to their actual measured commits and raw
