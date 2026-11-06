@@ -21,9 +21,9 @@ class RegistryTests(unittest.TestCase):
     def setUp(self):
         self.study = next(study for study in load_studies() if study["id"] == STUDY_ID)
 
-    def test_packaged_study_is_running_at_exact_external_source(self):
+    def test_stopped_study_retains_exact_external_source(self):
         self.assertEqual(validate_study(self.study), [])
-        self.assertEqual(self.study["status"], "RUNNING")
+        self.assertEqual(self.study["status"], "STOPPED")
         self.assertEqual(
             self.study["source_commit"], "97580582ed28c4e494bf5c2656bbe94a85c544c3"
         )
@@ -137,7 +137,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(output.getvalue(), "")
         self.assertIn("unknown study", error.getvalue())
 
-    def test_bounded_completion_keeps_running_families_and_measured_identity_separate(
+    def test_bounded_completion_keeps_stopped_studies_and_measured_identity_separate(
         self,
     ):
         studies = {study["id"]: study for study in load_studies()}
@@ -145,8 +145,9 @@ class RegistryTests(unittest.TestCase):
         for identifier in (
             STUDY_ID,
             "higgs-dst-comparison-20261105",
+            "higgs-linear-atom-scaling-20261106",
         ):
-            self.assertEqual(studies[identifier]["status"], "RUNNING")
+            self.assertEqual(studies[identifier]["status"], "STOPPED")
         for identifier in (
             "higgs-coordinate-lr-20261105",
             "higgs-depth-position-20261105",
@@ -200,7 +201,7 @@ class RegistryTests(unittest.TestCase):
         with contextlib.redirect_stdout(output):
             self.assertEqual(main(["list", "--json"]), 0)
         listed = {study["id"]: study for study in json.loads(output.getvalue())}
-        self.assertEqual(listed[STUDY_ID]["status"], "RUNNING")
+        self.assertEqual(listed[STUDY_ID]["status"], "STOPPED")
         self.assertEqual(
             next(study for study in load_studies() if study["id"] == STUDY_ID), before
         )

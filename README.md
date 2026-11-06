@@ -2,10 +2,11 @@
 
 English (canonical) | [日本語](README.ja.md)
 
-Research on CST scaling, accuracy, learning dynamics, speed and memory under
-reproducible conditions. We freeze study designs and experiment identities before
-running comparisons, and distinguish observations, uncertainty and untested
-hypotheses. Licensed under [Apache-2.0](LICENSE).
+Research on making CST usable in neural networks. The current priority is to
+establish whether CST works in feed-forward networks (FFNs) and Attention,
+starting with a small language model. We record reproducible conditions, learning
+behavior, failures and fixes, and distinguish observations from hypotheses.
+Licensed under [Apache-2.0](LICENSE).
 
 ## Relationship to torchcst
 
@@ -21,17 +22,50 @@ private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
-## Current study
+## Current direction: FFN and Attention feasibility
+
+**Atom-count lower-bound and Big-Ω research is stopped. The priority is to
+establish practical use in FFNs and Attention.** This direction was adopted on
+2026-11-06. It is a research plan; these applications have not yet been validated.
+
+1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
+   forward/backward correctness and complete optimizer steps. Then replace the
+   FFN projections in a small language model with CST and check whether it learns
+   the task with stable training and meaningful validation performance.
+2. **Attention next.** Start with CST replacements for the query, key, value and
+   output projections. Keep the token-to-token attention computation and masking
+   explicit; projection replacement alone does not establish a new attention
+   operator. Investigate further changes after this first application works.
+3. **Diagnose and repair failures.** Record the failing configuration and inspect
+   initialization, activation/gradient scales, geometry and implementation
+   correctness. Isolate the cause, fix it in the appropriate repository, and
+   repeat the affected check before expanding the experiment.
+
+A working application is the immediate goal. Dense remains a sanity control for
+the task and training setup. Exhaustive Dense/DST comparisons, broad tuning and
+Atom-count asymptotics are deferred. Learning curves, validation quality, speed
+and memory remain useful observations, rather than a requirement to outperform
+another method in this phase. Select concrete tasks, configurations and success
+criteria in the next study before running it; a decreasing training loss alone
+is not sufficient evidence of task usefulness.
+
+Use the public torchcst initialization API, with the initializer and lowercase
+`q` recorded explicitly. Initializer changes and other fixes remain hypotheses
+until checked on the affected workload. Keep successful runs, negative results
+and fixes traceable so the README can develop into a record of what CST can do.
+
+## Previous HIGGS work
 
 **The HIGGS campaign has unfinished scientific admission/assessment and is
-paused. Its training jobs are finished; no primary/DST training is running.**
+stopped under the new research priority. Its training jobs are finished; no
+primary/DST training is running.**
 
-The campaign runs from torchcst [PR #141](https://github.com/takumiecd/torchcst/pull/141),
+The campaign used torchcst [PR #141](https://github.com/takumiecd/torchcst/pull/141),
 pinned to commit `97580582ed28c4e494bf5c2656bbe94a85c544c3`.
-It replaces only the middle layer of a 28→N→N→2 network with CST, comparing
+It replaced only the middle layer of a 28→N→N→2 network with CST, comparing
 N=1024/2048 and α=0.001/0.002/0.005/0.01 against a tuned dense baseline.
-The input and output layers remain dense, and all layers train. Three confirmation
-seeds are used, with margins fixed before execution: −0.2 percentage points in
+The input and output layers remained dense, and all layers trained. Three confirmation
+seeds were used, with margins fixed before execution: −0.2 percentage points in
 accuracy and −0.002 in ROC-AUC.
 
 See the [machine-readable protocol](src/cst_research/studies/higgs-alpha-confirmation-20261105.json)
@@ -45,8 +79,8 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 
 | Study | Status | Scope |
 |---|---|---|
-| [HIGGS primary](docs/reproducibility.md) | RUNNING | External975; final30-model assessment pending |
-| [HIGGS static/RigL comparison](docs/higgs-dst-comparison.md) | RUNNING | Stage1/2 consumers; common-horizon78-model gate pending |
+| [HIGGS primary](docs/reproducibility.md) | STOPPED | External975; final30-model assessment pending |
+| [HIGGS static/RigL comparison](docs/higgs-dst-comparison.md) | STOPPED | Stage1/2 consumers; common-horizon78-model gate pending |
 | [A100 MIG comparison](docs/higgs-gpu-comparison.md) | COMPLETED | Bounded one-epoch environment comparison |
 | [Coordinate LR](docs/higgs-coordinate-lr.md) | COMPLETED | Short pilot plus bounded two-seed followups; retain stock q1 |
 | [Depth/layer position](docs/higgs-depth-position.md) | COMPLETED |13 development-only cases; scope-limited stall evidence |
@@ -63,9 +97,10 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 The [observations and limitations](docs/bounded-validation-results.md) bind the
 completed coordinate/depth/gain results to their actual measured commits and raw
 audits. Development-selected pilots establish neither a minimum alpha nor formal
-noninferiority. HIGGS primary and DST stay RUNNING until their final fixed-family
-admission and assessment finish. Measured jobs retain their original source snapshots; integration does not
-restart them or complete the outstanding scientific assessment.
+noninferiority. HIGGS primary and DST are STOPPED with final fixed-family admission and
+assessment unfinished; stopping does not imply completion. Measured jobs retain
+their original source snapshots; integration does not restart them or complete
+the outstanding scientific assessment.
 
 ## Quick start
 
@@ -86,7 +121,7 @@ To inspect the registry without installing, use
 `PYTHONPATH=src python -m cst_research list`.
 `validate` checks registry metadata and fixed protocol conditions. It does not
 validate training results, the existence of external evidence or GPU correctness.
-The formal HIGGS campaign still runs in the pinned external source. A separate
+The stopped formal HIGGS campaign used the pinned external source. A separate
 [bounded A100 MIG environment-comparison adapter](docs/higgs-gpu-comparison.md)
 consumes that unchanged benchmark after independent numerical admission.
 
