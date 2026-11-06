@@ -310,3 +310,7 @@ terminal evidence before adopting a recipe or making three-seed claims. Main
 width128/256/512, bounded aspect-ratio learning and seeds29/43/71 remain required
 on working configurations. Keep c fixed when checking width behavior; do not
 restart an Atom lower-bound search.
+
+Use the [receipt-linked reporting entry point](ffn-reporting.md) to aggregate
+completed, audited cohorts and overlay all learning curves. Report preparation
+and synthetic metadata tests do not constitute model-quality evidence.

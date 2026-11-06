@@ -15,6 +15,7 @@ dependencies = []
 
 [project.optional-dependencies]
 torchcst = ["torchcst @ git+https://github.com/takumiecd/torchcst.git@97580582ed28c4e494bf5c2656bbe94a85c544c3"]
+reporting = ["matplotlib"]
 
 [project.scripts]
 cst-research = "cst_research.cli:main"
