@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -12,7 +13,7 @@ import time
 
 import torch
 
-from .ffn_model import configure_native, make_cst
+from .ffn_model import configure_native, cst_optimizer, make_cst
 
 
 def reference_vjp(layer, x, cotangent, chunk=128):
@@ -156,13 +157,13 @@ def _assert_tree_equal(a, b):
 
 
 def optimizer_and_resume_check():
-    from torchcst import CSTAdamW, CSTOptimizer
+    from torchcst import CSTOptimizer
 
     cpu = make_cst(16, 64, seed=151)
     live = copy.deepcopy(cpu).cuda()
     configure_native(live)
     reference = CSTOptimizer(torch.optim.AdamW(cpu.parameters(), lr=0.0003, weight_decay=0.0, foreach=False), model=cpu)
-    optimizer = CSTAdamW(live.parameters(), model=live, lr=0.0003, weight_decay=0.0, foreach=False)
+    optimizer = cst_optimizer(live, lr=0.0003, weight_decay=0.0, foreach=False)
     for step in range(2):
         gradient = torch.randn(cpu.atoms.p.shape, generator=torch.Generator().manual_seed(450 + step)) * 0.001
         cpu.atoms.p.grad = gradient.clone(); live.atoms.p.grad = gradient.cuda()
@@ -178,7 +179,7 @@ def optimizer_and_resume_check():
     resumed = make_cst(16, 64, seed=151).cuda()
     resumed.load_state_dict(checkpoint['model'])
     configure_native(resumed)
-    other = CSTAdamW(resumed.parameters(), model=resumed, lr=0.0003, weight_decay=0.0, foreach=False)
+    other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
     other.load_state_dict(checkpoint['optimizer'])
     for model, opt in ((live, optimizer), (resumed, other)):
         model.atoms.p.grad = torch.full_like(model.atoms.p, 0.001)
@@ -186,6 +187,51 @@ def optimizer_and_resume_check():
     _assert_tree_equal(live.state_dict(), resumed.state_dict())
     _assert_tree_equal(optimizer.state_dict(), other.state_dict())
     return {'controlled_gradient_updates': 2, 'parameters_and_moments_checked': True, 'serialized_resume_next_step_exact': True}
+
+
+def task_step_and_resume_check():
+    from .ffn_contract import ModelConfig
+    from .ffn_model import LanguageModel
+
+    config = ModelConfig(width=16, layers=2, heads=2, context=8, vocabulary=64)
+    model = LanguageModel(config, 'cst', seed=251).cuda()
+    configure_native(model)
+    optimizer = cst_optimizer(model, lr=0.0003, weight_decay=0.0, foreach=False)
+    tokens = torch.randint(0, 64, (2, 9), generator=torch.Generator().manual_seed(252)).cuda()
+    x, y = tokens[:, :-1], tokens[:, 1:]
+    before = {n:p.detach().clone() for n,p in model.named_parameters() if n.endswith('atoms.p')}
+
+    def step(m, opt):
+        opt.zero_grad(set_to_none=True)
+        _, loss = m(x, y)
+        loss.backward()
+        for name, p in m.named_parameters():
+            if name.endswith('atoms.p'):
+                assert p.grad is not None and torch.isfinite(p.grad).all() and p.grad.abs().max() > 0
+        opt.step()
+        return float(loss.detach())
+
+    first_loss = step(model, optimizer)
+    assert all(not torch.equal(before[n], p) for n,p in model.named_parameters() if n in before)
+    storage = io.BytesIO()
+    torch.save({'model':model.state_dict(), 'optimizer':optimizer.state_dict()}, storage)
+    storage.seek(0); state = torch.load(storage, weights_only=False)
+    resumed = LanguageModel(config, 'cst', seed=251).cuda()
+    configure_native(resumed); resumed.load_state_dict(state['model'])
+    other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
+    other.load_state_dict(state['optimizer'])
+    _assert_tree_equal(model.state_dict(), resumed.state_dict())
+    _assert_tree_equal(optimizer.state_dict(), other.state_dict())
+    left, right = step(model, optimizer), step(resumed, other)
+    errors = [compare(p, dict(resumed.named_parameters())[n], atol=3e-6, rtol=3e-5)['max_abs_error'] for n,p in model.named_parameters()]
+    for (n,p), (_,q) in zip(model.named_parameters(), resumed.named_parameters()):
+        a,b = optimizer.state[p], other.state[q]
+        for key in ('exp_avg','exp_avg_sq','step'):
+            compare(a[key], b[key], atol=3e-7, rtol=3e-5)
+    return {'cst_projections':4, 'all_cst_sites_received_finite_nonzero_gradients_and_changed':True,
+            'first_loss':first_loss, 'next_loss':left, 'resumed_next_loss':right,
+            'serialized_state_exact_before_step':True, 'next_task_step_fp32_tolerance_passed':True,
+            'max_parameter_error':max(errors)}
 
 
 def main(argv=None):
@@ -198,7 +244,8 @@ def main(argv=None):
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     result = {'state': 'running', 'cohort': args.cohort, 'python': platform.python_version(),
-              'torch': torch.__version__, 'cuda': torch.version.cuda, 'gpu': torch.cuda.get_device_name(0), 'cases': []}
+              'torch': torch.__version__, 'cuda': torch.version.cuda, 'gpu': torch.cuda.get_device_name(0), 'cases': [],
+              'source_sha256': {name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('ffn_qualification.py','ffn_model.py','ffn_contract.py')}}
 
     def save():
         (args.output / 'qualification.json').write_text(json.dumps(result, indent=2) + '\n')
@@ -211,6 +258,8 @@ def main(argv=None):
             result['cases'].append(qualify_case(ni, no, tokens)); save()
             print(f'PASS {ni}->{no}, B2 T{tokens}, all Atom gradients', flush=True)
         result['optimizer'] = optimizer_and_resume_check()
+        print('Controlled optimizer and exact serialized resume passed', flush=True)
+        result['task_step'] = task_step_and_resume_check()
         result['state'] = 'passed'; save()
         print('Optimizer and serialized resume passed', flush=True)
     except Exception as error:

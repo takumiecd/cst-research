@@ -41,7 +41,8 @@ Denseの標準偏差0.02に対応させ、両条件で残差出力射影を`1/sq
    moment・counterを調べます。保存・再読込後の次の完全な更新は厳密一致を求めます。
 4. causal mask、条件間での共有初期値、CST FFNへの勾配、タスク更新を確認してから長期実行します。
 
-最初は公開CSTLinear・CSTAdamWと内部Plan `GLOBAL_ACTIVE_GRAD4_NATIVE`を使います。
+最初は公開CSTLinear・CSTAdamWと内部Plan `GLOBAL_ACTIVE_GRAD4_NATIVE`、
+明示した座標更新Plan `RADIUS_FLAT_TORUS_FUSED`を使います。既定の半径更新参照はCPU専用です。
 これは実験の内部依存として記録し、公開dispatcherの既定採用とは扱いません。
 現状の1024-site制約ではN512の2048幅射影が未対応なので、明示的な実装経路を拡張・
 独立検証してから進みます。未対応shapeを表現能力の失敗とは扱いません。
@@ -52,7 +53,23 @@ Denseの標準偏差0.02に対応させ、両条件で残差出力射影を`1/sq
 
 TinyStoriesのdataset revision・tokenizer・tokenファイルのハッシュを固定します。
 物語単位で分割してからpackingし、trainとvalidationを分離します。次トークンへのshift・
-評価window・promptを実行前に固定します。少数固定バッチと1seed・100万tokenのpilotから
+評価window・promptを実行前に固定します。
+初期データはrevision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`の元train/valid
+テキストとtiktoken0.12.0のGPT-2 encodingです。train20,000,001、development8,193、
+confirmation32,769 tokenを保持します。packing前に物語の完全一致によるsplit間重複を除きます。
+実tokenファイル・encoding・消費した正規化済み物語prefixをハッシュ化します。prefixのハッシュを
+元ファイル全体を取得したハッシュとは扱いません。prefixと物語IDは外部に保持し、
+confirmationは各限定runの最後に評価します。
+
+初期学習はFP32・TF32off、microbatch2×文脈128、累積4で1更新1,024 tokenです。
+AdamWの基本LR3e-4、betas(.9,.95)、eps1e-8、decay0、全体の勾配clip1、
+warmup `min(200, updates//10)`（最低1更新）の後、cosineで3e-5まで下げます。
+CSTには明示したfused座標更新Planを使います。条件間でデータ順序を揃え、token予算は
+完全な更新単位に切り下げます。developmentは更新0・200更新ごと・最終更新で評価し、
+値・勾配の診断は初期・10/100更新・最後に別backwardで行います。runner内で固定した
+2つのpromptから64 tokenを生成し、temperature0.8/top-k40、seed7000/7001を使います。
+
+少数固定バッチと1seed・100万tokenのpilotから
 始め、挙動とコストを確認後、各実行最大2,000万token・動作する構成で3seedを検証します。
 予算拡大や設定変更は別revisionで記録し、失敗runを黙って延長しません。
 
@@ -66,3 +83,23 @@ allocated/reservedピークを残します。診断を計時から分け、compi
 raw・状態・source/dataハッシュはignored領域か外部に保存します。失敗は残して初期化・
 勾配・幾何・コードの原因を分析し、修正を再検証してから広げます。runtime/backendの修正は
 torchcst、モデル・データ・研究ツールはこのrepoで管理します。Attention射影の置換は次の研究です。
+
+## 実行入口
+
+この研究はtorchcst commit `9cb6de727ddbf5c2178fe18db6d580c9e181b926`の統合済み
+初期化APIを必要とします。repoの既存`[torchcst]` extraは以前のHIGGS依存を固定している
+ため、この研究には使わず、隔離環境に対象commitを明示して導入します。
+対応するCUDAビルドツール、ninja、tiktoken0.12.0も必要です。
+
+```bash
+python -m pip install 'torchcst @ git+https://github.com/takumiecd/torchcst.git@9cb6de727ddbf5c2178fe18db6d580c9e181b926'
+PYTHONPATH=src python -m cst_research.experiments.ffn_qualification --cohort small --output evidence/qualification-small
+PYTHONPATH=src python -m cst_research.experiments.ffn_qualification --cohort target --output evidence/qualification-target
+PYTHONPATH=src python -m cst_research.experiments.ffn_data --output evidence/tokens
+```
+
+実receipt・token manifestを確認してSHA256を固定し、`ffn_run --qualification ...
+--qualification-sha256 ... --data ... --data-manifest-sha256 ... --kind cst
+--width 256 --seed 17 --tokens 1000000 --output evidence/pilot-cst`へ明示して渡します。
+pilotの既定wall予算は1時間です。失敗時は部分状態を保存し、自動再開・再試行しません。
+metadata検証だけで学習結果を採用したとは扱いません。

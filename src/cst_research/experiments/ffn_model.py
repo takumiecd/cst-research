@@ -56,6 +56,18 @@ def configure_native(model):
             layer.selector = FixedSelector(GLOBAL_ACTIVE_GRAD4_NATIVE, registry=make_algorithm_registry())
 
 
+def cst_optimizer(model, **options):
+    """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
+    from torchcst import CSTAdamW, FixedSelector, make_algorithm_registry
+    from torchcst._backends.cuda.algorithms.polar_update.plans import RADIUS_FLAT_TORUS_FUSED
+
+    return CSTAdamW(
+        model.parameters(), model=model,
+        update_selector=FixedSelector(RADIUS_FLAT_TORUS_FUSED, registry=make_algorithm_registry()),
+        **options,
+    )
+
+
 class Projection(nn.Module):
     def __init__(self, ni, no, *, config, kind, std, seed):
         super().__init__()
