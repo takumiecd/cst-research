@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "higgs-depth-gain-20261106",
+  "title": "HIGGS low-density all-hidden fixed output-gain intervention",
+  "status": "COMPLETED",
+  "status_note": "All3 bounded seed17 three-epoch A100 MIG arms completed with independent raw admission. Fixed gains partly rescued the low-density stall while remaining below the matched Dense control. Adaptive density selection, failed amplified componentwise diagnostics and reader failures remain disclosed; no default adoption.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_depth_gain",
+  "protocol_source_path": "docs/higgs-depth-gain.md",
+  "implementation_boundary": {
+    "runtime": "unchanged external public975 operators; no runtime or kernel copy",
+    "consumer": "distinct fixed-output-gain architecture/feature calibration and eager loop based on depthf6; all trainable tensors stock/gain identical initially",
+    "optimizer": "stock multi-site CSTAdamW, LR.0003, q1; fixed buffers outside optimizer",
+    "interpretation": "Per-site effective amplitude bounds change, but unrestricted output Dense preserves the global ideal-real function family; initialization/gradient/Adam coordinates differ, not a pure initialization-only proof."
+  },
+  "protocol": {
+    "version": "higgs-depth-gain-v1",
+    "parent_consumer_commit": "f6d08ad76001a69070b0965cefe7614f192ddf3f",
+    "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "architecture": [
+      28,
+      1024,
+      1024,
+      1024,
+      1024,
+      2
+    ],
+    "arms": [
+      "dense",
+      "stock-all",
+      "gain-all"
+    ],
+    "divisor": 10000,
+    "alpha": 0.0001,
+    "seed": 17,
+    "epochs": 3,
+    "batch_size": 4,
+    "lr": 0.0003,
+    "position_multiplier": 1.0,
+    "mode": "eager",
+    "dtype": "FP32",
+    "TF32": false,
+    "calibration": {
+      "rows": 256,
+      "partition": "first256 new-training feature rows in original order",
+      "labels_used": false,
+      "development_used": false,
+      "target": "corresponding Dense initial square-linear-output RMS on the same features",
+      "algorithm": "sequential public CPU-FP64 dense_weight composition; preceding gains applied before calibrating the next site",
+      "gain_storage": "three nontrainable FP32 gains in one fixed vector buffer, fixed throughout optimization",
+      "gain_bounds_inclusive": [
+        1e-06,
+        1000000.0
+      ],
+      "clip_or_search": false,
+      "infeasible": "inconclusive; no training or automatic replacement target"
+    },
+    "selection": "earliest minimum development CE within each arm",
+    "qualification": "all3 arms normal elementwise Y/dX/all-grad plus field/packed-column norm and material coverage; 8step/4resume/finite/ownership/clocks before any learning",
+    "amplified_componentwise_role": "diagnostic only; inherited failed stress remains failed, no arbitrary-cotangent per-component claim",
+    "training_metrics": "online train CE/accuracy and separate full-train/development evaluation at the same checkpoint outside the training clock",
+    "scope": "post-observation exploratory forward-conditioning intervention; changes effective amplitude bound, gradients and regularization mapping",
+    "adaptive_density_choice": "Initially prepared alpha.001 without execution; changed before any gain GPU result to alpha.0001 after stock13 development curves showed all-D10000 stalled at AUC.5 while .001 and .01 learned. Exploratory targeting, not held-out confirmation.",
+    "formal_claim": false,
+    "future_confirmation_evaluated": false,
+    "official_test_evaluated": false,
+    "automatic_followup": false,
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "train_rows": [
+      1000000,
+      1100000
+    ],
+    "development_rows": [
+      1100000,
+      1150000
+    ],
+    "normalization_fit": [
+      1000000,
+      1100000
+    ],
+    "historical_feature_statistics_included_new_rows": true,
+    "amplitude_decay": 0.01,
+    "ordinary_weight_decay": 0.01,
+    "atom_raw_decay": 0
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-depth-gain-20261106",
+    "availability": "External retained source/data/result manifests, passed independent raw audits, checkpoints/predictions and preserved negative/failed evidence; see the measured summary identities."
+  },
+  "execution": {
+    "measured_consumer_commit": "69d7f0636ce47db892096d7b7aacc2c2cb731b8b",
+    "measured_consumer_manifest_sha256": "b7b6428e80bbf18fc0cff22af2388e6818c3c9c28ad9221c98c352123666d193",
+    "passed_summary_audit_sha256": "4bfb2d41ed402fcce01b05648d52d601cee3fde820300edd6f1a15d8f80cbb7d",
+    "summary_path": "docs/bounded-validation-results.md",
+    "relative_evidence_report": "stats-actual-a100-gain-03",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false,
+    "analytic_clarification_analysis_sha256": "a90fa2323c706095b4975e8b81bc29c745322ae13a56fbb467dd8c8f8c05f5c7",
+    "analytic_clarification_summary_path": "docs/positive-gain-equivalence.md",
+    "analytic_clarification_is_task_evaluation": false
+  }
+}

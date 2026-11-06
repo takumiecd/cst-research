@@ -1,0 +1,59 @@
+{
+  "measured_consumer_commit": "7f562481db09321e658a80051275dee21b0ec26a",
+  "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "independent_admissions": {
+    "rtx4090": {
+      "status": "root-admitted-complete-saved-evidence-CPU-audit",
+      "archive_sha256": "c7f6ba086697f25b0da4c25c6c0d2af64bf83cab58dc69c9a56d8d8b46261271",
+      "audit_sha256": "4d73c97596f6b02cec69c361015a1e651df56a61852fe592ffed57f425a2eca7",
+      "outer_sha256": "b5b0b5fa4750ab51194c89dd5cac319db54b3ef01afe1769361ff910fa8764fc",
+      "payload_files": 137,
+      "task_updates": 50000,
+      "native_qualification_synthetic_updates": 40,
+      "metrics": 28,
+      "layer_probes": 14,
+      "source_commit": "7f562481db09321e658a80051275dee21b0ec26a"
+    },
+    "a100": {
+      "status": "root-admitted-complete-saved-evidence-CPU-audit",
+      "archive_sha256": "64809b89e9b879e5098278c05f2cae3aff299c6cbcb05662e968a2d3cf4f6c4d",
+      "audit_sha256": "aa7b22b60184a1937f336b5363839134dfcd710b1ea45d934b689186d6078692",
+      "outer_sha256": "7cf3b15195af61f7dfe683e26948532bfeb8775077d4d6b7a43df45ddcdeb080",
+      "payload_files": 137,
+      "task_updates": 50000,
+      "native_qualification_synthetic_updates": 40,
+      "metrics": 28,
+      "layer_probes": 14,
+      "source_commit": "7f562481db09321e658a80051275dee21b0ec26a"
+    }
+  },
+  "derived_files": {
+    "layer-signals.pdf": "9785167241e39135c6a038ae5fd6bcbaa6e4eb2b29b50656bc26f78c00143318",
+    "layer-signals.png": "460ce592e29fe4668e48df848933ec0688b2fe1ca07a93307d769b1a948ad2f0",
+    "learning-curves.pdf": "9c276f4f5f944793abbdfa9beaebf676250f7416fcc2d2c7cf506338f53f3b73",
+    "calibration.csv": "fdd021615ef91a8edb3479adc4f328c812b1d2b999dcdcf02f159cd2e1622ee1",
+    "learning-curves.png": "b9655de3adf293d946dce2009e24e98d00ea05323d209e526c3b3a79b26fac4a",
+    "layer-probes.csv": "d0587f838a0e95988d661f846e5a0fc22393f5a729d6830bf42f891daa5178a2",
+    "parameter-gradients.csv": "d4f32d056bc147a2c656ea04b3a1d1e079f35a2bbfaec43736dc866883e024b4",
+    "resources.csv": "8e23dcbaecd599ae3da3cdaeca1ea35f119e8f374497ea3e219accdf00a4f7d1",
+    "endpoints.csv": "9c8a37b71aa0c2df13b52fc047cfc27ecd897a0a316d530d5f6708fe4d4138dd",
+    "learning-curves.csv": "83d56f3983855b9f77af03334a0a0fa584676dff57c75ab112bab5701fffef9f"
+  },
+  "derived_artifacts_not_raw_predictions_or_checkpoints": true,
+  "one_seed_one_epoch": true,
+  "no_official_test_or_confirmation_scored": true,
+  "public_torchcst_API_is_separate_source": "ab7e9546c1c167576d2652f0b72383c9a2d465cb",
+  "source_derived_files_before_csv_newline_normalization": {
+    "layer-signals.pdf": "9785167241e39135c6a038ae5fd6bcbaa6e4eb2b29b50656bc26f78c00143318",
+    "layer-signals.png": "460ce592e29fe4668e48df848933ec0688b2fe1ca07a93307d769b1a948ad2f0",
+    "learning-curves.pdf": "9c276f4f5f944793abbdfa9beaebf676250f7416fcc2d2c7cf506338f53f3b73",
+    "calibration.csv": "226d63cc554b05e31715c67aa1270d9121482eae5e91ad1d5c024c6ff95aa0cb",
+    "learning-curves.png": "b9655de3adf293d946dce2009e24e98d00ea05323d209e526c3b3a79b26fac4a",
+    "layer-probes.csv": "b1677252f3140b9592087313e3541508c4b32d44beb407b85961bcc45ccb3c63",
+    "parameter-gradients.csv": "7ca290ebd83690a8a9d5a8d32387341686f67417a7f76b51aed609a207e57dff",
+    "resources.csv": "2618356b3b7aaf678de5eec16747408ebcc6e9b51d9ba1d7fdb900c26bb13767",
+    "endpoints.csv": "900c0bfc000d1455fbe4b23fea806ef9e11630dbac835eece33d366c81c38f4e",
+    "learning-curves.csv": "35c7d0dac81c06714942ccd7a253809c8ae94eed8e774a4e1fc984e6c084e833"
+  },
+  "serialization_note": "Published CSVs use LF rather than the source artifact CRLF; parsed rows and values are unchanged. Original derived artifact hashes are retained separately."
+}

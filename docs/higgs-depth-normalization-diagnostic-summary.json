@@ -1,0 +1,427 @@
+{
+  "status": "completed-bounded-diagnostic-not-quality-selection",
+  "identity": {
+    "consumer_commit": "4f777a5f1ef38cca7031cf9c637d0fa6fc0d5e7b",
+    "consumer_manifest_sha256": "aa942f52f88d9a26a950eb51203df948216bbb50fb437c410b9dc8d9b86bbd53",
+    "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "external_source_manifest_sha256": "17dad4ab1c0385a42e32fc7add37a724bc9e7a7a68f63ff3fd188ea3bcda1931",
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "runtime_fingerprint": {
+      "python": "3.12.9",
+      "torch": "2.11.0+cu126",
+      "cuda": "12.6",
+      "triton": "3.6.0",
+      "numpy": "2.0.2",
+      "driver": "570.133.20",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "capability": [
+        8,
+        9
+      ],
+      "multiprocessors": 128,
+      "total_memory_bytes": 25262096384
+    },
+    "admitted_hardware_family": "RTX4090",
+    "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "protocol_sha256": "0a267cc7fe634426ada6a515bdddf3459b7f7fa2d34797b84d38f65860cc3d33"
+  },
+  "scope": {
+    "cases": 9,
+    "true_task_updates_per_case": 8,
+    "displayed_step": 1,
+    "forward_timing": "first real training B4 forward before update1; not256 calibration probe",
+    "calibration_rows": 256,
+    "task_states": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "quality_or_final_accuracy_evaluation": false,
+    "heldout_evaluated": false,
+    "minimum_alpha_or_scaling_or_throughput_or_default_adoption_claim": false
+  },
+  "activations": [
+    {
+      "case": "dense-stock",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.03626812026717616,
+      "last_hidden_post_ReLU_RMS": 0.026206036640559156,
+      "last_hidden_ReLU_energy_retention_fraction": 0.522098677827016,
+      "updates_json_sha256": "931cc0118f939addf35deb107834c313e64435078f0f817d33d80c3193ebe5d7"
+    },
+    {
+      "case": "dense-rms",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.040255323702590044,
+      "last_hidden_post_ReLU_RMS": 0.02907112490137054,
+      "last_hidden_ReLU_energy_retention_fraction": 0.5215272765914585,
+      "updates_json_sha256": "3b976db74a3f6ab6fd87361da4151d69db491745f32bcc6118484d7a565b6816"
+    },
+    {
+      "case": "dense-ln",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.04025386745003405,
+      "last_hidden_post_ReLU_RMS": 0.028525584766576254,
+      "last_hidden_ReLU_energy_retention_fraction": 0.5021736119379023,
+      "updates_json_sha256": "9f4b8c59dd0919e8eb2da041141d2af550f972edb03313d4119553af0ef2e92a"
+    },
+    {
+      "case": "cst104-stock",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 2.56881777620076e-10,
+      "last_hidden_post_ReLU_RMS": 7.712437443979476e-12,
+      "last_hidden_ReLU_energy_retention_fraction": 0.0009013982553655367,
+      "updates_json_sha256": "c13642f14bc45c129b397d3fce19390222bbbebf16c057db65e5359d22bbe36a"
+    },
+    {
+      "case": "cst104-gain",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.0327717122632912,
+      "last_hidden_post_ReLU_RMS": 0.0009839148638484748,
+      "last_hidden_ReLU_energy_retention_fraction": 0.000901398387246072,
+      "updates_json_sha256": "770ba9564ca27fe692c4f06f5d8933c5605d9fe3bcf11fcdc494edd1a4bfa9ef"
+    },
+    {
+      "case": "cst104-postgain",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.6502987191974078,
+      "last_hidden_post_ReLU_RMS": 0.01952410237944562,
+      "last_hidden_ReLU_energy_retention_fraction": 0.0009013975127207519,
+      "updates_json_sha256": "ed6d92129c0758a9a94a491bd03bdfd20d820df86c258a9f37621622a3688c63"
+    },
+    {
+      "case": "cst104-rms",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.03308917035150197,
+      "last_hidden_post_ReLU_RMS": 0.0010020660304642596,
+      "last_hidden_ReLU_energy_retention_fraction": 0.00091710893300642,
+      "updates_json_sha256": "fed1f75697818ceb37f06253977174f1effc85a462980d50615582102e926712"
+    },
+    {
+      "case": "cst104-ln",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 0.032445207493870594,
+      "last_hidden_post_ReLU_RMS": 0.0055460745858070355,
+      "last_hidden_ReLU_energy_retention_fraction": 0.02921933313167999,
+      "updates_json_sha256": "19baf152e628720b4812d11a8d914ed98b732956aa51de034781c91e7ae4ea94"
+    },
+    {
+      "case": "cst1048-stock",
+      "step": 1,
+      "last_hidden_pre_ReLU_RMS": 4.814024224583608e-10,
+      "last_hidden_post_ReLU_RMS": 2.7424879783330475e-10,
+      "last_hidden_ReLU_energy_retention_fraction": 0.3245435051569623,
+      "updates_json_sha256": "2d48e6d42fd6b67293dc66c55de294d3d1409fe3cee9c9b00ad5ad99d6cda8c3"
+    }
+  ],
+  "coordinate_field_ranges": [
+    {
+      "case": "cst104-stock",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 2.8323363848732097e-14,
+        "max": 4.274888040636539e-14
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.6057692307692307,
+        "max": 0.7307692307692307
+      },
+      "eps_dominant_fraction_all": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "accepted_displacement_RMS": {
+        "min": 0.0,
+        "max": 0.0
+      },
+      "physical_changed_fraction": {
+        "min": 0.0,
+        "max": 0.0
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.0,
+        "max": 0.009615384615384616
+      }
+    },
+    {
+      "case": "cst104-gain",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 3.6139163223246228e-06,
+        "max": 5.456001462228835e-06
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.5865384615384616,
+        "max": 0.75
+      },
+      "eps_dominant_fraction_all": {
+        "min": 0.8557692307692307,
+        "max": 0.9230769230769231
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 0.7903225806451613,
+        "max": 0.8688524590163934
+      },
+      "accepted_displacement_RMS": {
+        "min": 7.976753671869816e-05,
+        "max": 0.0001041285310113356
+      },
+      "physical_changed_fraction": {
+        "min": 0.10576923076923077,
+        "max": 0.17307692307692307
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.10576923076923077,
+        "max": 0.17307692307692307
+      }
+    },
+    {
+      "case": "cst104-postgain",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 7.192918203780244e-05,
+        "max": 0.00010914708935519217
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.625,
+        "max": 0.7788461538461539
+      },
+      "eps_dominant_fraction_all": {
+        "min": 0.8365384615384616,
+        "max": 0.8653846153846154
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 0.7692307692307693,
+        "max": 0.8148148148148148
+      },
+      "accepted_displacement_RMS": {
+        "min": 9.720540782491201e-05,
+        "max": 0.00012015204676965786
+      },
+      "physical_changed_fraction": {
+        "min": 0.14423076923076922,
+        "max": 0.19230769230769232
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.14423076923076922,
+        "max": 0.19230769230769232
+      }
+    },
+    {
+      "case": "cst104-rms",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 3.6580743977415993e-06,
+        "max": 5.55716408943691e-06
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.8653846153846154,
+        "max": 1.0
+      },
+      "eps_dominant_fraction_all": {
+        "min": 0.7884615384615384,
+        "max": 0.8846153846153846
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 0.7884615384615384,
+        "max": 0.8846153846153846
+      },
+      "accepted_displacement_RMS": {
+        "min": 9.289394883640992e-05,
+        "max": 0.00012827833321806293
+      },
+      "physical_changed_fraction": {
+        "min": 0.14423076923076922,
+        "max": 0.6826923076923077
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.14423076923076922,
+        "max": 0.6826923076923077
+      }
+    },
+    {
+      "case": "cst104-ln",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 8.819200782102454e-06,
+        "max": 0.00012458584729968186
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.6538461538461539,
+        "max": 1.0
+      },
+      "eps_dominant_fraction_all": {
+        "min": 0.0,
+        "max": 0.6826923076923077
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 0.0,
+        "max": 0.6538461538461539
+      },
+      "accepted_displacement_RMS": {
+        "min": 0.00016432750027252404,
+        "max": 0.0003043060334148438
+      },
+      "physical_changed_fraction": {
+        "min": 0.38461538461538464,
+        "max": 1.0
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.38461538461538464,
+        "max": 1.0
+      }
+    },
+    {
+      "case": "cst1048-stock",
+      "field_blocks": 6,
+      "field_scope": "mu_output and mu_input across3 sites; per-field RMS over atoms, physical N1024 coordinate units",
+      "prepared_gradient_RMS": {
+        "min": 7.935581565946457e-13,
+        "max": 1.2747279969404144e-12
+      },
+      "gradient_nonzero_fraction": {
+        "min": 0.9961832061068703,
+        "max": 1.0
+      },
+      "eps_dominant_fraction_all": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "eps_dominant_fraction_nonzero_grad": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "accepted_displacement_RMS": {
+        "min": 0.0,
+        "max": 7.364774503889269e-09
+      },
+      "physical_changed_fraction": {
+        "min": 0.0,
+        "max": 0.0009541984732824427
+      },
+      "accepted_encoded_changed_fraction": {
+        "min": 0.0,
+        "max": 0.0009541984732824427
+      }
+    }
+  ],
+  "admission": {
+    "retained_files": 151,
+    "retained_raw_bytes": 2643520928,
+    "source_consumer_verified_files": 85,
+    "source_external_verified_files": 1188,
+    "native_scalar_max_relative_error": 9.70439081611091e-08,
+    "observer_scope": "producer checkedall8 synthetic steps; independent retained raw comparison is final8",
+    "amplified_componentwise_failed_fields_by_case": {
+      "dense-stock": [
+        "0.weight",
+        "0.bias",
+        "2.weight",
+        "4.weight",
+        "6.weight",
+        "8.weight"
+      ],
+      "dense-rms": [
+        "0.weight",
+        "2.weight",
+        "4.weight",
+        "6.weight",
+        "8.weight"
+      ],
+      "dense-ln": [
+        "0.weight",
+        "2.weight",
+        "4.weight",
+        "6.weight"
+      ],
+      "cst104-stock": [
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p",
+        "8.weight"
+      ],
+      "cst104-gain": [
+        "dX",
+        "0.weight",
+        "0.bias",
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p",
+        "8.weight"
+      ],
+      "cst104-postgain": [
+        "dX",
+        "0.weight",
+        "0.bias",
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p",
+        "8.weight"
+      ],
+      "cst104-rms": [
+        "dX",
+        "0.weight",
+        "0.bias",
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p",
+        "8.weight"
+      ],
+      "cst104-ln": [
+        "dX",
+        "0.weight",
+        "0.bias",
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p"
+      ],
+      "cst1048-stock": [
+        "2.atom_state.atoms.p",
+        "4.atom_state.atoms.p",
+        "6.atom_state.atoms.p"
+      ]
+    },
+    "mandatory_normal_norm_packed_material_gates": "passed-from-raw-all9"
+  },
+  "reporting_erratum": {
+    "legacy_scientific_source_changed": false,
+    "GPU_rerun": false,
+    "coordinate_deltas_libm_checked": 37632,
+    "legacy_rounding_differences": 7,
+    "max_absolute_legacy_difference": 3.637368184428169e-14,
+    "stock_A104_step8_nonzero_coordinate_delta": 9.540709761395212e-15,
+    "scope": "stable shortest-torus reporting only; encoded0 and1024 physically equivalent; first-update A104 physicaldelta zero, not literalzero throughall8"
+  },
+  "evidence_sha256": {
+    "full": "89238d2bece6f2537c68e3053e4da839a138dba7f4f78cd8c0bc92fe54faeba8",
+    "coordinates": "046c2e03cd9c2166379c38972cf3efb2075b35f00f903a5e40b4bc7073706fb6",
+    "analysis": "cd6c8311ba354f674e8abedbafc8630d57688057ecd22e584990cd0beccecc93",
+    "files": "3d857e153906395c76cf516f0afeb54508bf532acfa375b99e0c69f6e916ab3a",
+    "torus": "f95c32fc0c2b8c0875464ca1f4cd74d2fe990dc4854dde854cf4550a30502950"
+  },
+  "whole_result_archive_sha256": "882fa8a3e96b9214793fa4bf68f0c203de8bab83e98b4750d0d6e21e5764959b",
+  "transfer_manifest_sha256": "67d03abe0b50cad2a03194885997887923851e0d29e858c2ae16842d46f7d85d",
+  "derived_figure_and_CSV_sha256": {
+    "first-update-mechanisms.png": "4ce888ac0103935a719b8b78ddfced2936a62eb9054f5cf30933dc1b8b1c61ea",
+    "first-update-mechanisms.pdf": "7d3996bcba0edbad371baed39b6522cb7e19e06db5720180ad9306a15607e97f",
+    "atom-fields.csv": "24bc6fe4f1ed3c2c9fb6c661e64c11f8366308cf72198d670ab414dc5f7273fd",
+    "activations.csv": "5ab319bbb653312229f2fbce03717fd779ada27a745827774a81e384e1c40c21"
+  },
+  "external_evidence_locator": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-depth-normalization-diagnostic-20261106",
+    "index": "evidence-index.json"
+  }
+}

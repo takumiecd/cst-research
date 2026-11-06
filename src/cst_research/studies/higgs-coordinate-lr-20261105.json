@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "higgs-coordinate-lr-20261105",
+  "title": "Bounded HIGGS physical-position learning-rate pilot",
+  "status": "COMPLETED",
+  "status_note": "Completed bounded seed17 three-epoch A100 MIG pilot and conditional ten-epoch paired followups at29/43, with independent raw admission. Early q10 gains did not persist consistently; retain stock q1. Development-only exploratory evidence, no primary-family or public-runtime adoption.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_coordinate_lr",
+  "protocol_source_path": "docs/higgs-coordinate-lr.md",
+  "implementation_boundary": {
+    "runtime": "Unchanged external975 Git archive; no public runtime copy or edits",
+    "adapter": "Benchmark-only direct physical-position LR recomputation from contiguous old state; stock control and all arms eager",
+    "coupling": "s,t jointly encode amplitude/activity; no independent physical amplitude/radius LR or Graph eligibility claim"
+  },
+  "protocol": {
+    "width": 1024,
+    "divisor": 1000,
+    "atoms": 1048,
+    "batch_size": 4,
+    "dtype": "FP32",
+    "tf32": false,
+    "training_rows": [
+      0,
+      100000
+    ],
+    "development_validation_indices": [
+      0,
+      50000
+    ],
+    "data_sha256": "62d32a1789ed737a5997ca6a0630548e6211af86c9cd6a0a605cd057d8bd32ac",
+    "position_multipliers": [
+      0.1,
+      1.0,
+      10.0
+    ],
+    "ordinary_and_coupled_polar_lr": 0.0003,
+    "amplitude_weight_decay": 0.01,
+    "pilot": {
+      "seed": 17,
+      "epochs": 3,
+      "arms": 3,
+      "mode": "eager"
+    },
+    "advance": {
+      "minimum_development_ce_gain": 0.001,
+      "maximum_development_auc_drop": 0.001,
+      "requires_finite_correctness_resume": true,
+      "selection": "lowest eligible best-dev CE; control wins control tie; lower noncontrol ratio on exact tie"
+    },
+    "conditional_followup": {
+      "seeds": [
+        29,
+        43
+      ],
+      "epochs": 10,
+      "arms_per_seed": 2,
+      "runs": 4,
+      "automatic_submission": false,
+      "requires_reviewed_pilot_decision_sha256": true
+    },
+    "confirmation_evaluated": false,
+    "test_evaluated": false,
+    "formal_noninferiority": false,
+    "scope": "Short-budget exploratory gate then bounded longer development replication; no speed adoption or original CST/DST family change"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-coordinate-lr-20261105",
+    "availability": "External retained source/data/result manifests, passed independent raw audits, checkpoints/predictions and preserved negative/failed evidence; see the measured summary identities."
+  },
+  "execution": {
+    "measured_consumer_commit": "83cb77fe84e91ae296c24f2144bd56ca9398f404",
+    "measured_consumer_manifest_sha256": "7ce3d76f3ea3e09084e5c2dcb37ade7581eebffbf0f22c1b74dae08b467511bd",
+    "passed_summary_audit_sha256": "b5be7229474a29e182b7978ba5270e665a941f34870d0ac9b27fcecf2ca45532",
+    "summary_path": "docs/bounded-validation-results.md",
+    "relative_evidence_report": "stats-verified-two-followups-02",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
+  }
+}

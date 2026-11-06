@@ -85,8 +85,8 @@ alpha .0001へのこの判定の適用は事後的です。同じ判定を.001/.
 train probeで最初の置換層の初期出力RMSはCSTが約.0005、Denseが.2428でした。
 conditioningの仮説を立てる根拠ですが、表現力・初期化・最適化・activation maskの影響を
 切り分けた結果ではありません。別に固定した有限のgain実験の結果を以下に記録します。
-出力gainは実効的なweightの範囲、gradientと正則化のscaleも
-変えるため、純粋に初期化だけの因果実験にはなりません。
+各siteの範囲と最適化scaleは変わりますが、制約のない出力重みにより全体の理想実数関数クラスは
+保存されます。初期化だけの因果実験ではありません。
 
 ## 固定gain：最小密度の全層置換でも学習するが、Denseには届かない
 
@@ -130,6 +130,30 @@ readerだけの失敗2件も保持しています。local Torch2.13/Macで新し
 先行stock実測へ結び、そのtensorから較正を独立に再計算し、両方の行数に同じ二値指標の
 数式を適用します。producerの数式、許容差、raw結果は変更していません。
 runtimeをまたぐ初期化のbyte一致は主張しません。
+
+## 正gainでも全体の理想関数クラスは変わらない
+
+実際のbiasなし正方写像3個、ReLU、固定された正gainでは、正の斉次性から可逆な再parameter化を得ます。
+
+\[
+F_g(\theta)=F_{\rm stock}(T_g\theta),\qquad
+W'_{\rm out}=G W_{\rm out},\quad b'_{\rm out}=b_{\rm out},
+\qquad G=\prod_{j=1}^{3}g_j\approx127575095.34510244.
+\]
+
+この写像でhidden parameterは全て不変です。出力重みが制約されないため、siteごとの振幅範囲を
+rescaleしても全体の理想実数関数クラスは拡大しません。部分的改善を、表現可能な関数クラスの違いや
+不変の初期ゼロ列だけでは説明できません。同一保存tensorでも開始関数は異なり、勾配、Adam epsilon、
+相対update軌道も異なります。decoupled weight decayの乗算自体は定数rescaleと可換なので、
+単独の因果的役割を確定していません。有限FP32でのbyte同値は主張しません。
+
+[完全な導出](positive-gain-equivalence.ja.md)は実初期保存状態と未変更69/975 sourceに結び付きます。
+固定した合成linspaceとzero4×28入力による公開CPU-FP64 comparatorで、stockの出力重みを
+変換した場合の最大絶対差は8.67e-19と0でした。dataset/label、タスク評価、GPU操作、新qualificationは
+使っていません。解析report
+`higgs-depth-gain-20261106/stats-positive-gain-equivalence-01/analysis.json` のSHAは
+`a90fa2323c706095b4975e8b81bc29c745322ae13a56fbb467dd8c8f8c05f5c7` です。
+既存のseed17・3 epochという限界と診断の失敗は変わりません。
 
 ## Sourceと証拠の識別情報
 

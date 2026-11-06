@@ -27,3 +27,7 @@ target-version = "py311"
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.ruff.lint.per-file-ignores]
+# Preserve the measured69 consumer bytes; its unused returned metadata is harmless.
+"src/cst_research/experiments/higgs_depth_gain.py" = ["RUF059"]

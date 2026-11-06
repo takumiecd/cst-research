@@ -14,16 +14,17 @@ hypotheses. Licensed under [Apache-2.0](LICENSE).
 | [torchcst](https://github.com/takumiecd/torchcst) | Public modules, mathematical operator contracts, backends, autograd and kernel correctness |
 | cst-research | Study designs, models and tasks, comparison protocols, learning curves, statistics, experiment provenance and reproduction instructions |
 
-This repository does not duplicate the torchcst runtime. Future research runners
-using its public API will live here. When an experimental Graph adapter needs
+This repository does not duplicate the torchcst runtime. Research consumers and
+workflow controllers live here; their pinned operator implementations remain
+external. When an experimental Graph adapter needs
 private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
 ## Current study
 
-**The low-density HIGGS CST study is RUNNING. Results are incomplete, and its
-training runner has not migrated here.**
+**The HIGGS campaign has unfinished scientific admission/assessment and is
+paused. Its training jobs are finished; no primary/DST training is running.**
 
 The campaign runs from torchcst [PR #141](https://github.com/takumiecd/torchcst/pull/141),
 pinned to commit `97580582ed28c4e494bf5c2656bbe94a85c544c3`.
@@ -38,14 +39,33 @@ and [reproduction and evidence guide](docs/reproducibility.md).
 Earlier studies and raw evidence remain in their original torchcst history and
 external archives; they have not been copied wholesale into this repository.
 
-The [layer-position study plan](docs/higgs-layer-position-plan.md) compares
-early/middle/late hidden-layer replacements at fixed width and depth. A subsequent
-resource authorization allowed a separate bounded RTX3090 pilot alongside the
-primary L4 campaign. Its 13 cases and a separate A100 coordinate-LR followup have
-completed independent raw checks, as has a bounded fixed-gain depth intervention; see the
-[observations and limitations](docs/bounded-validation-results.md).
-These development-only pilots do not establish a minimum alpha or complete the
-primary three-seed assessment.
+The included consumer implementations and their measured histories are listed below.
+They retain their original source/data identities; integration is not a rerun or
+revalidation. See the [integration provenance](docs/integration-provenance.md).
+
+| Study | Status | Scope |
+|---|---|---|
+| [HIGGS primary](docs/reproducibility.md) | RUNNING | External975; final30-model assessment pending |
+| [HIGGS static/RigL comparison](docs/higgs-dst-comparison.md) | RUNNING | Stage1/2 consumers; common-horizon78-model gate pending |
+| [A100 MIG comparison](docs/higgs-gpu-comparison.md) | COMPLETED | Bounded one-epoch environment comparison |
+| [Coordinate LR](docs/higgs-coordinate-lr.md) | COMPLETED | Short pilot plus bounded two-seed followups; retain stock q1 |
+| [Depth/layer position](docs/higgs-depth-position.md) | COMPLETED |13 development-only cases; scope-limited stall evidence |
+| [Fixed output gain](docs/higgs-depth-gain.md) | COMPLETED |3 exploratory arms; partial rescue remains below Dense |
+| [Covertype transfer](docs/covertype-transfer-results.md) | COMPLETED | Nine sealed models, one heldout assessment; both CST densities below Dense |
+| [Eight-update normalization diagnostic](docs/higgs-depth-normalization-diagnostic-results.md) | COMPLETED | Nine cases ×8 task updates; mechanism evidence, no quality selection or default adoption |
+| [Three-epoch normalization followup](docs/higgs-depth-normalization-learning.md) | STOPPED | Original source ea0 remains at exit 1 and incomplete after 300,000 main updates; retained evidence reused only through separate recovery |
+| [Normalization load-contract recovery](docs/higgs-depth-normalization-learning-results.md) | COMPLETED | Nine exploratory cases through mixed lineage; A104 RMS/LN rescue remains below Dense; no normalization default adopted |
+| [Linear Atom count: Stage B results](docs/higgs-linear-atom-results.md) | COMPLETED (bounded Stage B) | Sixteen one-epoch seed-17 endpoints; H8 CST bias-only, no Atom-order or minimum-c claim |
+| [Scale versus LayerNorm](docs/higgs-initialization-results.md) | COMPLETED | Two independently admitted six-arm GPU cohorts |
+| [Width / TRAIN-RMS initialization](docs/higgs-initialization-results.md) | COMPLETED | Old and width-aware stall; empirical Dense-RMS rescue, one seed |
+| [He / Xavier moment initialization](docs/higgs-initialization-results.md) | COMPLETED | Paired q=0 pilot; explicit public API, no universal quality claim |
+
+The [observations and limitations](docs/bounded-validation-results.md) bind the
+completed coordinate/depth/gain results to their actual measured commits and raw
+audits. Development-selected pilots establish neither a minimum alpha nor formal
+noninferiority. HIGGS primary and DST stay RUNNING until their final fixed-family
+admission and assessment finish. Measured jobs retain their original source snapshots; integration does not
+restart them or complete the outstanding scientific assessment.
 
 ## Quick start
 
@@ -101,3 +121,11 @@ be included in public reports. When set, the environment variable takes preceden
 over the TOML root.
 
 Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The [width-aware amplitude initialization study](docs/higgs-width-amplitude-init.md) compares raw `0.1/sqrt(A/N)` without gain/LayerNorm against the old initializer and the prior fixed-gain control. Both bounded GPU cohorts are complete and independently audited; see the [results](docs/higgs-initialization-results.md).
+
+The [raw Dense-RMS initialization follow-up](docs/higgs-rms-amplitude-init.md) tunes initial amplitudes before training while keeping runtime gains1 and normalization NONE; Bounded GPU execution and independent audit are complete; see the [results](docs/higgs-initialization-results.md).
+
+The [He/Xavier initialization pilot](docs/higgs-fan-initialization.md) uses data-free Atom moment targets, configurable lowercase `q`, and fresh paired Dense/CST comparisons. CPU preparation is separate from native qualification, learning results and public default adoption.
+
+Completed [initialization results](docs/higgs-initialization-results.md) cover old/width-aware/TRAIN-RMS/data-free He/Xavier methods and normalization controls. The explicit public API is documented in [torchcst initialization](https://github.com/takumiecd/torchcst/blob/main/docs/initialization.md).

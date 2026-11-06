@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "id": "higgs-depth-normalization-diagnostic-20261106",
+  "title": "HIGGS eight-update scale-versus-centering diagnostic",
+  "status": "COMPLETED",
+  "preparation_status": "PREPARED",
+  "status_note": "All9 fixed cases completed exactly8 true task updates each in one RTX4090 attempt; all151 retained files and required source/oracle/resume/native-step/state gates passed independent CPU admission. First-update mechanism evidence only: no epoch-quality, heldout, minimum-alpha, throughput or default-adoption claim.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_depth_normalization_driver",
+  "protocol_source_path": "docs/higgs-depth-normalization-diagnostic.md",
+  "implementation_boundary": {
+    "runtime": "unchanged external public975; no public kernel/operator/optimizer code copied",
+    "consumer": "separate fixed nine-case no-affine normalization/calibration architecture and observation-only eager step adapter",
+    "qualification": "new full-network/oracle and observer-vs-native gates required; no public Graph/StockQualification claim"
+  },
+  "protocol": {
+    "version": "higgs-depth-normalization-diagnostic-v1",
+    "external_source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+    "architecture": [
+      28,
+      1024,
+      1024,
+      1024,
+      1024,
+      2
+    ],
+    "cases": [
+      "dense-stock",
+      "dense-rms",
+      "dense-ln",
+      "cst104-stock",
+      "cst104-gain",
+      "cst104-postgain",
+      "cst104-rms",
+      "cst104-ln",
+      "cst1048-stock"
+    ],
+    "preexecution_amendment": "Ninth cst104-postgain added before any GPU/task result following the user's post-output-scale hypothesis; unexecuted eight-case prototype preserved separately",
+    "calibration_target_by_case": {
+      "dense-stock": "pre-ReLU",
+      "dense-rms": "pre-ReLU",
+      "dense-ln": "pre-ReLU",
+      "cst104-stock": "pre-ReLU",
+      "cst104-gain": "pre-ReLU",
+      "cst104-postgain": "post-ReLU",
+      "cst104-rms": "pre-ReLU",
+      "cst104-ln": "pre-ReLU",
+      "cst1048-stock": "pre-ReLU"
+    },
+    "square_sites": [
+      2,
+      4,
+      6
+    ],
+    "square_bias": false,
+    "all_layers_trainable": true,
+    "seed": 17,
+    "batch_size": 4,
+    "training_updates": 8,
+    "first_epoch_order_seed": 117,
+    "state_steps": [
+      0,
+      1,
+      2,
+      4,
+      8
+    ],
+    "lr": 0.0003,
+    "position_multiplier": 1,
+    "mode": "eager",
+    "dtype": "FP32",
+    "TF32": false,
+    "normalization": {
+      "axis": "1024 features per example",
+      "eps": 1e-05,
+      "affine": false,
+      "location": "after each square before ReLU",
+      "rms": "z/sqrt(mean(z^2)+eps)",
+      "ln": "(z-mean(z))/sqrt(mean((z-mean(z))^2)+eps)"
+    },
+    "calibration": {
+      "feature_rows": 256,
+      "labels_used": false,
+      "target": "Dense-stock initial pre-ReLU RMS except explicit cst104-postgain post-ReLU target",
+      "algorithm": "sequential CPU FP64 public dense_weight, including preceding normalization/gains",
+      "storage": "positive nontrainable FP32 post-normalization gains",
+      "gain_bounds": [
+        1e-06,
+        1000000.0
+      ],
+      "zero_nonfinite_or_out_of_bounds": "fail closed; no clip, eps sweep or replacement"
+    },
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "development_evaluated": false,
+    "future_confirmation_evaluated": false,
+    "official_test_evaluated": false,
+    "HIGGS_confirmation_evaluated": false,
+    "selection_or_HPO": false,
+    "automatic_followup": false,
+    "formal_claim": false,
+    "qualification": "independent CPU FP64 full-network Y/dX/all-grad; inherited normal elementwise and relative norm/packed-column criteria; 8step and4+resume+4 exact states",
+    "amplified_componentwise": "diagnostic only; prior failed componentwise stress is not reset or promoted",
+    "scope": "post-observation mechanism diagnostic,8 actual task minibatches only; no epoch-quality inference"
+  },
+  "timing": "whole diagnostic wall time includes copies/statistics; not throughput or hardware comparison",
+  "memory": "allocated/reserved allocator peaks include diagnosis and retained inputs, not process memory",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-depth-normalization-diagnostic-20261106",
+    "availability": "External151-file retained attempt, independent full and detailed CPU reports, source-bound figure/CSVs, stable-torus reporting erratum and preserved reader/amplified failures; no raw evidence copied into Git."
+  },
+  "resource_preparation_amendment": {
+    "before_first_GPU_execution": true,
+    "authorized_new_hardware": "NVIDIA GeForce RTX 4090",
+    "authorized_Hub_profile": "gpu4090-tf2-18-0-pytorch2-6-0-cu126-keras3-8-0",
+    "capability": [
+      8,
+      9
+    ],
+    "multiprocessors": 128,
+    "total_memory_bytes": 25262096384,
+    "job_runtime_requirement": "isolated Torch2.11.0+cu126/CUDA12.6/Triton3.6.0; actual root runtime pin verified before scientific execution",
+    "scientific_protocol_changed": false,
+    "source20_and_prior7studies_changed": false,
+    "actual_runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "scientific_execution_completed": false,
+    "scope": "Historical pre-GPU resource approval, retained from measured4f; see execution for completed attempt."
+  },
+  "preparation_status_scope": "Historical preparation snapshot at measured4f; current execution completion is recorded separately below.",
+  "execution": {
+    "measured_consumer_commit": "4f777a5f1ef38cca7031cf9c637d0fa6fc0d5e7b",
+    "measured_consumer_manifest_sha256": "aa942f52f88d9a26a950eb51203df948216bbb50fb437c410b9dc8d9b86bbd53",
+    "measured_protocol_sha256": "0a267cc7fe634426ada6a515bdddf3459b7f7fa2d34797b84d38f65860cc3d33",
+    "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "device": "NVIDIA GeForce RTX 4090",
+    "cases": 9,
+    "true_task_updates_per_case": 8,
+    "driver_exit_code": 0,
+    "retained_files": 151,
+    "retained_raw_bytes": 2643520928,
+    "passed_full_CPU_admission_sha256": "89238d2bece6f2537c68e3053e4da839a138dba7f4f78cd8c0bc92fe54faeba8",
+    "passed_detailed_CST_CPU_replay_sha256": "046c2e03cd9c2166379c38972cf3efb2075b35f00f903a5e40b4bc7073706fb6",
+    "file_admission_sha256": "3d857e153906395c76cf516f0afeb54508bf532acfa375b99e0c69f6e916ab3a",
+    "whole_result_archive_sha256": "882fa8a3e96b9214793fa4bf68f0c203de8bab83e98b4750d0d6e21e5764959b",
+    "derived_reporting_erratum_sha256": "f95c32fc0c2b8c0875464ca1f4cd74d2fe990dc4854dde854cf4550a30502950",
+    "analysis_audit_sha256": "cd6c8311ba354f674e8abedbafc8630d57688057ecd22e584990cd0beccecc93",
+    "summary_path": "docs/higgs-depth-normalization-diagnostic-results.md",
+    "machine_readable_summary_path": "docs/higgs-depth-normalization-diagnostic-summary.json",
+    "external_evidence_index": "evidence-index.json",
+    "result_note_is_rerun_or_source_adoption": false,
+    "development_or_heldout_quality_evaluated": false,
+    "scientific_runtime_changed_after_measurement": false
+  }
+}

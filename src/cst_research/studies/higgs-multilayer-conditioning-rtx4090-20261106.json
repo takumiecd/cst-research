@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "higgs-multilayer-conditioning-rtx4090-20261106",
+  "title": "HIGGS H8 scale versus bare LayerNorm: fresh paired RTX4090 diagnostic",
+  "status": "COMPLETED",
+  "status_note": "Six bounded fresh arms completed and independently admitted; one seed/epoch, no universal normalization/quality claim.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_multilayer_conditioning_rtx4090_driver",
+  "protocol_source_path": "docs/higgs-multilayer-conditioning-rtx4090.md",
+  "implementation_boundary": {
+    "runtime": "unchanged external public975; stockq1, no runtime copy/Graph changes",
+    "consumer": "RTX4090 source/runtime/input/identity orchestration only; direct unchanged a43d qualification.qualify_all and base.run_case",
+    "prior_source": "all131 inherited files except one registry-count12to13 test metadata change remain byte-identical; all12 old registries and seven conditioning modules unchanged"
+  },
+  "protocol": {
+    "version": "higgs-multilayer-conditioning-rtx4090-v1",
+    "study_id": "higgs-multilayer-conditioning-rtx4090-20261106",
+    "status": "PREPARED_NOT_EXECUTED",
+    "cases": [
+      "dense-none",
+      "dense-bare-ln",
+      "cst-none",
+      "cst-fixed-gain",
+      "cst-bare-ln",
+      "cst-ln-gain"
+    ],
+    "width": 1024,
+    "hidden_layers": 8,
+    "internal_biasfree_CST_maps": 7,
+    "atoms_per_CST_map": 4096,
+    "seed": 17,
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "device": "exactRTX4090/CC8.9/128SM/25262096384B",
+    "normalization": "featurewise no-affineLN epsilon1e-5, orNONE; ordinaryDenseIO trainable",
+    "gains": "bothCSTgainarms sequentiallymatch SAME initialDense-stockpreReLURMS onfixedfirst256TRAINfeatures; positiveFP32[1e-6,1e6], no labels/DEV; zero/nonfinite/outofbounds failwithoutclamp",
+    "initialization": "unchanged public975 and explicitlegacy ordinary; pairedrawparams/IO; noamp-init intervention",
+    "optimizer": "stockq1 lr.0003 betas(.9,.999) eps1e-8 ordinaryWD.01 amplitudeWD.01 rawatomWD0; FP32TF32off eagerB4",
+    "epochs": 1,
+    "task_updates_per_case": 25000,
+    "total_task_updates": 150000,
+    "orders": "actualsavedCPUtorchrandperm100000 seed117, samefor6cases",
+    "milestones": [
+      0,
+      1000,
+      5000,
+      10000,
+      15000,
+      20000,
+      25000
+    ],
+    "milestone_evaluation": "FULLTRAIN100k+DEV50k atsameexactstate, outsidelearningblocks; no point0backward",
+    "selection": "fixedfinal25000 ONLY; no bestDEV/earlystop/HPO/autofollowup",
+    "qualification": {
+      "scope": "newactual6H8 fullY/dX/all11parameterFP64manualreverse includingexactLN/gain +unchanged975chunkedallatoms256; independentquad31/scalarAdam beforetaskupdates",
+      "scales": [
+        1.0,
+        1e+24
+      ],
+      "normal_elementwise": "3e-5+3e-4*abs(ref), mandatory",
+      "relative_fields_and_packed_columns": "FP64stable relativeL2 andmaxerror/refmax<=3e-4; exactzero strict; normalroundedzerotails disclosed notwaived",
+      "amplified_material": "dX andallpackedcolumns anyabs(ref)>3e-5+3e-4abs(ref) AND anyactualnonzero; amplifiedcomponentfailures preserveddiagnostic",
+      "amplified_optimizer_step": false,
+      "updates_per_case": 20,
+      "total_synthetic_updates": 120,
+      "trajectory": "8ordinary vs4+native7ownerload+4, andobservedfirst+7ordinary vs8ordinary exactcorebytes; nooptimizer monkeypatch/backwardhooks"
+    },
+    "first_task_step": "actualfirstB4 CEbackward/rawP.grad +unchangedoptimizer.step acceptedP/m/v/clocks/poststep.grad; retainedinputs/labels/order/intermediateforward/upstreamgrads",
+    "denominator": "accepted-state/source-FP32opmath reconstruction separatelyscalarqualified, NOT actualnativeintermediate; canonicalFlatTorus prepare/transportidentity; accepteddisplacement includesretraction/amplitudeWD",
+    "endpoint_probe": "samefirstB4 onindependentloadedfinalcopy; onebackward,nooptimizerstep; allothercopystateexact andoriginalcheckpoint/model/optimizer/grad unchanged",
+    "native_load": "exact7actualowners2/4/6/8/10/12/14 max(before+1,saved) only, everyothercorebyte literal; evalbaseline actualPOSTLOAD",
+    "timing": "DIAGNOSTIC notbaselineperformancebenchmark; firstupdate/observation/eval/diagnostics/calibration/save/hash separated; baretrainingblocks includeprescribed1000step sync/logging, reportscomponents nonadditive",
+    "rawretention": "qualifiedinitial0/4/8/resumed8/observer8; actualfirsttaskraw/fullfinalcheckpoint; milestonefullpredictions+typedstatefingerprints notfullintermediateoptimizercheckpoint; no independentrawmidstate replayclaim",
+    "raw_cap_bytes": 6442450944,
+    "JSON_cap_bytes": 67108864,
+    "retention_route": "immutable full RTX4090 raw; compact proofs/predictions plus space-admitted compressed local archive or separately pinned peer CPU auditor with CUDA off",
+    "heldout_test_or_original_confirmation_evaluated": false,
+    "formal_NI_Atomorder_capacity_or_LNnecessity_claim": false,
+    "automatic_retry_resume_or_advance": false,
+    "numerical_source_commit": "a43d6a938db7ff1bbf3522343cd35f10f3dcac1c",
+    "numerical_modules_sha256": {
+      "higgs_multilayer_conditioning.py": "1fc7a066bab7146f8a78060a845d5589b58d23ef40a564db1d2e6a4c5eac4596",
+      "higgs_multilayer_conditioning_reference.py": "bf99a2d4b83bb27aa8cb3c738c168f724e81c3a08990d5821f28a465cfac264a",
+      "higgs_multilayer_conditioning_state.py": "bc990c3631b2c38bac1bed4f19a1bb82b56ecc49a4231a689ddaafb8bf1c14d2",
+      "higgs_multilayer_conditioning_observation.py": "bbab43a2a549257e7d56f9089f08ad9af169363b1201d8c23e187187d0329154",
+      "higgs_multilayer_conditioning_qualification.py": "4c76f959d86b9aae33bed0f2cb59dcd070d8fad3bd3f7c7aafb05c5ede6e6835",
+      "higgs_multilayer_conditioning_run.py": "401f5dc4d9cb1a686e74aea69965e473eb296e0b0246e6da362a2c3b523264d0",
+      "higgs_multilayer_conditioning_driver.py": "88fbf42e4ab8e6e8d256f62c7e6bb90dd206438b457025995606debac1cf1006"
+    },
+    "cross_device_scope": "six fresh independently paired RTX4090 arms; same N1024/H8/A4096 as A100, no parent-state reuse, speed adoption or Atom-order claim"
+  },
+  "timing": "DIAGNOSTIC notthroughputcomparison tooldB. Prescribedblocklogging,firsttaskobservation,calibration,qualification,eval,checkpoint/probe clocks explicit/nonadditive.",
+  "memory": "trainingintervalpeaks beforeeval, residentarrays/model/optimizer/nativebuffers/reservedcache, notprocessmemory.6GiBraw/64MiBJSON planning; fullserverimmutable raw +compactretrieval orCPUremoteauditorCUDAoff option.",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-multilayer-conditioning-rtx4090-20261106",
+    "availability": "COMPLETE six-arm source/runtime-bound saved evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "4845e0c6649ecf3e822f014a554482478e2fe2cf",
+    "source_files": 137,
+    "independent_CPU_audit_sha256": "2163b6e1a026d2b2dea8316f04f758582682a0716a17b69314fb05aa2ed59d43",
+    "normal_outer_sha256": "e91b1815138e057e7a69edcc80d5fb3eb4107055a4a6e53ebf00a82b739c26bd",
+    "metrics_checked": 84,
+    "task_updates": 150000,
+    "summary_path": "docs/higgs-initialization-results.md",
+    "confirmation_or_test_evaluated": false,
+    "integration_is_rerun_or_revalidation": false
+  }
+}

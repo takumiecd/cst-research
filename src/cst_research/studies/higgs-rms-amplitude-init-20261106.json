@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "higgs-rms-amplitude-init-20261106",
+  "title": "Raw CST amplitude initialization matched to initial Dense RMS without gain or LayerNorm",
+  "status": "COMPLETED",
+  "status_note": "Bounded one-seed/one-epoch execution, normal completion and independent complete saved-evidence CPU audits finished; no formal quality/scaling claim.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_rms_amplitude_run",
+  "protocol_source_path": "docs/higgs-rms-amplitude-init.md",
+  "protocol": {
+    "version": "higgs-rms-amplitude-init-v1",
+    "arms": [
+      "rms-init"
+    ],
+    "initialization": {
+      "method": "sequential raw Gaussian amplitude coefficient search matching initial Dense pre-ReLU RMS on first256 TRAIN features",
+      "search_relative_tolerance": 0.005,
+      "native_relative_tolerance": 0.01,
+      "coarse_coefficients": [
+        0.0,
+        0.05,
+        0.1,
+        0.2,
+        0.4,
+        0.8,
+        1.6,
+        3.2
+      ],
+      "maximum_bisections": 32,
+      "maximum_coefficient": 3.2,
+      "formula": "k_layer/sqrt(A/N)",
+      "unchanged": [
+        "standardized normal draws",
+        "centers",
+        "ordinary input/output initialization",
+        "kernel and optimizer",
+        "amplitude_max1",
+        "alpha_init0"
+      ],
+      "runtime_gain": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "normalization": "none",
+      "calibration_before_learning_only": true,
+      "labels_or_DEV_used": false,
+      "radius_changes_and_symmetric_clipping_recorded": true
+    },
+    "width": 1024,
+    "hidden_layers": 8,
+    "internal_CST_maps": 7,
+    "atoms_per_CST_map": 4096,
+    "seed": 17,
+    "epochs": 1,
+    "task_updates_per_arm": 25000,
+    "total_task_updates": 25000,
+    "batch_size": 4,
+    "learning_rate": 0.0003,
+    "position_multiplier": 1,
+    "optimizer": "unchanged stockq1 fused CSTAdamW/AdamW, eps1e-8, ordinary/amplitude WD0.01, raw-Atom WD0",
+    "dtype": "FP32",
+    "TF32": false,
+    "mode": "eager",
+    "milestones": [
+      0,
+      1000,
+      5000,
+      10000,
+      15000,
+      20000,
+      25000
+    ],
+    "selection": "fixedfinal25000; no bestDEV, HPO or earlystop",
+    "probes": "same first TRAIN B4 on loaded copies at0/1000/5000/10000/15000/20000/25000; no optimizer update in probes; source fullcore remains unchanged",
+    "native_qualification": "one fresh full-network VJP/quad/scalar/native8+4load4+observer qualification;20 network synthetic updates, scalar8 separate",
+    "task_data": "TRAIN100k rows[1000000,1100000), DEV50k[1100000,1150000); no primary confirmation or officialtest",
+    "precision_scope": "retained arrays independently recountable; denominator summaries are accepted-state reconstructions, not native intermediate captures",
+    "timing_memory_scope": "diagnostic synchronized bare updates and allocated/reserved peaks; probe, evaluation, calibration and IO cost separate",
+    "raw_cap_bytes": 6442450944,
+    "JSON_cap_bytes": 67108864,
+    "automatic_followup": false,
+    "formal_NI_Atomorder_or_initialization_optimality_claim": false,
+    "comparator": "already admitted same-GPU seed17 Dense/old/width0.1/old+gain trial; no new timing adoption or NI claim"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-rms-amplitude-init-20261106",
+    "availability": "COMPLETED bounded cohorts; full raw source/data/state/prediction evidence retained externally."
+  },
+  "execution": {
+    "measured_consumer_commit": "2c5ec2cfbe8e31e776ad41161ef5e00d6b518cd5",
+    "admissions": {
+      "rtx4090": {
+        "status": "admitted-complete-remote-saved-evidence-CPU-audit",
+        "archive_sha256": "9b1e86518b6dd954d7bd5cc46e50b66e7480d709e15a8f92461b3ea5811396a6",
+        "audit_sha256": "2b45ef20f2ad2524a5aeefbdd06de4aa903024206f9d63a1de514d214e5dd603",
+        "outer_sha256": "7f7e2a8228dbf0819795818cacf986127a8daf4f8980e36a6f820544be0d3e59",
+        "reader_files_checked": 12,
+        "payload_files_checked": 76,
+        "task_updates": 25000,
+        "local_scope": "Compact proof transfer and root binding checks; full byte/tensor audit ran CPU-only on the source server. No new inference, training or scoring."
+      }
+    },
+    "summary_path": "docs/higgs-initialization-results.md",
+    "integration_is_rerun_or_revalidation": false,
+    "confirmation_or_test_evaluated": false
+  }
+}
