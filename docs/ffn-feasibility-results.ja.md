@@ -64,6 +64,78 @@ down .1171→.1237でした。最終振幅上位10%の平均半径は.914/1.637�
 全体の平均半径だけではこの違いを見落とします。始点と終点だけから振幅の累積
 往復量は判断できません。
 
+## 5M-tokenの機構比較（R6）
+
+5条件すべてが4882 update・4,999,168 tokenを完了しました。LRとデータ順序の予定
+horizonは共通20M tokenです。新しい実験であり、短horizonのR2の条件・観測を
+置き換えません。探索条件はdevelopment CEで選び、confirmation CEは監査用に
+保持して条件選択には使いません。
+
+| FFN | Development CE | Perplexity |
+| --- | ---: | ---: |
+| Dense | 2.75219 | 15.68 |
+| No FFN | 3.10782 | 22.37 |
+| CST initial q=0 | 2.99281 | 19.94 |
+| CST initial q=.25 | 3.01012 | 20.29 |
+| CST initial q=.5 | 3.06285 | 21.39 |
+
+![R6の学習曲線](assets/ffn-feasibility-20261107/mechanism-r6-learning-curves.png)
+
+この学習量ではCSTの3条件ともFFNなしを上回りますが、Denseとの差は残ります。
+初期qを増やしても最終development結果は改善しませんでした。開発用1 seedの観測で、
+統計的優位や係数固定の幅スケーリングは未確認です。各update後の振幅CPUサンプリングが
+wall時間に加わるため、時間軸の図は診断用であり、速度の主比較ではありません。
+
+![R6の物理振幅・半径履歴](assets/ffn-feasibility-20261107/mechanism-r6-motion-curves.png)
+
+物理振幅RMSだけでは移動量を見落とします。初期q0の層内RMS比を全8層で集計すると
+最終値は1.076です。正規化した始終点差のRMSは.256、累積絶対移動量は1.719でした。
+物理振幅a_iに対し、次のように定義します。
+
+$$
+D_{\mathrm{net}}=\sqrt{\operatorname{mean}_i(a_i(t)-a_i(0))^2},\qquad
+D_{\mathrm{path}}=\sqrt{\operatorname{mean}_i\left(\sum_\tau|\Delta a_i(\tau)|\right)^2}.
+$$
+
+各層の統計量をその層の初期振幅RMSで割ってから、層間のRMSを取っています。
+サンプリングした振幅の総変動を測るもので、振動周波数や無駄な移動の証明ではありません。
+q0は最終でも約5.2e-8です。初期q.5では平均qが.500→.176、物理半径のup/down平均が
+7.106/9.643→2.707/3.796 cellに減りました。初期q.25でも同様に縮みます。
+広く始めた条件が学習中ずっと広いわけではありません。q0は振幅に依存する半径下限で、
+物理的なhard minimumの.5とは異なります。弱い振幅ではbirth値4近辺の半径も残ります。
+
+別途、終了後の読み取り専用監査で全5 checkpointのhash/counter、optimizer状態の
+有限性、厳密なmodel load/cache generation、development/confirmation CEの独立再計算を
+確認しました。学習済みCST全24射影で、B1 T8のY/dX/全Atom VJPもchunk化したCPU FP64
+参照と一致しました。監査ではoptimizer更新や追加学習はしていません。記録した数値的
+範囲を支えますが、学習差の原因が一つに決まったわけではありません。
+
+### 固定promptの生成例
+
+事前に決めた最初のpromptについて全文を載せています。複数生成から良い例を選んだ
+ものではありません。sampling seed7000、temperature.8、top-k40、最大64新規tokenです。
+固定した2つのprompt、token ID、sampling設定は各raw summaryに保存しています。
+示す3モデルとも意味や文法の破綻があり、これだけで言語品質を評価しません。
+
+**Dense**
+
+```text
+Once upon a time, there was a little girl named Lily. One day, Lily's mom saw a white red tree with a small leaves on it. Lily wanted to help the bug, but her mom said she was going to a good tree to put on the bench and put on the tree. Lily's head and went to the tree and saw that it was
+```
+
+**CST initial q=0**
+
+```text
+Once upon a time, there was a little girl named Lily. One day, Lily's mom saw a white red red car. The toy had lots of colors wanted to make a beautiful pink dress on the floor. Lily went to a garden and went outside, but she had a few more fun. She played with and played with the butterfly in the sun.
+```
+
+**No FFN**
+
+```text
+Once upon a time, there was a little girl named Lily. One day, Lily wanted to help her mommy and put on her.
+Lily was playing with a little girl named Lily. She had a lot of fun with her toys and said, "Look, Lily?" Her mommy said, Lily and Lily was so happy. Lily looked around the
+```
+
 ## native検証の範囲と残作業
 
 R5では両FFN方向、B2 T128、q0/.25/.5でY/dX/全Atom VJP、polynomial quadrature、
@@ -71,9 +143,10 @@ optimizer/model resumeの検証を通りました。別途、範囲を限定し�
 RTX4090でR3の拡大12条件すべてを通り、512↔2048と128↔2048を含みます。これだけで
 幅512の言語モデルの有効性や、別consumer/q設定の検証済みを意味しません。
 
-新しい5M-tokenのDense・FFNなし・CST q0/.25/.5比較でも予定horizonは20Mのままです。
-CSTは各update後の振幅を読み、累積移動量と始終点の差、半径/qの履歴を保持します。
-診断付きrunを速度・メモリの主比較には用いません。幅128/256/512、縦横比を変えた
+R6の5条件と読み取り専用監査は完了しました。限定したR7の条件比較では、birth半径を
+狭める、大幅に広い半径を校正する、特徴を固定の順序で並べ替える、Atom LRを16倍にする
+介入を、それぞれnative/task検証を通してから試します。探索用で、標準設定の採用では
+ありません。幅128/256/512、縦横比を変えた
 学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
 
 ## CPUでの追加機構確認
@@ -121,8 +194,11 @@ TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`、tiktoken0.12.0
 GPT-2 encoding、story単位で重複を排除したsplitを用います。token manifest SHA256は
 `5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01`です。
 
-- R2/R5 operator：`9cb6de727ddbf5c2178fe18db6d580c9e181b926`。
+- R2/R5/R6 operator：`9cb6de727ddbf5c2178fe18db6d580c9e181b926`。
 - R2 consumer：`f75c1d2efe54767f6b9f65804c234924e6f6e191`。
+- R6 consumer：`f8de9b7f0e114e7c55035858f9544270ae381c21`。
+- R6終了manifest SHA256：`2f2ff1be72d443f8a08212d5a559e177d55644fa488f3968d0361fd76f6122ed`。
+- R6学習済み状態監査 SHA256：`b03d1bffa9a7f8d1017db47a7042aa3ca71aa748dbf46a1a28fd71a4552bbd67`。
 - R5 consumer：`09e15b759fd796ad02c436e3580f1a223e098a92`。
 - R5 native receipt SHA256：`4268f0d8ee42f4febd036e1f9846ecdd565231edaca330ef33fd5f4ddb49222b`。
 - R5終了manifest SHA256：`17d42c7f9722373da24ab23ab3c4e3244e700ab38cb84791f4a64d88309e2b40`。
