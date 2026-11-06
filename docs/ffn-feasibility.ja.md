@@ -248,3 +248,18 @@ upはstd.02、downは.02/sqrt(8)を使います。expansion1では同じ正方�
 checkpoint監査も行います。このflagでbackend対応を拡張するわけではなく、未対応の
 組合せは検証に失敗します。入口の準備だけで幅・縦横比の学習や新Atom数の検証済みを
 意味しません。
+
+## 選択した開発用追加比較（R8）
+
+R7のdevelopment CEを見た後、c8・q0・振幅上限1・w_c.3・birth4・通常の特徴順序・
+Atom LR16を、幅256・seed17の新しいDense/FFNなしとの比較に選びます。各5M tokenを上限に
+します。R7後の選択であり、結果を見る前に事前登録した設定や公開の標準設定ではありません。
+予定20M-tokenのLR・データhorizonと普通のParameterのLRを維持します。各update後の振幅
+サンプリングは無効にし、別のactivation/gradient probe、complete-updateの時間と
+allocated/reserved peakは保持します。
+
+固定consumerは`70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`、operatorは
+`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`です。実際の両方向の数値検証と4 blockの
+タスクpreflightを通してから実行しました。終了証拠を回収・監査してから、設定の採用や
+3 seedの主張に進みます。動く設定について主系列の幅128/256/512、限定した縦横比の学習、
+seed29/43/71の確認は残ります。幅の挙動はcを固定して比べ、Atom下限探索を再開しません。

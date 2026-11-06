@@ -292,3 +292,21 @@ plus that recipe's flags. Follow with actual four-block task updates and a
 checkpoint audit before a long run. These flags do not extend backend support;
 unsupported combinations still fail qualification. Preparing this entry point
 does not demonstrate width/aspect learning or validate a new Atom count.
+
+## Selected development followup (R8)
+
+After inspecting R7 development CE, select c8/q0/bound1/w_c.3/birth4,
+contiguous feature order and Atom LR16 for a fresh width256/seed17 comparison
+with Dense and no-FFN, capped at5M tokens per arm. This is a post-R7 selection,
+not a recipe preregistered before those results or a public-default decision.
+Keep the20M-token planned LR/data horizon and ordinary-parameter LR unchanged.
+Disable per-update motion sampling; retain separate activation/gradient probes,
+complete-update timing and allocated/reserved peaks.
+
+The frozen consumer is `70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`, with operator
+`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`. Both actual directions and the full
+four-block preflight passed before this followup began. Retrieve and audit the
+terminal evidence before adopting a recipe or making three-seed claims. Main
+width128/256/512, bounded aspect-ratio learning and seeds29/43/71 remain required
+on working configurations. Keep c fixed when checking width behavior; do not
+restart an Atom lower-bound search.
