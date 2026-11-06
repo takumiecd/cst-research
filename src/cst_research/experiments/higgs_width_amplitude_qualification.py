@@ -16,8 +16,19 @@ from .higgs_dst_comparison import file_sha, write
 SCALES = (1.0, 1e24)
 
 
-def qualify_arm(arm, gains, identity, output, quad_output, device):
-    case = study.ARMS[arm]
+def qualify_arm(
+    arm,
+    gains,
+    identity,
+    output,
+    quad_output,
+    device,
+    *,
+    model_factory=None,
+    runtime_case=None,
+):
+    factory = study.make_model if model_factory is None else model_factory
+    case = study.ARMS[arm] if runtime_case is None else runtime_case
     import torch
     from benchmarks.training.full_step_graph import ordinary_step
     from benchmarks.training.higgs_verify import (
@@ -27,7 +38,7 @@ def qualify_arm(arm, gains, identity, output, quad_output, device):
     )
 
     output.mkdir()
-    model = study.make_model(arm, gains=gains).to(device)
+    model = factory(arm, gains=gains).to(device)
     optimizer, _ = state.make_optimizer(model)
     initial = state.snapshot(model, optimizer, 0, identity)
     torch.save(initial, output / "initial-state.pt")
@@ -121,7 +132,7 @@ def qualify_arm(arm, gains, identity, output, quad_output, device):
     )
 
     def fresh():
-        m = study.make_model(arm, gains=gains).to(device)
+        m = factory(arm, gains=gains).to(device)
         o, _ = state.make_optimizer(m)
         exact.assert_equal(
             state.core_digest(state.snapshot(m, o, 0, identity)),

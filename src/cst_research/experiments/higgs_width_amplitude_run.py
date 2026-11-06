@@ -77,7 +77,19 @@ def probe(
     }
 
 
-def train_arm(arm, gains, identity, tensors, order, device, arm_root):
+def train_arm(
+    arm,
+    gains,
+    identity,
+    tensors,
+    order,
+    device,
+    arm_root,
+    *,
+    model_factory=None,
+    runtime_case=None,
+    initializer_policy=None,
+):
     from functools import partial
 
     import torch
@@ -86,9 +98,10 @@ def train_arm(arm, gains, identity, tensors, order, device, arm_root):
     output = arm_root / "task"
     output.mkdir()
     started = time.perf_counter()
-    model = study.make_model(arm, gains=gains).to(device)
+    factory = study.make_model if model_factory is None else model_factory
+    model = factory(arm, gains=gains).to(device)
     optimizer, optimizer_contract = state.make_optimizer(model)
-    case = study.ARMS[arm]
+    case = study.ARMS[arm] if runtime_case is None else runtime_case
     qualified = arm_root / "qualification/cases" / case / "initial-state.pt"
     initial = torch.load(qualified, map_location="cpu", weights_only=True)
     exact.assert_equal(
@@ -172,7 +185,9 @@ def train_arm(arm, gains, identity, tensors, order, device, arm_root):
                 "arm": arm,
                 "identity": identity,
                 "model_contract_case": case,
-                "initialization": study.initialization_policy(arm),
+                "initialization": study.initialization_policy(arm)
+                if initializer_policy is None
+                else initializer_policy,
                 "optimizer_contract": optimizer_contract,
                 "initial_diagnostics": initial_diagnostics,
                 "actual_first_task_observation_seconds": first_seconds,

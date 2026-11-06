@@ -120,3 +120,5 @@ over the TOML root.
 Add studies and changes through a PR following [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The [width-aware amplitude initialization study](docs/higgs-width-amplitude-init.md) compares raw `0.1/sqrt(A/N)` without gain/LayerNorm against the old initializer and the prior fixed-gain control. GPU evidence is pending.
+
+The [raw Dense-RMS initialization follow-up](docs/higgs-rms-amplitude-init.md) tunes initial amplitudes before training while keeping runtime gains1 and normalization NONE; GPU evidence pending.
