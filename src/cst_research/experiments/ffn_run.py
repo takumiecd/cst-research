@@ -122,9 +122,12 @@ def main(argv=None):
     parser.add_argument('--batch', type=int, default=2)
     parser.add_argument('--accumulation', type=int, default=4)
     parser.add_argument('--max-wall-seconds', type=int, default=3600)
+    parser.add_argument('--repeat-fixed-batches', action='store_true')
     args = parser.parse_args(argv)
     if not 1024 <= args.tokens <= 20000000 or args.batch < 1 or args.accumulation < 1 or args.max_wall_seconds < 1:
         parser.error('bounded positive training budget required')
+    if args.repeat_fixed_batches and args.tokens > 102400:
+        parser.error('fixed-batch diagnostic is capped at100 standard updates')
     if sha(args.qualification) != args.qualification_sha256 or sha(args.data / 'manifest.json') != args.data_manifest_sha256:
         parser.error('qualification or data manifest identity differs from the frozen request')
     qualification = json.loads(args.qualification.read_text())
@@ -212,7 +215,7 @@ def main(argv=None):
             torch.cuda.synchronize(); torch.cuda.reset_peak_memory_stats(); tick = time.monotonic()
             loss_sum = torch.zeros((), device='cuda')
             for micro in range(args.accumulation):
-                index = ((step - 1) * args.accumulation + micro) * args.batch
+                index = (micro if args.repeat_fixed_batches else ((step - 1) * args.accumulation + micro)) * args.batch
                 starts = order[index:index + args.batch] * config.context
                 x, y = token_batch(data['train'], starts, config.context, 'cuda')
                 _, loss = model(x, y)
@@ -239,8 +242,11 @@ def main(argv=None):
                 log({'step': step, 'seen_tokens': step * tokens_per_update, 'elapsed_seconds': time.monotonic() - began, 'development': dev})
                 summary['latest_development'] = dev; checkpoint(); save()
         summary['diagnostics']['final'] = probe(model, px, py)
-        summary['confirmation'] = evaluate(model, data['confirmation'], args.batch)
-        summary['generations'] = generate(model)
+        if args.repeat_fixed_batches:
+            summary['scope'] = 'repeated fixed-batch diagnostic; confirmation and generations not evaluated'
+        else:
+            summary['confirmation'] = evaluate(model, data['confirmation'], args.batch)
+            summary['generations'] = generate(model)
         summary['state'] = 'completed_execution_not_scientific_admission'; checkpoint(); save()
     except Exception as error:
         summary['state'] = 'failed'; summary['error'] = f'{type(error).__name__}: {error}'

@@ -45,7 +45,10 @@ Atom density and not a frozen training coordinate.
    or native backward. It complements, rather than replaces, quadrature.
 3. Controlled updates compare native-model CSTAdamW with the public optimizer
    wrapper reference, including Parameters, moments and counters. A serialized
-   checkpoint must reproduce the next complete update exactly.
+   checkpoint must reproduce the next controlled update exactly. Validate the
+   declared AtomState cache-generation advance on load separately; all payload
+   tensors, row IDs and other metadata remain exact. A full small causal model
+   also checks serialized state and the next CE update within FP32 tolerances.
 4. Model checks cover causal masking, common initialization across arms,
    real CST-FFN gradient flow, and complete task updates before a long run.
 
@@ -86,6 +89,9 @@ Start with repeated small batches and a one-seed one-million-token pilot. After
 validating behavior and cost, use at most20million training tokens per run and
 three seeds on working configurations. An enlarged budget or changed recipe
 must have a separately recorded revision, not silently extend a failed run.
+The fixed-batch diagnostic uses100updates/102,400 seen tokens with the same
+eight sequence windows repeated, seed17, at N256 in each arm. It skips
+confirmation and generation, and is not a heldout-quality result.
 
 Record training/validation CE and perplexity against steps, seen tokens and
 elapsed time; fixed-prompt generations; layer activation/gradient diagnostics;

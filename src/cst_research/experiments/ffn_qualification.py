@@ -141,19 +141,41 @@ def qualify_case(ni, no, rows, *, seed=17):
             'peak_reserved_bytes': torch.cuda.max_memory_reserved(), 'elapsed_seconds': time.monotonic() - began}
 
 
-def _assert_tree_equal(a, b):
+def _assert_tree_equal(a, b, path='state'):
     if isinstance(a, torch.Tensor):
         torch.testing.assert_close(a, b, atol=0, rtol=0)
     elif isinstance(a, dict):
         assert a.keys() == b.keys()
         for key in a:
-            _assert_tree_equal(a[key], b[key])
+            _assert_tree_equal(a[key], b[key], path + '.' + str(key))
     elif isinstance(a, (tuple, list)):
         assert len(a) == len(b)
-        for left, right in zip(a, b):
-            _assert_tree_equal(left, right)
+        for index, (left, right) in enumerate(zip(a, b)):
+            _assert_tree_equal(left, right, path + '.' + str(index))
     else:
-        assert a == b
+        assert a == b, f'{path}: {a!r} != {b!r}'
+
+
+def assert_model_restore(saved, restored, before_load):
+    """Check all payload bytes and the declared load-time cache invalidation.
+
+    AtomState.set_extra_state advances layout_version on load; equal logical
+    weights do not imply equal cache generations. Validate that one precise
+    transformation rather than dropping metadata or weakening tensor checks.
+    """
+    assert saved.keys() == restored.keys() == before_load.keys()
+    left, right = copy.deepcopy(saved), copy.deepcopy(restored)
+    versions = {}
+    for key in left:
+        if key.endswith('atom_state._extra_state'):
+            a,b,c = left[key],right[key],before_load[key]
+            assert set(a) == set(b) == set(c) == {'format_version','shape','layout_version'}
+            expected = max(c['layout_version'] + 1, a['layout_version'])
+            assert b['layout_version'] == expected
+            versions[key] = {'saved':a['layout_version'], 'before_load':c['layout_version'], 'restored':b['layout_version']}
+            del a['layout_version']; del b['layout_version']
+    _assert_tree_equal(left, right)
+    return versions
 
 
 def optimizer_and_resume_check():
@@ -177,6 +199,7 @@ def optimizer_and_resume_check():
     storage.seek(0)
     checkpoint = torch.load(storage, weights_only=False)
     resumed = make_cst(16, 64, seed=151).cuda()
+    before_load = copy.deepcopy(resumed.state_dict())
     resumed.load_state_dict(checkpoint['model'])
     configure_native(resumed)
     other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
@@ -184,9 +207,9 @@ def optimizer_and_resume_check():
     for model, opt in ((live, optimizer), (resumed, other)):
         model.atoms.p.grad = torch.full_like(model.atoms.p, 0.001)
         opt.step()
-    _assert_tree_equal(live.state_dict(), resumed.state_dict())
+    versions = assert_model_restore(live.state_dict(), resumed.state_dict(), before_load)
     _assert_tree_equal(optimizer.state_dict(), other.state_dict())
-    return {'controlled_gradient_updates': 2, 'parameters_and_moments_checked': True, 'serialized_resume_next_step_exact': True}
+    return {'controlled_gradient_updates': 2, 'parameters_and_moments_checked': True, 'serialized_resume_next_step_exact': True, 'cache_generation_load_contract':versions}
 
 
 def task_step_and_resume_check():
@@ -217,10 +240,11 @@ def task_step_and_resume_check():
     torch.save({'model':model.state_dict(), 'optimizer':optimizer.state_dict()}, storage)
     storage.seek(0); state = torch.load(storage, weights_only=False)
     resumed = LanguageModel(config, 'cst', seed=251).cuda()
+    before_load = copy.deepcopy(resumed.state_dict())
     configure_native(resumed); resumed.load_state_dict(state['model'])
     other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
     other.load_state_dict(state['optimizer'])
-    _assert_tree_equal(model.state_dict(), resumed.state_dict())
+    versions = assert_model_restore(model.state_dict(), resumed.state_dict(), before_load)
     _assert_tree_equal(optimizer.state_dict(), other.state_dict())
     left, right = step(model, optimizer), step(resumed, other)
     errors = [compare(p, dict(resumed.named_parameters())[n], atol=3e-6, rtol=3e-5)['max_abs_error'] for n,p in model.named_parameters()]
@@ -231,7 +255,7 @@ def task_step_and_resume_check():
     return {'cst_projections':4, 'all_cst_sites_received_finite_nonzero_gradients_and_changed':True,
             'first_loss':first_loss, 'next_loss':left, 'resumed_next_loss':right,
             'serialized_state_exact_before_step':True, 'next_task_step_fp32_tolerance_passed':True,
-            'max_parameter_error':max(errors)}
+            'max_parameter_error':max(errors), 'cache_generation_load_contract':versions}
 
 
 def main(argv=None):

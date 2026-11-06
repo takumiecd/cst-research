@@ -38,7 +38,10 @@ Denseの標準偏差0.02に対応させ、両条件で残差出力射影を`1/sq
    非連続入力・多トークンで比較します。数学的factorコードは共有しますが、CUDAの階層計算や
    native backwardは使いません。独立積分を置き換えるものではなく、組み合わせて確認します。
 3. 制御した勾配によるCSTAdamW更新を公開optimizer wrapper参照と比較し、Parameter・
-   moment・counterを調べます。保存・再読込後の次の完全な更新は厳密一致を求めます。
+   moment・counterを調べます。保存・再読込後の次の制御した更新は厳密一致を求めます。
+   再読込で進むAtomStateのcache世代は既存契約を別に検証し、全payload Tensor・row ID・
+   他のmetadataは厳密一致させます。小さな自己回帰モデル全体でも保存状態と次のCE更新を
+   FP32の許容差で確認します。
 4. causal mask、条件間での共有初期値、CST FFNへの勾配、タスク更新を確認してから長期実行します。
 
 最初は公開CSTLinear・CSTAdamWと内部Plan `GLOBAL_ACTIVE_GRAD4_NATIVE`、
@@ -72,6 +75,8 @@ CSTには明示したfused座標更新Planを使います。条件間でデー�
 少数固定バッチと1seed・100万tokenのpilotから
 始め、挙動とコストを確認後、各実行最大2,000万token・動作する構成で3seedを検証します。
 予算拡大や設定変更は別revisionで記録し、失敗runを黙って延長しません。
+固定バッチ診断は各条件N256・seed17で、同じ8系列windowを反復して100更新・
+延べ102,400 tokenを処理します。confirmation・生成は行わず、未知データの品質結果とは扱いません。
 
 train/validationのCE・perplexityをstep・学習token・実時間の各軸で記録します。
 固定promptの生成例、層ごとの値・勾配、FFNと全体のパラメータ数、同期した完全stepの速度と

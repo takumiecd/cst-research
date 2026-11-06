@@ -31,6 +31,26 @@ class FFNModelTests(unittest.TestCase):
         self.assertEqual(result['atoms_checked'], 8)
         self.assertLess(result['max_dp_error'], 2e-9)
 
+    def test_checkpoint_payload_is_exact_with_only_declared_cache_invalidation(self):
+        import copy
+        import torch
+        from cst_research.experiments.ffn_model import make_cst
+        from cst_research.experiments.ffn_qualification import assert_model_restore
+        source = make_cst(16,64)
+        restored = make_cst(16,64)
+        before = copy.deepcopy(restored.state_dict())
+        restored.load_state_dict(source.state_dict())
+        versions = assert_model_restore(source.state_dict(), restored.state_dict(), before)
+        self.assertEqual(len(versions),1)
+        broken = copy.deepcopy(restored.state_dict())
+        broken['atom_state.atoms.p'][0,0] += 0.01
+        with self.assertRaises(AssertionError):
+            assert_model_restore(source.state_dict(), broken, before)
+        broken = copy.deepcopy(restored.state_dict())
+        broken['atom_state._extra_state']['layout_version'] += 1
+        with self.assertRaises(AssertionError):
+            assert_model_restore(source.state_dict(), broken, before)
+
     def test_shared_parameters_match_and_cst_ffn_changes_predictions(self):
         import torch
         from cst_research.experiments.ffn_contract import ModelConfig
