@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "higgs-normalization-learning-recovery-20261106",
+  "title": "HIGGS post-failure selected-state load-contract correction",
+  "status": "PLANNED",
+  "preparation_status": "PREPARED",
+  "status_note": "Separate explicit corrective adapter; original ea0 attempt remains exit1/incomplete. Actual75-file fourcase CPU evidence passed independently; new selectedCSTstock evaluation and remaining375k GPU updates are NOT executed. Recipe/horizon/selection unchanged.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_normalization_learning_recovery_driver",
+  "protocol_source_path": "docs/higgs-normalization-learning-recovery.md",
+  "implementation_boundary": {
+    "runtime": "unchanged external public975; original27 scientific modules and9registries byte-identical; no numerical runtime copy",
+    "correction": "selected-state loader requires exact native3owner generation transition and all other core bytes; evaluator uses actual postload mutation baseline",
+    "execution": "reuse admitted parent3Dense as producer references; finish selectedparentCSTstock evaluation before only5fresh cases using old epochloop and explicit evaluator seam restoredfinally"
+  },
+  "protocol": {
+    "version": "higgs-normalization-learning-recovery-v1",
+    "amendment": "explicit post-failure selected-checkpoint load-contract correction, not training recipe change",
+    "parent_consumer_commit": "ea0d5701c45b188d619853ebd303767f224e36b8",
+    "parent_consumer_manifest_sha256": "68bf4e7eb80ed9c48ce4c27fc26bd549f55a309276ddd519d63d00dcf2860fb0",
+    "failed_parent_outer_receipt_sha256": "18403283955ab2a4d6f5dbdfe9f2094cec54efe9aadbeb3bff15e5285275bcab",
+    "training_recipe_protocol_sha256": "c2e27deeed740cc299471a2fc1b7f13c03864a678a293d45f05986353911fd4d",
+    "native_load_rule": "public975 AtomState.set_extra_state: loaded=max(before_load+1,serialized)",
+    "native_source_sha256": "eaba2a17badebd373b38745ffcbc42e443cd1c519c8972b9fdf766c069b5102c",
+    "generation_scope": "only actual3CST owners2/4/6 at native load; every other core tensor/metadata literal; evaluation compared toactual POSTLOAD baseline",
+    "reuse_complete_selected_cases": [
+      "dense-stock",
+      "dense-rms",
+      "dense-ln"
+    ],
+    "finish_parent_selected_evaluation_case": "cst104-stock",
+    "fresh_remaining_cases": [
+      "cst104-gain",
+      "cst104-postgain",
+      "cst104-rms",
+      "cst104-ln",
+      "cst1048-stock"
+    ],
+    "parent_main_updates": 300000,
+    "recovery_main_updates": 375000,
+    "combined_main_updates": 675000,
+    "parent_prefix_updates": 72,
+    "new_prefix_updates": 0,
+    "seed": 17,
+    "epochs": 3,
+    "updates_per_fresh_case": 75000,
+    "parent_raw_readonly": true,
+    "automatic_retry_or_resume": false,
+    "heldout_evaluated": false,
+    "HPO": false,
+    "additional_recipe_budget_or_selection_change": false,
+    "prior27_modules_and9_registries_unchanged": true,
+    "required_parent_CPU_report_status": "passed-retained-fourcase-evidence-only-run-INCOMPLETE"
+  },
+  "parent_original_exit_code": 1,
+  "parent_original_run_complete": false,
+  "parent_CPU_admission_sha256": "7d69415094ec9bdf31e5ecd66654d3aac2d792e46d92836dd016c2abe780b6b7",
+  "parent_file_admission_proof_sha256": "dbe3081a726d6e175f880d483b298ce86319eb28cf4bdbca98090769553ea4fb",
+  "timing": "Unchanged unobserved complete-step epochloop for375k; parent300k timing stays original. New source/runtime/admission/data/restore/evaluation timers separate, inclusive totals nonadditive. Driver bootstrap only within outer receipt walltime, not separately instrumented; first selected evaluation may include lazy native compile/placement. No full adoption-time completeness claim.",
+  "memory": "same epoch-reset/capture before postprocessing; resident train/dev/model/optimizer/native buffers and reserved-cache scope; no hardware-only claim",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-normalization-learning-recovery-20261106",
+    "availability": "Preparation only; originalfailed75raw and4f151raw remain readonly; actual4case CPUadmission and narrowload diagnosis retained externally; no recoveryGPU result yet"
+  }
+}

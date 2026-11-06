@@ -46,6 +46,7 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 | [Covertype転移](docs/covertype-transfer-results.ja.md) | COMPLETED | 9モデル固定・heldoutを1回評価、CST両密度はDenseに劣る |
 | [8更新の正規化診断](docs/higgs-depth-normalization-diagnostic-results.ja.md) | COMPLETED | 9×8 task更新の機構診断。品質選択・既定値採用なし |
 | [正規化の3 epoch追試](docs/higgs-depth-normalization-learning.ja.md) | PLANNED / PREPARED | 開発データのみの9条件。資格は継承し新たなprefix一致確認が必須。学習結果は未取得 |
+| [正規化load契約のrecovery](docs/higgs-normalization-learning-recovery.ja.md) | PLANNED / PREPARED | Parent未完了は維持。admit済み300kを再利用し、選択state修正後に残375kだけを実行する準備 |
 
 [観測結果と限界](docs/bounded-validation-results.ja.md)で、完了した座標・深さ・gain結果を
 実測commitとraw auditへ結びます。developmentで選んだpilotは最小alphaや正式な非劣性を
