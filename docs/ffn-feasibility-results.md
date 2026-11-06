@@ -226,6 +226,13 @@ passed under the separate R8 consumer and explicit2048 operator. A20-update
 fixed-batch smoke is not heldout feasibility or a primary performance result. Width128/256/512, bounded aspect-ratio learning, three-seed
 confirmation and final performance/memory validation remain incomplete.
 
+The [scoped2048 validation record](https://github.com/takumiecd/torchcst/blob/922a2f609575ad18bbc5d19235138d185f4968dd/docs/research-history/cuda-linear/ffn-rectangular-2048-20261107.md)
+retains the N512 reference smoke: observed complete updates18.40ms Dense versus
+726.25ms CST, allocated peaks952.66/1187.04MiB. These are ten timing samples
+after excluding the first ten updates, all still within LR warmup, not primary
+performance repetitions. Parameter compression does not imply a measured GPU
+memory reduction in this implementation.
+
 ## Additional CPU mechanism checks
 
 These are synthetic/calibration observations, not language-model results or
@@ -287,6 +294,9 @@ GPT-2 encoding, whole-story deduplicated splits. Token manifest SHA256:
 - R5 consumer: `09e15b759fd796ad02c436e3580f1a223e098a92`.
 - R5 native receipt SHA256: `4268f0d8ee42f4febd036e1f9846ecdd565231edaca330ef33fd5f4ddb49222b`.
 - R5 terminal manifest SHA256: `17d42c7f9722373da24ab23ab3c4e3244e700ab38cb84791f4a64d88309e2b40`.
+- R8 selected-width qualification consumer: `70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`.
+- R8 N512 native receipt SHA256: `b40ac9ffa47814408eb22d61f65c2a0313f0420632566609f168c269131785d6`.
+- R8 N512 trained-state audit SHA256: `08080c751cf5c2c80d57663daa4031bcb7fd231a401187ace7d16161511a9593`.
 - Expanded operator: `2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`;
   consumer `036d0c5beb4a6f675ce1dbeafd4224e6c270f342`.
 - Expanded native receipt SHA256: `419ab7750182bca2302d7152c6fc01c1a961efe69f19bf5bb22355f3aa299ce6`.

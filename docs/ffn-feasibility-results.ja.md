@@ -201,6 +201,12 @@ R6とR7の比較・終了後の監査は完了しました。R7のAtom LR16を�
 固定batch smokeはheldoutでの有効性や速度の主比較ではありません。幅128/256/512、縦横比を変えた
 学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
 
+[範囲を限定した2048検証記録](https://github.com/takumiecd/torchcst/blob/922a2f609575ad18bbc5d19235138d185f4968dd/docs/research-history/cuda-linear/ffn-rectangular-2048-20261107.ja.md)
+に幅512の標準設定smokeを保持しています。complete updateの観測はDense18.40ms、CST726.25ms、
+allocated peakは952.66/1187.04MiBでした。最初の10 updateを時間集計から除いた10 sampleで、
+すべてLR warmup内です。速度の主比較の独立反復ではありません。この実装ではParameterの
+圧縮が実測GPUメモリの削減を意味していません。
+
 ## CPUでの追加機構確認
 
 以下は合成条件・初期化の観測であり、言語モデルの結果や標準設定の変更ではありません。
@@ -258,6 +264,9 @@ GPT-2 encoding、story単位で重複を排除したsplitを用います。token
 - R5 consumer：`09e15b759fd796ad02c436e3580f1a223e098a92`。
 - R5 native receipt SHA256：`4268f0d8ee42f4febd036e1f9846ecdd565231edaca330ef33fd5f4ddb49222b`。
 - R5終了manifest SHA256：`17d42c7f9722373da24ab23ab3c4e3244e700ab38cb84791f4a64d88309e2b40`。
+- R8選択幅検証consumer：`70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`。
+- R8幅512 native receipt SHA256：`b40ac9ffa47814408eb22d61f65c2a0313f0420632566609f168c269131785d6`。
+- R8幅512学習済み状態監査 SHA256：`08080c751cf5c2c80d57663daa4031bcb7fd231a401187ace7d16161511a9593`。
 - 拡大operator：`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`、
   consumer：`036d0c5beb4a6f675ce1dbeafd4224e6c270f342`。
 - 拡大native receipt SHA256：`419ab7750182bca2302d7152c6fc01c1a961efe69f19bf5bb22355f3aa299ce6`。
