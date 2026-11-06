@@ -32,6 +32,12 @@ overlay every training/development seed, means and sample-SD bands, and show
 complete-update/allocated/reserved observations. The optional reporting extra
 is needed only for `--plots`.
 
+The elapsed-time plot shows individual validation trajectories without an
+interpolated mean or SD band. Its recorded clock includes per-arm setup,
+evaluation and probes, and excludes qualification; setup and final recorded
+elapsed seconds remain in JSON. Perplexity is computed for each seed before
+aggregation. Clock reversal or inconsistent elapsed budgets are rejected.
+
 SD is across independent seed runs, not the thousands of updates within one
 run, and is not a confidence interval. Paired CST-minus-control CE differences
 retain each seed. A development run has no estimated seed SD. Parameter counts

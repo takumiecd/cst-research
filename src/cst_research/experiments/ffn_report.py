@@ -171,7 +171,7 @@ def read_run(root, request, run):
         json.loads(line)
         for line in (artifacts / "curves.jsonl").read_text().splitlines()
     ]
-    previous, validation, train_steps = -1, [], []
+    previous, previous_time, validation, train_steps = -1, -1.0, [], []
     for point in curves:
         step = point["step"]
         require(
@@ -179,6 +179,11 @@ def read_run(root, request, run):
             "invalid curve grid",
         )
         previous = step
+        elapsed = finite(
+            point["elapsed_seconds"], "recorded elapsed time", positive=True
+        )
+        require(elapsed >= previous_time, "elapsed clock moved backwards")
+        previous_time = elapsed
         if "train_ce" in point:
             train_steps.append(step)
             finite(point["train_ce"], "training CE", positive=True)
@@ -223,6 +228,14 @@ def read_run(root, request, run):
     require(len(timing) == updates - 10, "incomplete complete-update timings")
     for value in timing:
         finite(value, "update time", positive=True)
+    setup = finite(summary["setup_seconds"], "setup time", positive=True)
+    total = finite(
+        summary["total_elapsed_seconds"], "total recorded elapsed time", positive=True
+    )
+    require(
+        total >= previous_time and total >= setup and total >= sum(timing),
+        "elapsed budget disagrees with measurements",
+    )
     allocated, reserved = (
         summary["peak_allocated_bytes"],
         summary["peak_reserved_bytes"],
@@ -255,7 +268,11 @@ def read_run(root, request, run):
         **{k: run[k] for k in ("width", "expansion", "seed", "kind")},
         "development_ce": dev,
         "confirmation_ce": confirmation,
+        "development_perplexity": math.exp(dev),
+        "confirmation_perplexity": math.exp(confirmation),
         "median_update_ms": statistics.median(timing) * 1000,
+        "setup_seconds": setup,
+        "total_elapsed_seconds": total,
         "peak_allocated_mib": allocated / 1048576,
         "peak_reserved_mib": reserved / 1048576,
         "ffn_parameters": parameters,
@@ -339,6 +356,8 @@ def aggregate(root, request):
             for key in (
                 "development_ce",
                 "confirmation_ce",
+                "development_perplexity",
+                "confirmation_perplexity",
                 "median_update_ms",
                 "peak_allocated_mib",
                 "peak_reserved_mib",
@@ -398,13 +417,6 @@ def aggregate(root, request):
 def write_markdown(result, output):
     """Equivalent English/Japanese tables; SD is not a confidence interval."""
     labels = {"dense": "Dense", "cst": "CST", "none": "No FFN"}
-    columns = [
-        "development_ce",
-        "confirmation_ce",
-        "median_update_ms",
-        "peak_allocated_mib",
-        "peak_reserved_mib",
-    ]
     for japanese in (False, True):
         filename = "report.ja.md" if japanese else "report.md"
         intro = (
@@ -419,26 +431,70 @@ def write_markdown(result, output):
             "These are not confidence intervals, noninferiority decisions or a general scaling law.\n\n"
         )
         intro += f"Cohort: {result['cohort']}; seeds: {result['protocol']['seeds']}; requested tokens/arm: {result['protocol']['token_budget']}.\n\n"
-        table = "| Width | Expansion | FFN | DEV CE | Confirmation CE | Update ms | Allocated MiB | Reserved MiB | FFN parameters |\n| ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |\n"
-        for group in result["groups"]:
-            values = []
-            for key in columns:
-                value = group["metrics"][key]
-                values.append(
-                    f"{value['mean']:.5f}"
-                    + (
-                        f" ± {value['sample_sd']:.5f}"
-                        if value["sample_sd"] is not None
-                        else ""
-                    )
-                )
-            table += (
-                f"| {group['width']} | {group['expansion']} | {labels[group['kind']]} | "
-                + " | ".join(values)
-                + f" | {group['ffn_parameters']} |\n"
+        text = intro
+        for columns, headers, parameters in (
+            (
+                (
+                    "development_ce",
+                    "development_perplexity",
+                    "confirmation_ce",
+                    "confirmation_perplexity",
+                ),
+                (
+                    "DEV CE",
+                    "DEV perplexity",
+                    "Confirmation CE",
+                    "Confirmation perplexity",
+                ),
+                False,
+            ),
+            (
+                ("median_update_ms", "peak_allocated_mib", "peak_reserved_mib"),
+                ("Update ms", "Allocated MiB", "Reserved MiB"),
+                True,
+            ),
+        ):
+            table = (
+                "| Width | Expansion | FFN | "
+                + " | ".join(headers)
+                + (" | FFN parameters" if parameters else "")
+                + " |\n"
             )
-        text = intro + table + "\n"
-        for stem in ("development-curves", "training-curves", "resource-observations"):
+            table += (
+                "| ---: | ---: | --- | "
+                + " | ".join("---:" for _ in range(len(headers) + int(parameters)))
+                + " |\n"
+            )
+            for group in result["groups"]:
+                values = []
+                for key in columns:
+                    value = group["metrics"][key]
+                    values.append(
+                        f"{value['mean']:.5f}"
+                        + (
+                            f" ± {value['sample_sd']:.5f}"
+                            if value["sample_sd"] is not None
+                            else ""
+                        )
+                    )
+                table += (
+                    f"| {group['width']} | {group['expansion']} | {labels[group['kind']]} | "
+                    + " | ".join(values)
+                    + (f" | {group['ffn_parameters']}" if parameters else "")
+                    + " |\n"
+                )
+            text += table + "\n"
+        text += (
+            "Perplexityは各seedで計算してから集計します。\n\n"
+            if japanese
+            else "Perplexity is computed for each seed before aggregation.\n\n"
+        )
+        for stem in (
+            "development-curves",
+            "training-curves",
+            "development-versus-time",
+            "resource-observations",
+        ):
             if (output / (stem + ".png")).exists():
                 text += f"![{stem}]({stem}.png)\n\n"
         text += (
@@ -501,6 +557,7 @@ def render_plots(result, output):
     for metric_name, stem in (
         ("development", "development-curves"),
         ("train", "training-curves"),
+        ("elapsed", "development-versus-time"),
     ):
         cols = min(3, len(shapes))
         rows = math.ceil(len(shapes) / cols)
@@ -519,6 +576,22 @@ def render_plots(result, output):
                     if (r["width"], r["expansion"], r["kind"])
                     == (shape["width"], shape["expansion"], kind)
                 ]
+                if metric_name == "elapsed":
+                    for i, run in enumerate(members):
+                        points = [
+                            p
+                            for p in run["curves"]
+                            if "development" in p and p["step"] > 0
+                        ]
+                        ax.plot(
+                            [p["elapsed_seconds"] for p in points],
+                            [p["development"]["ce"] for p in points],
+                            color=colors[kind],
+                            alpha=0.7,
+                            lw=1.3,
+                            label=labels[kind] if i == 0 else None,
+                        )
+                    continue
                 curves = [
                     [
                         (
@@ -569,19 +642,32 @@ def render_plots(result, output):
                     )
             ax.set(
                 title=f"N{shape['width']} / expansion{shape['expansion']}",
-                xlabel="Seen tokens (millions)",
+                xlabel="Recorded elapsed seconds"
+                if metric_name == "elapsed"
+                else "Seen tokens (millions)",
                 ylabel="Cross-entropy (lower is better)",
             )
+            if metric_name == "elapsed":
+                ax.set_xscale("log")
             ax.grid(alpha=0.2)
             ax.spines[["top", "right"]].set_visible(False)
         for ax in list(axes.flat)[len(shapes) :]:
             ax.set_visible(False)
         axes.flat[0].legend(frameon=False)
         fig.suptitle(
-            "FFN " + metric_name + " loss: all seeds and mean\n" + identity, fontsize=12
+            (
+                "FFN validation versus time: individual seeds"
+                if metric_name == "elapsed"
+                else "FFN " + metric_name + " loss: all seeds and mean"
+            )
+            + "\n"
+            + identity,
+            fontsize=12,
         )
         fig.supxlabel(
-            "Bands: ±1 sample SD (n>1), not confidence intervals.\nCommon20M-token LR/data horizon.",
+            "Recorded setup/evaluation/probes included; qualification excluded.\nIndividual trajectories, without interpolated mean or SD bands."
+            if metric_name == "elapsed"
+            else "Bands: ±1 sample SD (n>1), not confidence intervals.\nCommon20M-token LR/data horizon.",
             fontsize=9,
         )
         for ext in ("png", "svg"):

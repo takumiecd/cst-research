@@ -28,6 +28,11 @@ evidence hash、reporter source hash、描画環境を保持します。同等�
 development曲線と平均・標本SDの帯、complete-update/allocated/reservedの観測を描きます。
 optional reporting extraが必要なのは`--plots`だけです。
 
+時間軸の図は各seedのvalidation軌跡を描き、補間した平均・SD帯は付けません。記録した時計は
+各条件のsetup・評価・probeを含み、qualificationは含みません。setupと最終記録経過秒数は
+JSONに残します。perplexityは各seedで計算してから集計します。時計の逆行や経過時間との
+不整合は拒否します。
+
 SDは独立したseedのrun間のもので、1 run内の数千update間のSDや信頼区間ではありません。
 seedを対応させたCST−対照のCE差も各seedの値を保持します。開発用1 runではseed SDを
 推定しません。Parameter数は宣言したFFN予算と照合します。幅の観測点だけでruntime/memoryの

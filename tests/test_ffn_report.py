@@ -79,6 +79,9 @@ class ReportTests(unittest.TestCase):
                                     "development": metric(ce + 0.2),
                                 }
                             )
+                    duration = 0.003 if kind == "cst" else 0.001
+                    for point in points:
+                        point["elapsed_seconds"] = 10 + duration * point["step"]
                     (folder / "curves.jsonl").write_text(
                         "\n".join(json.dumps(p) for p in points)
                     )
@@ -112,6 +115,8 @@ class ReportTests(unittest.TestCase):
                         },
                         "timing_samples_seconds": [0.003 if kind == "cst" else 0.001]
                         * 966,
+                        "setup_seconds": 10.0,
+                        "total_elapsed_seconds": 12 + duration * 976,
                         "peak_allocated_bytes": 200 * 1048576,
                         "peak_reserved_bytes": 256 * 1048576,
                         "actual_ffn_parameters": 0
@@ -306,6 +311,26 @@ class ReportTests(unittest.TestCase):
         self.write(path, audit)
         run["audit_sha256"] = digest(path)
         with self.assertRaisesRegex(ValueError, "trained VJP"):
+            aggregate(self.root, request)
+
+    def test_rehashed_elapsed_clock_corruption_is_rejected(self):
+        request = self.request()
+        run = request["runs"][-1]
+        path = self.root / run["artifacts"] / "curves.jsonl"
+        original = path.read_text()
+        points = [json.loads(line) for line in original.splitlines()]
+        points[-1]["elapsed_seconds"] = 0.001
+        path.write_text("\n".join(json.dumps(p) for p in points))
+        self.rehash(run)
+        with self.assertRaisesRegex(ValueError, "clock moved backwards"):
+            aggregate(self.root, request)
+        path.write_text(original)
+        summary_path = self.root / run["artifacts"] / "summary.json"
+        summary = json.loads(summary_path.read_text())
+        summary["total_elapsed_seconds"] = 1.0
+        self.write(summary_path, summary)
+        self.rehash(run)
+        with self.assertRaisesRegex(ValueError, "elapsed budget"):
             aggregate(self.root, request)
 
     def test_evidence_paths_cannot_escape_root(self):
