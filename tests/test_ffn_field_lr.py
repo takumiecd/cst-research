@@ -189,3 +189,20 @@ class FieldRateTests(unittest.TestCase):
             FieldRateOptimizer(self.layer())
         with self.assertRaises(ValueError):
             FieldRateOptimizer(self.torch.nn.Linear(2, 3), native=False)
+
+    def test_controlled_fixture_copies_before_binding_different_state_contracts(self):
+        from cst_research.experiments.ffn_field_lr import (
+            FieldRateOptimizer,
+            FieldRateRecipe,
+        )
+        from cst_research.experiments.ffn_field_lr_qualification import (
+            controlled_models,
+        )
+        from torchcst import CSTAdamW
+
+        recipe = FieldRateRecipe()
+        cpu, live, stock = controlled_models(recipe, device="cpu")
+        FieldRateOptimizer(cpu, recipe, native=False)
+        FieldRateOptimizer(live, recipe, native=False)
+        # Binding the stock optimizer must succeed independently of the wrappers.
+        CSTAdamW(stock.parameters(), model=stock, weight_decay=0, foreach=False)

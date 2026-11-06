@@ -32,16 +32,22 @@ def recipe_for(arm):
     )
 
 
-def controlled_check(recipe):
+def controlled_models(recipe, *, device="cuda"):
+    """Create pristine copies before optimizer-specific Atom state is bound."""
     cpu = torch.nn.Module()
     cpu.layer = make_cst(16, 64, seed=151)
     cpu.ordinary = torch.nn.Parameter(torch.tensor([0.2, -0.3]))
-    live = copy.deepcopy(cpu).cuda()
-    reference = FieldRateOptimizer(cpu, recipe, native=False)
-    optimizer = FieldRateOptimizer(live, recipe)
+    live = copy.deepcopy(cpu).to(device)
     stock_model = (
         copy.deepcopy(live) if recipe.amplitude == recipe.outer_clock else None
     )
+    return cpu, live, stock_model
+
+
+def controlled_check(recipe):
+    cpu, live, stock_model = controlled_models(recipe)
+    reference = FieldRateOptimizer(cpu, recipe, native=False)
+    optimizer = FieldRateOptimizer(live, recipe)
     stock = (
         cst_optimizer(
             stock_model,
