@@ -76,6 +76,32 @@ CSTは各update後の振幅を読み、累積移動量と始終点の差、半�
 診断付きrunを速度・メモリの主比較には用いません。幅128/256/512、縦横比を変えた
 学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
 
+## CPUでの追加機構確認
+
+以下は合成条件・初期化の観測であり、言語モデルの結果や標準設定の変更ではありません。
+PolarのノルムQ=s²+t²、公開q=(Q−1)/3、接線方向の更新提案δu、step size hに対し、
+標準の活動量更新は次式です。
+
+\[
+Q_* = \operatorname{clip}_{[1,4]}(Q+\gamma\|\delta u\|^2),\qquad
+Q' = \left[1-\frac{Q_*-1}{Q_*}e^{-4\lambda h}\right]^{-1}.
+\]
+
+接線速度vを固定してδu=h vとすると、活動量の加算はh²に比例します。既存の
+`time_energy`はこの加算をhで割ります。h=.0003、||v||=.15、gamma1、lambda.1、
+1000 stepのCPU fixtureでは`finite_chord`のFP64でq≈6.36e-7となり、独立した
+scalar漸化式と一致しました。FP32ではq≈2.65e-9、`time_energy`ではq≈.00212です。
+小さい角度更新を繰り返してもqがほぼ0のままになり、FP32丸めでさらに活動量が
+小さくなる場合があります。実際のAdam接線速度や学習差の原因を特定したわけでは
+なく、R6学習のclock modeは変更していません。
+
+別の限定したCPU初期化gridでは振幅上限とw_cを一緒に変えました。上限4、w_c1.2、
+q1のseed17 up/down fixtureは、同じDense目標に合わせて平均半径31.53/40.54、
+4096 Atom中350/10個のclipとなりました。この大幅に広い設定は座標系の条件も変え、
+学習前に新たなnative qualificationが必要です。準備した候補であり、成功したモデル
+ではありません。raw script/resultは証拠locator内の`polar-activity-clock-diagnostic*`と
+`broad-radius-initialization-grid*`に保持します。
+
 ## 来歴と保存証拠
 
 TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`、tiktoken0.12.0の

@@ -84,6 +84,34 @@ motion from endpoint change, and retain radius/q histories. They are not primary
 timing/memory runs. Width128/256/512, bounded aspect-ratio learning, three-seed
 confirmation and final performance/memory validation remain incomplete.
 
+## Additional CPU mechanism checks
+
+These are synthetic/calibration observations, not language-model results or
+changes to the default recipe. For Polar norm Q=s²+t², public q=(Q−1)/3, tangent
+proposal δu and step size h, the default activity clock uses
+
+\[
+Q_* = \operatorname{clip}_{[1,4]}(Q+\gamma\|\delta u\|^2),\qquad
+Q' = \left[1-\frac{Q_*-1}{Q_*}e^{-4\lambda h}\right]^{-1}.
+\]
+
+With fixed tangent velocity v, δu=h v, its activity increment is proportional
+to h². The existing `time_energy` option divides that increment by h. A1000-step
+CPU fixture at h=.0003, ||v||=.15, gamma1 and lambda.1 produced q≈6.36e-7 in
+FP64 with `finite_chord`, matching an independent scalar recurrence; FP32 gave
+q≈2.65e-9. `time_energy` gave q≈.00212. Thus a near-zero q can coexist with
+small repeated angular updates, and FP32 rounding can further reduce activity.
+This does not establish the actual Adam tangent velocity or the learning-gap
+cause; no clock mode was changed in the R6 learning runs.
+
+A separate bounded CPU initialization grid varied amplitude bound and w_c
+together. With bound4, w_c1.2 and q1, the seed17 up/down fixtures matched the
+same Dense targets with average radii31.53/40.54 and350/10 clipped Atoms out of
+4096. These much wider settings also change coordinate conditioning and require
+new native qualification before learning. They are prepared alternatives, not
+successful models. Raw scripts/results are `polar-activity-clock-diagnostic*`
+and `broad-radius-initialization-grid*` under the evidence locator.
+
 ## Provenance and retained evidence
 
 TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`, tiktoken0.12.0
