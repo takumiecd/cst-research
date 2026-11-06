@@ -301,13 +301,24 @@ def optimizer_and_resume_check(
         "radius_birth": radius_birth,
         "coefficient": coefficient,
     }
-    cpu = make_cst(16, 64, seed=151, **settings)
+
+    def fixture():
+        model = torch.nn.Module()
+        model.layer = make_cst(16, 64, seed=151, **settings)
+        model.ordinary = torch.nn.Parameter(torch.tensor([0.2, -0.3]))
+        return model
+
+    cpu = fixture()
     live = copy.deepcopy(cpu).cuda()
     configure_native(live)
     reference = CSTOptimizer(
         torch.optim.AdamW(
-            cpu.parameters(),
-            lr=0.0003 * atom_lr_multiplier,
+            [
+                {"params": [cpu.ordinary], "lr": 0.0003},
+                {"params": [cpu.layer.atoms.p], "lr": 0.0003 * atom_lr_multiplier},
+            ],
+            lr=0.0003,
+            betas=(0.9, 0.95),
             weight_decay=0.0,
             foreach=False,
         ),
@@ -317,34 +328,38 @@ def optimizer_and_resume_check(
         live,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
+        betas=(0.9, 0.95),
         weight_decay=0.0,
         foreach=False,
     )
     for step in range(2):
-        gradient = (
-            torch.randn(
-                cpu.atoms.p.shape, generator=torch.Generator().manual_seed(450 + step)
-            )
-            * 0.001
-        )
-        cpu.atoms.p.grad = gradient.clone()
-        live.atoms.p.grad = gradient.cuda()
+        generator = torch.Generator().manual_seed(450 + step)
+        for (_, p_cpu), (_, p_live) in zip(
+            cpu.named_parameters(), live.named_parameters()
+        ):
+            gradient = torch.randn(p_cpu.shape, generator=generator) * 0.001
+            p_cpu.grad = gradient.clone()
+            p_live.grad = gradient.cuda()
         reference.step()
         optimizer.step()
-        compare(live.atoms.p, cpu.atoms.p, atol=2e-6, rtol=2e-5)
-        a, b = (
-            optimizer.state[live.atoms.p],
-            reference.base_optimizer.state[cpu.atoms.p],
-        )
-        for key in ("exp_avg", "exp_avg_sq", "step"):
-            compare(a[key], b[key], atol=2e-8, rtol=2e-5)
+        for (_, p_cpu), (_, p_live) in zip(
+            cpu.named_parameters(), live.named_parameters()
+        ):
+            compare(p_live, p_cpu, atol=2e-6, rtol=2e-5)
+            for key in ("exp_avg", "exp_avg_sq", "step"):
+                compare(
+                    optimizer.state[p_live][key],
+                    reference.base_optimizer.state[p_cpu][key],
+                    atol=2e-8,
+                    rtol=2e-5,
+                )
     storage = io.BytesIO()
     torch.save(
         {"model": live.state_dict(), "optimizer": optimizer.state_dict()}, storage
     )
     storage.seek(0)
     checkpoint = torch.load(storage, weights_only=False)
-    resumed = make_cst(16, 64, seed=151, **settings).cuda()
+    resumed = fixture().cuda()
     before_load = copy.deepcopy(resumed.state_dict())
     resumed.load_state_dict(checkpoint["model"])
     configure_native(resumed)
@@ -352,12 +367,14 @@ def optimizer_and_resume_check(
         resumed,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
+        betas=(0.9, 0.95),
         weight_decay=0.0,
         foreach=False,
     )
     other.load_state_dict(checkpoint["optimizer"])
     for model, opt in ((live, optimizer), (resumed, other)):
-        model.atoms.p.grad = torch.full_like(model.atoms.p, 0.001)
+        for parameter in model.parameters():
+            parameter.grad = torch.full_like(parameter, 0.001)
         opt.step()
     versions = assert_model_restore(
         live.state_dict(), resumed.state_dict(), before_load
@@ -366,6 +383,8 @@ def optimizer_and_resume_check(
     return {
         "controlled_gradient_updates": 2,
         "parameters_and_moments_checked": True,
+        "mixed_parameter_groups_checked": True,
+        "atom_lr_multiplier": atom_lr_multiplier,
         "serialized_resume_next_step_exact": True,
         "cache_generation_load_contract": versions,
     }
@@ -404,6 +423,7 @@ def task_step_and_resume_check(
         model,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
+        betas=(0.9, 0.95),
         weight_decay=0.0,
         foreach=False,
     )
@@ -428,6 +448,7 @@ def task_step_and_resume_check(
                     and torch.isfinite(p.grad).all()
                     and p.grad.abs().max() > 0
                 )
+        torch.nn.utils.clip_grad_norm_(m.parameters(), 1.0, error_if_nonfinite=True)
         opt.step()
         return float(loss.detach())
 
@@ -451,6 +472,7 @@ def task_step_and_resume_check(
         resumed,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
+        betas=(0.9, 0.95),
         weight_decay=0.0,
         foreach=False,
     )
