@@ -3,7 +3,7 @@
   "id": "ffn-feasibility-20261106",
   "title": "CST FFN feasibility with geometric-mean Atom budgets",
   "status": "RUNNING",
-  "status_note": "R6all5arms5M complete/audited24trainedCSTVJPs. R7all8pilots1M complete/audited40trainedCSTVJPs and disposable nexttaskstep resume; AtomLR16 DEV3.67351 vs reference3.96004/Dense3.58196. Fresh5M selecteddevelopmentfollowup is running, no defaultadoption. R8width512reference20updatefulltask+trainedaudit passed; selectedwidth/aspectlearning and3seedconfirmation remain. RTX4090only; HIGGS/DST/lower-bound stay stopped.",
+  "status_note": "R6/R7 terminal audits complete. R8 fresh N256/c8/AtomLR16 5M completed/audited all3arms and8trainedCSTVJPs; DEV Dense2.75219/CST2.88124/noFFN3.10782. R10selectedwidth/aspect1Mdevelopment pilots nowrunning on soleRTX4090. No three-seed/scaling-law or speed/memory-win claim. HIGGS/DST/lower-bound remain stopped.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
@@ -19,7 +19,7 @@
     ],
     "planned_learning_and_data_horizon_tokens": 20000000,
     "current_execution_device": "RTX4090only",
-    "current_priority": "Fresh N256c8 AtomLR16 5M followup with matching Dense/noFFN controls and common20M planned LR/data horizon, no motioninstrumentation; then selected-recipe width/aspect and3seed feasibility, conditional on stable usefulFFN contribution.",
+    "current_priority": "Selected c8/AtomLR16 fixed-family width/aspect feasibility: N128/N512 expansion4 andN128 expansion1/16 bounded1M developmentpilots after passed5M gate; then3seedconfirmation on workingmainwidths.",
     "initial_q": 0.0,
     "widths": [
       128,
@@ -145,7 +145,7 @@
       "gates": "Exact recipe native all-Atom VJPs both256x1024 directions B2T128, independent quadrature, optimizer/model resume; actual four-block task preflight before pilot. R6must finish and be audited first."
     },
     "selected_learning_followup": {
-      "status": "RUNNING_NOT_SCIENTIFIC_ADMISSION",
+      "status": "COMPLETED_AND_TRAINED_CHECKPOINT_AUDIT_PASSED",
       "selection_basis": "Post-R7 developmentCE only; no confirmation scores used for recipe choice. Not preregistered before R7 or an optimality claim.",
       "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
       "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
@@ -169,6 +169,36 @@
       "qualification": "Both actualdirections/Atomcount/scalars, upstd.02/downstd.02/sqrt8, mixedoptimizer/modelresume, full4block2updatepreflight passed before followup",
       "required_after_terminal": "Retrieve/hashcheck and independent trainedY/dX/allAtomVJPs/optimizer/resume/CE audit before recipe adoption or3seed claim.",
       "next_not_executed": "N128/N512 expansion4 andN128 expansion1/16 bounded1M developmentpilots for selectedrecipe; threeconfirmationseeds onworkingconfigurations; no lower-bound search."
+    },
+    "selected_shape_pilots": {
+      "status": "RUNNING_NOT_THREE_SEED_CONFIRMATION",
+      "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+      "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+      "coefficient": 8,
+      "atom_lr_multiplier": 16,
+      "seed": 17,
+      "shapes": [
+        [
+          128,
+          4
+        ],
+        [
+          512,
+          4
+        ],
+        [
+          128,
+          1
+        ],
+        [
+          128,
+          16
+        ]
+      ],
+      "token_cap_per_arm": 1000000,
+      "planned_horizon_tokens": 20000000,
+      "gates": "Current5Mterminalauditpassed and DEV_CST<DEV_noFFN; eachshape separately qualifies bothactualstd/directions/count/recipe, full4blockpreflight,3armlearning andtrainedcheckpoint audit. Failures retained; no automaticretry/resume.",
+      "confirmation_not_executed": true
     }
   },
   "evidence": {

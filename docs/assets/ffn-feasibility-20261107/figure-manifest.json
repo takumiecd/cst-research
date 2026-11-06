@@ -16,6 +16,28 @@
     "recipe-family-r7-learning-curves.svg": "d72efcd0d18fdbf3d887c2f3a6f76c91d2748b7273c8276233cbdc168006c4b3",
     "recipe-family-r7-activation-rms.png": "1622880fe8c6bb6aa7f8197dfaaeb624ab8fb70e39bdc9cdeec2aef55c1703cd",
     "recipe-family-r7-activation-rms.svg": "7a9b0eed8f81a738365b3ab6ec4fe57d17697d446ebdb8049e67d002977fe557",
-    "external-script:plot-recipes-r7.py": "4c88499c2c0dbccc3a3482d16be9b0cec181494a78e67f261b32b58b94400bb0"
+    "external-script:plot-recipes-r7.py": "4c88499c2c0dbccc3a3482d16be9b0cec181494a78e67f261b32b58b94400bb0",
+    "selected-r8-development-curves.png": "89771e91158c91839dccd7c2e31ace6010faf6b741d84fe8059323266b203e7e",
+    "selected-r8-development-curves.svg": "353ab0b5b9ad3540b2872c70e4fb0ba66d3ff61b2be2536b09cccafe5a64bbc5",
+    "selected-r8-training-curves.png": "9e48e21c4a78b8991c67c26bc791a43cc7b29a250b30ed9fb572ae731551f76d",
+    "selected-r8-training-curves.svg": "c177627ed4a61f853b537149917cbdc75b5f7552d7cec239d2fdbaaea555dfcb",
+    "selected-r8-development-versus-time.png": "e1bac46294f7c2fbbaeb1c68d76a26be033aa03fc57ad5d6a6361cb4ee67b01f",
+    "selected-r8-development-versus-time.svg": "895c5189137493d05e7b6b2520bb0d178b21ab0dfe4ac6567aaf5695b4dd4363",
+    "selected-r8-resource-observations.png": "6a3f6ac18769f5e092cc551bfce19504fc2880453abb244ba260c07465287e12",
+    "selected-r8-resource-observations.svg": "fe1affbcd826f5d0eb64d1c8167154015843126cc57fad99edff31fc30f3a5a2"
+  },
+  "selected_r8": {
+    "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
+    "raw_archive_sha256": "0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922",
+    "request_sha256": "a51a1f99bdc9830782e80d38ef48c9db3ceaa38f8c6739294fa9aae71e8b95ca",
+    "report_json_sha256": "ad9bd636659a803f80cc8197becc7b3eeb233332801cc3d316261fc45576b6f4",
+    "reporter_source_sha256": {
+      "ffn_report.py": "898526620ff4e3638ceb377db43f68e3952a79884acbbbe7b922df95defc4495",
+      "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
+    },
+    "plotting_runtime": {
+      "matplotlib": "3.11.1",
+      "python": "3.11.15"
+    }
   }
 }

@@ -211,6 +211,57 @@ the exact unused set; corrected audit02 allows missing gradients/state only
 for those no-FFN parameters and reran all eight arms. It does not relax any CST
 Atom or used ordinary-parameter check.
 
+## Selected five-million-token followup (R8)
+
+Fresh width256/c8/seed17 Dense, no-FFN and CST Atom LR16 arms completed 4,882
+updates/4,999,168 tokens at the common planned 20M-token LR/data horizon. All
+eight FFN projections remain CST; initial q0, amplitude bound 1, w_c .3 and birth 4
+are unchanged. Ordinary parameters retain base LR 3e-4; per-update motion sampling
+is disabled. The [complete generated report](ffn-feasibility-r8-selected-20261107.md)
+contains all three loss curves versus tokens/time, parameter/resource tables,
+fixed-prompt examples and their provenance.
+
+| FFN | Development CE | Perplexity | FFN parameters |
+| --- | ---: | ---: | ---: |
+| Dense | 2.75219 | 15.67689 | 2102272 |
+| CST Atom LR16 | 2.88124 | 17.83638 | 136192 |
+| No FFN | 3.10782 | 22.37219 | 0 |
+
+![Selected five-million-token validation curves](assets/ffn-feasibility-20261107/selected-r8-development-curves.png)
+
+CST has useful FFN contribution at this budget, with 6.48% of Dense's FFN
+parameters, and a remaining development CE gap 0.12905 to Dense. This is still
+one development seed. Curves continue decreasing at 5M; this is a budget endpoint,
+not demonstrated convergence or an optimum Atom count. The earlier R6 q0 result
+2.99281 remains tied to its original source; it is not a fresh R8 q0 ablation.
+
+The terminal audit passed all three checkpoints, original hashes, finite
+optimizer state/counters, independently recomputed development/confirmation CE
+and all eight trained CST projection Y/dX/all Atom VJPs at B1T8. Serialization
+and the next task update in disposable copies gave maximum parameter difference 0
+in every arm; original checkpoints were not overwritten. Only development CE
+was used to proceed to the bounded width/aspect pilots.
+
+The final separate fixed-window probe has up/down RMS .654/.448 for CST versus
+1.079/.358 for Dense, after RMS aggregation across four layers. Small down-output
+RMS alone no longer explains the remaining loss gap. This does not identify a
+unique cause or replace heldout quality measurements.
+
+Uninstrumented complete-update medians are 569.10 ms CST versus 11.36 ms Dense;
+allocated peaks 687.28/482.50 MiB and reserved 716/490 MiB. These are one sequential
+job's observations, without order crossover or independent device repetitions.
+Parameter compression has not produced a practical speed or GPU-memory win.
+The frozen R8 consumer is `70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`, operator
+`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`. Terminal receipt SHA256:
+`3029cd765869af95ca3c75f7ed71ae1b744c983cec7a199ea600b20076d5dfea`;
+trained audit SHA256:
+`3b7c5aceacf34c2ff7779351694b97248c65ead7f8662b0d39a5a756a0e9309a`.
+Retrieved small-evidence archive SHA256:
+`0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922`.
+All 11 bundled raw files matched their manifest. Bulk checkpoints stay on the GPU
+host. The same c8/Atom LR16 recipe now proceeds to width/aspect development
+pilots; three-seed confirmation and the overall study remain incomplete.
+
 ## Native scope and remaining work
 
 R5 qualification passed both FFN directions at B2 T128, q0/.25/.5, Y/dX/all Atom
@@ -219,9 +270,9 @@ scoped2048 route passed all12 expanded R3 native cases on RTX4090, including
 512↔2048 and128↔2048. This does not establish full language-model feasibility
 at width512, or qualify a different consumer/q recipe automatically.
 
-The R6 and R7 sequences and terminal audits are complete. R7 selects Atom LR16
-for a fresh5M followup after per-recipe native/task gates; public defaults remain
-unchanged. Width512 reference complete-task smoke and trained-state audit also
+The R6/R7 sequences and the selected R8 5M followup have completed their terminal
+audits. Atom LR16 proceeds to width/aspect development pilots; public defaults
+remain unchanged. Width512 reference complete-task smoke and trained-state audit also
 passed under the separate R8 consumer and explicit2048 operator. A20-update
 fixed-batch smoke is not heldout feasibility or a primary performance result. Width128/256/512, bounded aspect-ratio learning, three-seed
 confirmation and final performance/memory validation remain incomplete.

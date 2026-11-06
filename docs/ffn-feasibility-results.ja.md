@@ -188,6 +188,49 @@ moment/counter・Parameterが一致しました。8条件すべてでParameter�
 修正版の監査02ではこのFFNなしParameterにだけ勾配・状態の欠如を認め、8条件をすべて再監査
 しました。CST Atomや使う普通のParameterの確認を緩めたわけではありません。
 
+## 選択した設定の5M-token追加比較（R8）
+
+幅256・c8・seed17で新しいDense/FFNなし/CST Atom LR16を各4882 update・4,999,168 token
+学習しました。LR・データの予定horizonは共通20M tokenです。FFN全8射影がCSTで、初期q0・
+振幅上限1・w_c.3・birth4は共通です。普通のParameterは基本LR3e-4のまま、各update後の
+振幅サンプリングは無効です。[生成した詳細report](ffn-feasibility-r8-selected-20261107.ja.md)に
+3条件すべてのtoken/時間軸の損失曲線、Parameter・resource表、固定promptと来歴を載せています。
+
+| FFN | Development CE | Perplexity | FFN parameters |
+| --- | ---: | ---: | ---: |
+| Dense | 2.75219 | 15.67689 | 2102272 |
+| CST Atom LR16 | 2.88124 | 17.83638 | 136192 |
+| FFNなし | 3.10782 | 22.37219 | 0 |
+
+![選択した設定の5M-token validation曲線](assets/ffn-feasibility-20261107/selected-r8-development-curves.png)
+
+この学習量ではCSTのFFNの寄与が見え、FFN Parameter数はDenseの6.48%ですが、Denseとの
+development CE差.12905は残ります。開発用1 seedの観測です。5Mでも曲線は下がっており、
+予算の終点であって、収束や最適Atom数を示したものではありません。旧R6のq0結果2.99281は
+元のsourceに紐づく観測として保持し、新しいR8のq0 ablationとは扱いません。
+
+終了後の監査で全3 checkpointの元hash、optimizer状態/counterの有限性、development/
+confirmation CEの独立再計算、学習済みCST全8射影のB1T8のY/dX/全Atom VJPを確認しました。
+使い捨てコピー上でserialize後の次のtask updateを確認し、全条件でParameter最大差は0でした。
+元のcheckpointは上書きしていません。限定した幅・縦横比のpilotへ進める判断には
+development CEだけを使いました。
+
+最後の別の固定window probeで4層のRMSとして集計したup/down出力RMSはCST .654/.448、
+Dense 1.079/.358です。down出力RMSが小さいという説明だけでは残る損失差を説明できません。
+原因が一つに決まったものでも、heldout品質測定の代わりでもありません。
+
+診断なしのcomplete update中央値はCST569.10ms、Dense11.36ms、allocated peakは
+687.28/482.50MiB、reservedは716/490MiBでした。1つの逐次jobでの観測で、順序を入れ替えた
+比較や独立したdevice反復はありません。Parameter圧縮は実用上の速度・GPUメモリ優位には
+つながっていません。固定R8 consumerは`70e02d864e661d3a87cd8aea322b49ae3f4a1f8f`、
+operatorは`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`です。終了receipt SHA256は
+`3029cd765869af95ca3c75f7ed71ae1b744c983cec7a199ea600b20076d5dfea`、
+学習済み監査 SHA256は`3b7c5aceacf34c2ff7779351694b97248c65ead7f8662b0d39a5a756a0e9309a`です。
+回収した小証拠archive SHA256は
+`0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922`です。
+bundle内のraw全11ファイルをmanifestと照合しました。大きなcheckpointはGPU hostに
+保持します。同じc8/Atom LR16で幅・縦横比の開発pilotに進み、3 seed確認と研究全体は未完了です。
+
 ## native検証の範囲と残作業
 
 R5では両FFN方向、B2 T128、q0/.25/.5でY/dX/全Atom VJP、polynomial quadrature、
@@ -195,8 +238,8 @@ optimizer/model resumeの検証を通りました。別途、範囲を限定し�
 RTX4090でR3の拡大12条件すべてを通り、512↔2048と128↔2048を含みます。これだけで
 幅512の言語モデルの有効性や、別consumer/q設定の検証済みを意味しません。
 
-R6とR7の比較・終了後の監査は完了しました。R7のAtom LR16を、native/task検証後の
-新しい5M比較に進めます。公開の標準設定は変更していません。別のR8 consumerと明示的な
+R6/R7と選択したR8の5M追加比較は終了後の監査まで完了しました。Atom LR16を幅・
+縦横比の開発pilotへ進めます。公開の標準設定は変更していません。別のR8 consumerと明示的な
 2048 operatorで、幅512の実タスクsmokeと学習済み状態監査も通りました。20 updateの
 固定batch smokeはheldoutでの有効性や速度の主比較ではありません。幅128/256/512、縦横比を変えた
 学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
