@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "ffn-feasibility-20261106",
+  "title": "CST FFN feasibility with geometric-mean Atom budgets",
+  "status": "PLANNED",
+  "status_note": "Owner-approved plan. CPU preparation is underway; native qualification and language-model learning have not completed. HIGGS lower-bound and DST campaigns remain stopped.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
+  "runner_entrypoint": "cst_research.experiments.ffn_qualification",
+  "protocol_source_path": "docs/ffn-feasibility.md",
+  "protocol": {
+    "atom_rule": "ceil(c*sqrt(d_in*d_out))",
+    "initial_coefficient": 8,
+    "initial_q": 0.0,
+    "widths": [128, 256, 512],
+    "initial_width": 256,
+    "ffn_expansion": 4,
+    "blocks": 4,
+    "heads": 4,
+    "context": 128,
+    "arms": ["dense", "cst", "none"],
+    "initialization": "Dense std0.02, residual outputs /sqrt(2*blocks); public CST variance_scaling_ before CUDA/optimizer",
+    "initial_dataset": "roneneldan/TinyStories; revision/tokenizer/splits/hashes must be frozen before learning",
+    "pilot_training_tokens": 1000000,
+    "maximum_training_tokens_per_run": 20000000,
+    "confirmation_seeds": [29, 43, 71],
+    "development_seed": 17,
+    "lower_bound_search": false,
+    "attention_replacement": false,
+    "native_dependency": "internal GLOBAL_ACTIVE_GRAD4_NATIVE Plan; no dispatcher-default adoption",
+    "blocked_width": "N512 requires explicit rectangular 2048-site route extension and qualification"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106"
+  }
+}

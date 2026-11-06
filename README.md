@@ -28,6 +28,11 @@ public API are separate decisions.
 establish practical use in FFNs and Attention.** This direction was adopted on
 2026-11-06. It is a research plan; these applications have not yet been validated.
 
+The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
+`A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
+usefulness with a linear Atom budget and bounded aspect-ratio changes; it does
+not search for the minimum coefficient.
+
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
    FFN projections in a small language model with CST and check whether it learns
