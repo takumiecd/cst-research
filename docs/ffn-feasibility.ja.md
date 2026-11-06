@@ -191,3 +191,42 @@ CST診断では`--track-atom-motion`でoptimizer更新ごとに物理振幅を�
 やoptimizer状態を変更しない。同期したupdate時間には診断を含めず、総経過
 時間には含める。診断付きrunを速度・メモリの主比較には使わず、その主張には
 別途記録した診断なしの測定を用いる。元のR2/R5証拠は固定したまま保持する。
+
+## 限定した設定の追加確認（R7準備）
+
+R6終了後に証拠を監査してから、幅256・c8・seed17で次の設定を試す。すべての
+FFN射影をCSTとし、半径の硬い最小値.5、最大値50、4 block、Dense二乗平均の
+目標を固定する。実用設定の確認であり、Atom数の下限探索ではない。
+
+| 設定 | q | 振幅上限 / w_c | Radius birth | 特徴順序 | Atom LR倍率 |
+| --- | ---: | --- | ---: | --- | ---: |
+| 基準 | 0 | 1 / .3 | 4 | 元の順序 | 1 |
+| birthを狭く | 0 | 1 / .3 | 1 | 元の順序 | 1 |
+| 較正した広い半径 | 1 | 4 / 1.2 | 4 | 元の順序 | 1 |
+| 固定順序の変更 | 0 | 1 / .3 | 4 | 並べ替え | 1 |
+| Atom更新を速く | 0 | 1 / .3 | 4 | 元の順序 | 16 |
+
+`radius_birth`は弱い振幅側の下限曲線を変え、硬い最小値を下げる設定ではない。
+`permuted`はblockごとに独立したhidden/output channelの固定順序をbufferで保持し、
+学習Parameterを増やさない。Denseにも同じ順序オプションを適用し、並べ替えたDense
+対照も含める。Denseでは行列に並べ替えを吸収でき、CPUで代数的に確認する。
+共分散の並べ替えだけでは、モデルを変更して学習した結果とはしない。
+
+`atom_lr_multiplier`は角度・中心を含むAtom Parameter全体に適用し、通常の重みと
+biasは基準LRのままにする。実際のgroup LRはPolar方針のouter timeも制御するため、
+振幅LRだけの独立介入ではない。groupの実LR、物理的移動量、半径履歴を記録し、
+同じ名目LRから同じ関数更新量を推測しない。
+
+まず各100万token、共通予定20M-tokenのLR・データhorizonで観測し、新しいDense・
+FFNなし対照も用意する。探索的な選択にはdevelopment CEを使う。学習前に
+`ffn_qualification --cohort recipe`で両256↔1024方向、B2T128、全Atom VJP、
+polynomial quadrature、要求したq・境界・順序・LR設定でのoptimizer/model resumeを
+確認する。admissionは実Atom数と物理scalar、全モデル設定を照合する。capacity cohort
+では係数ごとのoptimizer/model resumeも確認する。独立の生polynomial oracleはbirth4・
+max8を仮定せず、軸ごとの宣言scalar境界を読む。準備段階の最初の失敗で、検証fixture
+が古い設定を仮定していたことを特定した。この修正でruntime/backendの数学的契約は
+変更していない。
+
+GPU gateと限定したタスク更新が実際に通るまではR7は準備である。動作中のR6のソース・
+出力を変えない。scalar、特徴順序、LR倍率の変更は新しいqualificationを要求し、
+古いreceiptで黙ってadmitしない。動く設定の選択後も幅・縦横比と3 seed確認が必要である。

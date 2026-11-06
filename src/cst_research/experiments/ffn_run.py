@@ -8,13 +8,13 @@ import json
 import math
 import os
 import time
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
 import numpy as np
 import torch
 
-from .ffn_contract import ModelConfig, learning_rate
+from .ffn_contract import ModelConfig, learning_rate, qualification_covers_model
 from .ffn_model import LanguageModel, configure_native, cst_optimizer
 
 
@@ -154,6 +154,19 @@ def main(argv=None):
     parser.add_argument(
         "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
     )
+    parser.add_argument(
+        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0), default=1.0
+    )
+    parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
+    parser.add_argument(
+        "--radius-birth", type=float, choices=(1.0, 2.0, 4.0, 16.0), default=4.0
+    )
+    parser.add_argument(
+        "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
+    )
+    parser.add_argument(
+        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
+    )
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--tokens", type=int, default=1000000)
     parser.add_argument("--schedule-tokens", type=int, default=None)
@@ -189,27 +202,27 @@ def main(argv=None):
         "expanded",
         "capacity",
         "radius",
+        "recipe",
     ):
         parser.error("passed target rectangular/multi-token qualification required")
     for name in ("ffn_model.py", "ffn_contract.py"):
         if sha(Path(__file__).parent / name) != qualification["source_sha256"][name]:
             parser.error("model source differs from qualified source")
-    pairs = {
-        (x["in"], x["out"], x.get("coefficient", 8), x.get("q", 0.0))
-        for x in qualification["cases"]
-    }
-    if (
-        args.width,
-        args.expansion * args.width,
-        args.coefficient,
-        args.q,
-    ) not in pairs or (
-        args.expansion * args.width,
-        args.width,
-        args.coefficient,
-        args.q,
-    ) not in pairs:
-        parser.error("qualification does not cover requested FFN dimensions")
+    requested = ModelConfig(
+        width=args.width,
+        expansion=args.expansion,
+        coefficient=args.coefficient,
+        q=args.q,
+        amplitude_max=args.amplitude_max,
+        w_c=args.w_c,
+        radius_birth=args.radius_birth,
+        feature_order=args.feature_order,
+        atom_lr_multiplier=args.atom_lr_multiplier,
+    )
+    if not qualification_covers_model(qualification, requested):
+        parser.error(
+            "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
+        )
     args.output.mkdir(parents=True, exist_ok=False)
     began = time.monotonic()
     torch.set_num_threads(4)
@@ -222,13 +235,7 @@ def main(argv=None):
     ):
         parser.error("actual GPU/runtime differs from its qualification")
     manifest, data = verify_data(args.data)
-    config = ModelConfig(
-        width=args.width,
-        expansion=args.expansion,
-        coefficient=args.coefficient,
-        q=args.q,
-        vocabulary=manifest["vocabulary"],
-    )
+    config = replace(requested, vocabulary=manifest["vocabulary"])
     if args.batch * config.context > 256:
         parser.error("initial qualified microbatch has at most256 token rows")
     if args.schedule_tokens + 1 > len(data["train"]):
@@ -245,7 +252,12 @@ def main(argv=None):
     if args.kind == "cst":
         configure_native(model)
         optimizer = cst_optimizer(
-            model, lr=0.0003, betas=(0.9, 0.95), weight_decay=0.0, foreach=False
+            model,
+            atom_lr_multiplier=config.atom_lr_multiplier,
+            lr=0.0003,
+            betas=(0.9, 0.95),
+            weight_decay=0.0,
+            foreach=False,
         )
     else:
         optimizer = torch.optim.AdamW(
@@ -304,7 +316,7 @@ def main(argv=None):
         "scheduled_tokens": updates * tokens_per_update,
         "completed_updates": 0,
         "completed_tokens": 0,
-        "optimizer": "AdamW lr3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy for managed atoms",
+        "optimizer": "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config",
         "measurement": "synchronized full optimizer update including accumulation/data transfer; no probes/evaluation in timed samples; eager FP32 TF32off",
         "atom_motion_diagnostics": "CPU copy after each update; instrumented wall time includes sampling. Use separate uninstrumented runs for primary time/memory claims."
         if motion is not None
@@ -381,7 +393,7 @@ def main(argv=None):
             optimizer.zero_grad(set_to_none=True)
             lr = learning_rate(step, horizon_updates)
             for group in optimizer.param_groups:
-                group["lr"] = lr
+                group["lr"] = lr * group.get("lr_scale", 1.0)
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
             tick = time.monotonic()
@@ -426,6 +438,9 @@ def main(argv=None):
                         "elapsed_seconds": time.monotonic() - began,
                         "train_ce": value,
                         "lr": lr,
+                        "optimizer_group_lrs": [
+                            float(group["lr"]) for group in optimizer.param_groups
+                        ],
                         "gradient_norm_before_clip": float(norm),
                         "complete_update_seconds": duration,
                         **(

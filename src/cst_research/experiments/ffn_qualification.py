@@ -47,7 +47,7 @@ def quadrature_factors(layer, p):
     Retains amplitude/center derivatives and piecewise routing. Polar task
     radius derivatives are detached, matching the declared public contract;
     this is not a claim about a different fully differentiable radius operator.
-    This bounded fixture uses shared input/output radius declarations.
+    Read each axis's declared scalar bounds; do not reuse runtime radius decoding.
     """
     import math
 
@@ -60,13 +60,29 @@ def quadrature_factors(layer, p):
     amplitude = float(layer.kernel.scalar("amplitude_max")) * polar[:, 0] / rho
     alpha = ((rho.square() - 1) / 3).clamp(0, 1)
     z = (amplitude / float(layer.kernel.scalar("w_c"))).square()
-    # The fixture is explicitly constructed with birth4, min.5 and max8.
-    lower = 0.5 + 3.5 / (1 + float(layer.kernel.scalar("lower_kappa")) * z)
-    upper = (0.5 + 7.5 * 3 / (3 + z)).clamp_min(1)
-    upper = torch.maximum(upper, lower)
-    radius = torch.exp((1 - alpha) * lower.log() + alpha * upper.log()).detach()
+    scalar_names = {
+        field: name
+        for name, field in layer.kernel.spec.parameterization.width_scalar_names
+    }
     factors = []
-    for count_sites, column in ((layer.in_features, 3), (layer.out_features, 2)):
+    for count_sites, column, side in (
+        (layer.in_features, 3, "input"),
+        (layer.out_features, 2, "output"),
+    ):
+        bounds = {
+            field: float(layer.kernel.scalar(name + "_" + side))
+            for field, name in scalar_names.items()
+        }
+        lower = bounds["minimum"] + (bounds["birth"] - bounds["minimum"]) / (
+            1 + float(layer.kernel.scalar("lower_kappa")) * z
+        )
+        kappa = float(layer.kernel.scalar("kappa"))
+        power = float(layer.kernel.scalar("upper_decay_power"))
+        upper = bounds["minimum"] + (bounds["maximum"] - bounds["minimum"]) * kappa / (
+            kappa + z.pow(power)
+        )
+        upper = torch.maximum(upper.clamp_min(bounds["upper_floor"]), lower)
+        radius = torch.exp((1 - alpha) * lower.log() + alpha * upper.log()).detach()
         rows = []
         for r, center in zip(radius, p[:, column]):
             tile = 1
@@ -105,8 +121,19 @@ def quadrature_factors(layer, p):
     return factors[0], factors[1] * amplitude[None]
 
 
-def independent_quadrature_check():
-    layer = make_cst(16, 64, std=0.02, q=0.25, dtype=torch.float64)
+def independent_quadrature_check(
+    *, q=0.25, amplitude_max=1.0, w_c=0.3, radius_birth=4.0
+):
+    layer = make_cst(
+        16,
+        64,
+        std=0.02,
+        q=q,
+        dtype=torch.float64,
+        amplitude_max=amplitude_max,
+        w_c=w_c,
+        radius_birth=radius_birth,
+    )
     # All eight stratified atoms in this bounded fixture; the full native cases
     # separately cover every atom in their larger declared budgets.
     p = layer.atoms.p.detach()[::32].clone().requires_grad_()
@@ -142,9 +169,31 @@ def compare(got, expected, *, atol=3e-5, rtol=3e-4):
     }
 
 
-def qualify_case(ni, no, rows, *, seed=17, coefficient=8, q=0.0, std=0.02):
+def qualify_case(
+    ni,
+    no,
+    rows,
+    *,
+    seed=17,
+    coefficient=8,
+    q=0.0,
+    std=0.02,
+    amplitude_max=1.0,
+    w_c=0.3,
+    radius_birth=4.0,
+):
     began = time.monotonic()
-    layer = make_cst(ni, no, seed=seed, coefficient=coefficient, q=q, std=std)
+    layer = make_cst(
+        ni,
+        no,
+        seed=seed,
+        coefficient=coefficient,
+        q=q,
+        std=std,
+        amplitude_max=amplitude_max,
+        w_c=w_c,
+        radius_birth=radius_birth,
+    )
     report = layer.initialization_report
     base = torch.randn(
         2, rows, ni * 2, generator=torch.Generator().manual_seed(seed + 1)
@@ -174,6 +223,9 @@ def qualify_case(ni, no, rows, *, seed=17, coefficient=8, q=0.0, std=0.02):
         "coefficient": coefficient,
         "q": q,
         "std": std,
+        "amplitude_max": amplitude_max,
+        "w_c": w_c,
+        "radius_birth": radius_birth,
         "input_noncontiguous": not xx.is_contiguous(),
         "initialization": report,
         "checks": metrics,
@@ -231,17 +283,43 @@ def assert_model_restore(saved, restored, before_load):
     return versions
 
 
-def optimizer_and_resume_check():
+def optimizer_and_resume_check(
+    *,
+    q=0.0,
+    amplitude_max=1.0,
+    w_c=0.3,
+    radius_birth=4.0,
+    atom_lr_multiplier=1.0,
+    coefficient=8,
+):
     from torchcst import CSTOptimizer
 
-    cpu = make_cst(16, 64, seed=151)
+    settings = {
+        "q": q,
+        "amplitude_max": amplitude_max,
+        "w_c": w_c,
+        "radius_birth": radius_birth,
+        "coefficient": coefficient,
+    }
+    cpu = make_cst(16, 64, seed=151, **settings)
     live = copy.deepcopy(cpu).cuda()
     configure_native(live)
     reference = CSTOptimizer(
-        torch.optim.AdamW(cpu.parameters(), lr=0.0003, weight_decay=0.0, foreach=False),
+        torch.optim.AdamW(
+            cpu.parameters(),
+            lr=0.0003 * atom_lr_multiplier,
+            weight_decay=0.0,
+            foreach=False,
+        ),
         model=cpu,
     )
-    optimizer = cst_optimizer(live, lr=0.0003, weight_decay=0.0, foreach=False)
+    optimizer = cst_optimizer(
+        live,
+        atom_lr_multiplier=atom_lr_multiplier,
+        lr=0.0003,
+        weight_decay=0.0,
+        foreach=False,
+    )
     for step in range(2):
         gradient = (
             torch.randn(
@@ -266,11 +344,17 @@ def optimizer_and_resume_check():
     )
     storage.seek(0)
     checkpoint = torch.load(storage, weights_only=False)
-    resumed = make_cst(16, 64, seed=151).cuda()
+    resumed = make_cst(16, 64, seed=151, **settings).cuda()
     before_load = copy.deepcopy(resumed.state_dict())
     resumed.load_state_dict(checkpoint["model"])
     configure_native(resumed)
-    other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
+    other = cst_optimizer(
+        resumed,
+        atom_lr_multiplier=atom_lr_multiplier,
+        lr=0.0003,
+        weight_decay=0.0,
+        foreach=False,
+    )
     other.load_state_dict(checkpoint["optimizer"])
     for model, opt in ((live, optimizer), (resumed, other)):
         model.atoms.p.grad = torch.full_like(model.atoms.p, 0.001)
@@ -287,14 +371,42 @@ def optimizer_and_resume_check():
     }
 
 
-def task_step_and_resume_check():
+def task_step_and_resume_check(
+    *,
+    q=0.0,
+    amplitude_max=1.0,
+    w_c=0.3,
+    radius_birth=4.0,
+    feature_order="contiguous",
+    atom_lr_multiplier=1.0,
+    coefficient=8,
+):
     from .ffn_contract import ModelConfig
     from .ffn_model import LanguageModel
 
-    config = ModelConfig(width=16, layers=2, heads=2, context=8, vocabulary=64)
+    config = ModelConfig(
+        width=16,
+        layers=2,
+        heads=2,
+        context=8,
+        vocabulary=64,
+        q=q,
+        amplitude_max=amplitude_max,
+        w_c=w_c,
+        radius_birth=radius_birth,
+        feature_order=feature_order,
+        atom_lr_multiplier=atom_lr_multiplier,
+        coefficient=coefficient,
+    )
     model = LanguageModel(config, "cst", seed=251).cuda()
     configure_native(model)
-    optimizer = cst_optimizer(model, lr=0.0003, weight_decay=0.0, foreach=False)
+    optimizer = cst_optimizer(
+        model,
+        atom_lr_multiplier=atom_lr_multiplier,
+        lr=0.0003,
+        weight_decay=0.0,
+        foreach=False,
+    )
     tokens = torch.randint(
         0, 64, (2, 9), generator=torch.Generator().manual_seed(252)
     ).cuda()
@@ -335,7 +447,13 @@ def task_step_and_resume_check():
     before_load = copy.deepcopy(resumed.state_dict())
     configure_native(resumed)
     resumed.load_state_dict(state["model"])
-    other = cst_optimizer(resumed, lr=0.0003, weight_decay=0.0, foreach=False)
+    other = cst_optimizer(
+        resumed,
+        atom_lr_multiplier=atom_lr_multiplier,
+        lr=0.0003,
+        weight_decay=0.0,
+        foreach=False,
+    )
     other.load_state_dict(state["optimizer"])
     versions = assert_model_restore(
         model.state_dict(), resumed.state_dict(), before_load
@@ -348,8 +466,10 @@ def task_step_and_resume_check():
         ]
         for n, p in model.named_parameters()
     ]
-    for (n, p), (_, q) in zip(model.named_parameters(), resumed.named_parameters()):
-        a, b = optimizer.state[p], other.state[q]
+    for (n, p), (_, resumed_parameter) in zip(
+        model.named_parameters(), resumed.named_parameters()
+    ):
+        a, b = optimizer.state[p], other.state[resumed_parameter]
         for key in ("exp_avg", "exp_avg_sq", "step"):
             compare(a[key], b[key], atol=3e-7, rtol=3e-5)
     return {
@@ -370,11 +490,24 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--cohort",
-        choices=("small", "target", "expanded", "capacity", "radius"),
+        choices=("small", "target", "expanded", "capacity", "radius", "recipe"),
         default="small",
     )
     parser.add_argument(
         "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
+    )
+    parser.add_argument(
+        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0), default=1.0
+    )
+    parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
+    parser.add_argument(
+        "--radius-birth", type=float, choices=(1.0, 2.0, 4.0, 16.0), default=4.0
+    )
+    parser.add_argument(
+        "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
+    )
+    parser.add_argument(
+        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
     )
     args = parser.parse_args(argv)
     if args.cohort == "radius" and args.q != 0.0:
@@ -392,6 +525,8 @@ def main(argv=None):
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(0),
         "cases": [],
+        "task_recipes": [],
+        "task_checks": [],
         "source_sha256": {
             name: hashlib.sha256(
                 (Path(__file__).parent / name).read_bytes()
@@ -406,7 +541,12 @@ def main(argv=None):
         )
 
     try:
-        result["quadrature"] = independent_quadrature_check()
+        physical = {
+            "amplitude_max": args.amplitude_max,
+            "w_c": args.w_c,
+            "radius_birth": args.radius_birth,
+        }
+        result["quadrature"] = independent_quadrature_check(q=args.q, **physical)
         save()
         print("Independent quadrature passed", flush=True)
         cases = (
@@ -446,18 +586,53 @@ def main(argv=None):
                 for q in (0.0, 0.25, 0.5)
                 for ni, no in ((256, 1024), (1024, 256))
             ]
+        if args.cohort == "recipe":
+            radius_cases = [
+                (ni, no, 128, 8, args.q, 0.02 if ni < no else 0.02 / math.sqrt(8))
+                for ni, no in ((256, 1024), (1024, 256))
+            ]
         for ni, no, tokens, coefficient, q, std in radius_cases:
             result["cases"].append(
-                qualify_case(ni, no, tokens, coefficient=coefficient, q=q, std=std)
+                qualify_case(
+                    ni, no, tokens, coefficient=coefficient, q=q, std=std, **physical
+                )
             )
             save()
             print(
                 f"PASS {ni}->{no}, c{coefficient}, q{q}, B2 T{tokens}, all Atom gradients",
                 flush=True,
             )
-        result["optimizer"] = optimizer_and_resume_check()
-        print("Controlled optimizer and exact serialized resume passed", flush=True)
-        result["task_step"] = task_step_and_resume_check()
+        for q in (0.0, 0.25, 0.5) if args.cohort == "radius" else (args.q,):
+            for coefficient in sorted({row["coefficient"] for row in result["cases"]}):
+                settings = dict(q=q, coefficient=coefficient, **physical)
+                optimizer_check = optimizer_and_resume_check(
+                    **settings, atom_lr_multiplier=args.atom_lr_multiplier
+                )
+                task_check = task_step_and_resume_check(
+                    **settings,
+                    feature_order=args.feature_order,
+                    atom_lr_multiplier=args.atom_lr_multiplier,
+                )
+                recipe = dict(
+                    **settings,
+                    feature_order=args.feature_order,
+                    atom_lr_multiplier=args.atom_lr_multiplier,
+                )
+                result["task_recipes"].append(recipe)
+                result["task_checks"].append(
+                    {
+                        "recipe": recipe,
+                        "optimizer": optimizer_check,
+                        "task_step": task_check,
+                    }
+                )
+                if "optimizer" not in result:
+                    result["optimizer"] = optimizer_check
+                    result["task_step"] = task_check
+                save()
+                print(
+                    f"Controlled optimizer/model resume passed for {recipe}", flush=True
+                )
         result["state"] = "passed"
         save()
         print("Optimizer and serialized resume passed", flush=True)

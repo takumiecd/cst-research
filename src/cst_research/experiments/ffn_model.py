@@ -20,7 +20,17 @@ def parameter_seed(seed, name):
 
 
 def make_cst(
-    d_in, d_out, *, coefficient=8, std=0.02, q=0.0, seed=17, dtype=torch.float32
+    d_in,
+    d_out,
+    *,
+    coefficient=8,
+    std=0.02,
+    q=0.0,
+    seed=17,
+    dtype=torch.float32,
+    amplitude_max=1.0,
+    w_c=0.3,
+    radius_birth=4.0,
 ):
     from torchcst import (
         ChebyshevSpec,
@@ -42,11 +52,11 @@ def make_cst(
             kernel=kernels.product(
                 kernels.cell_mass(ChebyshevSpec(modes=8), merge_factor=2),
                 coordinates=kernels.polar(
-                    amplitude_max=1.0,
-                    w_c=0.3,
+                    amplitude_max=amplitude_max,
+                    w_c=w_c,
                     input_bounds=RadiusBounds(
                         minimum=0.5,
-                        birth=min(4.0, min(d_in, d_out) / 2),
+                        birth=min(radius_birth, min(d_in, d_out) / 2),
                         maximum=min(50.0, min(d_in, d_out) / 2),
                         upper_floor=1.0,
                     ),
@@ -77,15 +87,36 @@ def configure_native(model):
             layer.selector = FixedSelector(plan, registry=make_algorithm_registry())
 
 
-def cst_optimizer(model, **options):
+def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
-    from torchcst import CSTAdamW, FixedSelector, make_algorithm_registry
+    from torchcst import CSTAdamW, CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.polar_update.plans import (
         RADIUS_FLAT_TORUS_FUSED,
     )
 
+    parameters = model.parameters()
+    if atom_lr_multiplier != 1.0:
+        if "lr" not in options:
+            raise ValueError("explicit base LR required for Atom multiplier")
+        atom_ids = {
+            id(module.atoms.p)
+            for module in model.modules()
+            if isinstance(module, CSTLinear)
+        }
+        atoms = [p for p in model.parameters() if id(p) in atom_ids]
+        ordinary = [p for p in model.parameters() if id(p) not in atom_ids]
+        parameters = []
+        if ordinary:
+            parameters.append({"params": ordinary, "lr_scale": 1.0})
+        parameters.append(
+            {
+                "params": atoms,
+                "lr": options["lr"] * atom_lr_multiplier,
+                "lr_scale": atom_lr_multiplier,
+            }
+        )
     return CSTAdamW(
-        model.parameters(),
+        parameters,
         model=model,
         update_selector=FixedSelector(
             RADIUS_FLAT_TORUS_FUSED, registry=make_algorithm_registry()
@@ -99,7 +130,15 @@ class Projection(nn.Module):
         super().__init__()
         if kind == "cst":
             self.map = make_cst(
-                ni, no, coefficient=config.coefficient, std=std, q=config.q, seed=seed
+                ni,
+                no,
+                coefficient=config.coefficient,
+                std=std,
+                q=config.q,
+                seed=seed,
+                amplitude_max=config.amplitude_max,
+                w_c=config.w_c,
+                radius_birth=config.radius_birth,
             )
         else:
             self.map = nn.Linear(ni, no, bias=False)
@@ -113,7 +152,22 @@ class FeedForward(nn.Module):
     def __init__(self, config, kind, seed, index):
         super().__init__()
         self.kind = kind
+        self.register_buffer("hidden_order", None)
+        self.register_buffer("output_order", None)
         if kind != "none":
+            if config.feature_order == "permuted":
+                self.hidden_order = torch.randperm(
+                    config.intermediate,
+                    generator=torch.Generator().manual_seed(
+                        parameter_seed(seed, f"block{index}.hidden_order")
+                    ),
+                )
+                self.output_order = torch.randperm(
+                    config.width,
+                    generator=torch.Generator().manual_seed(
+                        parameter_seed(seed, f"block{index}.output_order")
+                    ),
+                )
             self.up = Projection(
                 config.width,
                 config.intermediate,
@@ -132,10 +186,16 @@ class FeedForward(nn.Module):
             )
 
     def forward(self, x):
+        if self.kind == "none":
+            return torch.zeros_like(x)
+        hidden = F.gelu(self.up(x))
+        if self.hidden_order is not None:
+            hidden = hidden.index_select(-1, self.hidden_order)
+        output = self.down(hidden)
         return (
-            torch.zeros_like(x)
-            if self.kind == "none"
-            else self.down(F.gelu(self.up(x)))
+            output
+            if self.output_order is None
+            else output.index_select(-1, self.output_order)
         )
 
 

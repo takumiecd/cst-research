@@ -3,7 +3,7 @@
   "id": "ffn-feasibility-20261106",
   "title": "CST FFN feasibility with geometric-mean Atom budgets",
   "status": "RUNNING",
-  "status_note": "Initial4090 R2 gates and three-arm1M pilot completed; current radius q0/.25/.5 pilot at512updates has similar DEVCE4.4072/4.3945/4.4144. Owner stopped q0 long run; last saved2.8672M tokens. R3consumer with scoped2048 route passed all12 expanded native cases on4090, not full language-model feasibility. Fresh same-horizon5M mechanism observations precede width/seed expansion. RTX4090only; HIGGS lower-bound/DST campaigns stopped.",
+  "status_note": "R6same-horizon5M observations: DenseDEV2.75219,noFFN3.10782,CSTq.5=3.06285 completed; q.25/q0stillrunning. R7bounded radius/order/AtomLR recipes prepared on CPU only, with strict recipe admission and default-parity fixture. R3scoped2048 native12cases passed; exact selected-recipe task/width gates remain. RTX4090only; no HIGGS/DST/lower-bound restart.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
@@ -82,6 +82,67 @@
       "planned_horizon_tokens": 20000000,
       "track_atom_motion": true,
       "scope": "Exploratory development seed17, not primary timing/memory or confirmation; preserve R2/R5 as separate frozen versions"
+    },
+    "bounded_recipe_followup": {
+      "status": "PREPARED_NOT_NATIVE_QUALIFIED",
+      "width": 256,
+      "coefficient": 8,
+      "seed": 17,
+      "per_arm_token_cap": 1000000,
+      "planned_horizon_tokens": 20000000,
+      "recipes": [
+        {
+          "label": "reference",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "narrow_birth",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 1.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "calibrated_wide",
+          "q": 1.0,
+          "amplitude_max": 4.0,
+          "w_c": 1.2,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "fixed_order",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "permuted",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "atom_lr16",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 16.0
+        }
+      ],
+      "controls": [
+        "dense-contiguous",
+        "dense-permuted",
+        "noFFN"
+      ],
+      "gates": "Exact recipe native all-Atom VJPs both256x1024 directions B2T128, independent quadrature, optimizer/model resume; actual four-block task preflight before pilot. R6must finish and be audited first."
     }
   },
   "evidence": {

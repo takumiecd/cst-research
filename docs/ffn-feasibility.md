@@ -227,3 +227,48 @@ Sampling does not modify Parameters or optimizer state. Synchronized update
 timing excludes sampling; total elapsed time includes it. Instrumented runs
 are not primary speed/memory comparisons: use separately recorded uninstrumented
 passes for those claims. All original R2/R5 artifacts remain pinned.
+
+## Bounded recipe followup (R7 preparation)
+
+After R6 finishes and its evidence is audited, test the following width256,
+c8, seed17 recipes. Every FFN projection stays CST; hard radius minimum.5,
+maximum50, four blocks and the Dense moment targets stay fixed. These are
+practical recipe checks, not an Atom lower-bound search.
+
+| Recipe | q | Amplitude bound / w_c | Radius birth | Feature order | Atom LR multiplier |
+| --- | ---: | --- | ---: | --- | ---: |
+| Reference | 0 | 1 / .3 | 4 | Contiguous | 1 |
+| Narrow birth | 0 | 1 / .3 | 1 | Contiguous | 1 |
+| Calibrated wide | 1 | 4 / 1.2 | 4 | Contiguous | 1 |
+| Fixed ordering | 0 | 1 / .3 | 4 | Permuted | 1 |
+| Faster Atom updates | 0 | 1 / .3 | 4 | Contiguous | 16 |
+
+`radius_birth` changes the weak-amplitude lower curve; it does not lower the
+hard minimum. `permuted` stores fixed independent hidden/output channel orders
+per block, without extra trainable parameters. The same ordering option applies
+to Dense; include a permuted-Dense control. Dense can absorb these permutations
+into its matrices, as checked algebraically on the CPU. Reordering a covariance
+matrix alone was not a trained-model result.
+
+`atom_lr_multiplier` applies to each complete Atom Parameter, including angle
+and center coordinates; ordinary weights/biases retain the base LR. The actual
+group LR also controls the Polar policy's outer time, so this is not an isolated
+amplitude-LR intervention. Record optimizer-group rates, physical motion and
+radius history. Do not infer equal functional updates from equal nominal LR.
+
+First use one-million-token observations with a common20M-token LR/data horizon,
+plus fresh Dense/no-FFN controls; use development CE for exploratory choices.
+Before learning, `ffn_qualification --cohort recipe` must pass both256↔1024
+directions at B2T128, all Atom VJPs, polynomial quadrature, and optimizer/model
+resume for the requested q/bounds/order/LR recipe. Admission checks both actual
+Atom counts and physical scalars, and the full-model recipe. Capacity cohorts
+also check their requested coefficients in optimizer/model resume. The raw
+polynomial oracle now reads declared per-axis scalar bounds rather than assuming
+birth4/max8; an initial preparation failure exposed that old fixture assumption.
+No runtime/backend mathematical contract was changed by correcting that oracle.
+
+R7 remains preparation until these GPU gates and bounded task updates actually
+pass. Keep R6's running source and outputs unchanged. New scalar settings,
+feature ordering or LR multipliers require new qualification; older receipts
+cannot silently admit them. Width/aspect and three-seed checks remain required
+after selecting a working recipe.

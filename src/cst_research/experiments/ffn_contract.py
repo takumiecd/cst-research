@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from math import cos, isqrt, pi
+from math import cos, isfinite, isqrt, pi
 
 
 def atom_count(d_in: int, d_out: int, coefficient: int = 8) -> int:
@@ -40,17 +40,64 @@ class ModelConfig:
     coefficient: int = 8
     q: float = 0.0
     init_std: float = 0.02
+    amplitude_max: float = 1.0
+    w_c: float = 0.3
+    radius_birth: float = 4.0
+    feature_order: str = "contiguous"
+    atom_lr_multiplier: float = 1.0
 
     def __post_init__(self):
         for key, value in asdict(self).items():
-            if key not in ("q", "init_std") and (type(value) is not int or value < 1):
+            if key not in (
+                "q",
+                "init_std",
+                "amplitude_max",
+                "w_c",
+                "radius_birth",
+                "feature_order",
+                "atom_lr_multiplier",
+            ) and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
+        for key in (
+            "q",
+            "init_std",
+            "amplitude_max",
+            "w_c",
+            "radius_birth",
+            "atom_lr_multiplier",
+        ):
+            value = getattr(self, key)
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not isfinite(value)
+            ):
+                raise ValueError(f"finite numeric {key} required")
         if (
             self.width % self.heads
             or not 0 <= self.q <= 1
             or not 0 < self.init_std <= 1
+            or self.amplitude_max <= 0
+            or self.w_c <= 0
+            or not 0.5 <= self.radius_birth <= 50
+            or self.feature_order not in ("contiguous", "permuted")
+            or self.atom_lr_multiplier <= 0
         ):
             raise ValueError("invalid head divisibility, q or initialization scale")
+
+    def recipe(self):
+        return {
+            key: getattr(self, key)
+            for key in (
+                "q",
+                "amplitude_max",
+                "w_c",
+                "radius_birth",
+                "feature_order",
+                "atom_lr_multiplier",
+                "coefficient",
+            )
+        }
 
     @property
     def intermediate(self):
@@ -69,3 +116,27 @@ class ModelConfig:
             * (2 * self.width * self.intermediate + bias),
             "scope": "FFN only; Dense attention and vocabulary weights are excluded",
         }
+
+
+def qualification_covers_model(receipt, config):
+    """Admit both native directions and the full model's actual recipe."""
+    if config.recipe() not in receipt.get("task_recipes", []):
+        return False
+    scalars = {
+        key: getattr(config, key)
+        for key in ("q", "amplitude_max", "w_c", "radius_birth")
+    }
+    for ni, no in (
+        (config.width, config.intermediate),
+        (config.intermediate, config.width),
+    ):
+        if not any(
+            row.get("in") == ni
+            and row.get("out") == no
+            and row.get("coefficient") == config.coefficient
+            and row.get("atoms") == config.atoms_per_projection
+            and all(row.get(key) == value for key, value in scalars.items())
+            for row in receipt.get("cases", [])
+        ):
+            return False
+    return True
