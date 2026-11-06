@@ -82,10 +82,10 @@ CSTは各update後の振幅を読み、累積移動量と始終点の差、半�
 PolarのノルムQ=s²+t²、公開q=(Q−1)/3、接線方向の更新提案δu、step size hに対し、
 標準の活動量更新は次式です。
 
-\[
+$$
 Q_* = \operatorname{clip}_{[1,4]}(Q+\gamma\|\delta u\|^2),\qquad
 Q' = \left[1-\frac{Q_*-1}{Q_*}e^{-4\lambda h}\right]^{-1}.
-\]
+$$
 
 接線速度vを固定してδu=h vとすると、活動量の加算はh²に比例します。既存の
 `time_energy`はこの加算をhで割ります。h=.0003、||v||=.15、gamma1、lambda.1、
@@ -94,6 +94,8 @@ scalar漸化式と一致しました。FP32ではq≈2.65e-9、`time_energy`で�
 小さい角度更新を繰り返してもqがほぼ0のままになり、FP32丸めでさらに活動量が
 小さくなる場合があります。実際のAdam接線速度や学習差の原因を特定したわけでは
 なく、R6学習のclock modeは変更していません。
+これらは同じoperatorソースに対するローカルCPUのTorch2.13.0/Python3.11.15での
+確認であり、remote CUDA updaterのFP32丸め動作を検証したものではありません。
 
 別の限定したCPU初期化gridでは振幅上限とw_cを一緒に変えました。上限4、w_c1.2、
 q1のseed17 up/down fixtureは、同じDense目標に合わせて平均半径31.53/40.54、

@@ -90,19 +90,21 @@ These are synthetic/calibration observations, not language-model results or
 changes to the default recipe. For Polar norm Q=s²+t², public q=(Q−1)/3, tangent
 proposal δu and step size h, the default activity clock uses
 
-\[
+$$
 Q_* = \operatorname{clip}_{[1,4]}(Q+\gamma\|\delta u\|^2),\qquad
 Q' = \left[1-\frac{Q_*-1}{Q_*}e^{-4\lambda h}\right]^{-1}.
-\]
+$$
 
 With fixed tangent velocity v, δu=h v, its activity increment is proportional
-to h². The existing `time_energy` option divides that increment by h. A1000-step
+to h². The existing `time_energy` option divides that increment by h. A 1000-step
 CPU fixture at h=.0003, ||v||=.15, gamma1 and lambda.1 produced q≈6.36e-7 in
 FP64 with `finite_chord`, matching an independent scalar recurrence; FP32 gave
 q≈2.65e-9. `time_energy` gave q≈.00212. Thus a near-zero q can coexist with
 small repeated angular updates, and FP32 rounding can further reduce activity.
 This does not establish the actual Adam tangent velocity or the learning-gap
 cause; no clock mode was changed in the R6 learning runs.
+These local CPU checks used Torch2.13.0/Python3.11.15 against the same operator
+source; they do not validate the remote CUDA updater's FP32 rounding behavior.
 
 A separate bounded CPU initialization grid varied amplitude bound and w_c
 together. With bound4, w_c1.2 and q1, the seed17 up/down fixtures matched the
