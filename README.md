@@ -41,6 +41,9 @@ runs at width128/256/512 and bounded aspect ratios. The owner stopped the
 main-width three-seed family before completion to prioritize short field-LR
 experiments. Seed29 results are retained as incomplete confirmation evidence. Current eager FP32
 runs compress FFN parameters but do not show speed or GPU-memory advantages.
+The [short field-LR comparison](docs/ffn-field-lr-r12-20261107.md) found slower
+learning when only amplitude LR was reduced from16× to1× at fixed center rates
+and Polar outer time. A bounded intermediate-rate check precedes public API work.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the

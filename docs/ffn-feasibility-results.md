@@ -430,3 +430,7 @@ per-arm summary/curves, independent audit results and plotting scripts. R5 raw
 JSON/curve hashes were verified against the terminal manifest; trained R5
 checkpoint audit remains separate. Bulk checkpoints stay on the GPU host with
 their hashes. PNG and SVG here are derived figures, not raw evidence.
+
+## Short field-rate comparison (R12)
+
+The [audited amplitude/center pilot](ffn-field-lr-r12-20261107.md) completed all4arms at N256seed17/999424tokens, with16trainedCSTVJPs and4task-resume audits passed. All16 DEVCE3.67351 versus amplitude1/centers16 DEVCE3.84731: the amplitude-only reduction worsened short-budget learning and missed the prespecified0.03 API gate. Dense3.58196/noFFN4.03015. Next is one bounded amplitude8 condition with the same outer time; the public API remains unimplemented. The explicit2048 operator was merged through torchcst PR150 as9c8894, retaining tested2b587 ancestry; experimental source snapshots remain unchanged.

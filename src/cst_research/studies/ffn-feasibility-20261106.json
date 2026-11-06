@@ -295,7 +295,7 @@
     "relative_path": "ffn-feasibility-20261106"
   },
   "field_lr_development": {
-    "state": "PREPARED_NOT_GPU_QUALIFIED_NOT_TRAINED",
+    "state": "COMPLETED_AUDITED_RETRIEVED_API_GATE_NOT_PASSED",
     "owner_authorization": "Stop six unstarted long cases; short field comparison before API. Owner reaffirmed4090 and authorized API if short results look good.",
     "protocol": "docs/ffn-field-lr.md",
     "shape": {
@@ -325,6 +325,36 @@
       }
     },
     "API_gate": "All correctness gates pass; separated arm useful vs noFFN and final DEVCE <= all16+0.03. Confirmation not used for next-rate selection. No publicdefault adoption.",
-    "restriction": "One4090 scientific worker; new frozen consumer; old70e/2b snapshots unchanged. Cancelled long cases remain stopped; no lower-bound orAttention study."
+    "restriction": "One4090 scientific worker; new frozen consumer; old70e/2b snapshots unchanged. Cancelled long cases remain stopped; no lower-bound orAttention study.",
+    "consumer": "834f22a569aaa2948edd052df9dce8aaa1ce95d2",
+    "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "DEV_CE": {
+      "dense": 3.581960193812847,
+      "none": 4.03014962375164,
+      "all16": 3.6735053956508636,
+      "amplitude1_centers16": 3.847311906516552
+    },
+    "DEV_gap_amp1_minus_all16": 0.17380651086568832,
+    "API_gate_passed": false,
+    "report": "docs/ffn-field-lr-r12-20261107.md",
+    "trained_CST_VJPs": 16,
+    "serialized_task_resume_arms": 4,
+    "max_parameter_resume_error": 0,
+    "archive_sha256": "34ddda1866cf15e3496cd176a87333877fafdc048ec39ff1c54b8066c74b6ff6",
+    "bounded_amplitude8_followup": {
+      "state": "PREPARED_NOT_QUALIFIED_OR_TRAINED",
+      "peak_amplitude_LR": 0.0024,
+      "peak_centers_and_outer_LR": 0.0048,
+      "seed": 17,
+      "width": 256,
+      "actual_tokens": 999424,
+      "horizon": 20000000,
+      "fresh_controls": [
+        "dense",
+        "none"
+      ],
+      "quality_baseline": "Completed R12all16, codeidentity proofrequired before reuse. No pairedcrossjobtimeclaim.",
+      "gate": "DEV<=R12all16+0.03 andusefulvsfreshnone andallcorrectness. No broadsearch/defaultadoption."
+    }
   }
 }

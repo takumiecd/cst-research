@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from .ffn_contract import ModelConfig, learning_rate
-from .ffn_field_lr import FieldRateOptimizer, FieldRateRecipe
+from .ffn_field_lr import FieldRateOptimizer, recipe_for
 from .ffn_model import LanguageModel, configure_native, cst_optimizer, make_cst
 from .ffn_qualification import _assert_tree_equal, compare
 from .ffn_run import token_batch, verify_data
@@ -22,14 +22,6 @@ from .ffn_run import token_batch, verify_data
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def recipe_for(arm):
-    if arm not in ("all16", "amplitude1-centers16"):
-        raise ValueError("unknown field LR arm")
-    return FieldRateRecipe(
-        amplitude=0.0003 if arm == "amplitude1-centers16" else 0.0048
-    )
 
 
 def controlled_models(recipe, *, device="cuda"):
@@ -186,6 +178,12 @@ def main(argv=None):
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--data-manifest-sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--arms",
+        nargs="+",
+        choices=("all16", "amplitude1-centers16", "amplitude8-centers16"),
+        default=["all16", "amplitude1-centers16"],
+    )
     args = parser.parse_args(argv)
     assert digest(args.data / "manifest.json") == args.data_manifest_sha256
     assert torch.__version__ == "2.11.0+cu126"
@@ -224,7 +222,7 @@ def main(argv=None):
 
     save()
     try:
-        for arm in ("all16", "amplitude1-centers16"):
+        for arm in args.arms:
             recipe = recipe_for(arm)
             result["arms"][arm] = {
                 "recipe": recipe.manifest(),

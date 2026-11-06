@@ -58,3 +58,25 @@ be considered using DEV evidence. No public `field_lrs` API or default is adopte
 by this research adapter. The intended public interface uses absolute field
 rates, semantic fields declared by parameterization/geometry, and explicit
 scheduler/checkpoint semantics rather than raw tensor column names.
+
+## Audited short result and bounded follow-up
+
+R12 completed all four arms and their trained audits. Final DEV CE was Dense
+3.58196, no FFN4.03015, all16 CST3.67351 and amplitude1/centers16 CST3.84731.
+Reducing amplitude proposal LR to1× worsened DEV CE by0.17381 relative to all16;
+the prespecified0.03 API gate did not pass. This is slower learning within the
+observed budget, not proof of a worse converged optimum. Both CST arms remain
+better than no FFN. Correctness passed: sixteen trained projection VJPs, four
+serialized next-task-step audits and all four parameter resume errors0. See the
+[observation report](ffn-field-lr-r12-20261107.md) for curves and provenance.
+
+Next test one intermediate condition: amplitude8× (absolute peak0.0024), both
+centers16× and outer time16×. Keep N256/seed17/976updates and the same20M horizon.
+Freeze new source and qualify this exact recipe before learning; retain failed
+R12 evidence and the negative amplitude1 result. Run fresh Dense/no-FFN controls;
+reuse the completed R12 all16 quality baseline only after proving unchanged
+model/data/optimizer class implementations. Treat cross-job timing as an
+observation, not a paired performance claim. No need to rerun another all16
+training merely for unchanged code. The same DEV0.03/usefulness/correctness gate
+applies before API implementation; this is a bounded development follow-up,
+not an exhaustive LR search or a default/optimality claim.

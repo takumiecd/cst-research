@@ -46,6 +46,18 @@ class FieldRateRecipe:
         }
 
 
+def recipe_for(arm):
+    """Declared short-study rates; not an optimality claim or public default."""
+    rates = {
+        "all16": 0.0048,
+        "amplitude1-centers16": 0.0003,
+        "amplitude8-centers16": 0.0024,
+    }
+    if arm not in rates:
+        raise ValueError("unknown field LR arm")
+    return FieldRateRecipe(amplitude=rates[arm])
+
+
 class FieldRateOptimizer(CSTOptimizer):
     """Restricted experimental wrapper, retaining one Parameter/state per Atom table.
 

@@ -167,7 +167,10 @@ def main(argv=None):
     parser.add_argument(
         "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
     )
-    parser.add_argument("--field-lr-arm", choices=("all16", "amplitude1-centers16"))
+    parser.add_argument(
+        "--field-lr-arm",
+        choices=("all16", "amplitude1-centers16", "amplitude8-centers16"),
+    )
     parser.add_argument("--field-qualification", type=Path)
     parser.add_argument("--field-qualification-sha256")
     parser.add_argument("--seed", type=int, default=17)
@@ -228,7 +231,7 @@ def main(argv=None):
         )
     field_recipe = None
     if args.field_lr_arm is not None:
-        from .ffn_field_lr import FieldRateRecipe
+        from .ffn_field_lr import recipe_for
 
         if args.kind != "cst" or requested.atom_lr_multiplier != 16.0:
             parser.error("field LR arm requires CST with outer Atom multiplier16")
@@ -237,9 +240,7 @@ def main(argv=None):
             or sha(args.field_qualification) != args.field_qualification_sha256
         ):
             parser.error("field LR arm requires its exact separate qualification")
-        field_recipe = FieldRateRecipe(
-            amplitude=0.0003 if args.field_lr_arm == "amplitude1-centers16" else 0.0048
-        )
+        field_recipe = recipe_for(args.field_lr_arm)
         field_qualification = json.loads(args.field_qualification.read_text())
         if (
             field_qualification["state"] != "passed"
