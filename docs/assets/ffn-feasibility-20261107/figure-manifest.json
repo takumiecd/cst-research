@@ -1,0 +1,11 @@
+{
+  "scope": "Derived figures. External scripts and raw curves remain under the study evidence locator; no raw checkpoint is copied into Git.",
+  "sha256": {
+    "pilot-r2-learning-curves.png": "31f1edf68f02611428c35ce57df1db65b35dff41d167c6f8fa659a1f41164e26",
+    "pilot-r2-learning-curves.svg": "87e6e649aecf92a939aaab187a46f87105352274a460573d8444adb0c0437780",
+    "radius-r5-learning-curves.svg": "4c83857c69fc5d11534fed60757277cdad5582b77d0294b52c12b0200fcb20b7",
+    "radius-r5-learning-curves.png": "38ca29f979472b99fce12b6e72cc0c2eb963135127f31d6c39e39cd70f481fd8",
+    "external-script:plot-pilot-r2.py": "5ec8c716e8c7cf840c64d43d3ed9165ff4f8d4fe78e17ab3356a50c5a22c1aed",
+    "external-script:plot-radius-r5.py": "41a8d66b49e92549e026b2f51f26db9d124dc403f0d4189e49008bc9966b4869"
+  }
+}

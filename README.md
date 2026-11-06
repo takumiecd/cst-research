@@ -33,6 +33,10 @@ The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 usefulness with a linear Atom budget and bounded aspect-ratio changes; it does
 not search for the minimum coefficient.
 
+[Initial results and learning curves](docs/ffn-feasibility-results.md) separate
+the three-arm pilot, radius diagnosis, numerical qualification and remaining
+work. Useful CST FFNs and fixed-coefficient width scaling are not yet confirmed.
+
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
    FFN projections in a small language model with CST and check whether it learns
