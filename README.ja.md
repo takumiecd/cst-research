@@ -107,3 +107,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 [幅を考慮したamplitude初期化実験](docs/higgs-width-amplitude-init.ja.md)では、gain・LayerNormなしの生の`0.1/sqrt(A/N)`を、従来初期化と以前の固定gain対照と比較します。GPUの証拠はまだありません。
 
 [生のamplitudeをDenseのRMSへ合わせる追加実験](docs/higgs-rms-amplitude-init.ja.md)は、学習前のamplitudeを校正し、実行時gain1・正規化NONEを保ちます。GPUの証拠はまだありません。
+
+[He／Xavier初期化pilot](docs/higgs-fan-initialization.ja.md)はデータ不要のAtom二乗平均目標と小文字`q`の明示指定を使い、新規の対応するDense／CSTを比較します。CPU準備・native検証・学習結果・公開default採用は区別します。

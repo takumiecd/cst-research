@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "id": "higgs-fan-initialization-20261106",
+  "title": "Data-free He/Xavier CST initialization with configurable q",
+  "status": "PLANNED",
+  "status_note": "New source-pinned paired Dense/CST H8 pilots; native qualification and learning pending.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_fan_initialization_run",
+  "protocol_source_path": "docs/higgs-fan-initialization.md",
+  "protocol": {
+    "cohorts": {
+      "rtx4090": {
+        "version": "higgs-fan-initialization-v1",
+        "scheme": "he",
+        "q_init": 0.0,
+        "arms": [
+          "dense-fan",
+          "cst-fan"
+        ],
+        "width": 1024,
+        "hidden_layers": 8,
+        "internal_maps": 7,
+        "atoms_per_CST_map": 4096,
+        "seed": 17,
+        "internal_initialization": "Dense normal He fan_in/ReLU or Xavier gain1; CST bounded symmetric Gaussian amplitudes, conditional sign-energy target matches same Dense ensemble moment",
+        "ordinary_input_output": "unchanged paired legacy initialization; only seven internal maps change",
+        "target_energy": 2048.0000000000005,
+        "q_parameter": "Polar alpha_init; lowercase q/s/t; distinct from Atom density",
+        "calibration": "no data or Dense reference; FP64 atom factor norm products of actual FP32 candidate Atoms; error<=0.005",
+        "symmetric_amplitude_ratio_clip": [
+          -0.999999,
+          0.999999
+        ],
+        "maximum_scale": 32.0,
+        "distribution_scope": "clipped amplitude Gaussian is not an exact Gaussian weight distribution; all clip fractions retained",
+        "runtime_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "normalization": "none",
+        "epochs": 1,
+        "task_updates_per_arm": 25000,
+        "total_task_updates": 50000,
+        "batch_size": 4,
+        "learning_rate": 0.0003,
+        "position_multiplier": 1,
+        "eps": 1e-08,
+        "optimizer": "stockq1 AdamW/CSTAdamW; ordinary/amplitude decay.01 rawAtom decay0",
+        "dtype": "FP32",
+        "TF32": false,
+        "execution": "eager",
+        "milestones": [
+          0,
+          1000,
+          5000,
+          10000,
+          15000,
+          20000,
+          25000
+        ],
+        "selection": "fixed final25000, no HPO/bestDEV/earlystop",
+        "data": "TRAIN100k rows[1000000,1100000), DEV50k[1100000,1150000)",
+        "qualification": "fresh all-parameter Y/dX/dP FP64 native VJP dy1/dy1e24,31Atom quadrature,scalarAdam,8bare vs4load4 vsobservedfirst+7 equality;40 synthetic separate",
+        "probes": "same first TRAIN B4 copied probes at all seven milestones; no probe updates",
+        "automatic_followup": false,
+        "heldout_or_officialtest_scored": false,
+        "adoption": "exploratory only; no public default adoption or quality/scaling guarantee"
+      },
+      "a100": {
+        "version": "higgs-fan-initialization-v1",
+        "scheme": "xavier",
+        "q_init": 0.0,
+        "arms": [
+          "dense-fan",
+          "cst-fan"
+        ],
+        "width": 1024,
+        "hidden_layers": 8,
+        "internal_maps": 7,
+        "atoms_per_CST_map": 4096,
+        "seed": 17,
+        "internal_initialization": "Dense normal He fan_in/ReLU or Xavier gain1; CST bounded symmetric Gaussian amplitudes, conditional sign-energy target matches same Dense ensemble moment",
+        "ordinary_input_output": "unchanged paired legacy initialization; only seven internal maps change",
+        "target_energy": 1024.0,
+        "q_parameter": "Polar alpha_init; lowercase q/s/t; distinct from Atom density",
+        "calibration": "no data or Dense reference; FP64 atom factor norm products of actual FP32 candidate Atoms; error<=0.005",
+        "symmetric_amplitude_ratio_clip": [
+          -0.999999,
+          0.999999
+        ],
+        "maximum_scale": 32.0,
+        "distribution_scope": "clipped amplitude Gaussian is not an exact Gaussian weight distribution; all clip fractions retained",
+        "runtime_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "normalization": "none",
+        "epochs": 1,
+        "task_updates_per_arm": 25000,
+        "total_task_updates": 50000,
+        "batch_size": 4,
+        "learning_rate": 0.0003,
+        "position_multiplier": 1,
+        "eps": 1e-08,
+        "optimizer": "stockq1 AdamW/CSTAdamW; ordinary/amplitude decay.01 rawAtom decay0",
+        "dtype": "FP32",
+        "TF32": false,
+        "execution": "eager",
+        "milestones": [
+          0,
+          1000,
+          5000,
+          10000,
+          15000,
+          20000,
+          25000
+        ],
+        "selection": "fixed final25000, no HPO/bestDEV/earlystop",
+        "data": "TRAIN100k rows[1000000,1100000), DEV50k[1100000,1150000)",
+        "qualification": "fresh all-parameter Y/dX/dP FP64 native VJP dy1/dy1e24,31Atom quadrature,scalarAdam,8bare vs4load4 vsobservedfirst+7 equality;40 synthetic separate",
+        "probes": "same first TRAIN B4 copied probes at all seven milestones; no probe updates",
+        "automatic_followup": false,
+        "heldout_or_officialtest_scored": false,
+        "adoption": "exploratory only; no public default adoption or quality/scaling guarantee"
+      }
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-fan-initialization-20261106",
+    "availability": "CPU preparation; GPU and independent audit pending"
+  }
+}
