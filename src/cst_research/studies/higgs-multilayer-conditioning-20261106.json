@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "higgs-multilayer-conditioning-20261106",
+  "title": "HIGGS H8 scale versus bare LayerNorm: fresh paired A100 diagnostic",
+  "status": "PLANNED",
+  "preparation_status": "PREPARED",
+  "status_note": "Newsix-case CPUimplementation/protocol only. FreshA100 nativeadmission and150k taskupdates NOTexecuted. BareLN separatedfromfixedgain+LN; no publicruntime/default adoption.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
+  "runner_entrypoint": "cst_research.experiments.higgs_multilayer_conditioning_driver",
+  "protocol_source_path": "docs/higgs-multilayer-conditioning.md",
+  "implementation_boundary": {
+    "runtime": "unchanged externalpublic975 +stockq1, no numericalruntime copy orGraphguard changes",
+    "consumer": "new6H8 model/calibration/manualLNFP64reverse/observation/state/qualification/diagnosticloop; canonicalflatidentity sourceacceptedstate reports notintermediatecapture",
+    "prior_source": "allscientificmodules and11registries unchanged;119/120oldfiles exact, sole registry-counttest11to12 metadataexception reconstructible"
+  },
+  "protocol": {
+    "version": "higgs-multilayer-conditioning-v1",
+    "study_id": "higgs-multilayer-conditioning-20261106",
+    "status": "PREPARED_NOT_EXECUTED",
+    "cases": [
+      "dense-none",
+      "dense-bare-ln",
+      "cst-none",
+      "cst-fixed-gain",
+      "cst-bare-ln",
+      "cst-ln-gain"
+    ],
+    "width": 1024,
+    "hidden_layers": 8,
+    "internal_biasfree_CST_maps": 7,
+    "atoms_per_CST_map": 4096,
+    "seed": 17,
+    "data_sha256": "58127b3aefd643d209ee22045dc9df83399f0d043100ddb583b733e193ac15c3",
+    "data_manifest_sha256": "530db950794c74b665d79251d9353f7cb9f354ae8c16901f50f7b66450488526",
+    "runtime_pin_sha256": "35016be129960614d829affbea959797ae8d035b5ea41197b6803ae963709f55",
+    "device": "exactA10080GBPCIeMIG3g.40gb/42SM/CC8.0/42144366592B",
+    "normalization": "featurewise no-affineLN epsilon1e-5, orNONE; ordinaryDenseIO trainable",
+    "gains": "bothCSTgainarms sequentiallymatch SAME initialDense-stockpreReLURMS onfixedfirst256TRAINfeatures; positiveFP32[1e-6,1e6], no labels/DEV; zero/nonfinite/outofbounds failwithoutclamp",
+    "initialization": "unchanged public975 and explicitlegacy ordinary; pairedrawparams/IO; noamp-init intervention",
+    "optimizer": "stockq1 lr.0003 betas(.9,.999) eps1e-8 ordinaryWD.01 amplitudeWD.01 rawatomWD0; FP32TF32off eagerB4",
+    "epochs": 1,
+    "task_updates_per_case": 25000,
+    "total_task_updates": 150000,
+    "orders": "actualsavedCPUtorchrandperm100000 seed117, samefor6cases",
+    "milestones": [
+      0,
+      1000,
+      5000,
+      10000,
+      15000,
+      20000,
+      25000
+    ],
+    "milestone_evaluation": "FULLTRAIN100k+DEV50k atsameexactstate, outsidelearningblocks; no point0backward",
+    "selection": "fixedfinal25000 ONLY; no bestDEV/earlystop/HPO/autofollowup",
+    "qualification": {
+      "scope": "newactual6H8 fullY/dX/all11parameterFP64manualreverse includingexactLN/gain +unchanged975chunkedallatoms256; independentquad31/scalarAdam beforetaskupdates",
+      "scales": [
+        1.0,
+        1e+24
+      ],
+      "normal_elementwise": "3e-5+3e-4*abs(ref), mandatory",
+      "relative_fields_and_packed_columns": "FP64stable relativeL2 andmaxerror/refmax<=3e-4; exactzero strict; normalroundedzerotails disclosed notwaived",
+      "amplified_material": "dX andallpackedcolumns anyabs(ref)>3e-5+3e-4abs(ref) AND anyactualnonzero; amplifiedcomponentfailures preserveddiagnostic",
+      "amplified_optimizer_step": false,
+      "updates_per_case": 20,
+      "total_synthetic_updates": 120,
+      "trajectory": "8ordinary vs4+native7ownerload+4, andobservedfirst+7ordinary vs8ordinary exactcorebytes; nooptimizer monkeypatch/backwardhooks"
+    },
+    "first_task_step": "actualfirstB4 CEbackward/rawP.grad +unchangedoptimizer.step acceptedP/m/v/clocks/poststep.grad; retainedinputs/labels/order/intermediateforward/upstreamgrads",
+    "denominator": "accepted-state/source-FP32opmath reconstruction separatelyscalarqualified, NOT actualnativeintermediate; canonicalFlatTorus prepare/transportidentity; accepteddisplacement includesretraction/amplitudeWD",
+    "endpoint_probe": "samefirstB4 onindependentloadedfinalcopy; onebackward,nooptimizerstep; allothercopystateexact andoriginalcheckpoint/model/optimizer/grad unchanged",
+    "native_load": "exact7actualowners2/4/6/8/10/12/14 max(before+1,saved) only, everyothercorebyte literal; evalbaseline actualPOSTLOAD",
+    "timing": "DIAGNOSTIC notbaselineperformancebenchmark; firstupdate/observation/eval/diagnostics/calibration/save/hash separated; baretrainingblocks includeprescribed1000step sync/logging, reportscomponents nonadditive",
+    "rawretention": "qualifiedinitial0/4/8/resumed8/observer8; actualfirsttaskraw/fullfinalcheckpoint; milestonefullpredictions+typedstatefingerprints notfullintermediateoptimizercheckpoint; no independentrawmidstate replayclaim",
+    "raw_cap_bytes": 6442450944,
+    "JSON_cap_bytes": 67108864,
+    "retention_route": "immutablefullA100raw; compactproofs/predictionsretrieval; eithercompressedlocalactualspacefits OR separatepeerCPUauditorserver-sideCUDAoff/rootpinnedcode; no mandatorywholelocaldecompressedduplicate",
+    "heldout_test_or_original_confirmation_evaluated": false,
+    "formal_NI_Atomorder_capacity_or_LNnecessity_claim": false,
+    "automatic_retry_resume_or_advance": false
+  },
+  "timing": "DIAGNOSTIC notthroughputcomparison tooldB. Prescribedblocklogging,firsttaskobservation,calibration,qualification,eval,checkpoint/probe clocks explicit/nonadditive.",
+  "memory": "trainingintervalpeaks beforeeval, residentarrays/model/optimizer/nativebuffers/reservedcache, notprocessmemory.6GiBraw/64MiBJSON planning; fullserverimmutable raw +compactretrieval orCPUremoteauditorCUDAoff option.",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "higgs-multilayer-conditioning-20261106",
+    "availability": "CPU source/tests/preflight preparation only; actualnative/quality evidence pending"
+  }
+}
