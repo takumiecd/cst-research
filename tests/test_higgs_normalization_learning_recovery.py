@@ -140,7 +140,7 @@ class RecoveryPolicy(unittest.TestCase):
             / "src/cst_research/studies/higgs-normalization-learning-recovery-20261106.json"
         )
         study = json.loads(path.read_text())
-        self.assertEqual(study["status"], "PLANNED")
+        self.assertEqual(study["status"], "COMPLETED")
         self.assertEqual(study["preparation_status"], "PREPARED")
         self.assertEqual(study["protocol"], recovery.protocol())
         self.assertEqual(study["parent_original_exit_code"], 1)

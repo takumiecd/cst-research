@@ -45,8 +45,8 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 | [固定output gain](docs/higgs-depth-gain.ja.md) | COMPLETED | 探索的3条件、部分改善後もDenseに劣る |
 | [Covertype転移](docs/covertype-transfer-results.ja.md) | COMPLETED | 9モデル固定・heldoutを1回評価、CST両密度はDenseに劣る |
 | [8更新の正規化診断](docs/higgs-depth-normalization-diagnostic-results.ja.md) | COMPLETED | 9×8 task更新の機構診断。品質選択・既定値採用なし |
-| [正規化の3 epoch追試](docs/higgs-depth-normalization-learning.ja.md) | PLANNED / PREPARED | 開発データのみの9条件。資格は継承し新たなprefix一致確認が必須。学習結果は未取得 |
-| [正規化load契約のrecovery](docs/higgs-normalization-learning-recovery.ja.md) | PLANNED / PREPARED | Parent未完了は維持。admit済み300kを再利用し、選択state修正後に残375kだけを実行する準備 |
+| [正規化の3 epoch追試](docs/higgs-depth-normalization-learning.ja.md) | STOPPED | 元ea0はmain300k後にexit1・未完了を維持。保持証拠の再利用は別recovery系譜だけ |
+| [正規化load契約のrecovery](docs/higgs-depth-normalization-learning-results.ja.md) | COMPLETED | 探索的9条件を結合完了。A104のRMS/LN救済後もDenseに劣り、正規化の既定採用なし |
 | [線形Atom数：Stage B結果](docs/higgs-linear-atom-results.ja.md) | COMPLETED（限定Stage B） | seed17の1 epoch全16終点。H8 CSTはbias-only、Atomオーダ・最小cの主張なし |
 
 [観測結果と限界](docs/bounded-validation-results.ja.md)で、完了した座標・深さ・gain結果を
