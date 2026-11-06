@@ -52,7 +52,7 @@ revalidation. See the [integration provenance](docs/integration-provenance.md).
 | [Depth/layer position](docs/higgs-depth-position.md) | COMPLETED |13 development-only cases; scope-limited stall evidence |
 | [Fixed output gain](docs/higgs-depth-gain.md) | COMPLETED |3 exploratory arms; partial rescue remains below Dense |
 | [Covertype transfer](docs/covertype-transfer-results.md) | COMPLETED | Nine sealed models, one heldout assessment; both CST densities below Dense |
-| [Eight-update normalization diagnostic](docs/higgs-depth-normalization-diagnostic.md) | PLANNED / PREPARED | Eight fixed cases; no GPU/task update or quality selection yet |
+| [Eight-update normalization diagnostic](docs/higgs-depth-normalization-diagnostic-results.md) | COMPLETED | Nine cases ×8 task updates; mechanism evidence, no quality selection or default adoption |
 
 The [observations and limitations](docs/bounded-validation-results.md) bind the
 completed coordinate/depth/gain results to their actual measured commits and raw

@@ -2,8 +2,9 @@
 
 English (canonical) | [日本語](higgs-depth-normalization-diagnostic.ja.md)
 
-Study `higgs-depth-normalization-diagnostic-20261106` is **PREPARED, not executed**
-(registry status PLANNED). This post-observation mechanism probe adds no learning
+Study `higgs-depth-normalization-diagnostic-20261106` is **COMPLETED** within its
+bounded scope; see the [results and independent admission](higgs-depth-normalization-diagnostic-results.md).
+The design below is the unchanged scientific protocol frozen in measured source4f. This post-observation mechanism probe adds no learning
 curve, density/LR search, quality-selection claim or automatic followup to the
 completed f6/69 pilots or the separate running HIGGS confirmation families.
 Current evidence motivates scale and sign-energy questions, not a proven cause
@@ -165,7 +166,7 @@ exact hardware tuple and actual runtime pin; root's launcher separately verifies
 the requested Hub profile ID. Device properties alone do not attest that profile.
 The scientific nine cases, eight updates each, calibration, math, tolerances and
 all admission gates are unchanged. The preceding review inventory/source are
-preserved; no GPU execution has occurred.
+preserved; no scientific GPU execution had occurred at that resource amendment.
 
 ```sh
 python -B src/cst_research/experiments/higgs_depth_normalization_driver.py --consumer-commit FULL_FROZEN_SHA --runtime-sha256 ACTUAL_RUNTIME_FILE_SHA --cache-root ISOLATED_JOB_CACHE --output FRESH_ATTEMPT_OUTPUT --timeout 3600

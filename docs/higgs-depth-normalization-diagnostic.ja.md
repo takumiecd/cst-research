@@ -2,8 +2,9 @@
 
 [English](higgs-depth-normalization-diagnostic.md) | 日本語
 
-study `higgs-depth-normalization-diagnostic-20261106` は**準備済み・未実行**です
-（registry statusはPLANNED）。観測後の機構診断であり、完了済みf6／69 pilotや別途
+study `higgs-depth-normalization-diagnostic-20261106` の限定実行は**COMPLETED**です。
+[結果と独立admission](higgs-depth-normalization-diagnostic-results.ja.md)を参照してください。
+以下は実行source4fで凍結した設計であり、数理protocolを変更していません。観測後の機構診断であり、完了済みf6／69 pilotや別途
 進行中のHIGGS確認実験に学習曲線、密度／LR探索、品質選択、自動追試を追加しません。
 スケールと符号別エネルギーの疑問を調べるためであり、A104停滞の原因やLayerNormの
 効果が証明されたわけではありません。
@@ -148,7 +149,7 @@ Torch2.11.0+cu126／CUDA12.6／Triton3.6.0を必須とし、rootが隔離環境�
 です（Python3.12.9／NumPy2.0.2／driver570.133.20）。driverは正確なhardware tupleと実runtime pinを検証し、Hubで
 要求したprofile ID自体はrootのlauncherが別途確認します。GPU特性だけでprofileを
 証明したとは扱いません。科学的9 case・各8更新、校正、数式、許容差、全gateは
-変更しません。前のreview inventoryと変更前ソースを保存しており、GPUは未実行です。
+変更しません。前のreview inventoryと変更前ソースを保存しており、この資源変更時点では科学的GPU実行はまだありませんでした。
 
 ```sh
 python -B src/cst_research/experiments/higgs_depth_normalization_driver.py --consumer-commit FULL_FROZEN_SHA --runtime-sha256 ACTUAL_RUNTIME_FILE_SHA --cache-root ISOLATED_JOB_CACHE --output FRESH_ATTEMPT_OUTPUT --timeout 3600

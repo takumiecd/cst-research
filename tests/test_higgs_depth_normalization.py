@@ -328,14 +328,14 @@ class DiagnosticDriverTests(unittest.TestCase):
             with self.assertRaises(ProcessLookupError):
                 os.kill(pid, 0)
 
-    def test_registry_matches_prepared_nine_case_protocol(self):
+    def test_registry_matches_measured_nine_case_protocol(self):
         path = (
             Path(__file__).resolve().parents[1]
             / "src/cst_research/studies/higgs-depth-normalization-diagnostic-20261106.json"
         )
         registered = json.loads(path.read_text())
         self.assertEqual(registered["protocol"], n.protocol())
-        self.assertEqual(registered["status"], "PLANNED")
+        self.assertEqual(registered["status"], "COMPLETED")
         self.assertEqual(registered["preparation_status"], "PREPARED")
 
     def test_existing_cache_binding_mismatch_is_rejected_without_rewrite(self):

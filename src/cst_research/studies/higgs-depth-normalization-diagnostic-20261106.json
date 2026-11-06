@@ -2,9 +2,9 @@
   "schema_version": 1,
   "id": "higgs-depth-normalization-diagnostic-20261106",
   "title": "HIGGS eight-update scale-versus-centering diagnostic",
-  "status": "PLANNED",
+  "status": "COMPLETED",
   "preparation_status": "PREPARED",
-  "status_note": "Source/CPU preparation only. No GPU execution, task update or independent raw audit for this study yet. Existing measured sources and primary studies remain unchanged.",
+  "status_note": "All9 fixed cases completed exactly8 true task updates each in one RTX4090 attempt; all151 retained files and required source/oracle/resume/native-step/state gates passed independent CPU admission. First-update mechanism evidence only: no epoch-quality, heldout, minimum-alpha, throughput or default-adoption claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "97580582ed28c4e494bf5c2656bbe94a85c544c3",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/141",
@@ -110,7 +110,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "higgs-depth-normalization-diagnostic-20261106",
-    "availability": "PREPARED; source and CPU evidence only, actual GPU gate/probe/audit pending"
+    "availability": "External151-file retained attempt, independent full and detailed CPU reports, source-bound figure/CSVs, stable-torus reporting erratum and preserved reader/amplified failures; no raw evidence copied into Git."
   },
   "resource_preparation_amendment": {
     "before_first_GPU_execution": true,
@@ -126,6 +126,32 @@
     "scientific_protocol_changed": false,
     "source20_and_prior7studies_changed": false,
     "actual_runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
-    "scientific_execution_completed": false
+    "scientific_execution_completed": false,
+    "scope": "Historical pre-GPU resource approval, retained from measured4f; see execution for completed attempt."
+  },
+  "preparation_status_scope": "Historical preparation snapshot at measured4f; current execution completion is recorded separately below.",
+  "execution": {
+    "measured_consumer_commit": "4f777a5f1ef38cca7031cf9c637d0fa6fc0d5e7b",
+    "measured_consumer_manifest_sha256": "aa942f52f88d9a26a950eb51203df948216bbb50fb437c410b9dc8d9b86bbd53",
+    "measured_protocol_sha256": "0a267cc7fe634426ada6a515bdddf3459b7f7fa2d34797b84d38f65860cc3d33",
+    "runtime_pin_sha256": "1e7ecf23d0b4fa74f823178406a8a1bcda7020f504ce34fe62e0e7d63bdfe23b",
+    "device": "NVIDIA GeForce RTX 4090",
+    "cases": 9,
+    "true_task_updates_per_case": 8,
+    "driver_exit_code": 0,
+    "retained_files": 151,
+    "retained_raw_bytes": 2643520928,
+    "passed_full_CPU_admission_sha256": "89238d2bece6f2537c68e3053e4da839a138dba7f4f78cd8c0bc92fe54faeba8",
+    "passed_detailed_CST_CPU_replay_sha256": "046c2e03cd9c2166379c38972cf3efb2075b35f00f903a5e40b4bc7073706fb6",
+    "file_admission_sha256": "3d857e153906395c76cf516f0afeb54508bf532acfa375b99e0c69f6e916ab3a",
+    "whole_result_archive_sha256": "882fa8a3e96b9214793fa4bf68f0c203de8bab83e98b4750d0d6e21e5764959b",
+    "derived_reporting_erratum_sha256": "f95c32fc0c2b8c0875464ca1f4cd74d2fe990dc4854dde854cf4550a30502950",
+    "analysis_audit_sha256": "cd6c8311ba354f674e8abedbafc8630d57688057ecd22e584990cd0beccecc93",
+    "summary_path": "docs/higgs-depth-normalization-diagnostic-results.md",
+    "machine_readable_summary_path": "docs/higgs-depth-normalization-diagnostic-summary.json",
+    "external_evidence_index": "evidence-index.json",
+    "result_note_is_rerun_or_source_adoption": false,
+    "development_or_heldout_quality_evaluated": false,
+    "scientific_runtime_changed_after_measurement": false
   }
 }
