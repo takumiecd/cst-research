@@ -3,7 +3,7 @@
   "id": "ffn-feasibility-20261106",
   "title": "CST FFN feasibility with geometric-mean Atom budgets",
   "status": "RUNNING",
-  "status_note": "Initial4090 R2 gates and three-arm1M pilot completed; DenseDEV3.7273/CST4.1798/noFFN4.2307. Owner prioritized capacity-versus-duration diagnosis at N256 and RTX4090only before width/seed expansion. A100 small qualification/data preparation ended; no further A100 work. HIGGS lower-bound/DST campaigns remain stopped.",
+  "status_note": "Initial4090 R2 gates and three-arm1M pilot completed; current radius q0/.25/.5 pilot at512updates has similar DEVCE4.4072/4.3945/4.4144. Owner stopped q0 long run; last saved2.8672M tokens. R3consumer with scoped2048 route passed all12 expanded native cases on4090, not full language-model feasibility. Fresh same-horizon5M mechanism observations precede width/seed expansion. RTX4090only; HIGGS lower-bound/DST campaigns stopped.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
@@ -12,35 +12,58 @@
   "protocol": {
     "atom_rule": "ceil(c*sqrt(d_in*d_out))",
     "initial_coefficient": 8,
-    "bounded_coefficient_followup": [8,16,32],
+    "bounded_coefficient_followup": [
+      8,
+      16,
+      32
+    ],
     "planned_learning_and_data_horizon_tokens": 20000000,
     "current_execution_device": "RTX4090only",
-    "current_priority": "N256 capacity-versus-duration diagnosis before width/seed expansion; LR interventions deferred",
+    "current_priority": "Radius and duration mechanism at N256, c8;5M observations of Dense/noFFN/CSTq0/.25/.5 with common20M planned horizon; Atom-budget/LR interventions deferred",
     "initial_q": 0.0,
-    "widths": [128, 256, 512],
+    "widths": [
+      128,
+      256,
+      512
+    ],
     "initial_width": 256,
     "ffn_expansion": 4,
     "blocks": 4,
     "heads": 4,
     "context": 128,
-    "arms": ["dense", "cst", "none"],
+    "arms": [
+      "dense",
+      "cst",
+      "none"
+    ],
     "initialization": "Dense std0.02, residual outputs /sqrt(2*blocks); public CST variance_scaling_ before CUDA/optimizer",
     "initial_dataset": "roneneldan/TinyStories; revision/tokenizer/splits/hashes must be frozen before learning",
     "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
     "tokenizer": "tiktoken0.12.0:gpt2, vocabulary50257, ordinary encode + EOS",
-    "token_file_lengths": {"train": 20000001, "development": 8193, "confirmation": 32769},
+    "token_file_lengths": {
+      "train": 20000001,
+      "development": 8193,
+      "confirmation": 32769
+    },
     "split_rule": "original train/valid text files; exclude identical whole stories across splits before packing",
     "microbatch_sequences": 2,
     "accumulation": 4,
     "learning_rate": 0.0003,
-    "minimum_learning_rate": 0.00003,
+    "minimum_learning_rate": 3e-05,
     "warmup": "max(1,min(200,updates//10)), then cosine",
-    "betas": [0.9, 0.95],
+    "betas": [
+      0.9,
+      0.95
+    ],
     "weight_decay": 0.0,
     "global_gradient_clip": 1.0,
     "pilot_training_tokens": 1000000,
     "maximum_training_tokens_per_run": 20000000,
-    "confirmation_seeds": [29, 43, 71],
+    "confirmation_seeds": [
+      29,
+      43,
+      71
+    ],
     "development_seed": 17,
     "lower_bound_search": false,
     "attention_replacement": false,
@@ -48,7 +71,18 @@
     "initial_operator_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
     "prepared_2048_operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
     "bounded_aspect_learning": "N128 expansion1/16 development seed17 one-million-token pilots; main expansion4 at N128/256/512",
-    "blocked_width": "N512 and N128 expansion16 require explicit rectangular2048 route GPU qualification before learning"
+    "blocked_width": "N512 and N128 expansion16 require full task smoke and exact-consumer/selected-q rectangular2048 qualification before learning; R3q0 expanded native cases passed on4090",
+    "radius_followup": {
+      "q": [
+        0.0,
+        0.25,
+        0.5
+      ],
+      "per_arm_token_cap": 5000000,
+      "planned_horizon_tokens": 20000000,
+      "track_atom_motion": true,
+      "scope": "Exploratory development seed17, not primary timing/memory or confirmation; preserve R2/R5 as separate frozen versions"
+    }
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",

@@ -161,6 +161,7 @@ def main(argv=None):
     parser.add_argument("--accumulation", type=int, default=4)
     parser.add_argument("--max-wall-seconds", type=int, default=3600)
     parser.add_argument("--repeat-fixed-batches", action="store_true")
+    parser.add_argument("--track-atom-motion", action="store_true")
     args = parser.parse_args(argv)
     args.schedule_tokens = (
         args.tokens if args.schedule_tokens is None else args.schedule_tokens
@@ -254,6 +255,19 @@ def main(argv=None):
             weight_decay=0.0,
             foreach=False,
         )
+    motion = None
+    if args.track_atom_motion and args.kind == "cst":
+        from torchcst import CSTLinear
+
+        from .ffn_motion import AmplitudeMotion, geometry_snapshot
+
+        motion = AmplitudeMotion(
+            {
+                name: (module.atoms.p, float(module.kernel.scalar("amplitude_max")))
+                for name, module in model.named_modules()
+                if isinstance(module, CSTLinear)
+            }
+        )
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
     horizon_updates = args.schedule_tokens // tokens_per_update
@@ -292,6 +306,9 @@ def main(argv=None):
         "completed_tokens": 0,
         "optimizer": "AdamW lr3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy for managed atoms",
         "measurement": "synchronized full optimizer update including accumulation/data transfer; no probes/evaluation in timed samples; eager FP32 TF32off",
+        "atom_motion_diagnostics": "CPU copy after each update; instrumented wall time includes sampling. Use separate uninstrumented runs for primary time/memory claims."
+        if motion is not None
+        else "disabled",
         "diagnostics": {},
         "timing_samples_seconds": [],
     }
@@ -348,6 +365,8 @@ def main(argv=None):
             }
         )
         summary["initial_development"] = initial
+        if motion is not None:
+            summary["atom_geometry_history"] = {"0": geometry_snapshot(model)}
         torch.cuda.synchronize()
         torch.cuda.empty_cache()
         torch.cuda.reset_peak_memory_stats()
@@ -390,6 +409,8 @@ def main(argv=None):
             summary["peak_reserved_bytes"] = max(
                 summary["peak_reserved_bytes"], torch.cuda.max_memory_reserved()
             )
+            if motion is not None:
+                motion.update()
             value = float(loss_sum / args.accumulation)
             if not math.isfinite(value):
                 raise FloatingPointError("nonfinite training loss")
@@ -407,6 +428,11 @@ def main(argv=None):
                         "lr": lr,
                         "gradient_norm_before_clip": float(norm),
                         "complete_update_seconds": duration,
+                        **(
+                            {"amplitude_motion": motion.report()}
+                            if motion is not None
+                            else {}
+                        ),
                     }
                 )
             if step in (10, 100):
@@ -423,9 +449,15 @@ def main(argv=None):
                     }
                 )
                 summary["latest_development"] = dev
+                if motion is not None:
+                    summary["atom_geometry_history"][str(step)] = geometry_snapshot(
+                        model
+                    )
                 checkpoint(milestone=step in milestones)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
+        if motion is not None:
+            summary["amplitude_motion"] = motion.report()
         if args.repeat_fixed_batches:
             summary["scope"] = (
                 "repeated fixed-batch diagnostic; confirmation and generations not evaluated"

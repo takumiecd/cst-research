@@ -208,3 +208,22 @@ The final strongest-amplitude10% have average radii.914/1.637; weakest10% are
 3.967/3.992. q stays near zero. Wide weak Atoms coexist with narrow strong Atoms.
 Endpoints do not measure cumulative amplitude oscillation. The last periodic
 checkpoint precedes the SIGTERM stop; unsaved updates are not reconstructed.
+
+## Matched-duration mechanism followup
+
+After the radius pilot, run fresh width256/seed17 Dense, no-FFN and CST q0/q.25/q.5
+observations capped at5M tokens per arm, retaining the20M-token planned LR and
+data-order horizon. Keep c8, data, initialization targets and optimizer settings
+fixed. Include all three CST radii even if early losses are close; this checks
+whether a radius effect emerges later. This is a separately recorded followup,
+not a silent continuation of R5 or the stopped R2 run. Do not select a scaling
+recipe from half a million tokens.
+
+For these CST diagnosis runs, `--track-atom-motion` samples physical amplitude
+after every optimizer update, recording accumulated absolute motion separately
+from net endpoint change. CPU buffers retain the diagnostic state. Radius, q,
+and near-amplitude-bound fractions are recorded at validation checkpoints.
+Sampling does not modify Parameters or optimizer state. Synchronized update
+timing excludes sampling; total elapsed time includes it. Instrumented runs
+are not primary speed/memory comparisons: use separately recorded uninstrumented
+passes for those claims. All original R2/R5 artifacts remain pinned.

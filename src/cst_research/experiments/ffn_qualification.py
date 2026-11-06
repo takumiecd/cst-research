@@ -373,7 +373,12 @@ def main(argv=None):
         choices=("small", "target", "expanded", "capacity", "radius"),
         default="small",
     )
+    parser.add_argument(
+        "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
+    )
     args = parser.parse_args(argv)
+    if args.cohort == "radius" and args.q != 0.0:
+        parser.error("radius cohort declares its own q0/.25/.5 family")
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
@@ -381,6 +386,7 @@ def main(argv=None):
     result = {
         "state": "running",
         "cohort": args.cohort,
+        "requested_q": args.q,
         "python": platform.python_version(),
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
@@ -432,7 +438,7 @@ def main(argv=None):
                 for ni, no in ((256, 1024), (1024, 256))
             ]
         radius_cases = [
-            (ni, no, tokens, c, 0.0, 0.02) for ni, no, tokens, c in coefficient_cases
+            (ni, no, tokens, c, args.q, 0.02) for ni, no, tokens, c in coefficient_cases
         ]
         if args.cohort == "radius":
             radius_cases = [
