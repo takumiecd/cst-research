@@ -344,3 +344,31 @@ An observer/VPN timeout is not completion or permission to restart a job. Poll
 the recorded live process and journal; keep one scientific GPU child at a time
 on the approved RTX4090. Leave the user-owned Hub running after owned workers
 finish.
+
+### Owner-directed stop and short field-LR exploration
+
+The owner subsequently cancelled the six unstarted seed43/71 cases to prioritize
+short mechanism experiments before committing to a longer confirmation or public
+API. N128/N256 seed29 completed and were audited/retrieved; the in-flight N512
+seed29 learner is allowed to finish unchanged and receive the same terminal audit.
+The original nine-case request, source snapshots and raw supervisor journal are
+preserved. Only that supervisor was terminated; a separate finish-only worker
+waits for the current learner, then audits/bundles it without launching more
+training. The original journal's last `running` value is stale after this stop;
+the retained owner-stop record controls its disposition.
+
+This is a stopped, incomplete three-seed family, not a numerical failure or a
+successful three-seed result. Keep all seed29 evidence and the unexecuted planned
+cases visible. The owner redirected the work for time and API/mechanism priorities;
+do not select or exclude confirmation outcomes as if the planned family finished.
+
+Next, prepare a separate N256/seed17 one-million-token development comparison:
+all Atom directions at16× versus the amplitude direction at1× and both centers
+at16×, keeping Polar outer time and the20M LR/data horizon identical. First
+qualify the research adapter against stock behavior and independent optimizer/
+Polar references, moments/counters, serialization and native task steps. The
+physical amplitude is derived from the Polar pair; multiplying gradients alone
+is not the intended LR intervention. Activity still depends on accepted motion
+even with the same outer clock. Public `field_lrs` remains an unimplemented API
+proposal until the mechanism check; direct per-field rates are the owner's
+preferred input shape, with scheduler/checkpoint semantics still to be designed.

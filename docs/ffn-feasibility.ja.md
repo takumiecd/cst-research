@@ -290,3 +290,24 @@ CSTのconfirmation CEがFFNなしより低いことを要求します。効果�
 argv、source hash、各条件のreceiptを保持します。観測側やVPNのtimeoutを完了・再起動の許可とは
 扱いません。記録した実際の生存processとjournalを確認し、承認したRTX4090上で科学計算のGPU childは
 同時に1つとします。所有するworkerが終わった後も、user所有のHubは動作したままにします。
+
+### 所有者の判断による停止と短期field別LR探索
+
+その後、所有者は長い確認や公開APIへ進む前の短期の機構実験を優先し、未着手のseed43/71の
+6条件を中止しました。N128/N256のseed29は完了・監査・回収済みで、進行中のN512・seed29は
+変更せず完走させ、同じ終了監査を行います。元の9条件request、source snapshot、raw supervisor
+journalは保持します。停止したのはsupervisorだけで、別の終了処理専用workerが現在の学習を待ち、
+追加の学習を起動せず監査・bundle作成を行います。停止後も元journalの最後の`running`は残りますが、
+保存したowner-stop記録が停止状態の根拠です。
+
+3 seed系列は停止・未完了であり、数値的失敗でも3 seedでの成功でもありません。seed29の全証拠と
+未実行の計画条件を見える形で保持します。時間とAPI・機構の優先度による方向転換であり、計画系列が
+完了したかのようにconfirmation outcomeを選択・除外しません。
+
+次は別のN256・seed17・1M-token開発比較を準備します。Atom全方向16倍と、振幅方向1倍・
+両中心16倍を、Polarの外側の時間と20M LR・データhorizonを揃えて比べます。研究用adapterを先に
+標準動作と独立optimizer/Polar参照、moment/counter、serialize、native実タスク更新で検証します。
+物理的な振幅はPolarの組から導くため、単に勾配へ倍率を掛ける操作をLR介入とはしません。
+外側の時計が同じでも、activityは受理された移動量に依存します。公開`field_lrs`は機構確認まで
+未実装のAPI案として扱います。fieldごとの学習率を直接指定する形が所有者の希望で、schedulerと
+checkpointの契約も今後設計します。

@@ -202,7 +202,7 @@
       "confirmation_scope": "SeparateR11mainwidth3seedfamily launched; no completed3seedresults yet. Aspectpilots remainone-seed development."
     },
     "main_width_confirmation": {
-      "status": "RUNNING_NOT_COMPLETED",
+      "status": "STOPPED_BY_OWNER_INCOMPLETE_CURRENT_SEED29_FINALIZING",
       "selection_boundary": "Fixed after development seed17 evidence and before the first confirmation run; no recipe or budget selection using confirmation outcomes.",
       "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
       "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
@@ -239,7 +239,32 @@
       "analysis": "Keep all three seeds per main width and all controls, report paired CST-minus-noFFN and CST-minus-Dense CE/perplexity, learning curves, complete-update time and memory. UsefulFFN claim requires lower confirmationCE than noFFN for each mainwidth in allthree seeds; report effect sizes, no formalDense-noninferiority or generalasymptoticclaim.",
       "failures": "No automaticretry/resume, seed exclusion or recipe adjustment from confirmation scores; retain partial/failed evidence and inspect numerical failures before further execution.",
       "resources": "RTX4090only, one scientific GPUchild at a time; standardnohup independentPOSIXsession with PID/startticks journal for the long family.",
-      "execution": "Protocolfixedcommit5654fc4 beforelaunch; exactsource70e/operator2b. All9cases/27arms required; completion onlyafterterminalaudits andlocalhashretrieval."
+      "execution": "Protocolfixedcommit5654fc4 beforelaunch; exactsource70e/operator2b. All9cases/27arms required; completion onlyafterterminalaudits andlocalhashretrieval.",
+      "owner_amendment": {
+        "reason": "Owner selected short field-LR exploration because the remaining long confirmation budget was too slow; not a numerical failure or a claim of completed3seed confirmation.",
+        "completed_width_seed_cases_before_stop": [
+          [
+            128,
+            29
+          ],
+          [
+            256,
+            29
+          ]
+        ],
+        "inflight_case_to_finish_and_audit": [
+          512,
+          29
+        ],
+        "cancelled_unstarted_seeds": [
+          43,
+          71
+        ],
+        "cancelled_unstarted_width_seed_cases": 6,
+        "source_preservation": "Original nine-case request/controller/journal preserved; supervisor stopped by exactPID only; unchanged current learner finishes, separate finish-only supervisor performs terminal audit/bundle.",
+        "next": "Afterseed29retrieval, bounded N256seed17~1M comparison of allAtom16 versusamplitude-direction1/centers16, samePolaroutertime and20MLR/datahorizon. Independentoptimizer/reference/native/resume gates before learning, then publicAPI design.",
+        "public_API_preference": "Absolutefield_lrs withsemanticrolesdeclaredbyparameterization/chart; notimplemented/adopted."
+      }
     }
   },
   "evidence": {

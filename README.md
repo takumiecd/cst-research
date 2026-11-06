@@ -37,8 +37,9 @@ not search for the minimum coefficient.
 [Initial results and learning curves](docs/ffn-feasibility-results.md) separate
 the three-arm pilot, radius diagnosis, numerical qualification and remaining
 work. The selected recipe improves on no-FFN in audited one-seed development
-runs at width128/256/512 and bounded aspect ratios. The main-width three-seed
-confirmation is running; its results are not available yet. Current eager FP32
+runs at width128/256/512 and bounded aspect ratios. The owner stopped the
+main-width three-seed family before completion to prioritize short field-LR
+experiments. Seed29 results are retained as incomplete confirmation evidence. Current eager FP32
 runs compress FFN parameters but do not show speed or GPU-memory advantages.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,

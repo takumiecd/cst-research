@@ -261,9 +261,12 @@ Atomごとの学習座標4つと通常のbiasから、\(P_{\mathrm{CST,FFN}}=32A
 係数固定のFFN Parameter数は構成上線形で、有効な精度が幅を変えても保たれるかが実験の問いです。
 モデル全体にはDense attentionの二次のParameterが残ります。
 
-幅128/256/512、seed29/43/71、3条件を各5M（新規27 run）の主幅確認を実行中です。
-設定・学習量・全seedの保持・有効性の判定基準は最初の確認run前にcommit5654fc4で固定しました。
-3 seedの結果はまだありません。R10親receipt SHA256は
+主幅確認は幅128/256/512、seed29/43/71、3条件を各5M（新規27 run）と計画し、
+設定・学習量・全seedの保持・有効性基準を最初の確認run前にcommit5654fc4で固定しました。
+その後、所有者は短期field別LR実験を優先し、未着手のseed43/71の6条件を中止しました。
+N128/N256のseed29は完了・監査・回収済みで、進行中のN512 seed29は変更せず完走・終了監査します。
+系列は停止・未完了で、3 seedの主張や数値的失敗の主張はありません。研究計画に所有者の変更指示を
+明示しています。R10親receipt SHA256は
 `7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f`で、
 archive/request/reporterのhashは派生図manifestに保持します。
 
