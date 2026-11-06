@@ -104,6 +104,17 @@ q1のseed17 up/down fixtureは、同じDense目標に合わせて平均半径31.
 ではありません。raw script/resultは証拠locator内の`polar-activity-clock-diagnostic*`と
 `broad-radius-initialization-grid*`に保持します。
 
+別の初期状態のGaussian入力確認では、各blockに独立な正規化入力512個を与えました。
+4つのFFN出力共分散の和のparticipation ratioはDense184.13、CST q0で126.63、
+CST q.5で62.09、隣接channel相関の平均は−.003、.419、.839でした。participation
+ratioは共分散の統計量であり、代数的rankやタスク精度ではありません。blockごとに
+出力channelを独立に並べ替えた共分散の和では、CSTの統計量は144.15/100.58でした。
+これは共分散だけの反実仮想で、モデルを変更して学習した実験ではありません。
+半径拡大で特徴の相関が強まる場合があり、全体RMSの一致だけではDense同様の特徴の
+多様さを保証できません。広げる設定とAtom予算の確認に加え、birth側の半径下限を
+狭める設定や固定の特徴順序も検証候補です。このfixtureで解決策が確認できたわけ
+ではありません。`ffn-feature-covariance-initial*`を外部証拠として保持します。
+
 ## 来歴と保存証拠
 
 TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`、tiktoken0.12.0の

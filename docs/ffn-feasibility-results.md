@@ -114,6 +114,19 @@ new native qualification before learning. They are prepared alternatives, not
 successful models. Raw scripts/results are `polar-activity-clock-diagnostic*`
 and `broad-radius-initialization-grid*` under the evidence locator.
 
+A separate initial-state Gaussian-stimulus check used512 independent normalized
+inputs per block. Summing the four FFN output covariance matrices gave
+participation-ratio statistics184.13 (Dense),126.63 (CST q0) and62.09 (CST q.5);
+mean adjacent-channel correlations were−.003,.419 and.839. Participation ratio
+is a covariance statistic, not the algebraic rank or a task-accuracy measure.
+Independent output-channel permutations changed the combined CST covariance
+statistics to144.15/100.58; this was a covariance-only counterfactual, not a
+trained-model intervention. Larger radius can increase feature correlation,
+so matching global RMS does not establish Dense-like feature diversity. Narrower
+birth-radius settings and fixed feature orderings remain hypotheses to test,
+alongside broadening and Atom-budget checks. No remedy is established by this
+fixture. Retain `ffn-feature-covariance-initial*` in the external evidence.
+
 ## Provenance and retained evidence
 
 TinyStories revision `f54c09fd23315a6f9c86f9dc80f725de7d8f9c64`, tiktoken0.12.0
