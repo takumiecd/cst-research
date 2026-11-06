@@ -259,8 +259,52 @@ trained audit SHA256:
 Retrieved small-evidence archive SHA256:
 `0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922`.
 All 11 bundled raw files matched their manifest. Bulk checkpoints stay on the GPU
-host. The same c8/Atom LR16 recipe now proceeds to width/aspect development
-pilots; three-seed confirmation and the overall study remain incomplete.
+host. The same c8/Atom LR16 recipe completed the width/aspect development
+pilots below; three-seed confirmation and the overall study remain incomplete.
+
+## Selected width and aspect pilots (R10)
+
+All four fresh three-arm pilots completed 976 updates/999,424 tokens per arm,
+with the frozen R8 consumer/operator, seed17 and common20M LR/data horizon.
+Each shape passed its own exact-recipe native qualification and four-block task
+preflight. Each terminal audit passed all eight trained CST projection VJPs,
+optimizer/serialized next-step checks and independent CE recomputation. All44
+bundled raw files matched the retrieved manifests.
+
+| Width | Expansion | Dense DEV CE | CST DEV CE | No-FFN DEV CE | CST / Dense FFN parameters |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 1 | 3.96956 | 4.05337 | 4.35479 | 33792 / 132096 |
+| 128 | 4 | 3.89271 | 4.00487 | 4.35479 | 68096 / 526848 |
+| 128 | 16 | 3.91922 | 3.96799 | 4.35479 | 139776 / 2105856 |
+| 512 | 4 | 3.28466 | 3.40110 | 3.71174 | 272384 / 8398848 |
+
+CST improves on no-FFN in every development condition but remains behind Dense.
+The selected recipe works beyond the initial N256 shape; these one-seed pilots
+do not establish three-seed confirmation, an optimal Atom count, convergence or
+an asymptotic quality law. Do not compare these1M endpoints directly with N256's
+5M endpoint as a matched-budget width comparison.
+
+The [full audited pilot report](ffn-feasibility-r10-shapes-20261107.md) overlays
+training/development curves by tokens and elapsed time, retains fixed-prompt
+examples and records complete-update allocated/reserved peaks. In these eager
+FP32 observations CST remains slower and uses more GPU memory. The smallest
+parameter fraction here is N512:272384/8398848≈3.24%; this is an FFN parameter
+count, not a measured whole-model memory reduction.
+
+For four blocks and expansion e, each projection uses
+\(A=\lceil8N\sqrt e\rceil\). Four trainable coordinates per Atom and the ordinary
+biases give \(P_{\mathrm{CST,FFN}}=32A+4(e+1)N\), versus
+\(P_{\mathrm{Dense,FFN}}=8eN^2+4(e+1)N\). At e4 these are532N and32N²+20N.
+The fixed-c FFN parameter count is linear by construction; whether its useful
+quality persists with width is the empirical question. Dense attention still
+contributes quadratic parameters to the whole model.
+
+The main-width confirmation family is now running: widths128/256/512,
+seeds29/43/71 and all three arms at5M each (27 fresh runs). Its recipe, budget,
+retention rules and usefulness criterion were fixed in commit5654fc4 before the
+first confirmation run. No three-seed result is available yet. The raw R10 parent
+receipt SHA256 is `7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f`;
+archive/request/reporter hashes are retained in the derived figure manifest.
 
 ## Native scope and remaining work
 
@@ -270,12 +314,13 @@ scoped2048 route passed all12 expanded R3 native cases on RTX4090, including
 512↔2048 and128↔2048. This does not establish full language-model feasibility
 at width512, or qualify a different consumer/q recipe automatically.
 
-The R6/R7 sequences and the selected R8 5M followup have completed their terminal
-audits. Atom LR16 proceeds to width/aspect development pilots; public defaults
-remain unchanged. Width512 reference complete-task smoke and trained-state audit also
+The R6/R7 sequences, selected R8 5M followup and R10 width/aspect pilots have
+completed their terminal audits. Public defaults remain unchanged. Width512
+reference complete-task smoke and trained-state audit also
 passed under the separate R8 consumer and explicit2048 operator. A20-update
-fixed-batch smoke is not heldout feasibility or a primary performance result. Width128/256/512, bounded aspect-ratio learning, three-seed
-confirmation and final performance/memory validation remain incomplete.
+fixed-batch smoke is not heldout feasibility or a primary performance result.
+Three-seed matched-budget width confirmation, final performance/memory summaries
+and PR integration remain incomplete.
 
 The [scoped2048 validation record](https://github.com/takumiecd/torchcst/blob/922a2f609575ad18bbc5d19235138d185f4968dd/docs/research-history/cuda-linear/ffn-rectangular-2048-20261107.md)
 retains the N512 reference smoke: observed complete updates18.40ms Dense versus

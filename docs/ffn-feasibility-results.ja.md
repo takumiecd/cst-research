@@ -229,7 +229,43 @@ operatorは`2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440`です。終了receipt SHA2
 回収した小証拠archive SHA256は
 `0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922`です。
 bundle内のraw全11ファイルをmanifestと照合しました。大きなcheckpointはGPU hostに
-保持します。同じc8/Atom LR16で幅・縦横比の開発pilotに進み、3 seed確認と研究全体は未完了です。
+保持します。同じc8/Atom LR16の幅・縦横比pilotは以下のとおり完了し、3 seed確認と研究全体は未完了です。
+
+## 選択した幅・縦横比のpilot（R10）
+
+4つの新しい3条件pilotを、各条件976 update・999424 tokenまで実行しました。
+固定R8 consumer/operator、seed17、共通20M LR・データhorizonです。各形状で設定を
+厳密に合わせたnative検証と4 block実タスクpreflightを通り、終了監査では学習済みCST全8射影の
+VJP、optimizer・serialize後の次step、CEの独立再計算を通りました。回収したbundleのraw全44ファイルを
+manifestとhash照合しました。
+
+| 幅 | Expansion | Dense DEV CE | CST DEV CE | FFNなし DEV CE | CST / Dense FFN Parameter数 |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 1 | 3.96956 | 4.05337 | 4.35479 | 33792 / 132096 |
+| 128 | 4 | 3.89271 | 4.00487 | 4.35479 | 68096 / 526848 |
+| 128 | 16 | 3.91922 | 3.96799 | 4.35479 | 139776 / 2105856 |
+| 512 | 4 | 3.28466 | 3.40110 | 3.71174 | 272384 / 8398848 |
+
+開発条件の全てでCSTはFFNなしより改善し、Denseとの差は残ります。選択設定が最初のN256以外でも
+動きましたが、1 seedのpilotでは3 seed確認、Atom数の最適性、収束、精度の漸近則は示せません。
+この1M endpointとN256の5M endpointを、同じ学習量の幅比較として直接比べないでください。
+
+[監査済みpilotの全報告](ffn-feasibility-r10-shapes-20261107.ja.md)に、token数・経過時間に対する
+学習/開発曲線、固定promptの生成例、complete updateのallocated/reserved peakを残しています。
+今回のeager FP32ではCSTの方が遅く、GPUメモリも多く使います。Parameter比が最も小さいのは
+N512の272384/8398848≒3.24%ですが、FFN Parameter数の比であり、モデル全体の実測メモリ比ではありません。
+
+4 block・expansion eでは、各射影のAtom数は\(A=\lceil8N\sqrt e\rceil\)です。
+Atomごとの学習座標4つと通常のbiasから、\(P_{\mathrm{CST,FFN}}=32A+4(e+1)N\)、
+\(P_{\mathrm{Dense,FFN}}=8eN^2+4(e+1)N\)となり、e4では532Nと32N²+20Nです。
+係数固定のFFN Parameter数は構成上線形で、有効な精度が幅を変えても保たれるかが実験の問いです。
+モデル全体にはDense attentionの二次のParameterが残ります。
+
+幅128/256/512、seed29/43/71、3条件を各5M（新規27 run）の主幅確認を実行中です。
+設定・学習量・全seedの保持・有効性の判定基準は最初の確認run前にcommit5654fc4で固定しました。
+3 seedの結果はまだありません。R10親receipt SHA256は
+`7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f`で、
+archive/request/reporterのhashは派生図manifestに保持します。
 
 ## native検証の範囲と残作業
 
@@ -238,11 +274,11 @@ optimizer/model resumeの検証を通りました。別途、範囲を限定し�
 RTX4090でR3の拡大12条件すべてを通り、512↔2048と128↔2048を含みます。これだけで
 幅512の言語モデルの有効性や、別consumer/q設定の検証済みを意味しません。
 
-R6/R7と選択したR8の5M追加比較は終了後の監査まで完了しました。Atom LR16を幅・
-縦横比の開発pilotへ進めます。公開の標準設定は変更していません。別のR8 consumerと明示的な
+R6/R7、選択したR8の5M追加比較、R10の幅・縦横比pilotは終了後の監査まで完了しました。
+公開の標準設定は変更していません。別のR8 consumerと明示的な
 2048 operatorで、幅512の実タスクsmokeと学習済み状態監査も通りました。20 updateの
-固定batch smokeはheldoutでの有効性や速度の主比較ではありません。幅128/256/512、縦横比を変えた
-学習、3 seed確認、最終的な速度・メモリ検証は未完了です。
+固定batch smokeはheldoutでの有効性や速度の主比較ではありません。同じ学習量での幅の3 seed確認、
+最終的な速度・メモリ集計、PR統合は未完了です。
 
 [範囲を限定した2048検証記録](https://github.com/takumiecd/torchcst/blob/922a2f609575ad18bbc5d19235138d185f4968dd/docs/research-history/cuda-linear/ffn-rectangular-2048-20261107.ja.md)
 に幅512の標準設定smokeを保持しています。complete updateの観測はDense18.40ms、CST726.25ms、

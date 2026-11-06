@@ -26,7 +26,8 @@ public API are separate decisions.
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
 establish practical use in FFNs and Attention.** This direction was adopted on
-2026-11-06. It is a research plan; these applications have not yet been validated.
+2026-11-06. FFN development experiments are now available; Attention validation
+has not started.
 
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
@@ -35,7 +36,10 @@ not search for the minimum coefficient.
 
 [Initial results and learning curves](docs/ffn-feasibility-results.md) separate
 the three-arm pilot, radius diagnosis, numerical qualification and remaining
-work. Useful CST FFNs and fixed-coefficient width scaling are not yet confirmed.
+work. The selected recipe improves on no-FFN in audited one-seed development
+runs at width128/256/512 and bounded aspect ratios. The main-width three-seed
+confirmation is running; its results are not available yet. Current eager FP32
+runs compress FFN parameters but do not show speed or GPU-memory advantages.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the

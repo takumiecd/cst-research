@@ -559,7 +559,7 @@ def render_plots(result, output):
         ("train", "training-curves"),
         ("elapsed", "development-versus-time"),
     ):
-        cols = min(3, len(shapes))
+        cols = 2 if len(shapes) == 4 else min(3, len(shapes))
         rows = math.ceil(len(shapes) / cols)
         fig, axes = plt.subplots(
             rows,
