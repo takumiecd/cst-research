@@ -47,7 +47,7 @@ ROC-AUC −0.002の許容差を実行前に固定しています。
 | [8更新の正規化診断](docs/higgs-depth-normalization-diagnostic-results.ja.md) | COMPLETED | 9×8 task更新の機構診断。品質選択・既定値採用なし |
 | [正規化の3 epoch追試](docs/higgs-depth-normalization-learning.ja.md) | PLANNED / PREPARED | 開発データのみの9条件。資格は継承し新たなprefix一致確認が必須。学習結果は未取得 |
 | [正規化load契約のrecovery](docs/higgs-normalization-learning-recovery.ja.md) | PLANNED / PREPARED | Parent未完了は維持。admit済み300kを再利用し、選択state修正後に残375kだけを実行する準備 |
-| [線形 Atom 数](docs/higgs-linear-atom-scaling.ja.md) | PLANNED / PREPARED | A=cN、H4/H8 の新16条件 native qualification を先行。400k タスク学習は未実行 |
+| [線形Atom数：Stage B結果](docs/higgs-linear-atom-results.ja.md) | COMPLETED（限定Stage B） | seed17の1 epoch全16終点。H8 CSTはbias-only、Atomオーダ・最小cの主張なし |
 
 [観測結果と限界](docs/bounded-validation-results.ja.md)で、完了した座標・深さ・gain結果を
 実測commitとraw auditへ結びます。developmentで選んだpilotは最小alphaや正式な非劣性を

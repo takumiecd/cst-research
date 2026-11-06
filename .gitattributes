@@ -1,0 +1,2 @@
+# Preserve SHA-bound published CSV bytes, including their original CRLF rows.
+docs/results/higgs-linear-atom-stageB/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
