@@ -7,6 +7,7 @@ import copy
 import hashlib
 import io
 import json
+import math
 import platform
 import time
 from pathlib import Path
@@ -141,9 +142,9 @@ def compare(got, expected, *, atol=3e-5, rtol=3e-4):
     }
 
 
-def qualify_case(ni, no, rows, *, seed=17, coefficient=8):
+def qualify_case(ni, no, rows, *, seed=17, coefficient=8, q=0.0, std=0.02):
     began = time.monotonic()
-    layer = make_cst(ni, no, seed=seed, coefficient=coefficient)
+    layer = make_cst(ni, no, seed=seed, coefficient=coefficient, q=q, std=std)
     report = layer.initialization_report
     base = torch.randn(
         2, rows, ni * 2, generator=torch.Generator().manual_seed(seed + 1)
@@ -171,6 +172,8 @@ def qualify_case(ni, no, rows, *, seed=17, coefficient=8):
         "tokens": rows,
         "atoms": live.atoms.count,
         "coefficient": coefficient,
+        "q": q,
+        "std": std,
         "input_noncontiguous": not xx.is_contiguous(),
         "initialization": report,
         "checks": metrics,
@@ -366,7 +369,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--cohort", choices=("small", "target", "expanded", "capacity"), default="small"
+        "--cohort",
+        choices=("small", "target", "expanded", "capacity", "radius"),
+        default="small",
     )
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
@@ -426,13 +431,22 @@ def main(argv=None):
                 for c in (8, 16, 32)
                 for ni, no in ((256, 1024), (1024, 256))
             ]
-        for ni, no, tokens, coefficient in coefficient_cases:
+        radius_cases = [
+            (ni, no, tokens, c, 0.0, 0.02) for ni, no, tokens, c in coefficient_cases
+        ]
+        if args.cohort == "radius":
+            radius_cases = [
+                (ni, no, 128, 8, q, 0.02 if ni < no else 0.02 / math.sqrt(8))
+                for q in (0.0, 0.25, 0.5)
+                for ni, no in ((256, 1024), (1024, 256))
+            ]
+        for ni, no, tokens, coefficient, q, std in radius_cases:
             result["cases"].append(
-                qualify_case(ni, no, tokens, coefficient=coefficient)
+                qualify_case(ni, no, tokens, coefficient=coefficient, q=q, std=std)
             )
             save()
             print(
-                f"PASS {ni}->{no}, c{coefficient}, B2 T{tokens}, all Atom gradients",
+                f"PASS {ni}->{no}, c{coefficient}, q{q}, B2 T{tokens}, all Atom gradients",
                 flush=True,
             )
         result["optimizer"] = optimizer_and_resume_check()

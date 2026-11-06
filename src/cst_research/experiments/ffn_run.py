@@ -151,6 +151,9 @@ def main(argv=None):
         choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
         default="NVIDIA GeForce RTX 4090",
     )
+    parser.add_argument(
+        "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
+    )
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--tokens", type=int, default=1000000)
     parser.add_argument("--schedule-tokens", type=int, default=None)
@@ -184,18 +187,26 @@ def main(argv=None):
         "target",
         "expanded",
         "capacity",
+        "radius",
     ):
         parser.error("passed target rectangular/multi-token qualification required")
     for name in ("ffn_model.py", "ffn_contract.py"):
         if sha(Path(__file__).parent / name) != qualification["source_sha256"][name]:
             parser.error("model source differs from qualified source")
     pairs = {
-        (x["in"], x["out"], x.get("coefficient", 8)) for x in qualification["cases"]
+        (x["in"], x["out"], x.get("coefficient", 8), x.get("q", 0.0))
+        for x in qualification["cases"]
     }
-    if (args.width, args.expansion * args.width, args.coefficient) not in pairs or (
+    if (
+        args.width,
+        args.expansion * args.width,
+        args.coefficient,
+        args.q,
+    ) not in pairs or (
         args.expansion * args.width,
         args.width,
         args.coefficient,
+        args.q,
     ) not in pairs:
         parser.error("qualification does not cover requested FFN dimensions")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -214,6 +225,7 @@ def main(argv=None):
         width=args.width,
         expansion=args.expansion,
         coefficient=args.coefficient,
+        q=args.q,
         vocabulary=manifest["vocabulary"],
     )
     if args.batch * config.context > 256:

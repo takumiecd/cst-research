@@ -171,3 +171,40 @@ them explicitly to `ffn_run --qualification ... --qualification-sha256 ...
 --tokens 1000000 --output evidence/pilot-cst`. The pilot uses a one-hour wall
 budget by default, preserves incomplete states on failure and does not resume
 or retry itself. No training result is admitted from metadata validation alone.
+
+
+## Radius diagnosis after the initial pilot
+
+The owner stopped the c8 long run to prioritize radius coverage. A radius
+comparison uses width256, c8 (4096 Atoms per projection), seed17 and q=0/0.25/0.5.
+Keep learning rate, data order and a common20M-token planned horizon identical;
+first observe512 updates (524288 tokens) per arm, with a1200-second wall cap.
+These are exploratory comparisons, not confirmations. Recompute moment-matched
+initialization for each q using the same Dense target variance; increasing q
+can also change amplitude and spatial correlation. It is not an isolated
+radius-only intervention. q is the initial logarithmic fraction between
+amplitude-dependent bounds, not a physical radius or a value frozen in training.
+Retain actual radius/amplitude distributions and clipping diagnostics. Use the
+new `radius` qualification cohort (both FFN directions, full B2 T128 and all
+Atom VJPs at each q) before `ffn_run --q 0.25` or `--q 0.5`. The declared maximum
+radius remains50; actual radii can be substantially smaller. No result is
+implied by preparing these controls. Atom-count and LR interventions are
+deferred while this radius hypothesis is tested.
+
+CPU preparation found that q=1 cannot meet the up-projection variance with
+4096 Atoms and the current amplitude bound1; this is an initializer rejection,
+not a failed training run. q=.5 passed the second-moment search but clipped
+277/4096 up Atoms and3/4096 down Atoms in the seed17 preparation fixture. q=.25
+clipped14/4096 up Atoms and no down Atoms. These fixtures use `make_cst` seed17;
+actual model projections use their named seeds and require separate reports.
+Their average radii were up/down2.49/3.21 (q0),4.35/5.58 (q.25),7.14/9.71
+(q.5). This constrains broadening under the current amplitude/radius coupling;
+it does not establish that Polar or the backend is incorrect.
+
+The stopped-long c8 periodic checkpoint retains2800 updates/2867200 tokens,
+SHA256 `9e82dd7985d773294c59cfac0f34412a1fe31648fd55a8ed1a5f6ee6a0be6745`.
+Matched Atom IDs show aggregate up amplitude RMS.2280→.2359 and down.1171→.1237.
+The final strongest-amplitude10% have average radii.914/1.637; weakest10% are
+3.967/3.992. q stays near zero. Wide weak Atoms coexist with narrow strong Atoms.
+Endpoints do not measure cumulative amplitude oscillation. The last periodic
+checkpoint precedes the SIGTERM stop; unsaved updates are not reconstructed.
