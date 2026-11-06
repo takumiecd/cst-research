@@ -2,10 +2,20 @@
 
 import unittest
 
-from cst_research.experiments.ffn_contract import ModelConfig, atom_count
+from cst_research.experiments.ffn_contract import ModelConfig, atom_count, learning_rate
 
 
 class FFNContractTests(unittest.TestCase):
+    def test_early_checkpoint_retains_the_long_learning_rate_horizon(self):
+        short = 1000000 // 1024
+        long = 20000000 // 1024
+        self.assertAlmostEqual(learning_rate(short, short), 0.00003)
+        self.assertGreater(learning_rate(short, long), 0.00029)
+        self.assertAlmostEqual(learning_rate(long, long), 0.00003)
+        self.assertAlmostEqual(learning_rate(200, long), 0.0003)
+        with self.assertRaises(ValueError):
+            learning_rate(long + 1, long)
+
     def test_exact_rounding_symmetry_and_large_integer_arithmetic(self):
         self.assertEqual(atom_count(3, 7), 37)
         self.assertEqual(atom_count(7, 3), 37)

@@ -73,9 +73,35 @@ original research/operator snapshots; they are not silently migrated.
 Beyond the main expansion4 width cohorts, run bounded one-million-token,
 development-seed17 pilots at N128 expansion1 and16 with the same c=8. These
 check aspect-ratio applicability, not an optimal formula or minimum coefficient.
-Any parallel A100 MIG40GB cohort needs its own numerical/runtime qualification,
-exact GPU check and all three paired arms. Keep speed/memory results separate
-by device; do not pool different GPUs into a width-scaling curve.
+The owner subsequently restricted execution to RTX4090. A100 small qualification
+and CPU token preparation ended; no further A100 work is part of this campaign.
+Keep any retained device-specific preparation separate from RTX4090 results.
+
+## Current mechanism followup
+
+The initial R2 one-million-token, seed17 pilot completed. Its development CE was
+Dense3.7273, CST4.1798, no-FFN4.2307. CST's initial FFN activation RMS was close
+to Dense, but its down-projection RMS stayed near0.04–0.05 while Dense grew to
+0.12–0.17. This does not establish whether capacity, optimization or training
+duration caused the gap. Its976-update cosine schedule already decayed to3e-5,
+so it cannot isolate a duration effect from a longer schedule.
+
+Before width/seed expansion, compare N256 coefficients c8/16/32
+(4096/8192/16384 Atoms per projection) under the same q0, target variance, base
+LR, data and seen-token budget. Reinitialize each Atom budget to the same Dense
+moment target and report actual initial activations. This is bounded practical
+recipe selection, not renewed lower-bound/Big-Omega research. Atom-coordinate
+LR interventions are deferred while these hypotheses are checked.
+
+Use a common planned20million-token learning-rate AND data-order horizon, even
+for an early checkpoint. `--schedule-tokens 20000000` controls warmup/cosine and
+the full data permutation; `--tokens` controls the bounded execution length.
+Thus1M/5M/10M/20M observations of that design have matching early LR/data streams.
+Retain the old R2 short-horizon pilot as a separate observation. Record current
+c8's longer trajectory before concluding Atom shortage; compare Atom budgets
+at matched checkpoints. An Atom-budget intervention also changes coordinate
+geometry and per-Atom amplitude, so improvement alone does not prove a pure
+expressivity limit.
 
 ## Learning and evidence plan
 

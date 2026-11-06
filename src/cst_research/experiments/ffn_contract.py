@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from math import isqrt
+from math import cos, isqrt, pi
 
 
 def atom_count(d_in: int, d_out: int, coefficient: int = 8) -> int:
@@ -13,6 +13,20 @@ def atom_count(d_in: int, d_out: int, coefficient: int = 8) -> int:
     square = coefficient**2 * d_in * d_out
     root = isqrt(square)
     return root + (root * root < square)
+
+
+def learning_rate(step: int, horizon_updates: int) -> float:
+    """One fixed planned horizon, independent of an observation's stop point."""
+    if (
+        any(type(n) is not int or n < 1 for n in (step, horizon_updates))
+        or step > horizon_updates
+    ):
+        raise ValueError("positive step within the planned update horizon required")
+    warmup = max(1, min(200, horizon_updates // 10))
+    if step <= warmup:
+        return 0.0003 * step / warmup
+    progress = (step - warmup) / max(1, horizon_updates - warmup)
+    return 0.00003 + 0.00027 * (1 + cos(pi * progress)) / 2
 
 
 @dataclass(frozen=True)

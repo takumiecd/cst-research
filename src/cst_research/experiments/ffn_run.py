@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import time
 from dataclasses import asdict
 from pathlib import Path
@@ -13,7 +14,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from .ffn_contract import ModelConfig
+from .ffn_contract import ModelConfig, learning_rate
 from .ffn_model import LanguageModel, configure_native, cst_optimizer
 
 
@@ -144,6 +145,7 @@ def main(argv=None):
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
+    parser.add_argument("--coefficient", type=int, choices=(8, 16, 32), default=8)
     parser.add_argument(
         "--expected-gpu",
         choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
@@ -151,16 +153,21 @@ def main(argv=None):
     )
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--tokens", type=int, default=1000000)
+    parser.add_argument("--schedule-tokens", type=int, default=None)
     parser.add_argument("--batch", type=int, default=2)
     parser.add_argument("--accumulation", type=int, default=4)
     parser.add_argument("--max-wall-seconds", type=int, default=3600)
     parser.add_argument("--repeat-fixed-batches", action="store_true")
     args = parser.parse_args(argv)
+    args.schedule_tokens = (
+        args.tokens if args.schedule_tokens is None else args.schedule_tokens
+    )
     if (
         not 1024 <= args.tokens <= 20000000
         or args.batch < 1
         or args.accumulation < 1
         or args.max_wall_seconds < 1
+        or not args.tokens <= args.schedule_tokens <= 20000000
     ):
         parser.error("bounded positive training budget required")
     if args.repeat_fixed_batches and args.tokens > 102400:
@@ -176,15 +183,19 @@ def main(argv=None):
     if qualification["state"] != "passed" or qualification["cohort"] not in (
         "target",
         "expanded",
+        "capacity",
     ):
         parser.error("passed target rectangular/multi-token qualification required")
     for name in ("ffn_model.py", "ffn_contract.py"):
         if sha(Path(__file__).parent / name) != qualification["source_sha256"][name]:
             parser.error("model source differs from qualified source")
-    pairs = {(x["in"], x["out"]) for x in qualification["cases"]}
-    if (args.width, args.expansion * args.width) not in pairs or (
+    pairs = {
+        (x["in"], x["out"], x.get("coefficient", 8)) for x in qualification["cases"]
+    }
+    if (args.width, args.expansion * args.width, args.coefficient) not in pairs or (
         args.expansion * args.width,
         args.width,
+        args.coefficient,
     ) not in pairs:
         parser.error("qualification does not cover requested FFN dimensions")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -200,11 +211,14 @@ def main(argv=None):
         parser.error("actual GPU/runtime differs from its qualification")
     manifest, data = verify_data(args.data)
     config = ModelConfig(
-        width=args.width, expansion=args.expansion, vocabulary=manifest["vocabulary"]
+        width=args.width,
+        expansion=args.expansion,
+        coefficient=args.coefficient,
+        vocabulary=manifest["vocabulary"],
     )
     if args.batch * config.context > 256:
         parser.error("initial qualified microbatch has at most256 token rows")
-    if args.tokens + 1 > len(data["train"]):
+    if args.schedule_tokens + 1 > len(data["train"]):
         parser.error("train prefix does not cover token budget")
     model = LanguageModel(config, args.kind, args.seed).cuda()
     ffn_parameters = [p for name, p in model.named_parameters() if ".ffn." in name]
@@ -230,10 +244,14 @@ def main(argv=None):
         )
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
-    windows = args.tokens // config.context
+    horizon_updates = args.schedule_tokens // tokens_per_update
+    windows = args.schedule_tokens // config.context
     order = np.random.default_rng(args.seed + 888).permutation(windows)
     total_microbatches = updates * args.accumulation
     assert total_microbatches * args.batch <= len(order)
+    milestones = {
+        n // tokens_per_update for n in (1000000, 5000000, 10000000, 20000000)
+    }
     px, py = token_batch(data["train"], [0], config.context, "cuda")
     summary = {
         "state": "running",
@@ -254,6 +272,9 @@ def main(argv=None):
             p.numel() * p.element_size() for p in ffn_parameters
         ),
         "scheduled_updates": updates,
+        "learning_rate_horizon_updates": horizon_updates,
+        "data_order_horizon_tokens": args.schedule_tokens,
+        "milestone_checkpoint_sha256": {},
         "scheduled_tokens": updates * tokens_per_update,
         "completed_updates": 0,
         "completed_tokens": 0,
@@ -274,7 +295,7 @@ def main(argv=None):
         curves.flush()
         print(json.dumps(entry), flush=True)
 
-    def checkpoint():
+    def checkpoint(*, milestone=False):
         target = args.output / "checkpoint.pt"
         temporary = args.output / "checkpoint.tmp"
         torch.save(
@@ -285,6 +306,8 @@ def main(argv=None):
                 "kind": args.kind,
                 "seed": args.seed,
                 "updates": summary["completed_updates"],
+                "planned_horizon_tokens": args.schedule_tokens,
+                "completed_tokens": summary["completed_tokens"],
                 "data_manifest_sha256": summary["data_manifest_sha256"],
                 "torch_rng_state": torch.get_rng_state(),
                 "cuda_rng_state": torch.cuda.get_rng_state(),
@@ -293,6 +316,13 @@ def main(argv=None):
         )
         temporary.replace(target)
         summary["checkpoint_sha256"] = sha(target)
+        if milestone:
+            name = f"checkpoint-{summary['completed_tokens']}-tokens.pt"
+            destination = args.output / name
+            if not destination.exists():
+                os.link(target, destination)
+            assert sha(destination) == summary["checkpoint_sha256"]
+            summary["milestone_checkpoint_sha256"][name] = summary["checkpoint_sha256"]
 
     try:
         summary["diagnostics"]["initial"] = probe(model, px, py)
@@ -311,7 +341,6 @@ def main(argv=None):
         torch.cuda.reset_peak_memory_stats()
         setup_end = time.monotonic()
         summary["setup_seconds"] = setup_end - began
-        warmup = max(1, min(200, updates // 10))
         for step in range(1, updates + 1):
             if time.monotonic() - began > args.max_wall_seconds:
                 raise TimeoutError(
@@ -319,11 +348,7 @@ def main(argv=None):
                 )
             model.train()
             optimizer.zero_grad(set_to_none=True)
-            if step <= warmup:
-                lr = 0.0003 * step / warmup
-            else:
-                progress = (step - warmup) / max(1, updates - warmup)
-                lr = 0.00003 + 0.00027 * (1 + math.cos(math.pi * progress)) / 2
+            lr = learning_rate(step, horizon_updates)
             for group in optimizer.param_groups:
                 group["lr"] = lr
             torch.cuda.synchronize()
@@ -375,7 +400,7 @@ def main(argv=None):
             if step in (10, 100):
                 summary["diagnostics"][str(step)] = probe(model, px, py)
                 torch.cuda.empty_cache()
-            if step % 200 == 0 or step == updates:
+            if step % 200 == 0 or step == updates or step in milestones:
                 dev = evaluate(model, data["development"], args.batch)
                 log(
                     {
@@ -386,7 +411,7 @@ def main(argv=None):
                     }
                 )
                 summary["latest_development"] = dev
-                checkpoint()
+                checkpoint(milestone=step in milestones)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
         if args.repeat_fixed_batches:

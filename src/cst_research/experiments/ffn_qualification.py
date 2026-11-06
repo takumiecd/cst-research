@@ -141,9 +141,9 @@ def compare(got, expected, *, atol=3e-5, rtol=3e-4):
     }
 
 
-def qualify_case(ni, no, rows, *, seed=17):
+def qualify_case(ni, no, rows, *, seed=17, coefficient=8):
     began = time.monotonic()
-    layer = make_cst(ni, no, seed=seed)
+    layer = make_cst(ni, no, seed=seed, coefficient=coefficient)
     report = layer.initialization_report
     base = torch.randn(
         2, rows, ni * 2, generator=torch.Generator().manual_seed(seed + 1)
@@ -170,6 +170,7 @@ def qualify_case(ni, no, rows, *, seed=17):
         "batch": 2,
         "tokens": rows,
         "atoms": live.atoms.count,
+        "coefficient": coefficient,
         "input_noncontiguous": not xx.is_contiguous(),
         "initialization": report,
         "checks": metrics,
@@ -365,7 +366,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--cohort", choices=("small", "target", "expanded"), default="small"
+        "--cohort", choices=("small", "target", "expanded", "capacity"), default="small"
     )
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
@@ -418,10 +419,22 @@ def main(argv=None):
                 (128, 2048, 128),
                 (2048, 128, 128),
             ]
-        for ni, no, tokens in cases:
-            result["cases"].append(qualify_case(ni, no, tokens))
+        coefficient_cases = [(ni, no, tokens, 8) for ni, no, tokens in cases]
+        if args.cohort == "capacity":
+            coefficient_cases = [
+                (ni, no, 128, c)
+                for c in (8, 16, 32)
+                for ni, no in ((256, 1024), (1024, 256))
+            ]
+        for ni, no, tokens, coefficient in coefficient_cases:
+            result["cases"].append(
+                qualify_case(ni, no, tokens, coefficient=coefficient)
+            )
             save()
-            print(f"PASS {ni}->{no}, B2 T{tokens}, all Atom gradients", flush=True)
+            print(
+                f"PASS {ni}->{no}, c{coefficient}, B2 T{tokens}, all Atom gradients",
+                flush=True,
+            )
         result["optimizer"] = optimizer_and_resume_check()
         print("Controlled optimizer and exact serialized resume passed", flush=True)
         result["task_step"] = task_step_and_resume_check()
