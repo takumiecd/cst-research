@@ -127,6 +127,9 @@ torchcst、モデル・データ・研究ツールはこのrepoで管理しま�
 
 ## 実行入口
 
+選択したR8/R10/R11設定は[固定ソースでの再現手順](ffn-reproduction.ja.md)を使います。
+以下は最初のR2実行入口で、選択した2048条件には再現手順中の後続operatorが必要です。
+
 この研究はtorchcst commit `9cb6de727ddbf5c2178fe18db6d580c9e181b926`の統合済み
 初期化APIを必要とします。repoの既存`[torchcst]` extraは以前のHIGGS依存を固定している
 ため、この研究には使わず、隔離環境に対象commitを明示して導入します。

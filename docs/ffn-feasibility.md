@@ -154,6 +154,10 @@ replacement is a later study.
 
 ## Entry points
 
+For the selected R8/R10/R11 recipe, use the [frozen-source reproduction
+guide](ffn-reproduction.md). The commands below describe the initial R2 entry
+points; selected2048 cohorts require the later explicit operator in that guide.
+
 This study requires the merged initialization API at torchcst commit
 `9cb6de727ddbf5c2178fe18db6d580c9e181b926`. The repository's historical
 `[torchcst]` extra still pins the old HIGGS dependency; do not use that older
