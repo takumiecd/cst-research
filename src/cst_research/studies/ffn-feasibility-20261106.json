@@ -199,6 +199,45 @@
       "planned_horizon_tokens": 20000000,
       "gates": "Current5Mterminalauditpassed and DEV_CST<DEV_noFFN; eachshape separately qualifies bothactualstd/directions/count/recipe, full4blockpreflight,3armlearning andtrainedcheckpoint audit. Failures retained; no automaticretry/resume.",
       "confirmation_not_executed": true
+    },
+    "main_width_confirmation": {
+      "status": "PLANNED_CONDITIONAL_NOT_STARTED",
+      "selection_boundary": "Fixed after development seed17 evidence and before the first confirmation run; no recipe or budget selection using confirmation outcomes.",
+      "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+      "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+      "widths": [
+        128,
+        256,
+        512
+      ],
+      "expansion": 4,
+      "seeds": [
+        29,
+        43,
+        71
+      ],
+      "coefficient": 8,
+      "initial_q": 0.0,
+      "amplitude_max": 1.0,
+      "w_c": 0.3,
+      "radius_birth": 4.0,
+      "feature_order": "contiguous",
+      "atom_lr_multiplier": 16.0,
+      "token_cap_per_arm": 5000000,
+      "actual_updates_per_arm": 4882,
+      "actual_seen_tokens_per_arm": 4999168,
+      "planned_horizon_tokens": 20000000,
+      "arms": [
+        "dense",
+        "none",
+        "cst"
+      ],
+      "learning_runs": 27,
+      "track_atom_motion": false,
+      "entry_gates": "R8selected5M and allR10shape pilots terminal/audited; usefulDEV_CSTvsnoFFN atN128/N256/N512 before confirmation. Per-case nativequalification/preflight and terminal trainedcheckpoint audit remain required.",
+      "analysis": "Keep all three seeds per main width and all controls, report paired CST-minus-noFFN and CST-minus-Dense CE/perplexity, learning curves, complete-update time and memory. UsefulFFN claim requires lower confirmationCE than noFFN for each mainwidth in allthree seeds; report effect sizes, no formalDense-noninferiority or generalasymptoticclaim.",
+      "failures": "No automaticretry/resume, seed exclusion or recipe adjustment from confirmation scores; retain partial/failed evidence and inspect numerical failures before further execution.",
+      "resources": "RTX4090only, one scientific GPUchild at a time; standardnohup independentPOSIXsession with PID/startticks journal for the long family."
     }
   },
   "evidence": {

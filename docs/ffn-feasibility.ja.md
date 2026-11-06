@@ -266,3 +266,24 @@ seed29/43/71の確認は残ります。幅の挙動はcを固定して比べ、A
 
 完了・監査した条件の集計と全学習曲線の重ね描画には、[receiptを結ぶreport入口](ffn-reporting.ja.md)
 を使います。reportの準備や合成metadataのテストは、モデル品質の証拠ではありません。
+
+## 主系列の幅の確認実験
+
+選択した5M比較と限定したshape pilotが終了後の監査を通したら、同じc8・初期q0・振幅上限1・
+w_c.3・birth4・通常順序・Atom LR16を幅128/256/512、expansion4、seed29/43/71で確認します。
+各幅・seedで新しいDense/FFNなし/CSTを各5M token上限（4882 update・実際に4,999,168 token）
+で学習し、共通予定20M-tokenのLR・データhorizon、振幅診断なしとします。計27 learning runです。
+固定R8 consumer70e02d8/operator2b587を使います。開発後、confirmationの開始前にこの系列と
+予算を固定します。
+
+全seedと対照を保持し、対応するseedのCE差、各seedのperplexity、全学習曲線、complete-step時間、
+allocated/reservedメモリを示します。FFNの寄与の確認を主張するには、主系列の各幅・全3 seedで
+CSTのconfirmation CEがFFNなしより低いことを要求します。効果量を示し、形式的なDense非劣性や
+普遍的なスケーリング則は主張しません。confirmation scoreからseedを除外したり、recipeを調整したり
+しません。失敗を保存し、数値的失敗は先に調べ、黙って再試行・再開しません。限定した縦横比のpilotは
+開発用1 seedの確認であり、3 seedの主張ではありません。
+
+長い系列は標準の`nohup`と独立したPOSIX sessionで動かし、PID/start ticks、process group、正確な
+argv、source hash、各条件のreceiptを保持します。観測側やVPNのtimeoutを完了・再起動の許可とは
+扱いません。記録した実際の生存processとjournalを確認し、承認したRTX4090上で科学計算のGPU childは
+同時に1つとします。所有するworkerが終わった後も、user所有のHubは動作したままにします。

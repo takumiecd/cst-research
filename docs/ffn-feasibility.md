@@ -314,3 +314,29 @@ restart an Atom lower-bound search.
 Use the [receipt-linked reporting entry point](ffn-reporting.md) to aggregate
 completed, audited cohorts and overlay all learning curves. Report preparation
 and synthetic metadata tests do not constitute model-quality evidence.
+
+## Main-width confirmation family
+
+After the selected5M and bounded shape pilots finish their terminal audits,
+confirm the same c8/q0/bound1/w_c.3/birth4, contiguous-order, Atom-LR16 recipe at
+width128/256/512, expansion4, seeds29/43/71. Every width/seed has fresh Dense,
+no-FFN and CST arms capped at5M tokens (4882 updates/4,999,168 actual tokens),
+with the common planned20M-token LR/data horizon and no motion instrumentation:
+27 learning runs in total. Keep the frozen R8 consumer70e02d8/operator2b587
+sources. This family and budget are fixed after development, before confirmation.
+
+Retain every seed and control. Report paired CE differences and per-seed
+perplexities, all learning curves, complete-step time and allocated/reserved
+memory. A useful-FFN confirmation claim requires CST confirmation CE below
+no-FFN at every main width in all three seeds; report effect sizes without a
+formal Dense noninferiority or universal scaling-law claim. Do not exclude a
+seed or tune the recipe from confirmation scores. Preserve failures and inspect
+numerical failures before further execution; do not silently retry or resume.
+Bounded aspect pilots remain one-seed development checks, not three-seed claims.
+
+The long family uses standard `nohup` in an independent POSIX session, recording
+PID/start ticks, process group, exact argv, source hashes and per-case receipts.
+An observer/VPN timeout is not completion or permission to restart a job. Poll
+the recorded live process and journal; keep one scientific GPU child at a time
+on the approved RTX4090. Leave the user-owned Hub running after owned workers
+finish.
