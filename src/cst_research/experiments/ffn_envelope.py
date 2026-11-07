@@ -80,6 +80,7 @@ def envelope_snapshot(model):
 def main(argv=None):
     """Qualify one exact envelope/q recipe, including all eight actual FFN sites."""
     from .ffn_contract import ModelConfig
+    from .ffn_model import parameter_seed
     from .ffn_qualification import (
         independent_quadrature_check,
         qualify_case,
@@ -144,7 +145,15 @@ def main(argv=None):
         save()
         for ni, no, std in [(256, 1024, 0.02), (1024, 256, 0.02 / (8**0.5))]:
             result["cases"].append(
-                qualify_case(ni, no, 128, q=args.q, std=std, **envelope)
+                qualify_case(
+                    ni,
+                    no,
+                    128,
+                    q=args.q,
+                    std=std,
+                    seed=parameter_seed(17, "block0.up" if ni < no else "block0.down"),
+                    **envelope,
+                )
             )
             save()
             print(f"PASS all-Atom native VJP {ni}->{no}", flush=True)

@@ -241,6 +241,7 @@ def qualify_case(
         "atoms": live.atoms.count,
         "coefficient": coefficient,
         "q": q,
+        "seed": seed,
         "std": std,
         "amplitude_max": amplitude_max,
         "w_c": w_c,
@@ -443,7 +444,7 @@ def task_step_and_resume_check(
         coefficient=coefficient,
         **envelope_settings,
     )
-    model = LanguageModel(config, "cst", seed=251).cuda()
+    model = LanguageModel(config, "cst", seed=17 if full_task else 251).cuda()
     configure_native(model)
     optimizer = cst_optimizer(
         model,
@@ -493,7 +494,7 @@ def task_step_and_resume_check(
     )
     storage.seek(0)
     state = torch.load(storage, weights_only=False)
-    resumed = LanguageModel(config, "cst", seed=251).cuda()
+    resumed = LanguageModel(config, "cst", seed=17 if full_task else 251).cuda()
     before_load = copy.deepcopy(resumed.state_dict())
     configure_native(resumed)
     resumed.load_state_dict(state["model"])
@@ -525,6 +526,7 @@ def task_step_and_resume_check(
             compare(a[key], b[key], atol=3e-7, rtol=3e-5)
     return {
         "cst_projections": 2 * config.layers,
+        "seed": 17 if full_task else 251,
         "all_cst_sites_received_finite_nonzero_gradients_and_changed": True,
         "first_loss": first_loss,
         "next_loss": left,
