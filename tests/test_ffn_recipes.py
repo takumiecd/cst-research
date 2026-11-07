@@ -110,6 +110,11 @@ class FeatureOrderTests(unittest.TestCase):
                 )
 
     def test_atom_lr_group_does_not_change_ordinary_parameter_rates(self):
+        for multiplier in (16.0, 32.0, 64.0):
+            with self.subTest(multiplier=multiplier):
+                self.check_atom_lr_group(multiplier)
+
+    def check_atom_lr_group(self, multiplier):
         from torchcst import CSTLinear
 
         from cst_research.experiments.ffn_model import LanguageModel, cst_optimizer
@@ -118,7 +123,7 @@ class FeatureOrderTests(unittest.TestCase):
             ModelConfig(width=8, layers=1, heads=2, context=4, vocabulary=31)
         )
         optimizer = cst_optimizer(
-            model, atom_lr_multiplier=16.0, lr=0.0003, foreach=False
+            model, atom_lr_multiplier=multiplier, lr=0.0003, foreach=False
         )
         atoms = {
             id(module.atoms.p)
@@ -129,7 +134,7 @@ class FeatureOrderTests(unittest.TestCase):
         for group in optimizer.param_groups:
             for parameter in group["params"]:
                 seen.append(id(parameter))
-                expected = 16.0 if id(parameter) in atoms else 1.0
+                expected = multiplier if id(parameter) in atoms else 1.0
                 self.assertEqual(group["lr_scale"], expected)
                 self.assertAlmostEqual(group["lr"], 0.0003 * expected)
         self.assertEqual(set(seen), {id(p) for p in model.parameters()})

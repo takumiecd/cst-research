@@ -547,7 +547,7 @@ def main(argv=None):
         "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
     )
     parser.add_argument(
-        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0), default=1.0
+        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0, 32.0, 64.0), default=1.0
     )
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)

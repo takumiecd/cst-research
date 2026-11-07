@@ -102,3 +102,23 @@ this an optimum or a paired cross-job speed comparison. The owner's explicit
 request extends the earlier bounded follow-up. API implementation proceeds
 locally while the single4090 runs these new arms sequentially; frozen operator
 2b587 and past experiment sources stay unchanged.
+
+## Correction: whole-Atom 32×/64× comparison (R15)
+
+The owner clarified that the higher-rate question concerns the whole Atom, not
+amplitude alone. R14 was an assistant interpretation error: retain its audited
+amplitude-only results, but do not use them to answer the whole-Atom question.
+R14 DEV CE was3.689207 at amplitude32/centers16/outer16 and3.698881 at
+amplitude64/centers16/outer16; all16 was3.673505. These are separate contrasts.
+
+Next run stock CSTAdamW with the entire Atom group LR multiplied by32 or64:
+joint amplitude coordinates, both centers and the Polar outer clock all share
+that rate. Keep ordinary parameters, including FFN biases, at the Dense rate.
+No field-rate adapter or new public API is used. N256/c8/seed17,999,424 actual
+tokens (976 updates), the same20M planned horizon, data/order/initialization,
+and fresh Dense/no-FFN controls remain fixed. Qualify each exact rate against
+CPU optimizer/moments/counters and serialized task resume before training;
+audit trained eight projection VJPs, CE and resume afterward. Compare curves
+with the retained all16 baseline. This is a bounded one-seed development check,
+not an optimum or a paired cross-job speed claim. Use only the existing4090,
+with one sequential scientific child; do not resume cancelled long cases.
