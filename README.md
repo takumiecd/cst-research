@@ -206,8 +206,8 @@ For current FFN work, use the separately pinned research library extra:
 python -m pip install -e '.[ffn]'
 ```
 
-The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
-from merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+The exact library commit is `1cb4bec3ae2f1a859a077bf1c664888082ccc7ab`,
+from [center-activity PR153](https://github.com/takumiecd/torchcst/pull/153), extending merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
 the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
 envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
 envelope arguments available; these experimental settings remain explicit
@@ -261,3 +261,5 @@ requirement to its evidence, including the owner-stopped three-seed family.
 A [post-hoc radius review](docs/ffn-radius-review-20261107.md) conditions on physical
 amplitude and matches Atom IDs: weaker/decreased Atoms do widen, but weak support
 stays near4 under the current low-q/default-no-dormant-expansion recipe.
+
+The [center-activity FFN pilot](docs/ffn-center-activity-20261107.md) preserves `(s,t)` and the selected L/U recipe, comparing fresh amplitude activity with three center-activity gains. Preparation is separate from completed GPU learning; see its registry state. The current FFN dependency is an experimental pin, not a new main/default adoption.

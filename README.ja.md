@@ -166,8 +166,8 @@ python -m unittest discover -s tests -v
 python -m pip install -e '.[ffn]'
 ```
 
-ライブラリはmerge済みの[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
-`7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`に固定しています。
+ライブラリはmerge済みの[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)を拡張した[中心活動PR153](https://github.com/takumiecd/torchcst/pull/153)の
+`1cb4bec3ae2f1a859a077bf1c664888082ccc7ab`に固定しています。
 統合済みの長方形演算・初期化・field別LR APIに加え、明示指定の実験用半径包絡と
 Torch2.6のAdamW互換修正を含みます。この固定はconsumerの包絡引数を利用可能にするためで、
 これらの実験設定は明示指定の機能のままで、実装のmergeによって公開デフォルトを変更するものではありません。
@@ -215,3 +215,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 [実施結果と終了範囲](docs/ffn-campaign-disposition-20261107.ja.md)に、所有者が停止した3seed系列も含め、要件と証拠を対応付けています。
 
 [半径の事後確認](docs/ffn-radius-review-20261107.ja.md)では振幅別・同じAtom IDで調べ、弱い・弱まったAtomの半径が広がることを確認しました。ただし現在の低q・弱Atom追加拡張なしの設定では、弱いAtomも半径4付近にとどまります。
+
+[中心活動型FFNパイロット](docs/ffn-center-activity-20261107.ja.md)は`(s,t)`と選択済みL/Uを保ち、fresh振幅活動と中心活動gain3条件を比較します。準備とGPU学習完了を区別し、状態はregistryに記録します。現在のFFN依存は実験用pinで、新しいmain統合やデフォルト採用ではありません。

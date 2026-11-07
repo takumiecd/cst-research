@@ -194,6 +194,15 @@ def main(argv=None):
     parser.add_argument("--track-atom-motion", action="store_true")
     parser.add_argument("--track-center-motion", action="store_true")
     parser.add_argument(
+        "--activity-mode",
+        choices=("finite_chord", "time_energy", "center_chord"),
+        default="finite_chord",
+    )
+    parser.add_argument("--activity-gain", type=float, default=1.0)
+    parser.add_argument(
+        "--update-backend", choices=("native", "radius_eager"), default="native"
+    )
+    parser.add_argument(
         "--radius-envelope",
         choices=("rational", "closed_polynomial", "rational_zero_opening"),
         default="rational",
@@ -251,6 +260,9 @@ def main(argv=None):
         closed_upper_power=args.closed_upper_power,
         zero_opening_scale=args.zero_opening_scale,
         attention_kind=args.attention_kind,
+        activity_mode=args.activity_mode,
+        activity_gain=args.activity_gain,
+        update_backend=args.update_backend,
     )
     if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
