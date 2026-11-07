@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "ffn-center-activity-20261107",
   "title": "Center-driven Polar activity with preserved s,t and fixed FFN envelope",
-  "status": "PLANNED",
-  "status_note": "CPU preparation; no GPU learning result yet. New owner-authorized bounded comparison, separate from the completed envelope/Attention studies.",
+  "status": "RUNNING",
+  "status_note": "Frozen A100 cohort launched; CPU/CUDA update tests and full-model initialization parity passed. Recipe qualification precedes learning; no completed quality result yet.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "1cb4bec3ae2f1a859a077bf1c664888082ccc7ab",
   "runner_entrypoint": "cst_research.experiments.ffn_envelope",
@@ -38,7 +38,8 @@
     ],
     "activity": "shortest accepted torus displacement / old support; no optimizer-time division",
     "confirmation_evaluated": false,
-    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "frozen_consumer_commit": "ac64f6db4fdf616870c41fed779e1119ecc5e441"
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
