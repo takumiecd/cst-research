@@ -3,10 +3,10 @@
   "id": "ffn-closed-envelope-20261107",
   "title": "Closed Polar radius envelope FFN pilot",
   "status": "PLANNED",
-  "status_note": "Owner authorized RTX4090 short follow-up; reuse Dense/rational-q0 baselines. Rational-q1 rejected in bounded variance initialization; two closed recipes prepared, not yet GPU-qualified or trained.",
+  "status_note": "Exploratory RTX4090 pilot prepared. Attempt01 stopped before native tests (pytest missing); attempt02 found one-ulp minimum-radius support-routing mismatch before any learner. Corrected operator uses stable closed-law interpolation; qualification must pass before learning. Dense/rational-q0 remain reused.",
   "source_repository": "https://github.com/takumiecd/torchcst",
-  "source_commit": "8a69f00257e950b1a0c96b93d18774958d1d4046",
-  "source_pull_request": "https://github.com/takumiecd/torchcst/compare/main...kernel/closed-radius-envelope",
+  "source_commit": "bfe43c1e234f48d8c7d1139939239dbef2f55970",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
   "runner_entrypoint": "cst_research.experiments.ffn_envelope",
   "protocol_source_path": "docs/ffn-closed-envelope-20261107.md",
   "protocol": {
