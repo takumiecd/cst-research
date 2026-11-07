@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "attention-qk-20261107",
+  "title": "CST Q-only and K-only causal LM pilot",
+  "status": "COMPLETED",
+  "status_note": "Fresh Dense and selected projection learners completed, trained-audited and retrieved/hash-verified. One-seed short feasibility observations; combined models remain separate.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
+  "runner_entrypoint": "cst_research.experiments.attention_qualification",
+  "protocol_source_path": "docs/attention-qk-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "heads": 4,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "dense",
+      "cst-q",
+      "cst-k"
+    ],
+    "ffn_kind": "dense",
+    "cst_projection": "Q-only or K-only in all four blocks",
+    "q": 0.0,
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "atoms_per_projection": 2048,
+    "results_document": "docs/attention-qk-20261107-results.md",
+    "trained_consumer_commit": "9bc0418dc4fc72820658e86ae8b7e5e747aad0df"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/attention-qk-20261107-01",
+    "archive_sha256": "4f209b48f13770134b0258f9cf6b5118a2e56ae0f0ee197577e62456300190e6"
+  }
+}

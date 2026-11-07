@@ -70,7 +70,7 @@ def probe(model, x, y):
     model.zero_grad(set_to_none=True)
     activations, handles = {}, []
     for name, module in model.named_modules():
-        if name.endswith((".ffn.up", ".ffn.down")):
+        if name.endswith((".ffn.up", ".ffn.down", ".qkv.value")):
 
             def capture(_module, _inputs, output, name=name):
                 activations[name] = float(
@@ -83,7 +83,7 @@ def probe(model, x, y):
         loss.backward()
         gradients = {}
         for name, p in model.named_parameters():
-            if ".ffn." in name and p.grad is not None:
+            if (".ffn." in name or ".qkv." in name) and p.grad is not None:
                 if not bool(torch.isfinite(p.grad).all()):
                     raise FloatingPointError("nonfinite FFN gradient: " + name)
                 gradients[name] = {
@@ -142,6 +142,11 @@ def main(argv=None):
     parser.add_argument("--qualification-sha256", required=True)
     parser.add_argument("--data-manifest-sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--attention-kind",
+        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv"),
+        default="dense",
+    )
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
@@ -159,7 +164,7 @@ def main(argv=None):
     )
     parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
     parser.add_argument(
-        "--radius-birth", type=float, choices=(1.0, 2.0, 4.0, 16.0), default=4.0
+        "--radius-birth", type=float, choices=(0.5, 1.0, 2.0, 4.0, 16.0), default=4.0
     )
     parser.add_argument(
         "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
@@ -187,6 +192,7 @@ def main(argv=None):
     parser.add_argument("--max-wall-seconds", type=int, default=3600)
     parser.add_argument("--repeat-fixed-batches", action="store_true")
     parser.add_argument("--track-atom-motion", action="store_true")
+    parser.add_argument("--track-center-motion", action="store_true")
     parser.add_argument(
         "--radius-envelope",
         choices=("rational", "closed_polynomial", "rational_zero_opening"),
@@ -244,8 +250,9 @@ def main(argv=None):
         closed_lower_power=args.closed_lower_power,
         closed_upper_power=args.closed_upper_power,
         zero_opening_scale=args.zero_opening_scale,
+        attention_kind=args.attention_kind,
     )
-    if not qualification_covers_model(qualification, requested):
+    if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
         )
@@ -307,7 +314,7 @@ def main(argv=None):
         else config.ffn_parameter_budget()[args.kind + "_parameters"]
     )
     assert actual_ffn_parameters == expected_ffn_parameters
-    if args.kind == "cst":
+    if args.kind == "cst" or config.attention_kind != "dense":
         configure_native(model)
         if field_recipe is not None:
             from .ffn_field_lr import FieldRateOptimizer
@@ -331,7 +338,9 @@ def main(argv=None):
             foreach=False,
         )
     motion = None
-    if args.track_atom_motion and args.kind == "cst":
+    if args.track_atom_motion and (
+        args.kind == "cst" or config.attention_kind != "dense"
+    ):
         from torchcst import CSTLinear
 
         from .ffn_motion import AmplitudeMotion, geometry_snapshot
@@ -343,6 +352,11 @@ def main(argv=None):
                 if isinstance(module, CSTLinear)
             }
         )
+    center_motion = None
+    if args.track_center_motion:
+        from .ffn_center_motion import CenterMotion
+
+        center_motion = CenterMotion(model)
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
     horizon_updates = args.schedule_tokens // tokens_per_update
@@ -513,6 +527,8 @@ def main(argv=None):
             )
             if motion is not None:
                 motion.update()
+            if center_motion is not None:
+                center_motion.update()
             if step <= 5 or step % 20 == 0 or step == updates:
                 log_geometry(step)
             value = float(loss_sum / args.accumulation)
@@ -535,6 +551,11 @@ def main(argv=None):
                         ],
                         "gradient_norm_before_clip": float(norm),
                         "complete_update_seconds": duration,
+                        **(
+                            {"center_motion": center_motion.report()}
+                            if center_motion is not None
+                            else {}
+                        ),
                         **(
                             {"amplitude_motion": motion.report()}
                             if motion is not None
@@ -563,6 +584,8 @@ def main(argv=None):
                 checkpoint(milestone=step in milestones)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
+        if center_motion is not None:
+            summary["center_motion"] = center_motion.report()
         if motion is not None:
             summary["amplitude_motion"] = motion.report()
         if args.repeat_fixed_batches:

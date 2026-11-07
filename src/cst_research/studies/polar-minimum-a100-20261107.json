@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "id": "polar-minimum-a100-20261107",
+  "title": "A100 minimum-based lower-envelope FFN screen",
+  "status": "COMPLETED",
+  "status_note": "Three400-update A100 recipes completed, trained-audited and retrieved/hash-verified after explicitTorch2.6 compatibility fix. Further kernel/movement-policy experiments deferred by user.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "7be68e4faf1813dd4b1a677ee432da5e3a8da9bd",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
+  "runner_entrypoint": "cst_research.experiments.ffn_envelope",
+  "protocol_source_path": "docs/polar-minimum-a100-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "rational-q0",
+      "minimum-001",
+      "minimum-003"
+    ],
+    "q": 0.0,
+    "updates": 400,
+    "token_budget": 409600,
+    "schedule_tokens": 20000000,
+    "radius_minimum": 0.5,
+    "candidate_radius_birth": 0.5,
+    "epsilon": [
+      0.001,
+      0.003
+    ],
+    "center_motion": "read-only every-step shortest torus delta over previous radius",
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "results_document": "docs/polar-minimum-a100-20261107-results.md",
+    "trained_consumer_commit": "85c5a3c09d7ee12ff092384e35b67a506b05fc31",
+    "movement_update_stage": "DEFERRED_BY_USER"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/polar-minimum-a100-20261107-02",
+    "archive_sha256": "fb90978eb5ee72dcc762ec93442204b65a673c9f7d665281716d50e6aa3e00c5"
+  }
+}

@@ -26,8 +26,8 @@ public API are separate decisions.
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
 establish practical use in FFNs and Attention.** This direction was adopted on
-2026-11-06. FFN development experiments are now available; Attention validation
-has not started.
+2026-11-06. FFN and Attention development pilots are now complete, including
+combined QKV and QKV+FFN substitutions in all four blocks.
 
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
@@ -60,6 +60,41 @@ each completed 999,424 tokens and trained-checkpoint audits; Dense and rational-
 controls were reused. Weak radii reached about 50, but this pL4/pU1 candidate's
 DEV losses (3.9506/3.9761) were worse than rational-q0 (3.6735). The learning and
 amplitude-conditioned radius/q curves are retained for further shape design.
+
+### Completed projection and Polar pilots (2026-11-07)
+
+At width 256, seed 17 and 999,424 training tokens, the audited RTX4090 pilots
+reached the following DEV cross entropies. These are short feasibility
+observations, not convergence or noninferiority claims.
+
+| Projection replacement | DEV CE | Evidence |
+| --- | ---: | --- |
+| Dense control | 3.581960 | Fresh control in each Attention pilot |
+| V only | 3.570822 | [Results and curves](docs/attention-v-20261107-results.md) |
+| Q only / K only | 3.592582 / 3.582850 | [Results and curves](docs/attention-qk-20261107-results.md) |
+| QKV together | 3.580952 | [Combined results](docs/attention-combined-20261107-results.md) |
+| QKV + both FFN maps | 3.695186 | Same report, 20 CST sites |
+
+O, embeddings, vocabulary output and normalization remain Dense; causal
+softmax is unchanged. QKV is close to Dense here, while the FFN-containing model
+still has a gap. Target projection Parameters fall from 2,891,776 to 237,568 for
+QKV+FFN, but the current eager FP32 implementation shows no speed or peak-memory
+benefit at this width.
+
+The [A100 minimum-based lower-envelope screen](docs/polar-minimum-a100-20261107-results.md)
+also completed: at 400 updates the fresh rational control reached CE 4.294037,
+versus 4.248089 / 4.257022 for epsilon .001 / .003. It retains read-only center
+motion and amplitude-conditioned radius/q curves; it does not validate a new
+movement-dependent optimizer. All four studies have trained-checkpoint audits
+and retrieved, hash-verified compact evidence. Their workers are finished. New
+radius/update policies wait for joint mathematical discussion, and the RTX4090
+has been released for the owner's other work. Implementation and evidence are
+recorded in [research PR32](https://github.com/takumiecd/cst-research/pull/32),
+following [PR31](https://github.com/takumiecd/cst-research/pull/31). Library
+envelopes were merged through
+[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152) as explicit opt-ins.
+
+### Research sequence
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
@@ -172,11 +207,11 @@ python -m pip install -e '.[ffn]'
 ```
 
 The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
-from [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+from merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
 the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
 envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
-envelope arguments available; it does not imply that the experimental PR has
-merged or that its settings are public defaults.
+envelope arguments available; these experimental settings remain explicit
+opt-ins, and merging the implementation does not select new public defaults.
 This does not reproduce the numeric runtime or migrate historical runs; follow
 [the frozen-source guide](docs/ffn-reproduction.md) for recorded quality results.
 

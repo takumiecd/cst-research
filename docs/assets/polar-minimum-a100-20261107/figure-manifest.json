@@ -1,0 +1,39 @@
+{
+  "source_commits": {
+    "torchcst": "7be68e4faf1813dd4b1a677ee432da5e3a8da9bd",
+    "cst-research": "85c5a3c09d7ee12ff092384e35b67a506b05fc31"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "fb90978eb5ee72dcc762ec93442204b65a673c9f7d665281716d50e6aa3e00c5",
+  "plot_script_sha256": "d711ae3017be241aea4bdd6ee631211a1d680a7e98c9fcaa7442bb6c70598bcb",
+  "matplotlib": "3.11.1",
+  "source_files": {
+    "rational-q0/geometry.jsonl": "84848539028dc289f9d7488c0e891273fd99c89f30f23d0e879c4c29b5ad03f1",
+    "rational-q0/summary.json": "c8ac139e62d08219c1e34e6b22ed41002f949457b0d74bc5bd2f0522f4dafc4c",
+    "rational-q0/curves.jsonl": "d2ff81384d18e21c7f5db07ca2fbc15db167afe537438c045dc2fe5a8f4e47fe",
+    "minimum-001/geometry.jsonl": "7a246c4d5361ab7a5ffc14c40158d61de95d804bad0e2e95bbcb73a82185dea7",
+    "minimum-001/summary.json": "4e043f92688e56674184b9cfad24b02e30075a309947c08b5199f6c20d7cc660",
+    "minimum-001/curves.jsonl": "2d0c5c2512ace3575cfa85c3fb4be4af3f38e42ab7a5747e631e57c81473ba24",
+    "minimum-001-qualification/qualification.json": "103401aeaa6fd050f18174fae6c7ff9deb60c3cd42f84ab24469a805456fd147",
+    "rational-q0-qualification/qualification.json": "9390daffb6f2470ca43f099c83adcdc7b8c96d13ff05f29580b9f4034f7d9e20",
+    "minimum-003/geometry.jsonl": "b8e52f139e2f40389cadc17ef3375a5a851909a36f21f5ffb4e113ca97682570",
+    "minimum-003/summary.json": "907c43a4b28e0504699d225ffa21a92cf60d5da9f99cfea6a550c936d1bf769a",
+    "minimum-003/curves.jsonl": "52eefa98939704da9e8a271a3e85f1327709154bed12fd057889dea57d7d2ff2",
+    "minimum-003-qualification/qualification.json": "beab5766748a59e4e4de1666a1ccef898db5aba623aa3e1de8966e2af275b21d"
+  },
+  "historical_files": {},
+  "figures": {
+    "learning-curves.png": "5d7ef87a57963702d4418c0abd9350ef98d32792785e7d656d14d85789ad2b5e",
+    "learning-curves.svg": "bfc88550d6042a0f39f1de7a028cf183d9f40ea6f2f1c6608eab03edf1eebf89",
+    "learning-curves-tail.png": "4123a036cf021f6fc2885c89a41a26c197f912ae9000678512be844271cd53b5",
+    "center-motion.png": "94dcabfc0bcb120840bedb88a96f4011996876f1e8a4c8fe6cfa0b119e9bb962",
+    "geometry-ffn-down.png": "032ed020fd785288f0a581f1790222185016274f44263b55ef2593919e168dca",
+    "envelope-shape.svg": "08cc580803d896ef7e43757e41c245a1bb06e63c8c61a201ea097de0d5953d92",
+    "geometry-ffn-up.svg": "6fae8464577f58766784dd95f6fc9b63ab91972ecebdca994eff66226b023160",
+    "geometry-ffn-up.png": "63228c5da6a956f71400fe6634fc5ae2cb7e32301abda6fd8add6039abe670c5",
+    "envelope-shape.png": "83260535f08043e6e7669169b5fdc7e9bc656d7876f6a70cb41fc8e1b5bd647f",
+    "geometry-ffn-down.svg": "78751c02420b6a5d76180cd4160d01af6ec8bf9196feca491ed87143b4dbf5c3",
+    "center-motion.svg": "69b15775c08f9960d4e26142340912cb0e13bea299fe45661403d75d367e65e9",
+    "learning-curves-tail.svg": "fe82f550ffe39063c72cad8960aaaa0bb5fa19d769bd741f90dec917d68a9ce0"
+  }
+}

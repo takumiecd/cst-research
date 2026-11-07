@@ -49,6 +49,7 @@ class ModelConfig:
     closed_lower_power: float = 4.0
     closed_upper_power: float = 1.0
     zero_opening_scale: float = 0.03
+    attention_kind: str = "dense"
 
     def __post_init__(self):
         for key, value in asdict(self).items():
@@ -59,6 +60,7 @@ class ModelConfig:
                 "w_c",
                 "radius_birth",
                 "feature_order",
+                "attention_kind",
                 "atom_lr_multiplier",
                 "radius_envelope",
                 "closed_lower_power",
@@ -92,6 +94,8 @@ class ModelConfig:
             or self.w_c <= 0
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
+            or self.attention_kind
+            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -121,6 +125,8 @@ class ModelConfig:
             )
         if self.radius_envelope == "rational_zero_opening":
             result["zero_opening_scale"] = self.zero_opening_scale
+        if self.attention_kind != "dense":
+            result["attention_kind"] = self.attention_kind
         return result
 
     @property
@@ -142,10 +148,16 @@ class ModelConfig:
         }
 
 
-def qualification_covers_model(receipt, config):
+def qualification_covers_model(receipt, config, *, ffn_kind=None):
     """Admit both native directions and the full model's actual recipe."""
     if config.recipe() not in receipt.get("task_recipes", []):
         return False
+    if ffn_kind is not None and config.attention_kind != "dense":
+        if {
+            "ffn_kind": ffn_kind,
+            "attention_kind": config.attention_kind,
+        } not in receipt.get("model_kinds", []):
+            return False
     scalars = {
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
@@ -158,15 +170,22 @@ def qualification_covers_model(receipt, config):
         )
     if config.radius_envelope == "rational_zero_opening":
         scalars["zero_opening_scale"] = config.zero_opening_scale
-    for ni, no in (
-        (config.width, config.intermediate),
-        (config.intermediate, config.width),
-    ):
+    dimensions = (
+        [(config.width, config.width)]
+        if config.attention_kind != "dense"
+        else [(config.width, config.intermediate), (config.intermediate, config.width)]
+    )
+    if config.attention_kind != "dense" and ffn_kind == "cst":
+        dimensions += [
+            (config.width, config.intermediate),
+            (config.intermediate, config.width),
+        ]
+    for ni, no in dimensions:
         if not any(
             row.get("in") == ni
             and row.get("out") == no
             and row.get("coefficient") == config.coefficient
-            and row.get("atoms") == config.atoms_per_projection
+            and row.get("atoms") == atom_count(ni, no, config.coefficient)
             and all(row.get(key) == value for key, value in scalars.items())
             for row in receipt.get("cases", [])
         ):

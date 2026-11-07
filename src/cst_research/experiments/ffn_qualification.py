@@ -432,6 +432,7 @@ def task_step_and_resume_check(
     atom_lr_multiplier=1.0,
     coefficient=8,
     full_task=False,
+    ffn_kind="cst",
     **envelope_settings,
 ):
     from .ffn_contract import ModelConfig
@@ -452,7 +453,7 @@ def task_step_and_resume_check(
         coefficient=coefficient,
         **envelope_settings,
     )
-    model = LanguageModel(config, "cst", seed=17 if full_task else 251).cuda()
+    model = LanguageModel(config, ffn_kind, seed=17 if full_task else 251).cuda()
     configure_native(model)
     optimizer = cst_optimizer(
         model,
@@ -502,7 +503,7 @@ def task_step_and_resume_check(
     )
     storage.seek(0)
     state = torch.load(storage, weights_only=False)
-    resumed = LanguageModel(config, "cst", seed=17 if full_task else 251).cuda()
+    resumed = LanguageModel(config, ffn_kind, seed=17 if full_task else 251).cuda()
     before_load = copy.deepcopy(resumed.state_dict())
     configure_native(resumed)
     resumed.load_state_dict(state["model"])
@@ -533,7 +534,7 @@ def task_step_and_resume_check(
         for key in ("exp_avg", "exp_avg_sq", "step"):
             compare(a[key], b[key], atol=3e-7, rtol=3e-5)
     return {
-        "cst_projections": 2 * config.layers,
+        "cst_projections": len(before),
         "seed": 17 if full_task else 251,
         "all_cst_sites_received_finite_nonzero_gradients_and_changed": True,
         "first_loss": first_loss,
