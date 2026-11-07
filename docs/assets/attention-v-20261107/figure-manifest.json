@@ -1,0 +1,28 @@
+{
+  "source_commits": {
+    "torchcst": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+    "cst-research": "48479cabf504053d37f8b7143d104f0a85b19fd9"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "a2794154797af986eac5842a16226bb23ade1ebec974efa7f10f51d04ddfa335",
+  "plot_script_sha256": "d711ae3017be241aea4bdd6ee631211a1d680a7e98c9fcaa7442bb6c70598bcb",
+  "matplotlib": "3.11.1",
+  "source_files": {
+    "cst-v/geometry.jsonl": "723901a2924a421df2a310d227f4971aea9173496eebbaa2a5a65a6e6606a610",
+    "cst-v/summary.json": "418eec438571639c5102f771e9d6c20948bb5c62d1e86ed8678abf975d3187ba",
+    "cst-v/curves.jsonl": "d6b651d2d6d1abcfbd7ed8462ac3d091fcf1fa46dcb97d4c68596a0361068e17",
+    "dense/geometry.jsonl": "ee2114c42592eecda8d9ccaca913593fa7c39cfa74536a4ccc76f36016f46c81",
+    "dense/summary.json": "86ced72470325f3cdc9d8cae696a16179f2bef35f412ae8c78c79b144f7d24a9",
+    "dense/curves.jsonl": "2d1215be8942b04b8f61c9dabcf525b8ca01bd36b1359ef6bfdfba4712800b10",
+    "qualification/qualification.json": "6ffccbdc9e4796d8729f62f01d3e8ba6240d64e7fb62a63b900b4e6e625a806c"
+  },
+  "historical_files": {},
+  "figures": {
+    "learning-curves.png": "dcdcae9cb9905a4e8b6953224e104fda04b936725485f79b052e90b29726ef4f",
+    "geometry-value.png": "88fbbffc65e5fddf7fdb85b844b5738a24a0735075862428fe2827fd19c4a992",
+    "geometry-value.svg": "e8063d3f4acb373b3a6fe7e3316d1d7b81cec7e183d5e302691663e9d5964b02",
+    "learning-curves.svg": "93e3a83aabf5248740a63d2f06f6bc5d9bb97fab37e607bf5fcafe330719fe45",
+    "learning-curves-tail.png": "99e00b5f6578f609416c4fbedd54f184b09ec38a6036ff42d4b500443d0b5a5b",
+    "learning-curves-tail.svg": "8f99aaeba81a3bc23091998de30978aab8d01c5b0f58e6bbf1b291bad02e5a69"
+  }
+}

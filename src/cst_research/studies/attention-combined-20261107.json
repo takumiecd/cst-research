@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "attention-combined-20261107",
   "title": "Combined CST QKV and FFN causal LM pilot",
-  "status": "PLANNED",
-  "status_note": "Combined QKV then QKV+FFN authorized after individual projections; separate12/20-site full-task qualification required.",
+  "status": "COMPLETED",
+  "status_note": "Fresh Dense, 12-site QKV and 20-site QKV+FFN completed; separate trained audits and compact retrieval/hash verification passed. One-seed short feasibility only; further radius policies wait for joint mathematical discussion.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "d2ca317f63b034e5138bb3471ede541159a9a60b",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
@@ -38,10 +38,13 @@
       20
     ],
     "atoms_per_square_projection": 2048,
-    "atoms_per_rectangular_projection": 4096
+    "atoms_per_rectangular_projection": 4096,
+    "results_document": "docs/attention-combined-20261107-results.md",
+    "trained_consumer_commit": "13f717d44569109b543c7f6628e93883936bac1e"
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "ffn-feasibility-20261106/attention-combined-20261107-01"
+    "relative_path": "ffn-feasibility-20261106/attention-combined-20261107-01",
+    "archive_sha256": "b4bcbd09385e8a80651d617f5db2e93b11437186a245e37736628e82a4435bdd"
   }
 }

@@ -1,0 +1,37 @@
+{
+  "source_commits": {
+    "torchcst": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+    "cst-research": "9bc0418dc4fc72820658e86ae8b7e5e747aad0df"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "4f209b48f13770134b0258f9cf6b5118a2e56ae0f0ee197577e62456300190e6",
+  "plot_script_sha256": "d711ae3017be241aea4bdd6ee631211a1d680a7e98c9fcaa7442bb6c70598bcb",
+  "matplotlib": "3.11.1",
+  "source_files": {
+    "cst-q/geometry.jsonl": "a005c365fbce09903b32874e73a0d3a4f157d918b1955082fc49fc282edb0658",
+    "cst-q/summary.json": "5b8b29d379307e37ad016b0626f4bbd564fc8fea239c87b385371fa412cad058",
+    "cst-q/curves.jsonl": "573e095f2c716a36b23d02f8f4d418ad9bf7838187e9c7ed20c501af4b71a4b2",
+    "cst-k/geometry.jsonl": "a7c1d2e5bad4887c189d1e7f305f05a261bb96aaab69bf4374c281f4f2864afd",
+    "cst-k/summary.json": "035e9746e447522b253e87fb98d0bb47179fc9d41dd9195eb9168743c2f15825",
+    "cst-k/curves.jsonl": "770e00e99432351a0f8da02bc3ab45f3b3ff368bba71012bb721c9c47441aaa6",
+    "key-qualification/qualification.json": "bb532ac0384cb4c45cdbf14635f2a4712d1caf57fdb38bf51d7f012bd37e9827",
+    "dense/geometry.jsonl": "ee2114c42592eecda8d9ccaca913593fa7c39cfa74536a4ccc76f36016f46c81",
+    "dense/summary.json": "bf35c6c1b8210a1a2355ebf28b6b9900437981c6611b60665e0113b84f99004f",
+    "dense/curves.jsonl": "185b58a8ecbfe73913726cfc9cfdde38b46bae0367997e7f855a7a3691211990",
+    "query-qualification/qualification.json": "2df98e93340ac2a8162410c90c0729b51b10f6b15081bda53d1da24bb7e22548"
+  },
+  "historical_files": {
+    "attention-v-20261107-01/retrieved/cst-v/summary.json": "418eec438571639c5102f771e9d6c20948bb5c62d1e86ed8678abf975d3187ba",
+    "attention-v-20261107-01/retrieved/cst-v/curves.jsonl": "d6b651d2d6d1abcfbd7ed8462ac3d091fcf1fa46dcb97d4c68596a0361068e17"
+  },
+  "figures": {
+    "learning-curves.png": "366a0bb4cd9a9696f865646c6179e81423752cb4160b557c0a6f77b7dcc33ae9",
+    "geometry-key.svg": "8b005df47d7f00e638a0352178c40dc7af5b2d720f8e434f6d522d97c6790504",
+    "geometry-key.png": "9738e2aa1b9c014b95b55a6a2b71ae5f90c686035e2e46ac01f1e41671ddfdbc",
+    "learning-curves.svg": "4c7206b373bfc463985a0b28ae564d18c03746e6ed7db40f280c69f654d65f76",
+    "learning-curves-tail.png": "fbb7a21861a774b1cffb9e8752000a1c2b0ad92c41cdbe1ef6410278423f1892",
+    "geometry-query.png": "fa2e063ff779611f1425453c8d3f0b3ef7ac936dde2f92fbac007578cc6d33af",
+    "geometry-query.svg": "1f022793cc71fded93de84205efa4a90eaa2401b35a10b8232a291e63006ad5b",
+    "learning-curves-tail.svg": "3722f06faf551fb4d72e33cf6d0b866589fd89e7f500b88a581068812185ff76"
+  }
+}

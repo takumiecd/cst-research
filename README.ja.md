@@ -22,7 +22,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
-2026-11-06に採用した研究方針です。FFNの開発実験結果を記録し、Attentionの検証はまだ始めていません。
+2026-11-06に採用した研究方針です。FFN・Attentionの開発パイロットを完了し、
+4ブロックすべてのQKV同時置換、QKV+FFN同時置換まで確認しました。
 
 合意した[FFN検証計画](docs/ffn-feasibility.ja.md)は`A=ceil(8*sqrt(d_in*d_out))`を使い、
 幅256から始めて128/512も確認します。線形Atom予算での有効性と限定した縦横比の変更を調べ、
@@ -45,6 +46,35 @@ L・Uを振幅の両端で合流させました。新境界の初期q0/q1をRTX4
 学習済みcheckpointの監査まで完了しました。Dense・従来q0は再利用しています。
 弱いAtomの半径は約50まで広がりましたが、今回のpL4/pU1のDEV損失3.9506/3.9761は
 従来q0の3.6735より悪い結果です。形状を検討するための学習曲線・振幅別の半径とqを保存しています。
+
+### 完了した射影・Polarパイロット（2026-11-07）
+
+幅256・seed17・999,424学習tokenの監査済みRTX4090パイロットでは、次のDEV CEになりました。
+短期の実用可能性の観察であり、収束・非劣性を主張する結果ではありません。
+
+| CSTへ置換した射影 | DEV CE | 証拠 |
+| --- | ---: | --- |
+| Dense対照 | 3.581960 | 各Attentionパイロットで取り直した対照 |
+| Vのみ | 3.570822 | [結果と曲線](docs/attention-v-20261107-results.ja.md) |
+| Qのみ / Kのみ | 3.592582 / 3.582850 | [結果と曲線](docs/attention-qk-20261107-results.ja.md) |
+| QKV同時 | 3.580952 | [同時置換の結果](docs/attention-combined-20261107-results.ja.md) |
+| QKV + FFN両射影 | 3.695186 | 同レポート、20か所のCST |
+
+O、embedding、語彙出力、正規化はDenseのままで、causal softmaxも変更していません。
+QKVはこの条件でDenseに近い一方、FFNを含めると差が残ります。QKV+FFNの対象射影は
+2,891,776から237,568パラメータへ減りますが、現在の小幅・eager FP32実装では
+速度・peakメモリの利点は示していません。
+
+[A100のminimum基準の下側包絡比較](docs/polar-minimum-a100-20261107-results.ja.md)も完了しました。
+400更新でfresh rational対照のCE 4.294037に対し、epsilon .001 / .003は4.248089 / 4.257022でした。
+読み取り専用の中心移動量と振幅別の半径・qの曲線を保持していますが、新しい移動依存optimizerを検証したものではありません。
+4つのstudyすべてで学習済みcheckpointの監査とcompact evidenceの回収・hash照合が完了し、workerも終了済みです。
+新しい半径・更新policyは一緒に数式を検討してから進めます。RTX4090はユーザーの別作業用に返しています。
+実験コードは[研究PR32](https://github.com/takumiecd/cst-research/pull/32)にまとめ、
+[PR31](https://github.com/takumiecd/cst-research/pull/31)の上に積んでいます。
+ライブラリの包絡変更は[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)です。
+
+### 研究の順序
 
 1. **まずFFN。** 長方形の入出力、多トークン、forward/backwardの正しさ、optimizerを含む更新を確認します。
    その後、小型言語モデルのFFNの射影をCSTへ置換し、安定して学習できるか、validationでタスクに意味のある性能が得られるかを調べます。

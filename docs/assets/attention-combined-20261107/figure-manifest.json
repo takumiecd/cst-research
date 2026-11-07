@@ -1,0 +1,47 @@
+{
+  "source_commits": {
+    "torchcst": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+    "cst-research": "13f717d44569109b543c7f6628e93883936bac1e"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "b4bcbd09385e8a80651d617f5db2e93b11437186a245e37736628e82a4435bdd",
+  "plot_script_sha256": "d711ae3017be241aea4bdd6ee631211a1d680a7e98c9fcaa7442bb6c70598bcb",
+  "matplotlib": "3.11.1",
+  "source_files": {
+    "dense/geometry.jsonl": "ee2114c42592eecda8d9ccaca913593fa7c39cfa74536a4ccc76f36016f46c81",
+    "dense/summary.json": "13e341299f05a24efc2a3f0fa4573e2aa353928b24e7254f1b38d1990cc5ff26",
+    "dense/curves.jsonl": "199571618ab2e323accf6d9bc2d427788f411bcc72700e1ddaa38b969d253d0f",
+    "cst-qkv-ffn/geometry.jsonl": "4699fd90d20a5d53c4e0bb938820e4610e94a84b5c40626b23db2d94b65f9434",
+    "cst-qkv-ffn/summary.json": "6c560fd074354b6d70831916f52a425aace7daceaa89e64169be1ca0af3759d2",
+    "cst-qkv-ffn/curves.jsonl": "92150c724b22a6374c8815bb13477eaf65cf644cee6f6247b71bf51349237338",
+    "qkv-ffn-qualification/qualification.json": "ec0021a175075caae32d561a527d18b293f6e9a03f23df6293b253ad3a67c7f0",
+    "cst-qkv/geometry.jsonl": "455fafb1313a89fe54b37413aee66380ef6af580b7685e58124e9ee9863c3141",
+    "cst-qkv/summary.json": "4530cdc0e166cdd37e50827f639dae19c94a4e88b640a84e974179eedbb3cedd",
+    "cst-qkv/curves.jsonl": "b84dbcb0bd68f3874ddd632eae451b97d9db1e820491961502627417d6e9babc",
+    "qkv-qualification/qualification.json": "5877545a697c10e86d299cf2213bf899b3ff11e31ac051a50314416d6cae7a41"
+  },
+  "historical_files": {
+    "attention-v-20261107-01/retrieved/cst-v/summary.json": "418eec438571639c5102f771e9d6c20948bb5c62d1e86ed8678abf975d3187ba",
+    "attention-v-20261107-01/retrieved/cst-v/curves.jsonl": "d6b651d2d6d1abcfbd7ed8462ac3d091fcf1fa46dcb97d4c68596a0361068e17",
+    "attention-qk-20261107-01/retrieved/cst-q/summary.json": "5b8b29d379307e37ad016b0626f4bbd564fc8fea239c87b385371fa412cad058",
+    "attention-qk-20261107-01/retrieved/cst-q/curves.jsonl": "573e095f2c716a36b23d02f8f4d418ad9bf7838187e9c7ed20c501af4b71a4b2",
+    "attention-qk-20261107-01/retrieved/cst-k/summary.json": "035e9746e447522b253e87fb98d0bb47179fc9d41dd9195eb9168743c2f15825",
+    "attention-qk-20261107-01/retrieved/cst-k/curves.jsonl": "770e00e99432351a0f8da02bc3ab45f3b3ff368bba71012bb721c9c47441aaa6"
+  },
+  "figures": {
+    "learning-curves.png": "db3981c5448fcbf8b4f68e7ee3289f4af3327d4eb76b74bb59f281920fe3aafa",
+    "geometry-key.svg": "0071dbd3e31980a38bbbc14836acbbfa30ac4293d9695722d0491923daeab25b",
+    "geometry-value.png": "aa93b9f5ef3f56b5506156d5d988e2579ac0dfc5bef251d5deae1937f788f952",
+    "geometry-value.svg": "12a6e5867ea907b2559cb17e4092a63e2122fd5a8096b72bf1bcff41fb021177",
+    "geometry-key.png": "da8e012366d3f4baf0fc02bfa07b257e26f17a65d517d66475b136415f95e86e",
+    "learning-curves.svg": "554ac589aad92a99dd7d7d3b5814efa3db87273ff409676f6a4868b240bea786",
+    "learning-curves-tail.png": "b846474522ee6ff89fcd93fcbaf3ffaedb40074910997db74b4ef015bd4f7a9e",
+    "geometry-query.png": "3bca264ddd9ebaed3182db7fdc4cccefdb91403497e0bedd10f23c1e89e016fc",
+    "geometry-ffn-down.png": "b4b17f43080a9674128e4a9bc0d19392df7f9227245c4096dbd893733700dbfa",
+    "geometry-ffn-up.svg": "533cf2b3b41bcfed7ff608da34c6ef3e5f328ed49e9daca47fde18e38aa4de23",
+    "geometry-ffn-up.png": "2b673a7e2b1f89cb3137fbc5e448d6676c951c03da0b81b25215077f4403201c",
+    "geometry-ffn-down.svg": "34f18c8685e7984cf5cf4dae071252137ec2e5a7f2e9aa7fa486904323b0c88e",
+    "geometry-query.svg": "a5479ec90422226e411f8b5cb284056a4564c1f23cbf9ad03fd9c817f422a6b5",
+    "learning-curves-tail.svg": "8750775887aaaaaaf23ad5fdbde9f19b7eac832a14bde67764e1e4baac765260"
+  }
+}
