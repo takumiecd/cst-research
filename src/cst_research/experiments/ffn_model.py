@@ -31,6 +31,9 @@ def make_cst(
     amplitude_max=1.0,
     w_c=0.3,
     radius_birth=4.0,
+    radius_envelope="rational",
+    closed_lower_power=4.0,
+    closed_upper_power=1.0,
 ):
     from torchcst import (
         ChebyshevSpec,
@@ -56,10 +59,20 @@ def make_cst(
                     w_c=w_c,
                     input_bounds=RadiusBounds(
                         minimum=0.5,
-                        birth=min(radius_birth, min(d_in, d_out) / 2),
+                        birth=min(
+                            50.0
+                            if radius_envelope == "closed_polynomial"
+                            else radius_birth,
+                            min(d_in, d_out) / 2,
+                        ),
                         maximum=min(50.0, min(d_in, d_out) / 2),
-                        upper_floor=1.0,
+                        upper_floor=0.5
+                        if radius_envelope == "closed_polynomial"
+                        else 1.0,
                     ),
+                    radius_envelope=radius_envelope,
+                    closed_lower_power=closed_lower_power,
+                    closed_upper_power=closed_upper_power,
                 ),
             ),
         )
@@ -139,6 +152,9 @@ class Projection(nn.Module):
                 amplitude_max=config.amplitude_max,
                 w_c=config.w_c,
                 radius_birth=config.radius_birth,
+                radius_envelope=config.radius_envelope,
+                closed_lower_power=config.closed_lower_power,
+                closed_upper_power=config.closed_upper_power,
             )
         else:
             self.map = nn.Linear(ni, no, bias=False)

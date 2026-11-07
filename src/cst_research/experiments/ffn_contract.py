@@ -45,6 +45,9 @@ class ModelConfig:
     radius_birth: float = 4.0
     feature_order: str = "contiguous"
     atom_lr_multiplier: float = 1.0
+    radius_envelope: str = "rational"
+    closed_lower_power: float = 4.0
+    closed_upper_power: float = 1.0
 
     def __post_init__(self):
         for key, value in asdict(self).items():
@@ -56,6 +59,9 @@ class ModelConfig:
                 "radius_birth",
                 "feature_order",
                 "atom_lr_multiplier",
+                "radius_envelope",
+                "closed_lower_power",
+                "closed_upper_power",
             ) and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
         for key in (
@@ -65,6 +71,8 @@ class ModelConfig:
             "w_c",
             "radius_birth",
             "atom_lr_multiplier",
+            "closed_lower_power",
+            "closed_upper_power",
         ):
             value = getattr(self, key)
             if (
@@ -82,11 +90,13 @@ class ModelConfig:
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
             or self.atom_lr_multiplier <= 0
+            or self.radius_envelope not in ("rational", "closed_polynomial")
+            or not 1 <= self.closed_upper_power <= self.closed_lower_power
         ):
             raise ValueError("invalid head divisibility, q or initialization scale")
 
     def recipe(self):
-        return {
+        result = {
             key: getattr(self, key)
             for key in (
                 "q",
@@ -98,6 +108,13 @@ class ModelConfig:
                 "coefficient",
             )
         }
+        if self.radius_envelope != "rational":
+            result.update(
+                radius_envelope=self.radius_envelope,
+                closed_lower_power=self.closed_lower_power,
+                closed_upper_power=self.closed_upper_power,
+            )
+        return result
 
     @property
     def intermediate(self):
@@ -126,6 +143,12 @@ def qualification_covers_model(receipt, config):
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
     }
+    if config.radius_envelope != "rational":
+        scalars.update(
+            radius_envelope=config.radius_envelope,
+            closed_lower_power=config.closed_lower_power,
+            closed_upper_power=config.closed_upper_power,
+        )
     for ni, no in (
         (config.width, config.intermediate),
         (config.intermediate, config.width),

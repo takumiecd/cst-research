@@ -73,14 +73,24 @@ def quadrature_factors(layer, p):
             field: float(layer.kernel.scalar(name + "_" + side))
             for field, name in scalar_names.items()
         }
-        lower = bounds["minimum"] + (bounds["birth"] - bounds["minimum"]) / (
-            1 + float(layer.kernel.scalar("lower_kappa")) * z
-        )
-        kappa = float(layer.kernel.scalar("kappa"))
-        power = float(layer.kernel.scalar("upper_decay_power"))
-        upper = bounds["minimum"] + (bounds["maximum"] - bounds["minimum"]) * kappa / (
-            kappa + z.pow(power)
-        )
+        spec = layer.kernel.spec.parameterization
+        if getattr(spec, "radius_envelope", "rational") == "closed_polynomial":
+            b = (1 - (amplitude / spec.amplitude_max).square()).clamp(0, 1)
+            lower = bounds["minimum"] + (bounds["maximum"] - bounds["minimum"]) * b.pow(
+                spec.closed_lower_power
+            )
+            upper = bounds["minimum"] + (bounds["maximum"] - bounds["minimum"]) * b.pow(
+                spec.closed_upper_power
+            )
+        else:
+            lower = bounds["minimum"] + (bounds["birth"] - bounds["minimum"]) / (
+                1 + float(layer.kernel.scalar("lower_kappa")) * z
+            )
+            kappa = float(layer.kernel.scalar("kappa"))
+            power = float(layer.kernel.scalar("upper_decay_power"))
+            upper = bounds["minimum"] + (
+                bounds["maximum"] - bounds["minimum"]
+            ) * kappa / (kappa + z.pow(power))
         upper = torch.maximum(upper.clamp_min(bounds["upper_floor"]), lower)
         radius = torch.exp((1 - alpha) * lower.log() + alpha * upper.log()).detach()
         rows = []
@@ -122,17 +132,24 @@ def quadrature_factors(layer, p):
 
 
 def independent_quadrature_check(
-    *, q=0.25, amplitude_max=1.0, w_c=0.3, radius_birth=4.0
+    *,
+    q=0.25,
+    amplitude_max=1.0,
+    w_c=0.3,
+    radius_birth=4.0,
+    std=0.02,
+    **envelope_settings,
 ):
     layer = make_cst(
         16,
         64,
-        std=0.02,
+        std=std,
         q=q,
         dtype=torch.float64,
         amplitude_max=amplitude_max,
         w_c=w_c,
         radius_birth=radius_birth,
+        **envelope_settings,
     )
     # All eight stratified atoms in this bounded fixture; the full native cases
     # separately cover every atom in their larger declared budgets.
@@ -181,6 +198,7 @@ def qualify_case(
     amplitude_max=1.0,
     w_c=0.3,
     radius_birth=4.0,
+    **envelope_settings,
 ):
     began = time.monotonic()
     layer = make_cst(
@@ -193,6 +211,7 @@ def qualify_case(
         amplitude_max=amplitude_max,
         w_c=w_c,
         radius_birth=radius_birth,
+        **envelope_settings,
     )
     report = layer.initialization_report
     base = torch.randn(
@@ -226,6 +245,7 @@ def qualify_case(
         "amplitude_max": amplitude_max,
         "w_c": w_c,
         "radius_birth": radius_birth,
+        **envelope_settings,
         "input_noncontiguous": not xx.is_contiguous(),
         "initialization": report,
         "checks": metrics,
@@ -291,6 +311,8 @@ def optimizer_and_resume_check(
     radius_birth=4.0,
     atom_lr_multiplier=1.0,
     coefficient=8,
+    std=0.02,
+    **envelope_settings,
 ):
     from torchcst import CSTOptimizer
 
@@ -300,11 +322,12 @@ def optimizer_and_resume_check(
         "w_c": w_c,
         "radius_birth": radius_birth,
         "coefficient": coefficient,
+        **envelope_settings,
     }
 
     def fixture():
         model = torch.nn.Module()
-        model.layer = make_cst(16, 64, seed=151, **settings)
+        model.layer = make_cst(16, 64, seed=151, std=std, **settings)
         model.ordinary = torch.nn.Parameter(torch.tensor([0.2, -0.3]))
         return model
 
@@ -399,16 +422,18 @@ def task_step_and_resume_check(
     feature_order="contiguous",
     atom_lr_multiplier=1.0,
     coefficient=8,
+    full_task=False,
+    **envelope_settings,
 ):
     from .ffn_contract import ModelConfig
     from .ffn_model import LanguageModel
 
     config = ModelConfig(
-        width=16,
-        layers=2,
-        heads=2,
-        context=8,
-        vocabulary=64,
+        width=256 if full_task else 16,
+        layers=4 if full_task else 2,
+        heads=4 if full_task else 2,
+        context=128 if full_task else 8,
+        vocabulary=50257 if full_task else 64,
         q=q,
         amplitude_max=amplitude_max,
         w_c=w_c,
@@ -416,6 +441,7 @@ def task_step_and_resume_check(
         feature_order=feature_order,
         atom_lr_multiplier=atom_lr_multiplier,
         coefficient=coefficient,
+        **envelope_settings,
     )
     model = LanguageModel(config, "cst", seed=251).cuda()
     configure_native(model)
@@ -428,7 +454,10 @@ def task_step_and_resume_check(
         foreach=False,
     )
     tokens = torch.randint(
-        0, 64, (2, 9), generator=torch.Generator().manual_seed(252)
+        0,
+        config.vocabulary,
+        (2, config.context + 1),
+        generator=torch.Generator().manual_seed(252),
     ).cuda()
     x, y = tokens[:, :-1], tokens[:, 1:]
     before = {
@@ -495,7 +524,7 @@ def task_step_and_resume_check(
         for key in ("exp_avg", "exp_avg_sq", "step"):
             compare(a[key], b[key], atol=3e-7, rtol=3e-5)
     return {
-        "cst_projections": 4,
+        "cst_projections": 2 * config.layers,
         "all_cst_sites_received_finite_nonzero_gradients_and_changed": True,
         "first_loss": first_loss,
         "next_loss": left,
