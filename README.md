@@ -43,7 +43,11 @@ experiments. Seed29 results are retained as incomplete confirmation evidence. Cu
 runs compress FFN parameters but do not show speed or GPU-memory advantages.
 The [short field-LR comparison](docs/ffn-field-lr-r12-20261107.md) found slower
 learning when only amplitude LR was reduced from16× to1× at fixed center rates
-and Polar outer time. A bounded intermediate-rate check precedes public API work.
+and Polar outer time. The [audited follow-ups](docs/ffn-field-lr-r14-20261107.md)
+include amplitude8/32/64 at fixed centers/outer16. Amplitude8 passed the
+engineering gate for API implementation; public GPU validation remains pending.
+The owner clarified that whole-Atom32/64 is the intended high-rate comparison;
+that separate stock-optimizer experiment is now running.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the

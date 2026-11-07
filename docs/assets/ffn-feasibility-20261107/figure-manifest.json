@@ -46,7 +46,16 @@
     "r12-field-lr-train_ce.png": "c2d225307c80d68f452bcdcb5fc081d6842859646fcaa1d4ea5bae9378e3709e",
     "r12-field-lr-resources.svg": "6eb359ed2c25bd74ad10fdf471e21e45b143195e91db36e05bd1113b4eaf67e0",
     "r12-field-lr-resources.png": "b6e56e26aee2e6164c857c5bc0dceac7fb8f8a3cf00b7fbdd74daf1320eecd42",
-    "r12-field-lr-train_ce.svg": "09e3e199b2f737e9a406a9c8ed3cf1e317b20f2f49ea6855be51a427c3320f89"
+    "r12-field-lr-train_ce.svg": "09e3e199b2f737e9a406a9c8ed3cf1e317b20f2f49ea6855be51a427c3320f89",
+    "r14-field-lr-development.png": "449a8faf08cf8ec48ea650785d4518cc412dd21e2e7492a67a4a185ca98fd2c4",
+    "r14-field-lr-development.svg": "4d0f359851fe409568dc8bb04f094bb2aec47c95fcb93f8a21b991e54da48a62",
+    "r14-field-lr-train_ce.png": "49b9ae18297fae1c23615f17499522614f2a1912781c6063c902bfaf92cbf8ba",
+    "r14-field-lr-train_ce.svg": "9f15f049560b788f91ef9c79ffceee2481e4cd8dcaf2a9214ab05868a57324eb",
+    "r14-field-lr-activation-rms.png": "32d011d9e44426d85b026f4a4d17f5394ae5d3dc6b595ac089baab9544f5f1a5",
+    "r14-field-lr-activation-rms.svg": "3878471089887c2815ff1a72c480f3346b8985fa59c9f5510ed544588974c976",
+    "r14-field-lr-resources.png": "aecf7babc69c76ebfb869d7d2cfb558b922023b973b4dc61abb3d209b6fb652a",
+    "r14-field-lr-resources.svg": "58b885967c84d0a3e727b366200f22eb998f23b2e5e3129942f6641d2f105ca8",
+    "external-script:report-field-lr-r14-01.py": "947ba67b16803f0a07fbe881b4b747bfbc1277bd60233b8daed4d8d7a380b803"
   },
   "selected_r8": {
     "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
@@ -123,5 +132,11 @@
       "r12-field-lr-train_ce.svg": "09e3e199b2f737e9a406a9c8ed3cf1e317b20f2f49ea6855be51a427c3320f89"
     },
     "plotting_runtime": "Local Matplotlib3.11.1/Python3.11.15; derived rendering, not GPU validation"
+  },
+  "field_lr_r14": {
+    "report_sha256": "a374d58b64e46c4b171cf863467f3580955b089c8a530b84a978ac6eb93b684b",
+    "R13_baseline_report_sha256": "1557d3f65f217fbb5cb571ef0f6cee803be8204e5b0b24bd4ffe8c96980dc802",
+    "archive_sha256": "c115a4623811e890a0ce7b6fc1c1a71e7bd9dd034e7aa77957a625d840a9324e",
+    "scope": "Assistant interpreted owner32/64 as amplitude-only, later corrected. These results do NOT answer whole-Atom LR32/64. Centers and outer time16 throughout. N256c8seed17/976updates/common20M horizon; priorR12/R13 quality baselines retained; freshDense/noFFN exactquality matches. No optimum/convergence/3seed or speedmemorywin claim."
   }
 }

@@ -342,7 +342,7 @@
     "max_parameter_resume_error": 0,
     "archive_sha256": "34ddda1866cf15e3496cd176a87333877fafdc048ec39ff1c54b8066c74b6ff6",
     "bounded_amplitude8_followup": {
-      "state": "PREPARED_NOT_QUALIFIED_OR_TRAINED",
+      "state": "COMPLETED_AUDITED_RETRIEVED_API_ENGINEERING_GATE_PASSED",
       "peak_amplitude_LR": 0.0024,
       "peak_centers_and_outer_LR": 0.0048,
       "seed": 17,
@@ -353,8 +353,39 @@
         "dense",
         "none"
       ],
-      "quality_baseline": "Completed R12all16, codeidentity proofrequired before reuse. No pairedcrossjobtimeclaim.",
-      "gate": "DEV<=R12all16+0.03 andusefulvsfreshnone andallcorrectness. No broadsearch/defaultadoption."
+      "quality_baseline": "Completed R12all16; model/data and optimizer-class source bytes checked before reuse. Fresh controls exact quality match. No paired cross-job time claim.",
+      "gate": "DEV<=R12all16+0.03 andusefulvsfreshnone andallcorrectness. No broadsearch/defaultadoption.",
+      "consumer": "0b9dba7412f4b6162883b84a0d7160e2f16f57ff",
+      "DEV_CE": 3.6943871080875397,
+      "DEV_gap_vs_all16": 0.020881712436676025,
+      "API_gate_passed": true,
+      "trained_CST_VJPs": 8,
+      "serialized_task_resume_arms": 3,
+      "max_parameter_resume_error": 0,
+      "archive_sha256": "2185fe612db8ae80546c4c4e66daa28ec2db406eaa5236bf93123b940f449d39",
+      "report": "docs/ffn-field-lr-r14-20261107.md"
+    },
+    "higher_amplitude_followup": {
+      "state": "COMPLETED_AUDITED_RETRIEVED_ASSISTANT_SCOPE_ERROR",
+      "scope": "Amplitude-only32/64 with centers/outer16; does not answer owner whole-Atom32/64 question. Retain as separate contrast.",
+      "consumer": "86e83fc92543b770f51bdfd7749baab4276f8b6c",
+      "DEV_CE": {
+        "amplitude32_centers16": 3.6892067790031433,
+        "amplitude64_centers16": 3.6988805904984474
+      },
+      "trained_CST_VJPs": 16,
+      "serialized_task_resume_arms": 4,
+      "max_parameter_resume_error": 0,
+      "archive_sha256": "c115a4623811e890a0ce7b6fc1c1a71e7bd9dd034e7aa77957a625d840a9324e",
+      "report": "docs/ffn-field-lr-r14-20261107.md"
     }
+  },
+  "whole_atom_lr_development": {
+    "state": "RUNNING_QUALIFIED_BEFORE_LEARNING",
+    "consumer": "351617dc81f529ce10e964e5a762f336b7c24b39",
+    "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "scope": "Correct owner question: stock CSTAdamW wholeAtom32/64, amplitude+centers+Polar outer time same multiplier; ordinary1. N256c8seed17/976updates/common20M horizon; fresh Dense/noFFN. Exact32/64 independent quadrature/actual rectangular VJPs/CPU optimizer state/taskresume qualified before training. Trained audits and quality results pending.",
+    "protocol": "docs/ffn-field-lr.md",
+    "paired_cross_job_speed_claim": false
   }
 }
