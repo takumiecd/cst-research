@@ -28,6 +28,25 @@ class ClosedEnvelopeContractTests(unittest.TestCase):
             qualification_covers_model(receipt, replace(c, closed_lower_power=8))
         )
 
+    def test_zero_opening_scale_is_part_of_admission(self):
+        c = ModelConfig(
+            radius_envelope="rational_zero_opening",
+            zero_opening_scale=0.03,
+            atom_lr_multiplier=16,
+        )
+        cases = [
+            dict(**c.recipe(), **{"in": ni, "out": no, "atoms": c.atoms_per_projection})
+            for ni, no in [(256, 1024), (1024, 256)]
+        ]
+        receipt = {"task_recipes": [c.recipe()], "cases": cases}
+        self.assertTrue(qualification_covers_model(receipt, c))
+        self.assertFalse(
+            qualification_covers_model(receipt, replace(c, zero_opening_scale=0.1))
+        )
+        broken = {"task_recipes": [c.recipe()], "cases": [dict(row) for row in cases]}
+        broken["cases"][1]["zero_opening_scale"] = 0.1
+        self.assertFalse(qualification_covers_model(broken, c))
+
     def test_diagnostic_bins_conserve_atoms_and_do_not_mutate_rng_or_parameters(self):
         try:
             torch = importlib.import_module("torch")

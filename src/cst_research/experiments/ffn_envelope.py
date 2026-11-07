@@ -92,8 +92,11 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--q", type=float, choices=(0.0, 1.0), required=True)
     parser.add_argument(
-        "--radius-envelope", choices=("rational", "closed_polynomial"), required=True
+        "--radius-envelope",
+        choices=("rational", "closed_polynomial", "rational_zero_opening"),
+        required=True,
     )
+    parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
@@ -101,12 +104,16 @@ def main(argv=None):
     torch.backends.cudnn.allow_tf32 = False
     assert torch.cuda.get_device_name(0) == "NVIDIA GeForce RTX 4090"
     config = ModelConfig(
-        q=args.q, radius_envelope=args.radius_envelope, atom_lr_multiplier=16
+        q=args.q,
+        radius_envelope=args.radius_envelope,
+        atom_lr_multiplier=16,
+        zero_opening_scale=args.zero_opening_scale,
     )
     envelope = dict(
         radius_envelope=args.radius_envelope,
         closed_lower_power=4.0,
         closed_upper_power=1.0,
+        zero_opening_scale=args.zero_opening_scale,
     )
     result = {
         "state": "running",

@@ -48,6 +48,7 @@ class ModelConfig:
     radius_envelope: str = "rational"
     closed_lower_power: float = 4.0
     closed_upper_power: float = 1.0
+    zero_opening_scale: float = 0.03
 
     def __post_init__(self):
         for key, value in asdict(self).items():
@@ -62,6 +63,7 @@ class ModelConfig:
                 "radius_envelope",
                 "closed_lower_power",
                 "closed_upper_power",
+                "zero_opening_scale",
             ) and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
         for key in (
@@ -73,6 +75,7 @@ class ModelConfig:
             "atom_lr_multiplier",
             "closed_lower_power",
             "closed_upper_power",
+            "zero_opening_scale",
         ):
             value = getattr(self, key)
             if (
@@ -90,7 +93,9 @@ class ModelConfig:
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
             or self.atom_lr_multiplier <= 0
-            or self.radius_envelope not in ("rational", "closed_polynomial")
+            or self.radius_envelope
+            not in ("rational", "closed_polynomial", "rational_zero_opening")
+            or self.zero_opening_scale <= 0
             or not 1 <= self.closed_upper_power <= self.closed_lower_power
         ):
             raise ValueError("invalid head divisibility, q or initialization scale")
@@ -114,6 +119,8 @@ class ModelConfig:
                 closed_lower_power=self.closed_lower_power,
                 closed_upper_power=self.closed_upper_power,
             )
+        if self.radius_envelope == "rational_zero_opening":
+            result["zero_opening_scale"] = self.zero_opening_scale
         return result
 
     @property
@@ -149,6 +156,8 @@ def qualification_covers_model(receipt, config):
             closed_lower_power=config.closed_lower_power,
             closed_upper_power=config.closed_upper_power,
         )
+    if config.radius_envelope == "rational_zero_opening":
+        scalars["zero_opening_scale"] = config.zero_opening_scale
     for ni, no in (
         (config.width, config.intermediate),
         (config.intermediate, config.width),

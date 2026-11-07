@@ -92,7 +92,15 @@ def quadrature_factors(layer, p):
                 bounds["maximum"] - bounds["minimum"]
             ) * kappa / (kappa + z.pow(power))
         upper = torch.maximum(upper.clamp_min(bounds["upper_floor"]), lower)
-        radius = torch.exp((1 - alpha) * lower.log() + alpha * upper.log()).detach()
+        if getattr(spec, "radius_envelope", "rational") == "rational_zero_opening":
+            tau = float(layer.kernel.scalar("zero_opening_scale"))
+            g = amplitude.square() / (amplitude.square() + tau * tau)
+            lower = upper - g * (upper - lower)
+        radius = (
+            torch.exp((1 - alpha) * lower.log() + alpha * upper.log())
+            .clamp(min=lower, max=upper)
+            .detach()
+        )
         rows = []
         for r, center in zip(radius, p[:, column]):
             tile = 1

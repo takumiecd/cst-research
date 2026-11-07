@@ -141,7 +141,7 @@ class RegistryTests(unittest.TestCase):
         self,
     ):
         studies = {study["id"]: study for study in load_studies()}
-        self.assertEqual(len(studies), 18)
+        self.assertEqual(len(studies), 19)
         for identifier in (
             STUDY_ID,
             "higgs-dst-comparison-20261105",

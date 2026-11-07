@@ -189,13 +189,14 @@ def main(argv=None):
     parser.add_argument("--track-atom-motion", action="store_true")
     parser.add_argument(
         "--radius-envelope",
-        choices=("rational", "closed_polynomial"),
+        choices=("rational", "closed_polynomial", "rational_zero_opening"),
         default="rational",
     )
     parser.add_argument("--closed-lower-power", type=float, default=4.0)
     parser.add_argument("--closed-upper-power", type=float, default=1.0)
     parser.add_argument("--track-envelope", action="store_true")
     parser.add_argument("--development-only", action="store_true")
+    parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     args = parser.parse_args(argv)
     args.schedule_tokens = (
         args.tokens if args.schedule_tokens is None else args.schedule_tokens
@@ -242,6 +243,7 @@ def main(argv=None):
         radius_envelope=args.radius_envelope,
         closed_lower_power=args.closed_lower_power,
         closed_upper_power=args.closed_upper_power,
+        zero_opening_scale=args.zero_opening_scale,
     )
     if not qualification_covers_model(qualification, requested):
         parser.error(
