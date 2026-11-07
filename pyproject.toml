@@ -15,7 +15,7 @@ dependencies = []
 
 [project.optional-dependencies]
 torchcst = ["torchcst @ git+https://github.com/takumiecd/torchcst.git@97580582ed28c4e494bf5c2656bbe94a85c544c3"]
-ffn = ["torchcst @ git+https://github.com/takumiecd/torchcst.git@c3b68dcf6275f96d29a21ff2aa6e989d42de2cff"]
+ffn = ["torchcst @ git+https://github.com/takumiecd/torchcst.git@7be68e4faf1813dd4b1a677ee432da5e3a8da9bd"]
 reporting = ["matplotlib"]
 
 [project.scripts]

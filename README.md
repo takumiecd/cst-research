@@ -199,14 +199,18 @@ The stopped formal HIGGS campaign used the pinned external source. A separate
 [bounded A100 MIG environment-comparison adapter](docs/higgs-gpu-comparison.md)
 consumes that unchanged benchmark after independent numerical admission.
 
-For current FFN work, use the separately pinned library extra (merged
-rectangular/initializer/field-LR APIs):
+For current FFN work, use the separately pinned research library extra:
 
 ```bash
 python -m pip install -e '.[ffn]'
 ```
 
-The exact library commit is `c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`.
+The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
+from [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
+envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
+envelope arguments available; it does not imply that the experimental PR has
+merged or that its settings are public defaults.
 This does not reproduce the numeric runtime or migrate historical runs; follow
 [the frozen-source guide](docs/ffn-reproduction.md) for recorded quality results.
 

@@ -159,13 +159,17 @@ python -m unittest discover -s tests -v
 独立した数値admission後に変更なしのbenchmarkを呼ぶ
 [限定A100 MIG環境比較adapter](docs/higgs-gpu-comparison.ja.md)を別に用意しています。
 
-現在のFFN研究には、長方形演算・初期化・field別LR API統合後の専用extraを使えます。
+現在のFFN研究には、研究用ライブラリを固定した専用extraを使えます。
 
 ```bash
 python -m pip install -e '.[ffn]'
 ```
 
-ライブラリは`c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`に固定しています。
+ライブラリは[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
+`7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`に固定しています。
+統合済みの長方形演算・初期化・field別LR APIに加え、明示指定の実験用半径包絡と
+Torch2.6のAdamW互換修正を含みます。この固定はconsumerの包絡引数を利用可能にするためで、
+実験PRのmergeや公開デフォルトへの採用を意味しません。
 数値環境の再現や過去runの移行ではありません。品質結果の再現には
 [固定ソースの手順](docs/ffn-reproduction.ja.md)を使ってください。
 
