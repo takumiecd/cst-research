@@ -88,10 +88,11 @@ motion and amplitude-conditioned radius/q curves; it does not validate a new
 movement-dependent optimizer. All four studies have trained-checkpoint audits
 and retrieved, hash-verified compact evidence. Their workers are finished. New
 radius/update policies wait for joint mathematical discussion, and the RTX4090
-has been released for the owner's other work. Experimental code remains in
-[research PR32](https://github.com/takumiecd/cst-research/pull/32), stacked on
-[PR31](https://github.com/takumiecd/cst-research/pull/31); library envelope changes
-remain in [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152).
+has been released for the owner's other work. Implementation and evidence are
+recorded in [research PR32](https://github.com/takumiecd/cst-research/pull/32),
+following [PR31](https://github.com/takumiecd/cst-research/pull/31). Library
+envelopes were merged through
+[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152) as explicit opt-ins.
 
 ### Research sequence
 
@@ -206,11 +207,11 @@ python -m pip install -e '.[ffn]'
 ```
 
 The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
-from [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+from merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
 the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
 envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
-envelope arguments available; it does not imply that the experimental PR has
-merged or that its settings are public defaults.
+envelope arguments available; these experimental settings remain explicit
+opt-ins, and merging the implementation does not select new public defaults.
 This does not reproduce the numeric runtime or migrate historical runs; follow
 [the frozen-source guide](docs/ffn-reproduction.md) for recorded quality results.
 

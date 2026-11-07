@@ -70,9 +70,10 @@ QKVはこの条件でDenseに近い一方、FFNを含めると差が残ります
 読み取り専用の中心移動量と振幅別の半径・qの曲線を保持していますが、新しい移動依存optimizerを検証したものではありません。
 4つのstudyすべてで学習済みcheckpointの監査とcompact evidenceの回収・hash照合が完了し、workerも終了済みです。
 新しい半径・更新policyは一緒に数式を検討してから進めます。RTX4090はユーザーの別作業用に返しています。
-実験コードは[研究PR32](https://github.com/takumiecd/cst-research/pull/32)にまとめ、
-[PR31](https://github.com/takumiecd/cst-research/pull/31)の上に積んでいます。
-ライブラリの包絡変更は[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)です。
+実装と証拠は[PR31](https://github.com/takumiecd/cst-research/pull/31)に続く
+[研究PR32](https://github.com/takumiecd/cst-research/pull/32)にまとめています。
+ライブラリの包絡変更は[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)で
+明示指定の機能としてmergeしました。
 
 ### 研究の順序
 
@@ -165,11 +166,11 @@ python -m unittest discover -s tests -v
 python -m pip install -e '.[ffn]'
 ```
 
-ライブラリは[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
+ライブラリはmerge済みの[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
 `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`に固定しています。
 統合済みの長方形演算・初期化・field別LR APIに加え、明示指定の実験用半径包絡と
 Torch2.6のAdamW互換修正を含みます。この固定はconsumerの包絡引数を利用可能にするためで、
-実験PRのmergeや公開デフォルトへの採用を意味しません。
+これらの実験設定は明示指定の機能のままで、実装のmergeによって公開デフォルトを変更するものではありません。
 数値環境の再現や過去runの移行ではありません。品質結果の再現には
 [固定ソースの手順](docs/ffn-reproduction.ja.md)を使ってください。
 
