@@ -57,3 +57,24 @@ Source revisions and the immutable data SHA are in the
 [registry record](../src/cst_research/studies/ffn-center-activity-20261107.json).
 Public runtime changes remain in torchcst; consumers/qualification/controllers
 remain here. Resource commands and raw receipts stay in ignored evidence.
+
+## Reproduction commands
+
+Use the frozen commits and token source in [the reproduction guide](ffn-reproduction.md). Replace CST_PILOT_DATA with the token directory and MANIFEST_SHA/QUAL_SHA with the actual SHA256 values. This example is center gain64; repeat gain1/4096 and finite_chord gain1 with separate outputs. Dense uses the amplitude-control qualification and --kind dense. The machine-specific trained-audit driver is retained in the compact evidence archive.
+
+```bash
+python -m cst_research.experiments.ffn_envelope \
+  --output qualification-center64 --q 0 \
+  --radius-envelope rational_zero_opening --radius-birth .5 --zero-opening-scale .001 \
+  --activity-mode center_chord --activity-gain 64 --update-backend radius_eager \
+  --expected-gpu 'NVIDIA A100 80GB PCIe MIG 3g.40gb'
+python -m cst_research.experiments.ffn_run \
+  --data "$CST_PILOT_DATA" --data-manifest-sha256 MANIFEST_SHA \
+  --qualification qualification-center64/qualification.json --qualification-sha256 QUAL_SHA \
+  --output learning-center64 --kind cst --seed 17 --width 256 --expansion 4 --coefficient 8 \
+  --tokens 409600 --schedule-tokens 20000000 --atom-lr-multiplier 16 --q 0 \
+  --radius-envelope rational_zero_opening --radius-birth .5 --zero-opening-scale .001 \
+  --activity-mode center_chord --activity-gain 64 --update-backend radius_eager \
+  --expected-gpu 'NVIDIA A100 80GB PCIe MIG 3g.40gb' \
+  --track-envelope --track-center-motion --development-only
+```

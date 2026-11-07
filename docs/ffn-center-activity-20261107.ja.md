@@ -44,3 +44,24 @@ compact raw evidenceを回収しmanifest/hashを照合し、元のソースとch
 ソースrevisionとデータSHAは[登録情報](../src/cst_research/studies/ffn-center-activity-20261107.json)に固定します。
 runtime変更はtorchcst、consumer・qualification・controllerは研究repoに置き、
 接続コマンドやraw receiptはignored evidenceに保存します。
+
+## 再現コマンド
+
+凍結commitと[再現ガイド](ffn-reproduction.ja.md)のtoken sourceを使います。CST_PILOT_DATAはtokenディレクトリ、MANIFEST_SHA/QUAL_SHAは実際のSHA256に置き換えます。例は中心gain64です。gain1/4096とfinite_chord gain1も別outputで実行し、Denseは振幅対照のqualificationと--kind denseを使います。環境固有の学習済み監査driverはcompact evidence archiveに保存しています。
+
+```bash
+python -m cst_research.experiments.ffn_envelope \
+  --output qualification-center64 --q 0 \
+  --radius-envelope rational_zero_opening --radius-birth .5 --zero-opening-scale .001 \
+  --activity-mode center_chord --activity-gain 64 --update-backend radius_eager \
+  --expected-gpu 'NVIDIA A100 80GB PCIe MIG 3g.40gb'
+python -m cst_research.experiments.ffn_run \
+  --data "$CST_PILOT_DATA" --data-manifest-sha256 MANIFEST_SHA \
+  --qualification qualification-center64/qualification.json --qualification-sha256 QUAL_SHA \
+  --output learning-center64 --kind cst --seed 17 --width 256 --expansion 4 --coefficient 8 \
+  --tokens 409600 --schedule-tokens 20000000 --atom-lr-multiplier 16 --q 0 \
+  --radius-envelope rational_zero_opening --radius-birth .5 --zero-opening-scale .001 \
+  --activity-mode center_chord --activity-gain 64 --update-backend radius_eager \
+  --expected-gpu 'NVIDIA A100 80GB PCIe MIG 3g.40gb' \
+  --track-envelope --track-center-motion --development-only
+```

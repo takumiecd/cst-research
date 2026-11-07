@@ -216,4 +216,4 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 
 [半径の事後確認](docs/ffn-radius-review-20261107.ja.md)では振幅別・同じAtom IDで調べ、弱い・弱まったAtomの半径が広がることを確認しました。ただし現在の低q・弱Atom追加拡張なしの設定では、弱いAtomも半径4付近にとどまります。
 
-[中心活動型FFNパイロット](docs/ffn-center-activity-20261107.ja.md)は`(s,t)`と選択済みL/Uを保ち、fresh振幅活動と中心活動gain3条件を比較します。準備とGPU学習完了を区別し、状態はregistryに記録します。現在のFFN依存は実験用pinで、新しいmain統合やデフォルト採用ではありません。
+[中心活動型FFNパイロット](docs/ffn-center-activity-20261107.ja.md)は、A100のfresh5条件を各400更新し、学習後監査・回収と照合まで完了しました。[結果と全曲線](docs/ffn-center-activity-20261107-results.ja.md)はDense CE4.135901、振幅活動4.248089、中心活動gain1/64/4096が4.247539/4.250420/4.262914です。`(s,t)`・選択済みL/U・一致した初期化を保ち、pは中心移動に応答しますが、品質改善は示せていません。clip/smoothstep目標policyは別の提案のままです。現在のFFN依存は実験用pinで、新しいmain統合やデフォルト採用ではありません。
