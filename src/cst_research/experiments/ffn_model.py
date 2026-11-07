@@ -218,23 +218,38 @@ class FeedForward(nn.Module):
         )
 
 
-class CSTValueProjection(nn.Module):
-    """Packed output with unchanged Dense Q/K and an explicit CST V map."""
+class CSTAttentionProjection(nn.Module):
+    """One explicit CST Q/K/V map with byte-matched Dense complementary rows."""
 
     def __init__(self, config, seed, index):
         super().__init__()
-        self.qk = nn.Linear(config.width, 2 * config.width)
-        self.value = Projection(
-            config.width,
-            config.width,
-            config=config,
-            kind="cst",
-            std=config.init_std,
-            seed=parameter_seed(seed, f"block{index}.attention.v"),
+        self.slot = {"cst_q": 0, "cst_k": 1, "cst_v": 2}[config.attention_kind]
+        self.dense_name = ("kv", "qv", "qk")[self.slot]
+        self.cst_name = ("query", "key", "value")[self.slot]
+        setattr(self, self.dense_name, nn.Linear(config.width, 2 * config.width))
+        setattr(
+            self,
+            self.cst_name,
+            Projection(
+                config.width,
+                config.width,
+                config=config,
+                kind="cst",
+                std=config.init_std,
+                seed=parameter_seed(
+                    seed, f"block{index}.attention." + ("q", "k", "v")[self.slot]
+                ),
+            ),
         )
 
     def forward(self, x):
-        return torch.cat((self.qk(x), self.value(x)), dim=-1)
+        ordinary = getattr(self, self.dense_name)(x)
+        selected = getattr(self, self.cst_name)(x)
+        if self.slot == 2:
+            return torch.cat((ordinary, selected), dim=-1)
+        parts = list(ordinary.chunk(2, dim=-1))
+        parts.insert(self.slot, selected)
+        return torch.cat(parts, dim=-1)
 
 
 class Block(nn.Module):
@@ -243,8 +258,8 @@ class Block(nn.Module):
         self.heads = config.heads
         self.norm1 = nn.LayerNorm(config.width)
         self.qkv = (
-            CSTValueProjection(config, seed, index)
-            if config.attention_kind == "cst_v"
+            CSTAttentionProjection(config, seed, index)
+            if config.attention_kind != "dense"
             else nn.Linear(config.width, config.width * 3)
         )
         self.attention_out = nn.Linear(config.width, config.width)
@@ -303,7 +318,7 @@ class LanguageModel(nn.Module):
 
         # Recover the exact historical packed Q/K initialization. Named streams
         # keep every other shared Parameter unchanged across Dense/CST-V arms.
-        if config.attention_kind == "cst_v":
+        if config.attention_kind != "dense":
             for i, block in enumerate(self.blocks):
                 packed = torch.empty(3 * config.width, config.width).normal_(
                     std=config.init_std,
@@ -312,7 +327,15 @@ class LanguageModel(nn.Module):
                     ),
                 )
                 with torch.no_grad():
-                    block.qkv.qk.weight.copy_(packed[: 2 * config.width])
+                    remaining = [
+                        row
+                        for slot in range(3)
+                        if slot != block.qkv.slot
+                        for row in range(slot * config.width, (slot + 1) * config.width)
+                    ]
+                    getattr(block.qkv, block.qkv.dense_name).weight.copy_(
+                        packed[remaining]
+                    )
 
     def forward(self, tokens, targets=None):
         if tokens.ndim != 2 or not 1 <= tokens.shape[1] <= self.config.context:

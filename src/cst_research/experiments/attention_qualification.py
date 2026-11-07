@@ -1,4 +1,4 @@
-"""Admission for a causal LM with Dense FFN and CST-only V projections."""
+"""Admission for a causal LM with Dense FFN and one CST Q/K/V projection type."""
 
 from __future__ import annotations
 
@@ -35,15 +35,26 @@ def shared_initialization(config):
         assert torch.equal(parameter, target[name]), name
         checked += 1
     for a, b in zip(dense.blocks, value.blocks):
-        assert torch.equal(a.qkv.weight[: 2 * config.width], b.qkv.qk.weight)
-        assert torch.equal(a.qkv.bias[: 2 * config.width], b.qkv.qk.bias)
+        rows = [
+            row
+            for slot in range(3)
+            if slot != b.qkv.slot
+            for row in range(slot * config.width, (slot + 1) * config.width)
+        ]
+        assert torch.equal(a.qkv.weight[rows], getattr(b.qkv, b.qkv.dense_name).weight)
+        assert torch.equal(a.qkv.bias[rows], getattr(b.qkv, b.qkv.dense_name).bias)
     reports = value.initialization_reports()
     assert len(reports) == config.layers and all(
         v["relative_error"] <= 0.005 for v in reports.values()
     )
     return {
         "shared_parameters_exact": checked,
-        "all_QK_weights_and_biases_exact": True,
+        "complementary_projection_weights_and_biases_exact": True,
+        **(
+            {"all_QK_weights_and_biases_exact": True}
+            if config.attention_kind == "cst_v"
+            else {}
+        ),
         "reports": reports,
     }
 
@@ -74,7 +85,7 @@ def causal_and_manual_attention_check(config):
     intermediate = x + block.attention_out(attention)
     reference = intermediate + block.ffn(block.norm2(intermediate))
     cotangent = torch.randn_like(live)
-    inputs = (x, block.qkv.value.map.atoms.p)
+    inputs = (x, getattr(block.qkv, block.qkv.cst_name).map.atoms.p)
     ga = torch.autograd.grad(live, inputs, cotangent, retain_graph=True)
     gb = torch.autograd.grad(reference, inputs, cotangent, retain_graph=True)
     result = {
@@ -91,6 +102,9 @@ def causal_and_manual_attention_check(config):
 def main(argv=None):
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument(
+        "--attention-kind", choices=("cst_v", "cst_q", "cst_k"), default="cst_v"
+    )
     args = p.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
@@ -98,7 +112,7 @@ def main(argv=None):
     torch.backends.cudnn.allow_tf32 = False
     assert torch.cuda.get_device_name(0) == "NVIDIA GeForce RTX 4090"
     dense = ModelConfig(atom_lr_multiplier=16)
-    config = ModelConfig(atom_lr_multiplier=16, attention_kind="cst_v")
+    config = ModelConfig(atom_lr_multiplier=16, attention_kind=args.attention_kind)
     r = {
         "state": "running",
         "cohort": "recipe",
@@ -132,7 +146,13 @@ def main(argv=None):
         for ni, no, std, seed_name in [
             (256, 1024, 0.02, "block0.up"),
             (1024, 256, 0.02 / (8**0.5), "block0.down"),
-            (256, 256, 0.02, "block0.attention.v"),
+            (
+                256,
+                256,
+                0.02,
+                "block0.attention."
+                + {"cst_v": "v", "cst_q": "q", "cst_k": "k"}[args.attention_kind],
+            ),
         ]:
             r["cases"].append(
                 qualify_case(
@@ -149,7 +169,7 @@ def main(argv=None):
         r["task_step"] = task_step_and_resume_check(
             full_task=True,
             ffn_kind="dense",
-            attention_kind="cst_v",
+            attention_kind=args.attention_kind,
             atom_lr_multiplier=16,
         )
         save()

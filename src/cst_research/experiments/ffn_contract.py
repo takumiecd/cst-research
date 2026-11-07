@@ -94,7 +94,7 @@ class ModelConfig:
             or self.w_c <= 0
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
-            or self.attention_kind not in ("dense", "cst_v")
+            or self.attention_kind not in ("dense", "cst_v", "cst_q", "cst_k")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -165,7 +165,7 @@ def qualification_covers_model(receipt, config):
         scalars["zero_opening_scale"] = config.zero_opening_scale
     dimensions = (
         [(config.width, config.width)]
-        if config.attention_kind == "cst_v"
+        if config.attention_kind != "dense"
         else [(config.width, config.intermediate), (config.intermediate, config.width)]
     )
     for ni, no in dimensions:

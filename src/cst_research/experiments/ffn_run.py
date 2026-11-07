@@ -142,7 +142,11 @@ def main(argv=None):
     parser.add_argument("--qualification-sha256", required=True)
     parser.add_argument("--data-manifest-sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--attention-kind", choices=("dense", "cst_v"), default="dense")
+    parser.add_argument(
+        "--attention-kind",
+        choices=("dense", "cst_v", "cst_q", "cst_k"),
+        default="dense",
+    )
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
@@ -310,7 +314,7 @@ def main(argv=None):
         else config.ffn_parameter_budget()[args.kind + "_parameters"]
     )
     assert actual_ffn_parameters == expected_ffn_parameters
-    if args.kind == "cst" or config.attention_kind == "cst_v":
+    if args.kind == "cst" or config.attention_kind != "dense":
         configure_native(model)
         if field_recipe is not None:
             from .ffn_field_lr import FieldRateOptimizer
@@ -335,7 +339,7 @@ def main(argv=None):
         )
     motion = None
     if args.track_atom_motion and (
-        args.kind == "cst" or config.attention_kind == "cst_v"
+        args.kind == "cst" or config.attention_kind != "dense"
     ):
         from torchcst import CSTLinear
 
