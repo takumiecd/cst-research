@@ -397,5 +397,23 @@
     "max_parameter_resume_error": 0,
     "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
     "report": "docs/ffn-whole-lr-r15-20261107.md"
+  },
+  "public_field_lr_API_validation": {
+    "state": "COMPLETED_QUALIFIED_RETRIEVED_MERGED",
+    "operator_tested": "a6c5f12a31442a03afb79cf47ebdb88db13afbb7",
+    "operator_merge": "c3b68dcf6275f96d29a21ff2aa6e989d42de2cff",
+    "PR": 151,
+    "CPU_cases_remote": 25,
+    "CUDA_cases": 8,
+    "skips": 0,
+    "actual_LM_cases": 8,
+    "task_updates_per_case": 25,
+    "serialized_next_task_step": 26,
+    "trained_projection_VJPs": 64,
+    "max_task_parameter_abs_error": 0,
+    "max_resume_parameter_abs_error": 0,
+    "archive_sha256": "64ae9bac51b1565d35cae76b875f45096a9145de663a2cb0f65ffd98367dfc06",
+    "report": "docs/ffn-field-api-r16-20261107.md",
+    "scope": "Native/wrapper xamp8/16/32/64 atcenters/outer16;20warmup+5fullpeakstress realtaskupdates thenrestore26; correctnessonly, no originallearnerresumed, qualitytrajectoriesstayontheiroriginalsources."
   }
 }

@@ -132,3 +132,14 @@ reproduced prior quality;13archive members were retrieved/hash verified.
 See the [whole-Atom curves/report](ffn-whole-lr-r15-20261107.md). This answers the
 corrected question separately from amplitude-onlyR14; no optimal-rate or
 convergence claim. Public field_lrs native/full-LM qualification is the next gate.
+
+## Public API gate completed (R16)
+
+The public absolute field_lrs API subsequently passed25 remoteCPU/8nativeCUDA
+cases with0skips and8 actualfour-block/eight-projection configurations with64
+trained projection VJPs, public/prototype task parity and default-constructor
+checkpoint restoration. It merged through torchcst PR151 as
+c3b68dcf6275f96d29a21ff2aa6e989d42de2cff.
+[The API record](ffn-field-api-r16-20261107.md) distinguishes these disposable
+correctness fixtures from the historical learning runs. No optimal-rate/default
+or Graph/speed/memory claim is added. No further learning is launched here.

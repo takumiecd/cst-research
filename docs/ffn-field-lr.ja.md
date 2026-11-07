@@ -117,3 +117,12 @@ stock CSTAdamWの32・64倍はともに976更新を完了し、学習後の全16
 [Atom全体の曲線・report](ffn-whole-lr-r15-20261107.ja.md)に記録しています。
 振幅だけのR14と分けて訂正後の問いに回答し、最適LR・収束は主張しません。
 次の検証は公開field_lrsのnative・完全LM対応です。
+
+## 公開APIの検証完了（R16）
+
+その後、絶対値field_lrs公開APIはremote CPU25・native CUDA8件をskipなしで通り、
+実4ブロック・8投影の8設定でも学習後64投影VJP、公開APIと試作の実タスク更新照合、
+指定なしconstructorへのcheckpoint復元を検証しました。torchcst PR151で
+c3b68dcf6275f96d29a21ff2aa6e989d42de2cffとして統合しました。
+[API記録](ffn-field-api-r16-20261107.ja.md)で、使い捨ての正しさfixtureと過去の学習runを
+分けています。最適LR・標準採用・Graph・速度・メモリの主張は追加せず、追加学習も開始しません。

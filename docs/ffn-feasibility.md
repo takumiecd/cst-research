@@ -372,3 +372,15 @@ is not the intended LR intervention. Activity still depends on accepted motion
 even with the same outer clock. Public `field_lrs` remains an unimplemented API
 proposal until the mechanism check; direct per-field rates are the owner's
 preferred input shape, with scheduler/checkpoint semantics still to be designed.
+
+## Final execution disposition
+
+The owner amendments control the campaign: all seed29 widths finished5M and
+were audited, while the six unstarted seed43/71 cases stay stopped and the
+formal three-seed family remains incomplete. Separate short field-rate and
+whole-Atom32/64 comparisons completed and were audited. Public field_lrs also
+passed native/full-LM gates and merged through torchcst PR151.
+The [campaign disposition](ffn-campaign-disposition-20261107.md) maps the full
+requirements to current evidence and limits. Earlier preparation/future-tense
+sections retain their design history; they do not authorize cancelled jobs or
+imply that an unperformed capacity/Attention experiment is complete.
