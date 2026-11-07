@@ -52,6 +52,8 @@ def recipe_for(arm):
         "all16": 0.0048,
         "amplitude1-centers16": 0.0003,
         "amplitude8-centers16": 0.0024,
+        "amplitude32-centers16": 0.0096,
+        "amplitude64-centers16": 0.0192,
     }
     if arm not in rates:
         raise ValueError("unknown field LR arm")

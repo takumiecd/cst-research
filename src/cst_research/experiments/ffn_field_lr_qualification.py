@@ -181,7 +181,13 @@ def main(argv=None):
     parser.add_argument(
         "--arms",
         nargs="+",
-        choices=("all16", "amplitude1-centers16", "amplitude8-centers16"),
+        choices=(
+            "all16",
+            "amplitude1-centers16",
+            "amplitude8-centers16",
+            "amplitude32-centers16",
+            "amplitude64-centers16",
+        ),
         default=["all16", "amplitude1-centers16"],
     )
     args = parser.parse_args(argv)

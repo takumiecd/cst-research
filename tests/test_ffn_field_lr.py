@@ -63,7 +63,7 @@ class FieldRateTests(unittest.TestCase):
             self.assert_states(a, oa, b, ob, atol=0)
 
     def test_scaled_proposal_matches_independent_adam_equations(self):
-        for amplitude in (0.0003, 0.0024):
+        for amplitude in (0.0003, 0.0024, 0.0096, 0.0192):
             with self.subTest(amplitude=amplitude):
                 self.check_independent_adam(amplitude)
 

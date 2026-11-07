@@ -169,7 +169,13 @@ def main(argv=None):
     )
     parser.add_argument(
         "--field-lr-arm",
-        choices=("all16", "amplitude1-centers16", "amplitude8-centers16"),
+        choices=(
+            "all16",
+            "amplitude1-centers16",
+            "amplitude8-centers16",
+            "amplitude32-centers16",
+            "amplitude64-centers16",
+        ),
     )
     parser.add_argument("--field-qualification", type=Path)
     parser.add_argument("--field-qualification-sha256")

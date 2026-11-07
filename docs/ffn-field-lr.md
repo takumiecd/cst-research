@@ -80,3 +80,25 @@ observation, not a paired performance claim. No need to rerun another all16
 training merely for unchanged code. The same DEV0.03/usefulness/correctness gate
 applies before API implementation; this is a bounded development follow-up,
 not an exhaustive LR search or a default/optimality claim.
+
+## R13 result and owner-requested higher amplitude rates
+
+R13 amplitude8/centers16 completed999,424 tokens and passed the trained eight
+projection VJPs, CE and all three arm resume audits (maximum parameter error0).
+DEV CE3.694387 differs from the retained all16 baseline3.673505 by0.020882,
+passing the prespecified0.03 engineering gate. Fresh Dense/no-FFN DEV scores
+exactly reproduced3.581960/4.030150. Ten archive members including the manifest
+were retrieved/hash verified. This authorizes public API implementation; it is
+not statistical equivalence or an optimal-rate/default claim.
+
+The owner then requested32×/64× checks (2026-11-07). Run two additional short
+amplitude-only conditions with peaks0.0096 and0.0192, keeping both centers and
+Polar outer peak time0.0048. Same width256/c8/seed17/976updates/20M horizon;
+fresh Dense/no-FFN controls. Reuse the audited all16/amp8 quality baselines after
+unchanged model/data/optimizer-class source-byte checks. Qualify both exact
+recipes before training; audit trained VJPs/CE/resume afterward. Record curves,
+finite failures and resource observations; choose from DEV only and do not call
+this an optimum or a paired cross-job speed comparison. The owner's explicit
+request extends the earlier bounded follow-up. API implementation proceeds
+locally while the single4090 runs these new arms sequentially; frozen operator
+2b587 and past experiment sources stay unchanged.
