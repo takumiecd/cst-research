@@ -135,6 +135,13 @@ assessment unfinished; stopping does not imply completion. Measured jobs retain
 their original source snapshots; integration does not restart them or complete
 the outstanding scientific assessment.
 
+The [gradual zero-opening pilot](docs/ffn-zero-opening-results-20261107.md)
+completed three RTX4090 runs at tau=.01/.03/.1 and initial q0, with audited
+976-update/999424-token checkpoints. DEV CE was3.69173/3.69918/3.75535 versus
+reused rational-q0=3.67351 and Dense=3.58196. Weak radii broadened as intended;
+this short one-seed comparison did not improve the reused controls. Learning,
+amplitude-conditioned radius/q and initialization diagnostics are recorded.
+
 ## Quick start
 
 Python 3.11 or later is required. The registry CLI uses only the standard library

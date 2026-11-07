@@ -1,0 +1,50 @@
+{
+  "source_commits": {
+    "torchcst": "f864e3c9e57f5214462212e3fc05b898577438a8",
+    "cst-research": "8e34d44f86ad16db4e6f721c3579c4a48b45828b"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "310003c3aee8de66c49b6781dec9e1a304bd0bea826e62cbfcafb3d6bdeb6738",
+  "plot_script_sha256": "7056b0b2c1263d8b25a1702302772f4b84dadf3023430ca25de3b46d274aec6f",
+  "source_files": {
+    "tau-001-audit-v2.json": "783cd57737e63ac9ccea5aac2f005994cd1195d891da515ae2ec91263e4a604f",
+    "tau-010-audit-v2.json": "2c069e22d0eab49419705e9eb0681a11fd306f159ca517579cc515022aaf77f3",
+    "preflight.json": "2006c3bd7f397eac69ef62709cca04d0c584ffabb2db13d744de57ef1bc7c5d5",
+    "tau-003-audit-v2.json": "6a1074e2fc497bf16a4685ea2574f9b621af8c0552e0f3bbc10d01a7886f2852",
+    "tau-003/geometry.jsonl": "68ddac1e5e30e2fdcb9320e925eb27adece4f59445121ba3175fcd68580d5158",
+    "tau-003/summary.json": "45d5d332b3370252daa3dd4e7bd3b7375de1de3c6819a6727864405a33f6220d",
+    "tau-003/curves.jsonl": "bdc5ed24addfdf3718228504368179b37c672b85eee9f91264ac2f7b93fe49f2",
+    "tau-010/geometry.jsonl": "34511325d8ee9565134f4353edd2f8b183deae3a60ccae840881d0c83f251b56",
+    "tau-010/summary.json": "833c4b377e0be5b220ac4f62d875b0ffbfaf8491c8822a0ae7356afa9ee795bb",
+    "tau-010/curves.jsonl": "ec3cf6c68c8cbe9c072d42089c4fcf6f136ce7888dae10b29467e49fa87c4171",
+    "tau-001/geometry.jsonl": "6c14fa6ee6b7b03931646b2037d2be4c0202c80becad8851c7f2f75899c9a228",
+    "tau-001/summary.json": "cd45d186eb9e0403b56323d09817ccf250e886e232c26a1a059ea44c59a66f8f",
+    "tau-001/curves.jsonl": "b7e0932dbee5b930d35477b7051ac546272dc340cb7ffc62811b8c9b22f06e44"
+  },
+  "historical_sources": {
+    "retrieved-field-lr-r12-02/ffn-r12-02-dense-pilot/summary.json": "05c01312f27b52fb3b796f55c7f049d30927115d598fead43aceae70f9b77124",
+    "retrieved-field-lr-r12-02/ffn-r12-02-amplitude1-centers16-pilot/summary.json": "e55ac6d949583231c156a99d683e5a189269eee7eca4f0b2a5d2596c1e19ca8c",
+    "retrieved-field-lr-r12-02/ffn-r12-02-none-pilot/summary.json": "14f86c641d7cd0283fb9dd78111297756329d78674435c80f6e40defd62f9243",
+    "retrieved-field-lr-r12-02/ffn-r12-02-all16-pilot/summary.json": "0cc05a410efc34240c8e0800db52060a435b0243fcc69ebdf42a66d14f8a3c25",
+    "retrieved-field-lr-r12-02/ffn-r12-02-dense-pilot/curves.jsonl": "3eac04723ddc802703eb03ceb637dfd1ce54af3ca34a291b5629e11f3f8fd6d4",
+    "retrieved-field-lr-r12-02/ffn-r12-02-amplitude1-centers16-pilot/curves.jsonl": "f41f126dc71b6e16e00c1e4df63d8ebadd8f1482287719352892b3143b9bf176",
+    "retrieved-field-lr-r12-02/ffn-r12-02-none-pilot/curves.jsonl": "a955428ce8d2618ca2311f25bdf8b4e9f4fc5ef8881dd63d7eeaed3d7e3b3340",
+    "retrieved-field-lr-r12-02/ffn-r12-02-all16-pilot/curves.jsonl": "1525540ee1f8fec9e71571b2c3a248d96a3a63f363be48ea94b4dc5d3b8978a4",
+    "radius-review-20261107-01/analysis.json": "57ce158cfb048a69bb167315556149db276f5820b825f1e814f9235c409f346f",
+    "radius-review-20261107-01/weak-analysis.json": "6343cdb4eeafbabcd854413975265e4c02d98c0435cc4f42a9615345c6625486"
+  },
+  "figures": {
+    "amplitude-radius-q.svg": "dac5cada2e15ac7b60b9254a9488dc758c3588fe1571a8450de8a27d1862f280",
+    "learning-curves.png": "b2e5f5fb685332f8acb5634c1a39b4b28d270a5d1a9067aae8580b91e39d1d26",
+    "learning-curves.svg": "0595286dbf3fff47d41f91ec752aece2d8ed133a5643a56ec13a2b82355b8ad9",
+    "amplitude-radius-q.png": "77ba780e639259be18acd3c6313e7bd005abf1f0ee1c6021e8e26c4dc55e3326",
+    "learning-curves-tail.png": "a43d6e45f5780a3899551c1bcd98aa29ade7e70539940242ad14482762b4a65c",
+    "global-radius-q.png": "6c2a9caca3243b109f71b49472f808b44c0af2ad7deb1d9d976a53f5f07d8a14",
+    "amplitude-populations.png": "26735ae0cbe1c1924e1aaf75f1603336be72ae5e3e9338231908f83d886d6470",
+    "envelope-shape.svg": "fc5f8f6f5275d0d78ef89f1df15d453f4fd286143c8b67ce5ed9c23631d580e9",
+    "envelope-shape.png": "73d787528eb3f0137a6fd4f43a87fb0fbb2e0cf271866b7fe46ffba1174b1ed2",
+    "amplitude-populations.svg": "782558e086940d4b1285fab67eb1606a30a1c677872b939f29843efa79b52c51",
+    "global-radius-q.svg": "188c7189b8c6f45981685afff064d675f7e3cc4552af8be6f638fc1ed4d8cc71",
+    "learning-curves-tail.svg": "29782f719d1acba26ad31dbdcd997af55d1a0d9748f036996189d2c530375f61"
+  }
+}

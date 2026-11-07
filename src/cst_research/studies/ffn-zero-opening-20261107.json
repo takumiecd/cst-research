@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "ffn-zero-opening-20261107",
   "title": "Gradual zero-opening Polar FFN pilot",
-  "status": "PLANNED",
-  "status_note": "Three tau arms authorized; qualification and learning pending; reuse historical rational-q0 and Dense.",
+  "status": "COMPLETED",
+  "status_note": "Three tau short learners completed, trained-audited and retrieved/hash-verified. Historical Dense/q0 reused; exploratory one-seed DEV and geometry observations only.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "f864e3c9e57f5214462212e3fc05b898577438a8",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
@@ -36,10 +36,13 @@
       0.1
     ],
     "q": 0.0,
-    "radius_law": "g=a^2/(a^2+tau^2); L=U0-g*(U0-L0); U=U0"
+    "radius_law": "g=a^2/(a^2+tau^2); L=U0-g*(U0-L0); U=U0",
+    "results_document": "docs/ffn-zero-opening-results-20261107.md",
+    "trained_consumer_commit": "8e34d44f86ad16db4e6f721c3579c4a48b45828b"
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "ffn-feasibility-20261106/zero-opening-20261107-01"
+    "relative_path": "ffn-feasibility-20261106/zero-opening-20261107-01",
+    "archive_sha256": "310003c3aee8de66c49b6781dec9e1a304bd0bea826e62cbfcafb3d6bdeb6738"
   }
 }
