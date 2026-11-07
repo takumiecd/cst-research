@@ -54,6 +54,13 @@ the [audited whole-Atom comparison](docs/ffn-whole-lr-r15-20261107.md) is now co
 Whole32/64 improved some early points but did not improve the final short-budget
 DEV value over16; no optimality or convergence claim is made.
 
+The [closed-envelope FFN pilot](docs/ffn-closed-envelope-results-20261107.md)
+joins L and U at both amplitude limits. Two new RTX4090 runs at initial q0/q1
+each completed 999,424 tokens and trained-checkpoint audits; Dense and rational-q0
+controls were reused. Weak radii reached about 50, but this pL4/pU1 candidate's
+DEV losses (3.9506/3.9761) were worse than rational-q0 (3.6735). The learning and
+amplitude-conditioned radius/q curves are retained for further shape design.
+
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
    FFN projections in a small language model with CST and check whether it learns

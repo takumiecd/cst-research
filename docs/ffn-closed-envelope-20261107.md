@@ -2,6 +2,8 @@
 
 English (canonical) | [日本語](ffn-closed-envelope-20261107.ja.md)
 
+[Completed observations and learning/radius/q curves](ffn-closed-envelope-results-20261107.md).
+
 This exploratory follow-up tests the envelope, not the Atom lower bound or an
 Attention replacement. It is separate from the completed/stopped prior campaign.
 
@@ -23,7 +25,7 @@ physical amplitudes across different radius maps.
 Pre-execution admission found rational/q1's up projection did not reach the
 target in the bounded amplitude search. Record that rejection with no learner
 and no silent unmatched fallback. The two closed recipes initialized all eight
-actual projections within0.5% on CPU. This is not yet GPU or learning evidence.
+actual projections within0.5% on CPU. Those preparation records alone are not GPU or learning evidence.
 Each admitted recipe requires independent quadrature, both actual native
 directions/all-Atom VJPs, controlled optimizer state/resume and actual four-block
 task/resume checks before training.

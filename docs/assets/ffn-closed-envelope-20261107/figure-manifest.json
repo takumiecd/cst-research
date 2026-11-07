@@ -1,0 +1,44 @@
+{
+  "source_commits": {
+    "torchcst": "bfe43c1e234f48d8c7d1139939239dbef2f55970",
+    "cst-research": "7b9eafa71c0e75332d3ecafe796049eb327726ad"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "ede57b3129f58bb37420f23070b236fbda0c1086e7d3a132e7062ffb64757cd6",
+  "source_script_sha256": "6537c63f0871675dc96c7a2af8c9bdfb18bf327233272caef292c1088dda692c",
+  "source_files": {
+    "closed-q0-audit-v2.json": "28e22969a03ba0a402e11abe30cc1b84b600fcbff8ebcc9978efb58fb1511248",
+    "closed-q1-audit-v2.json": "0e6241979e18f6543b2e369a89718789e441e9ff8d9f3ad27bbcf2c4c7d21dae",
+    "preflight.json": "cc163f80a772e5951d86894992c48b3422fbb4cbeb33b2588547da1fac7ccb9d",
+    "closed-q0/geometry.jsonl": "13a12fea0f9188cfb33d0e9463198f843aee10378e30edb6b3b397c31de01be4",
+    "closed-q0/summary.json": "060abf855491d91e4471eb69bfbd9e60316f7901ab4fa2e58b4807653be60278",
+    "closed-q0/curves.jsonl": "fa7c68a68458e416de9343ccc6ba101ab1ed2578a0213f1918ab59eb07d30904",
+    "closed-q1/geometry.jsonl": "73df9a1e6aec1eac6f7dd9eb8a72e3576c9890be7871acaf50611398658b7637",
+    "closed-q1/summary.json": "7fd51fd6dca8443e11c94b483b16c8c17d4e22a18ef8bb798858f01358b14d07",
+    "closed-q1/curves.jsonl": "ecb56e1983c88416b2f2723d4f73668c514584c550226b79a1794b2de4441b93"
+  },
+  "historical_sources": {
+    "retrieved-field-lr-r12-02/ffn-r12-02-dense-pilot/summary.json": "05c01312f27b52fb3b796f55c7f049d30927115d598fead43aceae70f9b77124",
+    "retrieved-field-lr-r12-02/ffn-r12-02-amplitude1-centers16-pilot/summary.json": "e55ac6d949583231c156a99d683e5a189269eee7eca4f0b2a5d2596c1e19ca8c",
+    "retrieved-field-lr-r12-02/ffn-r12-02-none-pilot/summary.json": "14f86c641d7cd0283fb9dd78111297756329d78674435c80f6e40defd62f9243",
+    "retrieved-field-lr-r12-02/ffn-r12-02-all16-pilot/summary.json": "0cc05a410efc34240c8e0800db52060a435b0243fcc69ebdf42a66d14f8a3c25",
+    "retrieved-field-lr-r12-02/ffn-r12-02-dense-pilot/curves.jsonl": "3eac04723ddc802703eb03ceb637dfd1ce54af3ca34a291b5629e11f3f8fd6d4",
+    "retrieved-field-lr-r12-02/ffn-r12-02-amplitude1-centers16-pilot/curves.jsonl": "f41f126dc71b6e16e00c1e4df63d8ebadd8f1482287719352892b3143b9bf176",
+    "retrieved-field-lr-r12-02/ffn-r12-02-none-pilot/curves.jsonl": "a955428ce8d2618ca2311f25bdf8b4e9f4fc5ef8881dd63d7eeaed3d7e3b3340",
+    "retrieved-field-lr-r12-02/ffn-r12-02-all16-pilot/curves.jsonl": "1525540ee1f8fec9e71571b2c3a248d96a3a63f363be48ea94b4dc5d3b8978a4",
+    "radius-review-20261107-01/analysis.json": "57ce158cfb048a69bb167315556149db276f5820b825f1e814f9235c409f346f",
+    "radius-review-20261107-01/weak-analysis.json": "6343cdb4eeafbabcd854413975265e4c02d98c0435cc4f42a9615345c6625486"
+  },
+  "figures": {
+    "amplitude-radius-q.svg": "6a64fd9fba6fd919d80e62c881ea5f71a31b25a6b9d20f21554996819c0551d2",
+    "learning-curves.png": "8a630073e92a95336ac2cc0783838fa7f21badc3e2522c8c4e68957f22776bde",
+    "learning-curves.svg": "045b55ad6f40fea8a3ba40b6f16685b3c65eabc375f5052a84f7c4da3388d910",
+    "amplitude-radius-q.png": "0566a49ec428cacdc219eea51ff84216b6ab5d8f1e58f448e7e053876047125c",
+    "learning-curves-tail.png": "ab9d878ced080877b9187d43b49a783235b940a62edb9ac307539cf8a28ba701",
+    "global-radius-q.png": "92c4a0366ed944bf9610082b23f93b37733b02e920e04802d3883e628351ce8b",
+    "amplitude-populations.png": "8f3c55555f4c48e67f2e6d7314a0bb9d1151a686ab72bf631509c48a0dbe6f77",
+    "amplitude-populations.svg": "fd9e05ca96147af16d02be5f27b375213cf8162b7468621928c04919b4e9f03f",
+    "global-radius-q.svg": "ceb94c35a6608d3ca93ac85ba2bc43041db40f66f1fcd1b25d87970d7a54360c",
+    "learning-curves-tail.svg": "3b02a84ac0c66f3d819844456ff0f24ae538d99d0ba39ffe52e4e1de45915f71"
+  }
+}
