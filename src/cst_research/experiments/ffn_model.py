@@ -218,12 +218,35 @@ class FeedForward(nn.Module):
         )
 
 
+class CSTValueProjection(nn.Module):
+    """Packed output with unchanged Dense Q/K and an explicit CST V map."""
+
+    def __init__(self, config, seed, index):
+        super().__init__()
+        self.qk = nn.Linear(config.width, 2 * config.width)
+        self.value = Projection(
+            config.width,
+            config.width,
+            config=config,
+            kind="cst",
+            std=config.init_std,
+            seed=parameter_seed(seed, f"block{index}.attention.v"),
+        )
+
+    def forward(self, x):
+        return torch.cat((self.qk(x), self.value(x)), dim=-1)
+
+
 class Block(nn.Module):
     def __init__(self, config, kind, seed, index):
         super().__init__()
         self.heads = config.heads
         self.norm1 = nn.LayerNorm(config.width)
-        self.qkv = nn.Linear(config.width, config.width * 3)
+        self.qkv = (
+            CSTValueProjection(config, seed, index)
+            if config.attention_kind == "cst_v"
+            else nn.Linear(config.width, config.width * 3)
+        )
         self.attention_out = nn.Linear(config.width, config.width)
         self.norm2 = nn.LayerNorm(config.width)
         self.ffn = FeedForward(config, kind, seed, index)
@@ -277,6 +300,19 @@ class LanguageModel(nn.Module):
                             parameter_seed(seed, name)
                         ),
                     )
+
+        # Recover the exact historical packed Q/K initialization. Named streams
+        # keep every other shared Parameter unchanged across Dense/CST-V arms.
+        if config.attention_kind == "cst_v":
+            for i, block in enumerate(self.blocks):
+                packed = torch.empty(3 * config.width, config.width).normal_(
+                    std=config.init_std,
+                    generator=torch.Generator().manual_seed(
+                        parameter_seed(seed, f"blocks.{i}.qkv.weight")
+                    ),
+                )
+                with torch.no_grad():
+                    block.qkv.qk.weight.copy_(packed[: 2 * config.width])
 
     def forward(self, tokens, targets=None):
         if tokens.ndim != 2 or not 1 <= tokens.shape[1] <= self.config.context:
