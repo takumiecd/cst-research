@@ -55,7 +55,16 @@
     "r14-field-lr-activation-rms.svg": "3878471089887c2815ff1a72c480f3346b8985fa59c9f5510ed544588974c976",
     "r14-field-lr-resources.png": "aecf7babc69c76ebfb869d7d2cfb558b922023b973b4dc61abb3d209b6fb652a",
     "r14-field-lr-resources.svg": "58b885967c84d0a3e727b366200f22eb998f23b2e5e3129942f6641d2f105ca8",
-    "external-script:report-field-lr-r14-01.py": "947ba67b16803f0a07fbe881b4b747bfbc1277bd60233b8daed4d8d7a380b803"
+    "external-script:report-field-lr-r14-01.py": "947ba67b16803f0a07fbe881b4b747bfbc1277bd60233b8daed4d8d7a380b803",
+    "r15-whole-lr-development.png": "e689199c0f5cf0ea28946e29b7a5966afda26877ee89f366f8dca3a9d3e0bb8b",
+    "r15-whole-lr-development.svg": "faccecb9dc38bbc863e3d7b26d453f59ec75887d5544e63638144a5fe7436957",
+    "r15-whole-lr-train_ce.png": "9c55f0e1d8748e08a35238a08eb073df8f6a6af446e0c50db8eec95a24389e16",
+    "r15-whole-lr-train_ce.svg": "9a5928dfea774030d2c92d4f1d54cc5911d0ac0bbc9db948633840af1ed3dfb9",
+    "r15-whole-lr-activation-rms.png": "4bfdd55f90811377a31ff1ddce77a7e35835970acf9be36943c31b0fa8030c8a",
+    "r15-whole-lr-activation-rms.svg": "c97cb1604dbb01aa750c2376d735bdba5c42dee28e4ad1c5ab61f3da7ccbd0f4",
+    "r15-whole-lr-resources.png": "9dd01f9cf29ec8955363cbf5c5d246715c6ea522dd353b82be2a345cc920d7ca",
+    "r15-whole-lr-resources.svg": "bf8c3bc1c615ae7235c57cdc336eb0d22e9d78cddfb175da391cedf50fa11125",
+    "external-script:report-whole-lr-r15-02.py": "ee69eedfc572ab135dec6673dfaf99dcf0d3a039ee5a9971fdcede20bf4ceb31"
   },
   "selected_r8": {
     "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
@@ -138,5 +147,12 @@
     "R13_baseline_report_sha256": "1557d3f65f217fbb5cb571ef0f6cee803be8204e5b0b24bd4ffe8c96980dc802",
     "archive_sha256": "c115a4623811e890a0ce7b6fc1c1a71e7bd9dd034e7aa77957a625d840a9324e",
     "scope": "Assistant interpreted owner32/64 as amplitude-only, later corrected. These results do NOT answer whole-Atom LR32/64. Centers and outer time16 throughout. N256c8seed17/976updates/common20M horizon; priorR12/R13 quality baselines retained; freshDense/noFFN exactquality matches. No optimum/convergence/3seed or speedmemorywin claim."
+  },
+  "whole_lr_r15": {
+    "report_sha256": "4c045155bc04be20da1a216900ad6a90698f02ef8ee1ad2ff6a1e4bc9ccc16ad",
+    "baseline_report_sha256": "a374d58b64e46c4b171cf863467f3580955b089c8a530b84a978ac6eb93b684b",
+    "source_reuse_proof_sha256": "db8dbae1e4182914b606922c21fc815e5a87e7ecb75a79f4123d36423c4c00c5",
+    "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
+    "scope": "Whole Atom amplitude+centers+Polar outer time32/64 in stockCSTAdamW; ordinaryLR unchanged. N256c8seed17/976updates/common20M horizon. All16 quality baseline from auditedR12 with stock trajectory equality proof. Fresh controls exactly reproduce prior quality. Separate from amplitude-onlyR14; no convergence/optimum/3seed, speed or memory advantage claim."
   }
 }

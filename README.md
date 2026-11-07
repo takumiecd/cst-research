@@ -47,7 +47,9 @@ and Polar outer time. The [audited follow-ups](docs/ffn-field-lr-r14-20261107.md
 include amplitude8/32/64 at fixed centers/outer16. Amplitude8 passed the
 engineering gate for API implementation; public GPU validation remains pending.
 The owner clarified that whole-Atom32/64 is the intended high-rate comparison;
-that separate stock-optimizer experiment is now running.
+the [audited whole-Atom comparison](docs/ffn-whole-lr-r15-20261107.md) is now complete.
+Whole32/64 improved some early points but did not improve the final short-budget
+DEV value over16; no optimality or convergence claim is made.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the

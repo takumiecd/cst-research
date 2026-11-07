@@ -122,3 +122,13 @@ audit trained eight projection VJPs, CE and resume afterward. Compare curves
 with the retained all16 baseline. This is a bounded one-seed development check,
 not an optimum or a paired cross-job speed claim. Use only the existing4090,
 with one sequential scientific child; do not resume cancelled long cases.
+
+## Completed whole-Atom follow-up (R15)
+
+Both32/64 stock-CSTAdamW arms completed976updates and passed all16 trained
+projection VJPs plus4arm next-task-step resume audits(maxerror0). DEV CE was
+3.682039/3.687784 vs retained all16 baseline3.673505. Fresh controls exactly
+reproduced prior quality;13archive members were retrieved/hash verified.
+See the [whole-Atom curves/report](ffn-whole-lr-r15-20261107.md). This answers the
+corrected question separately from amplitude-onlyR14; no optimal-rate or
+convergence claim. Public field_lrs native/full-LM qualification is the next gate.

@@ -381,11 +381,21 @@
     }
   },
   "whole_atom_lr_development": {
-    "state": "RUNNING_QUALIFIED_BEFORE_LEARNING",
+    "state": "COMPLETED_AUDITED_RETRIEVED",
     "consumer": "351617dc81f529ce10e964e5a762f336b7c24b39",
     "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
-    "scope": "Correct owner question: stock CSTAdamW wholeAtom32/64, amplitude+centers+Polar outer time same multiplier; ordinary1. N256c8seed17/976updates/common20M horizon; fresh Dense/noFFN. Exact32/64 independent quadrature/actual rectangular VJPs/CPU optimizer state/taskresume qualified before training. Trained audits and quality results pending.",
+    "scope": "Whole Atom amplitude+centers+Polar outer time32/64 in stockCSTAdamW; ordinaryLR unchanged. N256c8seed17/976updates/common20M horizon. All16 quality baseline from auditedR12 with stock trajectory equality proof. Fresh controls exactly reproduce prior quality. Separate from amplitude-onlyR14; no convergence/optimum/3seed, speed or memory advantage claim.",
     "protocol": "docs/ffn-field-lr.md",
-    "paired_cross_job_speed_claim": false
+    "paired_cross_job_speed_claim": false,
+    "DEV_CE": {
+      "all32": 3.6820387840270996,
+      "all64": 3.687783807516098,
+      "all16_baseline": 3.6735053956508636
+    },
+    "trained_CST_VJPs": 16,
+    "serialized_task_resume_arms": 4,
+    "max_parameter_resume_error": 0,
+    "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
+    "report": "docs/ffn-whole-lr-r15-20261107.md"
   }
 }
