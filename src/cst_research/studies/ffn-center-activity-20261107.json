@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "ffn-center-activity-20261107",
+  "title": "Center-driven Polar activity with preserved s,t and fixed FFN envelope",
+  "status": "COMPLETED",
+  "status_note": "All five400-update learners, trained audits, owned-worker postflight and compact retrieval/hash verification completed; one-seed exploratory only.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "1cb4bec3ae2f1a859a077bf1c664888082ccc7ab",
+  "runner_entrypoint": "cst_research.experiments.ffn_envelope",
+  "protocol_source_path": "docs/ffn-center-activity-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "heads": 4,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "q": 0.0,
+    "updates": 400,
+    "token_budget": 409600,
+    "schedule_tokens": 20000000,
+    "arms": [
+      "dense",
+      "amplitude-g1",
+      "center-g1",
+      "center-g64",
+      "center-g4096"
+    ],
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001,
+    "update_backend": "radius_eager",
+    "center_gains": [
+      1,
+      64,
+      4096
+    ],
+    "activity": "shortest accepted torus displacement / old support; no optimizer-time division",
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "frozen_consumer_commit": "ac64f6db4fdf616870c41fed779e1119ecc5e441",
+    "results_document": "docs/ffn-center-activity-20261107-results.md",
+    "trained_consumer_commit": "ac64f6db4fdf616870c41fed779e1119ecc5e441"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/ffn-center-activity-20261107-01",
+    "archive_sha256": "19ad6885fa0d2c5a989b03e2b322be8cfa32272e575c59dc56a345c3dff3769d"
+  },
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/153"
+}

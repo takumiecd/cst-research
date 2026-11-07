@@ -51,6 +51,10 @@ def main():
         "cst-k": "CST K",
         "cst-qkv": "CST QKV",
         "cst-qkv-ffn": "CST QKV + FFN",
+        "amplitude-g1": "Amplitude activity, gain1",
+        "center-g1": "Center activity, gain1",
+        "center-g64": "Center activity, gain64",
+        "center-g4096": "Center activity, gain4096",
     }
     colors = {
         "rational-q0": "#777777",
@@ -62,6 +66,10 @@ def main():
         "cst-k": "#D55E00",
         "cst-qkv": "#CC79A7",
         "cst-qkv-ffn": "#8B5A2B",
+        "amplitude-g1": "#777777",
+        "center-g1": "#0072B2",
+        "center-g64": "#D55E00",
+        "center-g4096": "#CC79A7",
     }
     paths = {arm: b / "retrieved" / arm for arm in receipt["arms"]}
     historical = set()
@@ -199,7 +207,7 @@ def main():
                         lw=1.6,
                     )
         axes[0].set(ylabel="Mean support radius", yscale="log", ylim=(0.45, 55))
-        axes[1].set(ylabel="Mean q")
+        axes[1].set(ylabel="Mean p (legacy q)" if "amplitude-g1" in paths else "Mean q")
         axes[1].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
         axes[1].set_ylim(bottom=0)
         for ax in axes:
@@ -220,10 +228,53 @@ def main():
         fig.tight_layout(rect=(0, 0.16, 1, 0.93))
         save(fig, "geometry-" + group)
 
-    if "rational-q0" in paths:
+    if "amplitude-g1" in paths:
+        fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
+        for arm, history in geo.items():
+            for side, style in (("up", "-"), ("down", "--")):
+                for col, metric in enumerate(("q", "input_radius")):
+                    yy = []
+                    for row in history:
+                        entries = [
+                            g["all"]
+                            for name, g in row["layers"].items()
+                            if name.endswith(".ffn." + side + ".map")
+                        ]
+                        count = sum(e["count"] for e in entries)
+                        yy.append(
+                            sum(e["count"] * e[metric]["mean"] for e in entries) / count
+                        )
+                    axes[col].plot(
+                        [r["step"] for r in history],
+                        np.ma.masked_less_equal(yy, 0),
+                        style,
+                        color=colors[arm],
+                        lw=1.6,
+                    )
+        for ax in axes:
+            ax.set(xlabel="Optimizer updates", yscale="log")
+            ax.grid(alpha=0.2)
+        axes[0].set(ylabel="Mean p (log scale; exact zeros omitted)", ylim=(None, 1))
+        axes[1].set(ylabel="Mean physical support radius", ylim=(0.45, 55))
+        handles = [Line2D([], [], color=colors[a], label=labels[a]) for a in geo]
+        handles += [
+            Line2D([], [], color="#444444", ls=style, label="FFN " + side)
+            for side, style in (("up", "-"), ("down", "--"))
+        ]
+        fig.legend(
+            handles=handles, loc="lower center", ncol=3, frameon=False, fontsize=9
+        )
+        fig.suptitle(
+            "Global activity and support; all Atoms, four blocks per direction"
+        )
+        fig.tight_layout(rect=(0, 0.16, 1, 0.93))
+        save(fig, "activity-and-radius")
+
+    if "rational-q0" in paths or "amplitude-g1" in paths:
         histories = {
             arm: [row for row in history if "center_motion" in row]
             for arm, history in curves.items()
+            if arm != "dense"
         }
         fig, axes = plt.subplots(2, 2, figsize=(11, 7))
         for col, side in enumerate(("up", "down")):
@@ -279,13 +330,21 @@ def main():
         old = 0.5 + 3.5 / (1 + 3 * z)
         upper = np.maximum(np.maximum(0.5 + 148.5 / (3 + z), 1), old)
         ax.plot(a, upper, color="#222222", label="Unchanged U0")
-        ax.plot(a, old, color=colors["rational-q0"], ls="--", label="Rational L0")
-        for epsilon, arm in ((0.001, "minimum-001"), (0.003, "minimum-003")):
+        if "rational-q0" in paths:
+            ax.plot(a, old, color=colors["rational-q0"], ls="--", label="Rational L0")
+        envelopes = (
+            ((0.001, "minimum-001"), (0.003, "minimum-003"))
+            if "rational-q0" in paths
+            else ((0.001, "amplitude-g1"),)
+        )
+        for epsilon, arm in envelopes:
             ax.plot(
                 a,
                 0.5 + (upper - 0.5) * epsilon**2 / (a * a + epsilon**2),
                 color=colors[arm],
-                label=labels[arm],
+                label=labels[arm]
+                if "rational-q0" in paths
+                else "Fixed L, epsilon=.001 (all CST arms)",
             )
         ax.set(
             xscale="log",
