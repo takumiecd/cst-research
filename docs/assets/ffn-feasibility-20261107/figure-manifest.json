@@ -1,0 +1,158 @@
+{
+  "scope": "Derived figures. External scripts and raw curves remain under the study evidence locator; no raw checkpoint is copied into Git.",
+  "sha256": {
+    "pilot-r2-learning-curves.png": "31f1edf68f02611428c35ce57df1db65b35dff41d167c6f8fa659a1f41164e26",
+    "pilot-r2-learning-curves.svg": "87e6e649aecf92a939aaab187a46f87105352274a460573d8444adb0c0437780",
+    "radius-r5-learning-curves.svg": "4c83857c69fc5d11534fed60757277cdad5582b77d0294b52c12b0200fcb20b7",
+    "radius-r5-learning-curves.png": "38ca29f979472b99fce12b6e72cc0c2eb963135127f31d6c39e39cd70f481fd8",
+    "external-script:plot-pilot-r2.py": "5ec8c716e8c7cf840c64d43d3ed9165ff4f8d4fe78e17ab3356a50c5a22c1aed",
+    "external-script:plot-radius-r5.py": "41a8d66b49e92549e026b2f51f26db9d124dc403f0d4189e49008bc9966b4869",
+    "mechanism-r6-learning-curves.png": "9410f14b6d8223cb849443ff39ad86c2e7e6126ea81d2fa73cc27459e66fa296",
+    "mechanism-r6-learning-curves.svg": "c21a7c6bbf3ac67442579a9e69254fa01ea7b34ffe30fc0f5acf029c4b2897da",
+    "mechanism-r6-motion-curves.png": "062e80422cf53cab65e3bcd9cd30c50e0e2b408ba72766b953f684d50877631c",
+    "mechanism-r6-motion-curves.svg": "867f45574812206bff1a79c7aaaa33d28c6db63fc47123d39ecd5d2103467c9c",
+    "external-script:plot-mechanism-r6.py": "5e02cfc1fe763268b532af1b5b3316c0e2e1abadd7c099671adf623cd836f27f",
+    "recipe-family-r7-learning-curves.png": "523e5ad12cdfe2c957832483c4b0216006ad7a41604cfb4e8d29490449719b7d",
+    "recipe-family-r7-learning-curves.svg": "d72efcd0d18fdbf3d887c2f3a6f76c91d2748b7273c8276233cbdc168006c4b3",
+    "recipe-family-r7-activation-rms.png": "1622880fe8c6bb6aa7f8197dfaaeb624ab8fb70e39bdc9cdeec2aef55c1703cd",
+    "recipe-family-r7-activation-rms.svg": "7a9b0eed8f81a738365b3ab6ec4fe57d17697d446ebdb8049e67d002977fe557",
+    "external-script:plot-recipes-r7.py": "4c88499c2c0dbccc3a3482d16be9b0cec181494a78e67f261b32b58b94400bb0",
+    "selected-r8-development-curves.png": "89771e91158c91839dccd7c2e31ace6010faf6b741d84fe8059323266b203e7e",
+    "selected-r8-development-curves.svg": "353ab0b5b9ad3540b2872c70e4fb0ba66d3ff61b2be2536b09cccafe5a64bbc5",
+    "selected-r8-training-curves.png": "9e48e21c4a78b8991c67c26bc791a43cc7b29a250b30ed9fb572ae731551f76d",
+    "selected-r8-training-curves.svg": "c177627ed4a61f853b537149917cbdc75b5f7552d7cec239d2fdbaaea555dfcb",
+    "selected-r8-development-versus-time.png": "e1bac46294f7c2fbbaeb1c68d76a26be033aa03fc57ad5d6a6361cb4ee67b01f",
+    "selected-r8-development-versus-time.svg": "895c5189137493d05e7b6b2520bb0d178b21ab0dfe4ac6567aaf5695b4dd4363",
+    "selected-r8-resource-observations.png": "6a3f6ac18769f5e092cc551bfce19504fc2880453abb244ba260c07465287e12",
+    "selected-r8-resource-observations.svg": "fe1affbcd826f5d0eb64d1c8167154015843126cc57fad99edff31fc30f3a5a2",
+    "shapes-r10-development-curves.png": "eedbe1fab20252304752d4575082ebf70db48867c44ecea88c82e3191c473a7d",
+    "shapes-r10-development-curves.svg": "c37c37267370ffb588baef4b38d7e7494428c7bfea9145a2a02c1b9130dfe9fc",
+    "shapes-r10-training-curves.png": "d43d49adf44f85870923d48d8b9bcc8303302af853e64f93b9ab91f148423109",
+    "shapes-r10-training-curves.svg": "16463d108a3dd0db733761e3b2a54acb16c3a34b83a96e109f4f30a1ad607080",
+    "shapes-r10-development-versus-time.png": "c9bb7b7714ccebc224211a1b45786adf8de4cffd4debb9a1a428d659ebdd868a",
+    "shapes-r10-development-versus-time.svg": "e1f40c4d1bd96ff86d254ea1035bad7b97980ec6450bf450afb3e26bd72c038c",
+    "shapes-r10-resource-observations.png": "04be201c3b4d95388289adbc44f69119306228bcd17c569ad882bd4f39e67dcc",
+    "shapes-r10-resource-observations.svg": "1dcbd1a594ac37caa65df613db0128d8ffde81f0681e5b5d54036e730c31afe1",
+    "stopped-r11-development-curves.png": "613d5c2e5380001fa9ba732d78e8e7b83ebecb3beb34cf0e7bc6e7371d75940c",
+    "stopped-r11-development-curves.svg": "aeec611267c2ca0fd698edf414e681c09ac3a4320d7a75ad6f042bf37cd10db8",
+    "stopped-r11-training-curves.png": "0c4ac3a63d25bd068097f900a7f7ccd650cc7ff41a3a2ef4ade8770f5a857825",
+    "stopped-r11-training-curves.svg": "cfd5f5d2aad2a8422b961638467c3977919e1af9302cf58b20f3dcf2526dd410",
+    "stopped-r11-development-versus-time.png": "35e5e890b590f44efe67ed2cf7dd7d2e44a2f2acd09bf4dbb27c18f79dd2919f",
+    "stopped-r11-development-versus-time.svg": "c78f8a94905d770142a8c8062027cc19d7c4a6fd3251feeef2e0bf6b26db4271",
+    "stopped-r11-resource-observations.png": "e7ff5d5a49a815245ab0b24a5217d6e7488114b8331ae252bae14a43613da9e8",
+    "stopped-r11-resource-observations.svg": "4fd6b757933e2f2575d9758dec9cf3c2bf033fa78f97a248034dcdf4f37c7158",
+    "r12-field-lr-development.svg": "2d3cfc4aae135c0892ae0303580f58db05e995d5b3979fc14a214533c4182cec",
+    "r12-field-lr-development.png": "555504ca30d72f342e6dc2bcc2eefc5382bb3157bf8b24bffd6e33105b4eaf13",
+    "r12-field-lr-train_ce.png": "c2d225307c80d68f452bcdcb5fc081d6842859646fcaa1d4ea5bae9378e3709e",
+    "r12-field-lr-resources.svg": "6eb359ed2c25bd74ad10fdf471e21e45b143195e91db36e05bd1113b4eaf67e0",
+    "r12-field-lr-resources.png": "b6e56e26aee2e6164c857c5bc0dceac7fb8f8a3cf00b7fbdd74daf1320eecd42",
+    "r12-field-lr-train_ce.svg": "09e3e199b2f737e9a406a9c8ed3cf1e317b20f2f49ea6855be51a427c3320f89",
+    "r14-field-lr-development.png": "449a8faf08cf8ec48ea650785d4518cc412dd21e2e7492a67a4a185ca98fd2c4",
+    "r14-field-lr-development.svg": "4d0f359851fe409568dc8bb04f094bb2aec47c95fcb93f8a21b991e54da48a62",
+    "r14-field-lr-train_ce.png": "49b9ae18297fae1c23615f17499522614f2a1912781c6063c902bfaf92cbf8ba",
+    "r14-field-lr-train_ce.svg": "9f15f049560b788f91ef9c79ffceee2481e4cd8dcaf2a9214ab05868a57324eb",
+    "r14-field-lr-activation-rms.png": "32d011d9e44426d85b026f4a4d17f5394ae5d3dc6b595ac089baab9544f5f1a5",
+    "r14-field-lr-activation-rms.svg": "3878471089887c2815ff1a72c480f3346b8985fa59c9f5510ed544588974c976",
+    "r14-field-lr-resources.png": "aecf7babc69c76ebfb869d7d2cfb558b922023b973b4dc61abb3d209b6fb652a",
+    "r14-field-lr-resources.svg": "58b885967c84d0a3e727b366200f22eb998f23b2e5e3129942f6641d2f105ca8",
+    "external-script:report-field-lr-r14-01.py": "947ba67b16803f0a07fbe881b4b747bfbc1277bd60233b8daed4d8d7a380b803",
+    "r15-whole-lr-development.png": "e689199c0f5cf0ea28946e29b7a5966afda26877ee89f366f8dca3a9d3e0bb8b",
+    "r15-whole-lr-development.svg": "faccecb9dc38bbc863e3d7b26d453f59ec75887d5544e63638144a5fe7436957",
+    "r15-whole-lr-train_ce.png": "9c55f0e1d8748e08a35238a08eb073df8f6a6af446e0c50db8eec95a24389e16",
+    "r15-whole-lr-train_ce.svg": "9a5928dfea774030d2c92d4f1d54cc5911d0ac0bbc9db948633840af1ed3dfb9",
+    "r15-whole-lr-activation-rms.png": "4bfdd55f90811377a31ff1ddce77a7e35835970acf9be36943c31b0fa8030c8a",
+    "r15-whole-lr-activation-rms.svg": "c97cb1604dbb01aa750c2376d735bdba5c42dee28e4ad1c5ab61f3da7ccbd0f4",
+    "r15-whole-lr-resources.png": "9dd01f9cf29ec8955363cbf5c5d246715c6ea522dd353b82be2a345cc920d7ca",
+    "r15-whole-lr-resources.svg": "bf8c3bc1c615ae7235c57cdc336eb0d22e9d78cddfb175da391cedf50fa11125",
+    "external-script:report-whole-lr-r15-02.py": "ee69eedfc572ab135dec6673dfaf99dcf0d3a039ee5a9971fdcede20bf4ceb31"
+  },
+  "selected_r8": {
+    "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
+    "raw_archive_sha256": "0327ac9e47d4675a2bfb71e4abbc2adeaafdf8e3665e2867a43651f0621e5922",
+    "request_sha256": "a51a1f99bdc9830782e80d38ef48c9db3ceaa38f8c6739294fa9aae71e8b95ca",
+    "report_json_sha256": "ad9bd636659a803f80cc8197becc7b3eeb233332801cc3d316261fc45576b6f4",
+    "reporter_source_sha256": {
+      "ffn_report.py": "898526620ff4e3638ceb377db43f68e3952a79884acbbbe7b922df95defc4495",
+      "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
+    },
+    "plotting_runtime": {
+      "matplotlib": "3.11.1",
+      "python": "3.11.15"
+    }
+  },
+  "shape_pilots_r10": {
+    "scope": "Actual four-shape seed17 one-million-token development family,12arms, all44rawfiles archive-manifest verified, eachtrained8CSTVJPs/optimizer/resume/CE auditpassed. Not3seedconfirmation.",
+    "raw_archives": {
+      "width128-e4-lr16-r8-01-evidence.tar.gz": "bf55311ea09366b99fea4f8a3bb684e758f560180067daabb309000639e9bcc4",
+      "width512-e4-lr16-r8-01-evidence.tar.gz": "e59e990cd947d5c3ac538e0cac28cf20b3b9ad0c9df1811fabcab18f4559c5c9",
+      "width128-e1-lr16-r8-01-evidence.tar.gz": "b37e5dca54f29001e859f1eda3b00447a5168c6fc6f130dfb4033bafb5784ed6",
+      "width128-e16-lr16-r8-01-evidence.tar.gz": "0edb48531af793f9079d9911b9e9f3b06bbd24f321238f80b4f84c13a8bf732f"
+    },
+    "parent_receipt_sha256": "7b0d3a2bd8e006d445e3d705d4d55a6a1e8c6cf505ecdd4f17d3bdcf07f6579f",
+    "request_sha256": "376e062e3a633c31fed618e2d688f7965b92b8921e28abc6e96d883b81d3d4fd",
+    "report_json_sha256": "b0e853e0bd670372a480bfe31c409ffd6e855fc57135b449d0f6f978078b7887",
+    "reporter_source_sha256": {
+      "ffn_report.py": "4e03c2e4710edd1c9b62169c301323befb420c26b58c9f001ef406782f3444e5",
+      "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
+    },
+    "plotting_runtime": {
+      "matplotlib": "3.11.1",
+      "python": "3.11.15"
+    }
+  },
+  "owner_stopped_r11_seed29": {
+    "scope": "ActualN128/256/512 seed29 all9arms5M, audited/retrieved33rawfiles. Planned3seedfamily explicitlySTOPPED_BY_OWNER/INCOMPLETE, no3seedclaim. Separateobservationadapter rerunsstrictindividualread_run andowner-stopproof, reusesrenderersonly; formalaggregateadmissionunchanged.",
+    "owner_stop_record_sha256": "0503e0c7a1d3032eb8016c63211d5d17381237e5d6b4c2d1556ee12bed30d4e8",
+    "finish_only_receipt_sha256": "59d7a4e28c60d84b8a92bdd1b442abbe74c81daeb8267fcaf8b51ff8674b7f27",
+    "raw_archives": {
+      "width128-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "ee3530b7451713f2dc0f70251ab49b4d1e3216d95ee24b848998d2628c3521e1",
+      "width256-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "3390ce264fa24cfe84d99041d9ba83abb2fc55947296493af8a977cb1d2890ab",
+      "width512-e4-lr16-seed29-r8-confirm-01-evidence.tar.gz": "a1973aac3b176ba1e63a66373cd67a7305f9c9813335b7fbd09afb4709dbca74"
+    },
+    "request_sha256": "ba1b60176eb52b20c45520901cfad57425c0209cccc1a3efa7c7aeb6120983be",
+    "observation_adapter_sha256": "6edee2d20d30c2a66ea1b0c0982de0761ba0a568506eef7f7364c6fea505447b",
+    "reporter_source_sha256": {
+      "ffn_report.py": "586f25564c90bd131f95c49dc932d565fc1a9064ac99d273fc948213b2ad6664",
+      "ffn_contract.py": "a4b0cd250cf3a8d0000f47abf67e219358e04b3175dc63e63f32ce09e321be8e"
+    },
+    "report_json_sha256": "884c89241cc63768cbb1edeb09eedca87019697e436964e7757f449b45adc079",
+    "plotting_runtime": {
+      "matplotlib": "3.11.1",
+      "python": "3.11.15"
+    }
+  },
+  "field_lr_r12": {
+    "scope": "Auditedone-seedshortfieldLRobservations; 12archive membersinclmanifest hashverified. Negativeamp1, APIgatefalse. Derivedfiguresonly, raw/checkpoints preservedoutsideGit.",
+    "consumer": "834f22a569aaa2948edd052df9dce8aaa1ce95d2",
+    "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "archive_sha256": "34ddda1866cf15e3496cd176a87333877fafdc048ec39ff1c54b8066c74b6ff6",
+    "manifest_sha256": "95a09da85345ad8a82371a68b2cd37674a2378dc541d1e327d331350724ecb0c",
+    "receipt_sha256": "5c02042efaeb0e6568eb3b5f11a1a0330d46e23b9a6ef2e10ddbdf75518454f2",
+    "audit_sha256": "8bf7f36a4c462abfffc29cb5c273beed207091d0fd9c182611afc4fc27fa1734",
+    "field_qualification_sha256": "a7fd324158c034f838216ca02f14d6a062469e8d748248e2a8466291096ea85c",
+    "report_json_sha256": "6ab1cc4ead8741fad926e5ab8da4a77e71d85910a1da74aab491d22f5d023ae9",
+    "report_adapter_sha256": "dfd94afa4e76b71c7682fd99e9cc945453269791d85c9e982fc34ffa9e65cc54",
+    "files": {
+      "r12-field-lr-development.svg": "2d3cfc4aae135c0892ae0303580f58db05e995d5b3979fc14a214533c4182cec",
+      "r12-field-lr-development.png": "555504ca30d72f342e6dc2bcc2eefc5382bb3157bf8b24bffd6e33105b4eaf13",
+      "r12-field-lr-train_ce.png": "c2d225307c80d68f452bcdcb5fc081d6842859646fcaa1d4ea5bae9378e3709e",
+      "r12-field-lr-resources.svg": "6eb359ed2c25bd74ad10fdf471e21e45b143195e91db36e05bd1113b4eaf67e0",
+      "r12-field-lr-resources.png": "b6e56e26aee2e6164c857c5bc0dceac7fb8f8a3cf00b7fbdd74daf1320eecd42",
+      "r12-field-lr-train_ce.svg": "09e3e199b2f737e9a406a9c8ed3cf1e317b20f2f49ea6855be51a427c3320f89"
+    },
+    "plotting_runtime": "Local Matplotlib3.11.1/Python3.11.15; derived rendering, not GPU validation"
+  },
+  "field_lr_r14": {
+    "report_sha256": "a374d58b64e46c4b171cf863467f3580955b089c8a530b84a978ac6eb93b684b",
+    "R13_baseline_report_sha256": "1557d3f65f217fbb5cb571ef0f6cee803be8204e5b0b24bd4ffe8c96980dc802",
+    "archive_sha256": "c115a4623811e890a0ce7b6fc1c1a71e7bd9dd034e7aa77957a625d840a9324e",
+    "scope": "Assistant interpreted owner32/64 as amplitude-only, later corrected. These results do NOT answer whole-Atom LR32/64. Centers and outer time16 throughout. N256c8seed17/976updates/common20M horizon; priorR12/R13 quality baselines retained; freshDense/noFFN exactquality matches. No optimum/convergence/3seed or speedmemorywin claim."
+  },
+  "whole_lr_r15": {
+    "report_sha256": "4c045155bc04be20da1a216900ad6a90698f02ef8ee1ad2ff6a1e4bc9ccc16ad",
+    "baseline_report_sha256": "a374d58b64e46c4b171cf863467f3580955b089c8a530b84a978ac6eb93b684b",
+    "source_reuse_proof_sha256": "db8dbae1e4182914b606922c21fc815e5a87e7ecb75a79f4123d36423c4c00c5",
+    "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
+    "scope": "Whole Atom amplitude+centers+Polar outer time32/64 in stockCSTAdamW; ordinaryLR unchanged. N256c8seed17/976updates/common20M horizon. All16 quality baseline from auditedR12 with stock trajectory equality proof. Fresh controls exactly reproduce prior quality. Separate from amplitude-onlyR14; no convergence/optimum/3seed, speed or memory advantage claim."
+  }
+}

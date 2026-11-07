@@ -1,0 +1,58 @@
+{
+  "cohort": "development",
+  "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+  "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "torch": "2.11.0+cu126",
+  "token_budget": 5000000,
+  "recipe": {
+    "q": 0.0,
+    "amplitude_max": 1.0,
+    "w_c": 0.3,
+    "radius_birth": 4.0,
+    "feature_order": "contiguous",
+    "atom_lr_multiplier": 16.0,
+    "coefficient": 8
+  },
+  "seeds": [17],
+  "shapes": [{"width": 256, "expansion": 4}],
+  "runs": [
+    {
+      "width": 256,
+      "expansion": 4,
+      "seed": 17,
+      "kind": "dense",
+      "label": "dense-followup",
+      "artifacts": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-dense-followup",
+      "receipt": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-receipt.json",
+      "receipt_sha256": "REPLACE_WITH_TERMINAL_RECEIPT_SHA256",
+      "audit": "retrieved/audit-width256-lr16-5m-r8-01/result.json",
+      "audit_sha256": "REPLACE_WITH_PASSED_AUDIT_SHA256"
+    },
+    {
+      "width": 256,
+      "expansion": 4,
+      "seed": 17,
+      "kind": "none",
+      "label": "none-followup",
+      "artifacts": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-none-followup",
+      "receipt": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-receipt.json",
+      "receipt_sha256": "REPLACE_WITH_TERMINAL_RECEIPT_SHA256",
+      "audit": "retrieved/audit-width256-lr16-5m-r8-01/result.json",
+      "audit_sha256": "REPLACE_WITH_PASSED_AUDIT_SHA256"
+    },
+    {
+      "width": 256,
+      "expansion": 4,
+      "seed": 17,
+      "kind": "cst",
+      "label": "cst-followup",
+      "artifacts": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-cst-followup",
+      "receipt": "retrieved/ffn-r8-width256-lr16-5m-dev17-01-receipt.json",
+      "receipt_sha256": "REPLACE_WITH_TERMINAL_RECEIPT_SHA256",
+      "audit": "retrieved/audit-width256-lr16-5m-r8-01/result.json",
+      "audit_sha256": "REPLACE_WITH_PASSED_AUDIT_SHA256"
+    }
+  ]
+}

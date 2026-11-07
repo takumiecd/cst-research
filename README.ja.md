@@ -22,7 +22,23 @@ CSTをニューラルネットワークで使えるようにするための研�
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
-2026-11-06に採用した研究方針です。現時点でこれらの用途を検証できたという意味ではありません。
+2026-11-06に採用した研究方針です。FFNの開発実験結果を記録し、Attentionの検証はまだ始めていません。
+
+合意した[FFN検証計画](docs/ffn-feasibility.ja.md)は`A=ceil(8*sqrt(d_in*d_out))`を使い、
+幅256から始めて128/512も確認します。線形Atom予算での有効性と限定した縦横比の変更を調べ、
+最小係数の探索は行いません。
+
+[初期結果と学習曲線](docs/ffn-feasibility-results.ja.md)で、3条件pilot、半径診断、
+数値検証、残作業を分けて記録しています。選択設定は幅128/256/512と限定した縦横比の
+監査済み1 seed開発実験でFFNなしより改善しました。所有者の判断で主幅の3 seed確認を未完了のまま停止し、
+短期のfield別LR実験を優先します。seed29の結果は未完了の確認証拠として保持します。現在のeager FP32はFFN Parameter数を圧縮しますが、速度・GPUメモリの
+優位は示していません。
+[短期フィールド別LR比較](docs/ffn-field-lr-r12-20261107.ja.md)では、中心LRとPolar外部時間を揃えて振幅LRだけ16倍から1倍へ下げると学習が遅れました。[監査済みの追試](docs/ffn-field-lr-r14-20261107.ja.md)には中心・外部時間16倍に固定した振幅8・32・64倍も含みます。
+振幅8倍はAPI実装の工学的基準を通りました。その後、公開field_lrsはCPU25・CUDA8テストと
+全8設定の完全LM更新・復元、学習後64投影VJPも通り、[torchcst PR151](https://github.com/takumiecd/torchcst/pull/151)で統合しました。
+[検証とAPIの記録](docs/ffn-field-api-r16-20261107.ja.md)にまとめています。
+ユーザーが意図した高学習率比較はAtom全体32・64倍と訂正され、その[別のstock optimizer比較](docs/ffn-whole-lr-r15-20261107.ja.md)も監査まで完了しました。
+全体32・64倍は途中の点で先に改善する場合もありますが、最終の短期DEVは16倍より改善せず、最適値・収束は主張しません。
 
 1. **まずFFN。** 長方形の入出力、多トークン、forward/backwardの正しさ、optimizerを含む更新を確認します。
    その後、小型言語モデルのFFNの射影をCSTへ置換し、安定して学習できるか、validationでタスクに意味のある性能が得られるかを調べます。
@@ -100,7 +116,17 @@ python -m unittest discover -s tests -v
 独立した数値admission後に変更なしのbenchmarkを呼ぶ
 [限定A100 MIG環境比較adapter](docs/higgs-gpu-comparison.ja.md)を別に用意しています。
 
-torchcstのライブラリが必要な場合だけ、固定commitのoptional extraを使えます。
+現在のFFN研究には、長方形演算・初期化・field別LR API統合後の専用extraを使えます。
+
+```bash
+python -m pip install -e '.[ffn]'
+```
+
+ライブラリは`c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`に固定しています。
+数値環境の再現や過去runの移行ではありません。品質結果の再現には
+[固定ソースの手順](docs/ffn-reproduction.ja.md)を使ってください。
+
+過去HIGGS用のextraは元のstudy commitを保持します。別の環境で導入します。
 
 ```bash
 python -m pip install -e '.[torchcst]'
@@ -137,3 +163,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 [He／Xavier初期化pilot](docs/higgs-fan-initialization.ja.md)はデータ不要のAtom二乗平均目標と小文字`q`の明示指定を使い、新規の対応するDense／CSTを比較します。CPU準備・native検証・学習結果・公開default採用は区別します。
 
 完了した[初期化の結果](docs/higgs-initialization-results.ja.md)に、旧方式・幅対応・TRAIN-RMS・データ不要のHe/Xavier・正規化対照をまとめます。明示的な公開APIは[torchcst初期化ガイド](https://github.com/takumiecd/torchcst/blob/main/docs/initialization.ja.md)を参照してください。
+
+[実施結果と終了範囲](docs/ffn-campaign-disposition-20261107.ja.md)に、所有者が停止した3seed系列も含め、要件と証拠を対応付けています。

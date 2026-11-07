@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "id": "ffn-feasibility-20261106",
+  "title": "CST FFN feasibility with geometric-mean Atom budgets",
+  "status": "RUNNING",
+  "status_note": "R6/R7 terminal audits complete. R8 fresh N256/c8/AtomLR16 5M completed/audited all3arms and8trainedCSTVJPs; DEV Dense2.75219/CST2.88124/noFFN3.10782. R10selectedwidth/aspect1Mdevelopment pilots nowrunning on soleRTX4090. No three-seed/scaling-law or speed/memory-win claim. HIGGS/DST/lower-bound remain stopped.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/149",
+  "runner_entrypoint": "cst_research.experiments.ffn_qualification",
+  "protocol_source_path": "docs/ffn-feasibility.md",
+  "protocol": {
+    "atom_rule": "ceil(c*sqrt(d_in*d_out))",
+    "initial_coefficient": 8,
+    "bounded_coefficient_followup": [
+      8,
+      16,
+      32
+    ],
+    "planned_learning_and_data_horizon_tokens": 20000000,
+    "current_execution_device": "RTX4090only",
+    "current_priority": "Selected c8/AtomLR16 fixed-family width/aspect feasibility: N128/N512 expansion4 andN128 expansion1/16 bounded1M developmentpilots after passed5M gate; then3seedconfirmation on workingmainwidths.",
+    "initial_q": 0.0,
+    "widths": [
+      128,
+      256,
+      512
+    ],
+    "initial_width": 256,
+    "ffn_expansion": 4,
+    "blocks": 4,
+    "heads": 4,
+    "context": 128,
+    "arms": [
+      "dense",
+      "cst",
+      "none"
+    ],
+    "initialization": "Dense std0.02, residual outputs /sqrt(2*blocks); public CST variance_scaling_ before CUDA/optimizer",
+    "initial_dataset": "roneneldan/TinyStories; revision/tokenizer/splits/hashes must be frozen before learning",
+    "dataset_revision": "f54c09fd23315a6f9c86f9dc80f725de7d8f9c64",
+    "tokenizer": "tiktoken0.12.0:gpt2, vocabulary50257, ordinary encode + EOS",
+    "token_file_lengths": {
+      "train": 20000001,
+      "development": 8193,
+      "confirmation": 32769
+    },
+    "split_rule": "original train/valid text files; exclude identical whole stories across splits before packing",
+    "microbatch_sequences": 2,
+    "accumulation": 4,
+    "learning_rate": 0.0003,
+    "minimum_learning_rate": 3e-05,
+    "warmup": "max(1,min(200,updates//10)), then cosine",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "weight_decay": 0.0,
+    "global_gradient_clip": 1.0,
+    "pilot_training_tokens": 1000000,
+    "maximum_training_tokens_per_run": 20000000,
+    "confirmation_seeds": [
+      29,
+      43,
+      71
+    ],
+    "development_seed": 17,
+    "lower_bound_search": false,
+    "attention_replacement": false,
+    "native_dependency": "internal GLOBAL_ACTIVE_GRAD4_NATIVE, explicit scoped RECTANGULAR_2048 candidate + RADIUS_FLAT_TORUS_FUSED coordinate update; no dispatcher-default adoption",
+    "initial_operator_commit": "9cb6de727ddbf5c2178fe18db6d580c9e181b926",
+    "prepared_2048_operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "bounded_aspect_learning": "N128 expansion1/16 development seed17 one-million-token pilots; main expansion4 at N128/256/512",
+    "blocked_width": "N512reference/q0 exactR8native2directionqualification, actual4block20updates and trained8projection/checkpointaudit passed. SelectedAtomLR16 N512 and N128expansion16 learning still require their own recipe qualification/preflight; no inherited admission.",
+    "radius_followup": {
+      "q": [
+        0.0,
+        0.25,
+        0.5
+      ],
+      "per_arm_token_cap": 5000000,
+      "planned_horizon_tokens": 20000000,
+      "track_atom_motion": true,
+      "scope": "Exploratory development seed17, not primary timing/memory or confirmation; preserve R2/R5 as separate frozen versions"
+    },
+    "bounded_recipe_followup": {
+      "status": "COMPLETED_AND_TRAINED_CHECKPOINT_AUDIT_PASSED",
+      "width": 256,
+      "coefficient": 8,
+      "seed": 17,
+      "per_arm_token_cap": 1000000,
+      "planned_horizon_tokens": 20000000,
+      "recipes": [
+        {
+          "label": "reference",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "narrow_birth",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 1.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "calibrated_wide",
+          "q": 1.0,
+          "amplitude_max": 4.0,
+          "w_c": 1.2,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "fixed_order",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "permuted",
+          "atom_lr_multiplier": 1.0
+        },
+        {
+          "label": "atom_lr16",
+          "q": 0.0,
+          "amplitude_max": 1.0,
+          "w_c": 0.3,
+          "radius_birth": 4.0,
+          "feature_order": "contiguous",
+          "atom_lr_multiplier": 16.0
+        }
+      ],
+      "controls": [
+        "dense-contiguous",
+        "dense-permuted",
+        "noFFN"
+      ],
+      "gates": "Exact recipe native all-Atom VJPs both256x1024 directions B2T128, independent quadrature, optimizer/model resume; actual four-block task preflight before pilot. R6must finish and be audited first."
+    },
+    "selected_learning_followup": {
+      "status": "COMPLETED_AND_TRAINED_CHECKPOINT_AUDIT_PASSED",
+      "selection_basis": "Post-R7 developmentCE only; no confirmation scores used for recipe choice. Not preregistered before R7 or an optimality claim.",
+      "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+      "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+      "width": 256,
+      "expansion": 4,
+      "coefficient": 8,
+      "seed": 17,
+      "q": 0.0,
+      "amplitude_max": 1.0,
+      "w_c": 0.3,
+      "radius_birth": 4.0,
+      "feature_order": "contiguous",
+      "atom_lr_multiplier": 16.0,
+      "per_arm_token_cap": 5000000,
+      "planned_horizon_tokens": 20000000,
+      "controls": [
+        "dense",
+        "none"
+      ],
+      "track_atom_motion": false,
+      "qualification": "Both actualdirections/Atomcount/scalars, upstd.02/downstd.02/sqrt8, mixedoptimizer/modelresume, full4block2updatepreflight passed before followup",
+      "required_after_terminal": "Retrieve/hashcheck and independent trainedY/dX/allAtomVJPs/optimizer/resume/CE audit before recipe adoption or3seed claim.",
+      "next_not_executed": "SelectedR10fourshape1M developmentpilots completed/audited/retrieved. SeparateR11mainwidththree-seed5M confirmation running; finalreport/integration pending."
+    },
+    "selected_shape_pilots": {
+      "status": "COMPLETED_AUDITED_RETRIEVED_NOT_THREE_SEED_CONFIRMATION",
+      "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+      "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+      "coefficient": 8,
+      "atom_lr_multiplier": 16,
+      "seed": 17,
+      "shapes": [
+        [
+          128,
+          4
+        ],
+        [
+          512,
+          4
+        ],
+        [
+          128,
+          1
+        ],
+        [
+          128,
+          16
+        ]
+      ],
+      "token_cap_per_arm": 1000000,
+      "planned_horizon_tokens": 20000000,
+      "gates": "Current5Mterminalauditpassed and DEV_CST<DEV_noFFN; eachshape separately qualifies bothactualstd/directions/count/recipe, full4blockpreflight,3armlearning andtrainedcheckpoint audit. Failures retained; no automaticretry/resume.",
+      "confirmation_not_executed": false,
+      "confirmation_scope": "SeparateR11mainwidth3seedfamily launched; no completed3seedresults yet. Aspectpilots remainone-seed development."
+    },
+    "main_width_confirmation": {
+      "status": "STOPPED_BY_OWNER_INCOMPLETE_SEED29_AUDITED_RETRIEVED",
+      "selection_boundary": "Fixed after development seed17 evidence and before the first confirmation run; no recipe or budget selection using confirmation outcomes.",
+      "consumer_commit": "70e02d864e661d3a87cd8aea322b49ae3f4a1f8f",
+      "operator_commit": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+      "widths": [
+        128,
+        256,
+        512
+      ],
+      "expansion": 4,
+      "seeds": [
+        29,
+        43,
+        71
+      ],
+      "coefficient": 8,
+      "initial_q": 0.0,
+      "amplitude_max": 1.0,
+      "w_c": 0.3,
+      "radius_birth": 4.0,
+      "feature_order": "contiguous",
+      "atom_lr_multiplier": 16.0,
+      "token_cap_per_arm": 5000000,
+      "actual_updates_per_arm": 4882,
+      "actual_seen_tokens_per_arm": 4999168,
+      "planned_horizon_tokens": 20000000,
+      "arms": [
+        "dense",
+        "none",
+        "cst"
+      ],
+      "learning_runs": 27,
+      "track_atom_motion": false,
+      "entry_gates": "R8selected5M and allR10shape pilots terminal/audited; usefulDEV_CSTvsnoFFN atN128/N256/N512 before confirmation. Per-case nativequalification/preflight and terminal trainedcheckpoint audit remain required.",
+      "analysis": "Keep all three seeds per main width and all controls, report paired CST-minus-noFFN and CST-minus-Dense CE/perplexity, learning curves, complete-update time and memory. UsefulFFN claim requires lower confirmationCE than noFFN for each mainwidth in allthree seeds; report effect sizes, no formalDense-noninferiority or generalasymptoticclaim.",
+      "failures": "No automaticretry/resume, seed exclusion or recipe adjustment from confirmation scores; retain partial/failed evidence and inspect numerical failures before further execution.",
+      "resources": "RTX4090only, one scientific GPUchild at a time; standardnohup independentPOSIXsession with PID/startticks journal for the long family.",
+      "execution": "Protocolfixedcommit5654fc4 beforelaunch; exactsource70e/operator2b. All9cases/27arms required; completion onlyafterterminalaudits andlocalhashretrieval.",
+      "owner_amendment": {
+        "reason": "Owner selected short field-LR exploration because the remaining long confirmation budget was too slow; not a numerical failure or a claim of completed3seed confirmation.",
+        "completed_width_seed_cases_before_stop": [
+          [
+            128,
+            29
+          ],
+          [
+            256,
+            29
+          ]
+        ],
+        "inflight_case_to_finish_and_audit": [
+          512,
+          29
+        ],
+        "cancelled_unstarted_seeds": [
+          43,
+          71
+        ],
+        "cancelled_unstarted_width_seed_cases": 6,
+        "source_preservation": "Original nine-case request/controller/journal preserved; supervisor stopped by exactPID only; unchanged current learner finishes, separate finish-only supervisor performs terminal audit/bundle.",
+        "next": "Afterseed29retrieval, bounded N256seed17~1M comparison of allAtom16 versusamplitude-direction1/centers16, samePolaroutertime and20MLR/datahorizon. Independentoptimizer/reference/native/resume gates before learning, then publicAPI design.",
+        "public_API_preference": "Absolutefield_lrs withsemanticrolesdeclaredbyparameterization/chart; notimplemented/adopted.",
+        "finished_after_owner_stop": {
+          "width_seed_cases": [
+            [
+              128,
+              29
+            ],
+            [
+              256,
+              29
+            ],
+            [
+              512,
+              29
+            ]
+          ],
+          "learning_runs": 9,
+          "actual_updates_per_arm": 4882,
+          "actual_tokens_per_arm": 4999168,
+          "trained_CST_projection_VJPs": 24,
+          "all9_serialized_resume_max_parameter_error": 0,
+          "retrieved_manifest_verified_raw_files": 33,
+          "three_seed_claim": false
+        }
+      }
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106"
+  },
+  "field_lr_development": {
+    "state": "COMPLETED_AUDITED_RETRIEVED_API_GATE_NOT_PASSED",
+    "owner_authorization": "Stop six unstarted long cases; short field comparison before API. Owner reaffirmed4090 and authorized API if short results look good.",
+    "protocol": "docs/ffn-field-lr.md",
+    "shape": {
+      "width": 256,
+      "expansion": 4,
+      "layers": 4,
+      "CST_projections": 8,
+      "coefficient": 8
+    },
+    "seed": 17,
+    "actual_tokens_per_arm": 999424,
+    "planned_tokens": 20000000,
+    "arms": [
+      "dense",
+      "none",
+      "all16",
+      "amplitude1-centers16"
+    ],
+    "peak_rates": {
+      "ordinary": 0.0003,
+      "input_center": 0.0048,
+      "output_center": 0.0048,
+      "outer_clock": 0.0048,
+      "amplitude_by_arm": {
+        "all16": 0.0048,
+        "amplitude1-centers16": 0.0003
+      }
+    },
+    "API_gate": "All correctness gates pass; separated arm useful vs noFFN and final DEVCE <= all16+0.03. Confirmation not used for next-rate selection. No publicdefault adoption.",
+    "restriction": "One4090 scientific worker; new frozen consumer; old70e/2b snapshots unchanged. Cancelled long cases remain stopped; no lower-bound orAttention study.",
+    "consumer": "834f22a569aaa2948edd052df9dce8aaa1ce95d2",
+    "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "DEV_CE": {
+      "dense": 3.581960193812847,
+      "none": 4.03014962375164,
+      "all16": 3.6735053956508636,
+      "amplitude1_centers16": 3.847311906516552
+    },
+    "DEV_gap_amp1_minus_all16": 0.17380651086568832,
+    "API_gate_passed": false,
+    "report": "docs/ffn-field-lr-r12-20261107.md",
+    "trained_CST_VJPs": 16,
+    "serialized_task_resume_arms": 4,
+    "max_parameter_resume_error": 0,
+    "archive_sha256": "34ddda1866cf15e3496cd176a87333877fafdc048ec39ff1c54b8066c74b6ff6",
+    "bounded_amplitude8_followup": {
+      "state": "COMPLETED_AUDITED_RETRIEVED_API_ENGINEERING_GATE_PASSED",
+      "peak_amplitude_LR": 0.0024,
+      "peak_centers_and_outer_LR": 0.0048,
+      "seed": 17,
+      "width": 256,
+      "actual_tokens": 999424,
+      "horizon": 20000000,
+      "fresh_controls": [
+        "dense",
+        "none"
+      ],
+      "quality_baseline": "Completed R12all16; model/data and optimizer-class source bytes checked before reuse. Fresh controls exact quality match. No paired cross-job time claim.",
+      "gate": "DEV<=R12all16+0.03 andusefulvsfreshnone andallcorrectness. No broadsearch/defaultadoption.",
+      "consumer": "0b9dba7412f4b6162883b84a0d7160e2f16f57ff",
+      "DEV_CE": 3.6943871080875397,
+      "DEV_gap_vs_all16": 0.020881712436676025,
+      "API_gate_passed": true,
+      "trained_CST_VJPs": 8,
+      "serialized_task_resume_arms": 3,
+      "max_parameter_resume_error": 0,
+      "archive_sha256": "2185fe612db8ae80546c4c4e66daa28ec2db406eaa5236bf93123b940f449d39",
+      "report": "docs/ffn-field-lr-r14-20261107.md"
+    },
+    "higher_amplitude_followup": {
+      "state": "COMPLETED_AUDITED_RETRIEVED_ASSISTANT_SCOPE_ERROR",
+      "scope": "Amplitude-only32/64 with centers/outer16; does not answer owner whole-Atom32/64 question. Retain as separate contrast.",
+      "consumer": "86e83fc92543b770f51bdfd7749baab4276f8b6c",
+      "DEV_CE": {
+        "amplitude32_centers16": 3.6892067790031433,
+        "amplitude64_centers16": 3.6988805904984474
+      },
+      "trained_CST_VJPs": 16,
+      "serialized_task_resume_arms": 4,
+      "max_parameter_resume_error": 0,
+      "archive_sha256": "c115a4623811e890a0ce7b6fc1c1a71e7bd9dd034e7aa77957a625d840a9324e",
+      "report": "docs/ffn-field-lr-r14-20261107.md"
+    }
+  },
+  "whole_atom_lr_development": {
+    "state": "COMPLETED_AUDITED_RETRIEVED",
+    "consumer": "351617dc81f529ce10e964e5a762f336b7c24b39",
+    "operator": "2b587e0f04ddf64e2bfb0c2e3db591e87a6f6440",
+    "scope": "Whole Atom amplitude+centers+Polar outer time32/64 in stockCSTAdamW; ordinaryLR unchanged. N256c8seed17/976updates/common20M horizon. All16 quality baseline from auditedR12 with stock trajectory equality proof. Fresh controls exactly reproduce prior quality. Separate from amplitude-onlyR14; no convergence/optimum/3seed, speed or memory advantage claim.",
+    "protocol": "docs/ffn-field-lr.md",
+    "paired_cross_job_speed_claim": false,
+    "DEV_CE": {
+      "all32": 3.6820387840270996,
+      "all64": 3.687783807516098,
+      "all16_baseline": 3.6735053956508636
+    },
+    "trained_CST_VJPs": 16,
+    "serialized_task_resume_arms": 4,
+    "max_parameter_resume_error": 0,
+    "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
+    "report": "docs/ffn-whole-lr-r15-20261107.md"
+  },
+  "public_field_lr_API_validation": {
+    "state": "COMPLETED_QUALIFIED_RETRIEVED_MERGED",
+    "operator_tested": "a6c5f12a31442a03afb79cf47ebdb88db13afbb7",
+    "operator_merge": "c3b68dcf6275f96d29a21ff2aa6e989d42de2cff",
+    "PR": 151,
+    "CPU_cases_remote": 25,
+    "CUDA_cases": 8,
+    "skips": 0,
+    "actual_LM_cases": 8,
+    "task_updates_per_case": 25,
+    "serialized_next_task_step": 26,
+    "trained_projection_VJPs": 64,
+    "max_task_parameter_abs_error": 0,
+    "max_resume_parameter_abs_error": 0,
+    "archive_sha256": "64ae9bac51b1565d35cae76b875f45096a9145de663a2cb0f65ffd98367dfc06",
+    "report": "docs/ffn-field-api-r16-20261107.md",
+    "scope": "Native/wrapper xamp8/16/32/64 atcenters/outer16;20warmup+5fullpeakstress realtaskupdates thenrestore26; correctnessonly, no originallearnerresumed, qualitytrajectoriesstayontheiroriginalsources."
+  }
+}

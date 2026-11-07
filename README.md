@@ -26,7 +26,33 @@ public API are separate decisions.
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
 establish practical use in FFNs and Attention.** This direction was adopted on
-2026-11-06. It is a research plan; these applications have not yet been validated.
+2026-11-06. FFN development experiments are now available; Attention validation
+has not started.
+
+The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
+`A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
+usefulness with a linear Atom budget and bounded aspect-ratio changes; it does
+not search for the minimum coefficient.
+
+[Initial results and learning curves](docs/ffn-feasibility-results.md) separate
+the three-arm pilot, radius diagnosis, numerical qualification and remaining
+work. The selected recipe improves on no-FFN in audited one-seed development
+runs at width128/256/512 and bounded aspect ratios. The owner stopped the
+main-width three-seed family before completion to prioritize short field-LR
+experiments. Seed29 results are retained as incomplete confirmation evidence. Current eager FP32
+runs compress FFN parameters but do not show speed or GPU-memory advantages.
+The [short field-LR comparison](docs/ffn-field-lr-r12-20261107.md) found slower
+learning when only amplitude LR was reduced from16× to1× at fixed center rates
+and Polar outer time. The [audited follow-ups](docs/ffn-field-lr-r14-20261107.md)
+include amplitude8/32/64 at fixed centers/outer16. Amplitude8 passed the
+engineering gate for API implementation. The public field_lrs API subsequently
+passed25 CPU/8 CUDA tests and all8 full-LM update/resume configurations with64
+trained projection VJPs; it merged through [torchcst PR151](https://github.com/takumiecd/torchcst/pull/151).
+See the [validation and API record](docs/ffn-field-api-r16-20261107.md).
+The owner clarified that whole-Atom32/64 is the intended high-rate comparison;
+the [audited whole-Atom comparison](docs/ffn-whole-lr-r15-20261107.md) is now complete.
+Whole32/64 improved some early points but did not improve the final short-budget
+DEV value over16; no optimality or convergence claim is made.
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
@@ -125,8 +151,19 @@ The stopped formal HIGGS campaign used the pinned external source. A separate
 [bounded A100 MIG environment-comparison adapter](docs/higgs-gpu-comparison.md)
 consumes that unchanged benchmark after independent numerical admission.
 
-If you need the torchcst library, install the optional extra pinned to the study's
-source commit:
+For current FFN work, use the separately pinned library extra (merged
+rectangular/initializer/field-LR APIs):
+
+```bash
+python -m pip install -e '.[ffn]'
+```
+
+The exact library commit is `c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`.
+This does not reproduce the numeric runtime or migrate historical runs; follow
+[the frozen-source guide](docs/ffn-reproduction.md) for recorded quality results.
+
+The historical HIGGS library extra retains its original study commit. Use a
+separate environment for that dependency:
 
 ```bash
 python -m pip install -e '.[torchcst]'
@@ -164,3 +201,6 @@ The [raw Dense-RMS initialization follow-up](docs/higgs-rms-amplitude-init.md) t
 The [He/Xavier initialization pilot](docs/higgs-fan-initialization.md) uses data-free Atom moment targets, configurable lowercase `q`, and fresh paired Dense/CST comparisons. CPU preparation is separate from native qualification, learning results and public default adoption.
 
 Completed [initialization results](docs/higgs-initialization-results.md) cover old/width-aware/TRAIN-RMS/data-free He/Xavier methods and normalization controls. The explicit public API is documented in [torchcst initialization](https://github.com/takumiecd/torchcst/blob/main/docs/initialization.md).
+
+The [campaign disposition](docs/ffn-campaign-disposition-20261107.md) maps each
+requirement to its evidence, including the owner-stopped three-seed family.
