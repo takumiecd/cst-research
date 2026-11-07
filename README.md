@@ -54,6 +54,13 @@ the [audited whole-Atom comparison](docs/ffn-whole-lr-r15-20261107.md) is now co
 Whole32/64 improved some early points but did not improve the final short-budget
 DEV value over16; no optimality or convergence claim is made.
 
+The [closed-envelope FFN pilot](docs/ffn-closed-envelope-results-20261107.md)
+joins L and U at both amplitude limits. Two new RTX4090 runs at initial q0/q1
+each completed 999,424 tokens and trained-checkpoint audits; Dense and rational-q0
+controls were reused. Weak radii reached about 50, but this pL4/pU1 candidate's
+DEV losses (3.9506/3.9761) were worse than rational-q0 (3.6735). The learning and
+amplitude-conditioned radius/q curves are retained for further shape design.
+
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,
    forward/backward correctness and complete optimizer steps. Then replace the
    FFN projections in a small language model with CST and check whether it learns
@@ -128,6 +135,13 @@ assessment unfinished; stopping does not imply completion. Measured jobs retain
 their original source snapshots; integration does not restart them or complete
 the outstanding scientific assessment.
 
+The [gradual zero-opening pilot](docs/ffn-zero-opening-results-20261107.md)
+completed three RTX4090 runs at tau=.01/.03/.1 and initial q0, with audited
+976-update/999424-token checkpoints. DEV CE was3.69173/3.69918/3.75535 versus
+reused rational-q0=3.67351 and Dense=3.58196. Weak radii broadened as intended;
+this short one-seed comparison did not improve the reused controls. Learning,
+amplitude-conditioned radius/q and initialization diagnostics are recorded.
+
 ## Quick start
 
 Python 3.11 or later is required. The registry CLI uses only the standard library
@@ -151,14 +165,18 @@ The stopped formal HIGGS campaign used the pinned external source. A separate
 [bounded A100 MIG environment-comparison adapter](docs/higgs-gpu-comparison.md)
 consumes that unchanged benchmark after independent numerical admission.
 
-For current FFN work, use the separately pinned library extra (merged
-rectangular/initializer/field-LR APIs):
+For current FFN work, use the separately pinned research library extra:
 
 ```bash
 python -m pip install -e '.[ffn]'
 ```
 
-The exact library commit is `c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`.
+The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
+from [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
+envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
+envelope arguments available; it does not imply that the experimental PR has
+merged or that its settings are public defaults.
 This does not reproduce the numeric runtime or migrate historical runs; follow
 [the frozen-source guide](docs/ffn-reproduction.md) for recorded quality results.
 

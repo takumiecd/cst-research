@@ -40,6 +40,12 @@ CSTをニューラルネットワークで使えるようにするための研�
 ユーザーが意図した高学習率比較はAtom全体32・64倍と訂正され、その[別のstock optimizer比較](docs/ffn-whole-lr-r15-20261107.ja.md)も監査まで完了しました。
 全体32・64倍は途中の点で先に改善する場合もありますが、最終の短期DEVは16倍より改善せず、最適値・収束は主張しません。
 
+[両端で合流する境界のFFN短期比較](docs/ffn-closed-envelope-results-20261107.ja.md)では、
+L・Uを振幅の両端で合流させました。新境界の初期q0/q1をRTX4090でそれぞれ999,424トークン学習し、
+学習済みcheckpointの監査まで完了しました。Dense・従来q0は再利用しています。
+弱いAtomの半径は約50まで広がりましたが、今回のpL4/pU1のDEV損失3.9506/3.9761は
+従来q0の3.6735より悪い結果です。形状を検討するための学習曲線・振幅別の半径とqを保存しています。
+
 1. **まずFFN。** 長方形の入出力、多トークン、forward/backwardの正しさ、optimizerを含む更新を確認します。
    その後、小型言語モデルのFFNの射影をCSTへ置換し、安定して学習できるか、validationでタスクに意味のある性能が得られるかを調べます。
 2. **次にAttention。** まずquery・key・value・outputの射影をCSTへ置換します。
@@ -96,6 +102,13 @@ ROC-AUC −0.002の許容差を実行前に固定していました。
 確定しません。HIGGS primaryとDSTは最終固定familyのadmission・評価が未完了のままSTOPPEDです。停止は完了を意味しません。
 測定jobは元のsource snapshotを保持します。統合をjobの再開や未完了の科学的評価の完了とは扱いません。
 
+[ゼロから徐々に開く境界の比較](docs/ffn-zero-opening-results-20261107.ja.md)は、
+RTX4090でtau=.01/.03/.1、初期q0の3条件を976更新/999424トークン学習し、
+学習済みcheckpointの監査まで完了しました。DEV CEは3.69173/3.69918/3.75535、
+再利用した従来q0は3.67351、Denseは3.58196でした。弱振幅の半径は意図どおり
+広がりましたが、この1seed短期比較では対照を改善しませんでした。
+学習曲線・振幅別半径/q・初期化診断を保存しています。
+
 ## すぐに使う
 
 Python 3.11以上が必要です。レジストリCLIは標準ライブラリだけで動作し、GPUを使いません。
@@ -116,13 +129,17 @@ python -m unittest discover -s tests -v
 独立した数値admission後に変更なしのbenchmarkを呼ぶ
 [限定A100 MIG環境比較adapter](docs/higgs-gpu-comparison.ja.md)を別に用意しています。
 
-現在のFFN研究には、長方形演算・初期化・field別LR API統合後の専用extraを使えます。
+現在のFFN研究には、研究用ライブラリを固定した専用extraを使えます。
 
 ```bash
 python -m pip install -e '.[ffn]'
 ```
 
-ライブラリは`c3b68dcf6275f96d29a21ff2aa6e989d42de2cff`に固定しています。
+ライブラリは[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
+`7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`に固定しています。
+統合済みの長方形演算・初期化・field別LR APIに加え、明示指定の実験用半径包絡と
+Torch2.6のAdamW互換修正を含みます。この固定はconsumerの包絡引数を利用可能にするためで、
+実験PRのmergeや公開デフォルトへの採用を意味しません。
 数値環境の再現や過去runの移行ではありません。品質結果の再現には
 [固定ソースの手順](docs/ffn-reproduction.ja.md)を使ってください。
 

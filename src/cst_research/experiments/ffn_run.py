@@ -187,6 +187,16 @@ def main(argv=None):
     parser.add_argument("--max-wall-seconds", type=int, default=3600)
     parser.add_argument("--repeat-fixed-batches", action="store_true")
     parser.add_argument("--track-atom-motion", action="store_true")
+    parser.add_argument(
+        "--radius-envelope",
+        choices=("rational", "closed_polynomial", "rational_zero_opening"),
+        default="rational",
+    )
+    parser.add_argument("--closed-lower-power", type=float, default=4.0)
+    parser.add_argument("--closed-upper-power", type=float, default=1.0)
+    parser.add_argument("--track-envelope", action="store_true")
+    parser.add_argument("--development-only", action="store_true")
+    parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     args = parser.parse_args(argv)
     args.schedule_tokens = (
         args.tokens if args.schedule_tokens is None else args.schedule_tokens
@@ -230,6 +240,10 @@ def main(argv=None):
         radius_birth=args.radius_birth,
         feature_order=args.feature_order,
         atom_lr_multiplier=args.atom_lr_multiplier,
+        radius_envelope=args.radius_envelope,
+        closed_lower_power=args.closed_lower_power,
+        closed_upper_power=args.closed_upper_power,
+        zero_opening_scale=args.zero_opening_scale,
     )
     if not qualification_covers_model(qualification, requested):
         parser.error(
@@ -378,6 +392,25 @@ def main(argv=None):
     if field_recipe is not None:
         summary["optimizer_variant"] = field_recipe.manifest()
     curves = (args.output / "curves.jsonl").open("x")
+    geometry = (
+        (args.output / "geometry.jsonl").open("x") if args.track_envelope else None
+    )
+
+    def log_geometry(step):
+        if geometry is not None:
+            from .ffn_envelope import envelope_snapshot
+
+            geometry.write(
+                json.dumps(
+                    {
+                        "step": step,
+                        "seen_tokens": step * tokens_per_update,
+                        "layers": envelope_snapshot(model),
+                    }
+                )
+                + "\n"
+            )
+            geometry.flush()
 
     def save():
         (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -433,6 +466,7 @@ def main(argv=None):
             }
         )
         summary["initial_development"] = initial
+        log_geometry(0)
         if motion is not None:
             summary["atom_geometry_history"] = {"0": geometry_snapshot(model)}
         torch.cuda.synchronize()
@@ -479,6 +513,8 @@ def main(argv=None):
             )
             if motion is not None:
                 motion.update()
+            if step <= 5 or step % 20 == 0 or step == updates:
+                log_geometry(step)
             value = float(loss_sum / args.accumulation)
             if not math.isfinite(value):
                 raise FloatingPointError("nonfinite training loss")
@@ -533,7 +569,7 @@ def main(argv=None):
             summary["scope"] = (
                 "repeated fixed-batch diagnostic; confirmation and generations not evaluated"
             )
-        else:
+        elif not args.development_only:
             summary["confirmation"] = evaluate(model, data["confirmation"], args.batch)
             summary["generations"] = generate(model)
         summary["state"] = "completed_execution_not_scientific_admission"
@@ -549,6 +585,8 @@ def main(argv=None):
         summary["total_elapsed_seconds"] = time.monotonic() - began
         save()
         curves.close()
+        if geometry is not None:
+            geometry.close()
 
 
 if __name__ == "__main__":

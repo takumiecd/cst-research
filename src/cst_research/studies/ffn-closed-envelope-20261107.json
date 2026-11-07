@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "ffn-closed-envelope-20261107",
+  "title": "Closed Polar radius envelope FFN pilot",
+  "status": "COMPLETED",
+  "status_note": "Two closed-envelope short learners completed and trained-audited; Dense/rational-q0 reused; rational-q1 initialization rejected before learning. Weak radii broaden but this p4/p1 candidate does not improve the reused short DEV controls. One seed, no convergence or scaling/default claim.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "bfe43c1e234f48d8c7d1139939239dbef2f55970",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
+  "runner_entrypoint": "cst_research.experiments.ffn_envelope",
+  "protocol_source_path": "docs/ffn-closed-envelope-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "new_intended_arms": [
+      "rational-q1",
+      "closed-q0",
+      "closed-q1"
+    ],
+    "reused_arms": [
+      "R12-dense",
+      "R12-all16-q0"
+    ],
+    "closed_powers": [
+      4,
+      1
+    ],
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "hpo_or_scaling_claim": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "results_document": "docs/ffn-closed-envelope-results-20261107.md",
+    "trained_consumer_commit": "7b9eafa71c0e75332d3ecafe796049eb327726ad"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/closed-envelope-20261107-05",
+    "archive_sha256": "ede57b3129f58bb37420f23070b236fbda0c1086e7d3a132e7062ffb64757cd6"
+  }
+}
