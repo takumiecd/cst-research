@@ -165,3 +165,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 完了した[初期化の結果](docs/higgs-initialization-results.ja.md)に、旧方式・幅対応・TRAIN-RMS・データ不要のHe/Xavier・正規化対照をまとめます。明示的な公開APIは[torchcst初期化ガイド](https://github.com/takumiecd/torchcst/blob/main/docs/initialization.ja.md)を参照してください。
 
 [実施結果と終了範囲](docs/ffn-campaign-disposition-20261107.ja.md)に、所有者が停止した3seed系列も含め、要件と証拠を対応付けています。
+
+[半径の事後確認](docs/ffn-radius-review-20261107.ja.md)では振幅別・同じAtom IDで調べ、弱い・弱まったAtomの半径が広がることを確認しました。ただし現在の低q・弱Atom追加拡張なしの設定では、弱いAtomも半径4付近にとどまります。
