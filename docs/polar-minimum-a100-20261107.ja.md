@@ -33,3 +33,9 @@ CPU診断は同期時間の後に行い、計測付き総経過時間には含�
 取得とハッシュを検証、checkpoint/dataはリモートに保持します。1seed探索で最適epsilon、
 収束、最小容量、デバイス間の速度優位は主張しません。第二段階は別の数式・固定対照・
 検証記録を用意します。
+
+Attempt01はnative線形両方向が通りましたが、Torch2.6のAdamW内部signature差で
+学習前に停止しました。Attempt02はTorch2.6を保ち、バージョン差を明示的に吸収する
+CSTAdamW初期化を使います。全recipe検証の前にAMSGrad有無と保存/再開を標準
+PyTorch AdamWと比較します。隔離2.11の導入は外部indexのDNS失敗を受けて停止し、
+システム環境の変更や検証済みruntimeの作成は行っていません。

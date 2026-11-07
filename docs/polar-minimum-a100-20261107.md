@@ -37,3 +37,10 @@ Audit trained checkpoints and restored updates; retrieve/hash-verify compact
 results, retaining checkpoints/data remotely. One-seed screening is not evidence
 of optimal epsilon, convergence, minimum capacity or a cross-device speed gain.
 Stage two needs its own formula, fixed comparator and qualification record.
+
+Attempt01 passed both native linear directions but stopped before learning at
+the Torch2.6 AdamW private-signature seam. Attempt02 retains Torch2.6 and uses
+the explicit version-compatible CSTAdamW initialization bridge, tested against
+PyTorch AdamW with AMSGrad on/off and serialized resume before all recipe gates.
+The attempted isolated2.11 install was stopped after external-index DNS failures;
+it did not change the system environment or produce a qualified runtime.

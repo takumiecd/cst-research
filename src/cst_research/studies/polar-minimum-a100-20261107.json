@@ -3,9 +3,9 @@
   "id": "polar-minimum-a100-20261107",
   "title": "A100 minimum-based lower-envelope FFN screen",
   "status": "PLANNED",
-  "status_note": "Three fresh400-update A100 FFN recipes; movement-adaptive update remains a subsequent separate stage.",
+  "status_note": "Attempt01 passed linear VJPs but rejected Torch2.6 optimizer API mismatch before learning. Attempt02 uses an explicit AdamW version-compatibility fix and requalifies; same three400-update recipes.",
   "source_repository": "https://github.com/takumiecd/torchcst",
-  "source_commit": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+  "source_commit": "7be68e4faf1813dd4b1a677ee432da5e3a8da9bd",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
   "runner_entrypoint": "cst_research.experiments.ffn_envelope",
   "protocol_source_path": "docs/polar-minimum-a100-20261107.md",
@@ -37,6 +37,6 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "ffn-feasibility-20261106/polar-minimum-a100-20261107-01"
+    "relative_path": "ffn-feasibility-20261106/polar-minimum-a100-20261107-02"
   }
 }
