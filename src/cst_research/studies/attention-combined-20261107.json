@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "attention-combined-20261107",
+  "title": "Combined CST QKV and FFN causal LM pilot",
+  "status": "PLANNED",
+  "status_note": "Combined QKV then QKV+FFN authorized after individual projections; separate12/20-site full-task qualification required.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
+  "runner_entrypoint": "cst_research.experiments.attention_qualification",
+  "protocol_source_path": "docs/attention-combined-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "heads": 4,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "dense",
+      "cst-qkv",
+      "cst-qkv-ffn"
+    ],
+    "ffn_kind": [
+      "dense",
+      "cst"
+    ],
+    "cst_projection": "QKV or QKV+both FFN projections in all four blocks",
+    "q": 0.0,
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "cst_sites": [
+      12,
+      20
+    ],
+    "atoms_per_square_projection": 2048,
+    "atoms_per_rectangular_projection": 4096
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/attention-combined-20261107-01"
+  }
+}

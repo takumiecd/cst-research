@@ -27,6 +27,40 @@ class AttentionContractTests(unittest.TestCase):
         receipt["cases"][0]["atoms"] *= 2
         self.assertFalse(qualification_covers_model(receipt, c))
 
+    def test_combined_qkv_and_ffn_recipes_require_full_admission(self):
+        c = ModelConfig(attention_kind="cst_qkv", atom_lr_multiplier=16)
+        receipt = {
+            "task_recipes": [c.recipe()],
+            "model_kinds": [{"ffn_kind": "dense", "attention_kind": "cst_qkv"}],
+            "cases": [dict(c.recipe(), **{"in": 256, "out": 256, "atoms": 2048})],
+        }
+        self.assertTrue(qualification_covers_model(receipt, c, ffn_kind="dense"))
+        self.assertFalse(qualification_covers_model(receipt, c, ffn_kind="cst"))
+        receipt["model_kinds"].append({"ffn_kind": "cst", "attention_kind": "cst_qkv"})
+        self.assertFalse(qualification_covers_model(receipt, c, ffn_kind="cst"))
+        receipt["cases"] += [
+            dict(c.recipe(), **{"in": ni, "out": no, "atoms": 4096})
+            for ni, no in [(256, 1024), (1024, 256)]
+        ]
+        self.assertTrue(qualification_covers_model(receipt, c, ffn_kind="cst"))
+
+    def test_combined_initialization_covers_all_12_or_20_sites(self):
+        try:
+            import torch
+            import torchcst
+        except ImportError:
+            raise unittest.SkipTest("optional Torch/torchcst required")
+        from cst_research.experiments.attention_qualification import (
+            shared_initialization,
+        )
+
+        for ffn, n in (("dense", 12), ("cst", 20)):
+            r = shared_initialization(
+                ModelConfig(attention_kind="cst_qkv", atom_lr_multiplier=16), ffn
+            )
+            self.assertEqual(len(r["reports"]), n)
+            self.assertEqual(r["complementary_dense_maps"], 0)
+
     def test_query_and_key_preserve_complementary_projection_rows(self):
         try:
             import torch

@@ -144,7 +144,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--attention-kind",
-        choices=("dense", "cst_v", "cst_q", "cst_k"),
+        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv"),
         default="dense",
     )
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
@@ -252,7 +252,7 @@ def main(argv=None):
         zero_opening_scale=args.zero_opening_scale,
         attention_kind=args.attention_kind,
     )
-    if not qualification_covers_model(qualification, requested):
+    if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
         )

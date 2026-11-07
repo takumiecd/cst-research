@@ -94,7 +94,8 @@ class ModelConfig:
             or self.w_c <= 0
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
-            or self.attention_kind not in ("dense", "cst_v", "cst_q", "cst_k")
+            or self.attention_kind
+            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -147,10 +148,16 @@ class ModelConfig:
         }
 
 
-def qualification_covers_model(receipt, config):
+def qualification_covers_model(receipt, config, *, ffn_kind=None):
     """Admit both native directions and the full model's actual recipe."""
     if config.recipe() not in receipt.get("task_recipes", []):
         return False
+    if ffn_kind is not None and config.attention_kind != "dense":
+        if {
+            "ffn_kind": ffn_kind,
+            "attention_kind": config.attention_kind,
+        } not in receipt.get("model_kinds", []):
+            return False
     scalars = {
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
@@ -168,6 +175,11 @@ def qualification_covers_model(receipt, config):
         if config.attention_kind != "dense"
         else [(config.width, config.intermediate), (config.intermediate, config.width)]
     )
+    if config.attention_kind != "dense" and ffn_kind == "cst":
+        dimensions += [
+            (config.width, config.intermediate),
+            (config.intermediate, config.width),
+        ]
     for ni, no in dimensions:
         if not any(
             row.get("in") == ni

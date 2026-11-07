@@ -252,13 +252,38 @@ class CSTAttentionProjection(nn.Module):
         return torch.cat(parts, dim=-1)
 
 
+class CSTAllQKVProjection(nn.Module):
+    """Independent square CST Q, K and V maps; the attention operator is unchanged."""
+
+    def __init__(self, config, seed, index):
+        super().__init__()
+        for field, short in (("query", "q"), ("key", "k"), ("value", "v")):
+            setattr(
+                self,
+                field,
+                Projection(
+                    config.width,
+                    config.width,
+                    config=config,
+                    kind="cst",
+                    std=config.init_std,
+                    seed=parameter_seed(seed, f"block{index}.attention.{short}"),
+                ),
+            )
+
+    def forward(self, x):
+        return torch.cat((self.query(x), self.key(x), self.value(x)), dim=-1)
+
+
 class Block(nn.Module):
     def __init__(self, config, kind, seed, index):
         super().__init__()
         self.heads = config.heads
         self.norm1 = nn.LayerNorm(config.width)
         self.qkv = (
-            CSTAttentionProjection(config, seed, index)
+            CSTAllQKVProjection(config, seed, index)
+            if config.attention_kind == "cst_qkv"
+            else CSTAttentionProjection(config, seed, index)
             if config.attention_kind != "dense"
             else nn.Linear(config.width, config.width * 3)
         )
@@ -318,7 +343,7 @@ class LanguageModel(nn.Module):
 
         # Recover the exact historical packed Q/K initialization. Named streams
         # keep every other shared Parameter unchanged across Dense/CST-V arms.
-        if config.attention_kind != "dense":
+        if config.attention_kind in ("cst_q", "cst_k", "cst_v"):
             for i, block in enumerate(self.blocks):
                 packed = torch.empty(3 * config.width, config.width).normal_(
                     std=config.init_std,

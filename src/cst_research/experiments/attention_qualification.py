@@ -22,11 +22,11 @@ from .ffn_qualification import (
 )
 
 
-def shared_initialization(config):
+def shared_initialization(config, ffn_kind="dense"):
     dense = LanguageModel(
-        ModelConfig(**{**asdict(config), "attention_kind": "dense"}), "dense", 17
+        ModelConfig(**{**asdict(config), "attention_kind": "dense"}), ffn_kind, 17
     )
-    value = LanguageModel(config, "dense", 17)
+    value = LanguageModel(config, ffn_kind, 17)
     target = dict(value.named_parameters())
     checked = 0
     for name, parameter in dense.named_parameters():
@@ -35,6 +35,8 @@ def shared_initialization(config):
         assert torch.equal(parameter, target[name]), name
         checked += 1
     for a, b in zip(dense.blocks, value.blocks):
+        if config.attention_kind == "cst_qkv":
+            continue
         rows = [
             row
             for slot in range(3)
@@ -44,12 +46,19 @@ def shared_initialization(config):
         assert torch.equal(a.qkv.weight[rows], getattr(b.qkv, b.qkv.dense_name).weight)
         assert torch.equal(a.qkv.bias[rows], getattr(b.qkv, b.qkv.dense_name).bias)
     reports = value.initialization_reports()
-    assert len(reports) == config.layers and all(
+    expected = config.layers * (
+        (3 if config.attention_kind == "cst_qkv" else 1)
+        + (2 if ffn_kind == "cst" else 0)
+    )
+    assert len(reports) == expected and all(
         v["relative_error"] <= 0.005 for v in reports.values()
     )
     return {
         "shared_parameters_exact": checked,
         "complementary_projection_weights_and_biases_exact": True,
+        "complementary_dense_maps": 0
+        if config.attention_kind == "cst_qkv"
+        else 2 * config.layers,
         **(
             {"all_QK_weights_and_biases_exact": True}
             if config.attention_kind == "cst_v"
@@ -59,9 +68,9 @@ def shared_initialization(config):
     }
 
 
-def causal_and_manual_attention_check(config):
+def causal_and_manual_attention_check(config, ffn_kind="dense"):
     """Explicit masked softmax checks integration and future-token separation."""
-    model = LanguageModel(config, "dense", 17).cuda()
+    model = LanguageModel(config, ffn_kind, 17).cuda()
     configure_native(model)
     block = model.blocks[0]
     x = torch.randn(2, 7, config.width, device="cuda", requires_grad=True)
@@ -85,13 +94,18 @@ def causal_and_manual_attention_check(config):
     intermediate = x + block.attention_out(attention)
     reference = intermediate + block.ffn(block.norm2(intermediate))
     cotangent = torch.randn_like(live)
-    inputs = (x, getattr(block.qkv, block.qkv.cst_name).map.atoms.p)
+    fields = (
+        ("query", "key", "value")
+        if config.attention_kind == "cst_qkv"
+        else (block.qkv.cst_name,)
+    )
+    inputs = (x, *(getattr(block.qkv, field).map.atoms.p for field in fields))
     ga = torch.autograd.grad(live, inputs, cotangent, retain_graph=True)
     gb = torch.autograd.grad(reference, inputs, cotangent, retain_graph=True)
     result = {
         "Y": compare(live, reference),
         "dX": compare(ga[0], gb[0]),
-        "dAtoms": compare(ga[1], gb[1]),
+        "dAtoms": {field: compare(a, b) for field, a, b in zip(fields, ga[1:], gb[1:])},
     }
     future = torch.autograd.grad(live[:, :3].sum(), x)[0][:, 3:]
     assert torch.count_nonzero(future) == 0
@@ -103,8 +117,11 @@ def main(argv=None):
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument(
-        "--attention-kind", choices=("cst_v", "cst_q", "cst_k"), default="cst_v"
+        "--attention-kind",
+        choices=("cst_v", "cst_q", "cst_k", "cst_qkv"),
+        default="cst_v",
     )
+    p.add_argument("--ffn-kind", choices=("dense", "cst"), default="dense")
     args = p.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
@@ -123,6 +140,10 @@ def main(argv=None):
         "python": platform.python_version(),
         "cases": [],
         "task_recipes": [dense.recipe(), config.recipe()],
+        "model_kinds": [
+            {"ffn_kind": "dense", "attention_kind": "dense"},
+            {"ffn_kind": args.ffn_kind, "attention_kind": args.attention_kind},
+        ],
         "source_sha256": {
             n: hashlib.sha256((Path(__file__).parent / n).read_bytes()).hexdigest()
             for n in (
@@ -139,21 +160,21 @@ def main(argv=None):
 
     save()
     try:
-        r["shared_initialization"] = shared_initialization(config)
+        r["shared_initialization"] = shared_initialization(config, args.ffn_kind)
         save()
         r["quadrature"] = independent_quadrature_check(q=0.0, std=0.001)
         save()
-        for ni, no, std, seed_name in [
+        cases = [
             (256, 1024, 0.02, "block0.up"),
             (1024, 256, 0.02 / (8**0.5), "block0.down"),
-            (
-                256,
-                256,
-                0.02,
-                "block0.attention."
-                + {"cst_v": "v", "cst_q": "q", "cst_k": "k"}[args.attention_kind],
-            ),
-        ]:
+        ]
+        roles = (
+            ("q", "k", "v")
+            if args.attention_kind == "cst_qkv"
+            else ({"cst_v": "v", "cst_q": "q", "cst_k": "k"}[args.attention_kind],)
+        )
+        cases += [(256, 256, 0.02, "block0.attention." + role) for role in roles]
+        for ni, no, std, seed_name in cases:
             r["cases"].append(
                 qualify_case(
                     ni, no, 128, q=0.0, std=std, seed=parameter_seed(17, seed_name)
@@ -164,16 +185,19 @@ def main(argv=None):
             q=0.0, atom_lr_multiplier=16, std=0.001
         )
         save()
-        r["attention"] = causal_and_manual_attention_check(config)
+        r["attention"] = causal_and_manual_attention_check(config, args.ffn_kind)
         save()
         r["task_step"] = task_step_and_resume_check(
             full_task=True,
-            ffn_kind="dense",
+            ffn_kind=args.ffn_kind,
             attention_kind=args.attention_kind,
             atom_lr_multiplier=16,
         )
         save()
-        assert r["task_step"]["cst_projections"] == 4
+        assert r["task_step"]["cst_projections"] == config.layers * (
+            (3 if args.attention_kind == "cst_qkv" else 1)
+            + (2 if args.ffn_kind == "cst" else 0)
+        )
         r["state"] = "passed"
         save()
         print("ATTENTION QUALIFICATION PASSED", flush=True)
