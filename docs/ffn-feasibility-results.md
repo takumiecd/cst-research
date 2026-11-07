@@ -331,8 +331,8 @@ Current eager FP32 still shows no speed or measured GPU-memory advantage.
 The separate stopped-family observation adapter verifies every individual run
 with the strict reader and links the owner-stop/finalizer proofs. It reuses the
 renderers while leaving the formal three-seed aggregation gate unchanged.
-No seed SD is estimated from one seed. The next stage is the explicitly separate
-short field-LR mechanism comparison before public API creation.
+No seed SD is estimated from one seed. The separate short field-LR mechanism
+comparison is documented below; it does not reopen the stopped seed family.
 
 ## Native scope and remaining work
 
@@ -347,8 +347,11 @@ completed their terminal audits. Public defaults remain unchanged. Width512
 reference complete-task smoke and trained-state audit also
 passed under the separate R8 consumer and explicit2048 operator. A20-update
 fixed-batch smoke is not heldout feasibility or a primary performance result.
-Three-seed matched-budget width confirmation, final performance/memory summaries
-and PR integration remain incomplete.
+The R11 seed29 widths subsequently completed their5M heldout runs and audits
+(see the retained one-seed report above), with complete-update and allocated/
+reserved summaries. Three-seed confirmation was stopped by the owner and remains
+incomplete; no cancelled case should be restarted. The scoped backend integrated
+through torchcst PR150. Research/public field-LR API PR integration remains pending.
 
 The [scoped2048 validation record](https://github.com/takumiecd/torchcst/blob/922a2f609575ad18bbc5d19235138d185f4968dd/docs/research-history/cuda-linear/ffn-rectangular-2048-20261107.md)
 retains the N512 reference smoke: observed complete updates18.40ms Dense versus
@@ -433,4 +436,4 @@ their hashes. PNG and SVG here are derived figures, not raw evidence.
 
 ## Short field-rate comparison (R12)
 
-The [audited amplitude/center pilot](ffn-field-lr-r12-20261107.md) completed all4arms at N256seed17/999424tokens, with16trainedCSTVJPs and4task-resume audits passed. All16 DEVCE3.67351 versus amplitude1/centers16 DEVCE3.84731: the amplitude-only reduction worsened short-budget learning and missed the prespecified0.03 API gate. Dense3.58196/noFFN4.03015. Next is one bounded amplitude8 condition with the same outer time; the public API remains unimplemented. The explicit2048 operator was merged through torchcst PR150 as9c8894, retaining tested2b587 ancestry; experimental source snapshots remain unchanged.
+The [audited amplitude/center pilot](ffn-field-lr-r12-20261107.md) completed all4arms at N256seed17/999424tokens, with16trainedCSTVJPs and4task-resume audits passed. All16 DEVCE3.67351 versus amplitude1/centers16 DEVCE3.84731: the amplitude-only reduction worsened short-budget learning and missed the prespecified0.03 API gate. Dense3.58196/noFFN4.03015. The [audited R13/R14 follow-ups](ffn-field-lr-r14-20261107.md) retain amplitude8/32/64 at fixed centers/outer16. Amplitude8 passed the prespecified engineering gate (DEV3.694387; gap0.020882), authorizing API implementation. Absolute field_lrs is implemented in torchcst PR151; its native/full-LM GPU qualification is pending. R14 amplitude-only32/64 did not answer the owner's intended whole-Atom question. The corrected stock-optimizer whole-Atom32/64 R15 comparison has passed its exact recipe qualifications and is running separately. The explicit2048 operator was merged through torchcst PR150 as9c8894, retaining tested2b587 ancestry; experimental source snapshots remain unchanged.
