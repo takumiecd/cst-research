@@ -204,3 +204,7 @@ Completed [initialization results](docs/higgs-initialization-results.md) cover o
 
 The [campaign disposition](docs/ffn-campaign-disposition-20261107.md) maps each
 requirement to its evidence, including the owner-stopped three-seed family.
+
+A [post-hoc radius review](docs/ffn-radius-review-20261107.md) conditions on physical
+amplitude and matches Atom IDs: weaker/decreased Atoms do widen, but weak support
+stays near4 under the current low-q/default-no-dormant-expansion recipe.

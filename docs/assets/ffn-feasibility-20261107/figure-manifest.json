@@ -64,7 +64,19 @@
     "r15-whole-lr-activation-rms.svg": "c97cb1604dbb01aa750c2376d735bdba5c42dee28e4ad1c5ab61f3da7ccbd0f4",
     "r15-whole-lr-resources.png": "9dd01f9cf29ec8955363cbf5c5d246715c6ea522dd353b82be2a345cc920d7ca",
     "r15-whole-lr-resources.svg": "bf8c3bc1c615ae7235c57cdc336eb0d22e9d78cddfb175da391cedf50fa11125",
-    "external-script:report-whole-lr-r15-02.py": "ee69eedfc572ab135dec6673dfaf99dcf0d3a039ee5a9971fdcede20bf4ceb31"
+    "external-script:report-whole-lr-r15-02.py": "ee69eedfc572ab135dec6673dfaf99dcf0d3a039ee5a9971fdcede20bf4ceb31",
+    "r17-weak-amplitude-radius-bins.png": "5b3df5d66d803838a94a2a34348235c11bee16c07f41f14b577c602f4751717d",
+    "r17-weak-amplitude-radius-bins.svg": "4d45e03e344ced99f7340641c6386f05ca19c7576160d4a4518b9c8e76d0fb1c",
+    "r17-weak-amplitude-matched-growth.png": "6ad5a49069648bbdb1833ef5ab39032d170efbf1bb2c1418530582dac1034e19",
+    "r17-weak-amplitude-matched-growth.svg": "9a9e21a4b40eab0abdeea66f2a96d623abd6ac04bbfd7c91235aec0f56fdb66f",
+    "r17-radius-history-lr16.png": "ab201fe36080b263a75cc50c6848e9567392d1d7785ecc300d0f950efc6313c8",
+    "r17-radius-history-lr16.svg": "2727c94baab84c59afc061d20e90fb06550628b1b765bd9dcd459f085b55afe3",
+    "r17-radius-history-blocks.png": "bdc5f8015f209c5d972b5b7aa601393a1693ca7f1f9f13f8bf8a6f65ee987375",
+    "r17-radius-history-blocks.svg": "d92ef5baec3fec3085d7e9762349a93bea902c23ca75b0dfb498f1d20cebc741",
+    "r17-radius-checkpoint-comparison.png": "60e9df966a678048be61a9efd4dd969b422e558e540d54912c4cbe55f19fa5a0",
+    "r17-radius-checkpoint-comparison.svg": "cab3a16ddb4f1aaee882f48c925af3303af1ce1d610d5085815a2b6c47e802c6",
+    "r17-radius-history-broad-q.png": "4d6dfca0cc70378d50e5bd052fe88b89baa69f506dc35d35d48f39db07f0031f",
+    "r17-radius-history-broad-q.svg": "fa0fbe5df17b211b32670c30df6efee918c7ef1bf5e154dfb9cba96a6b179334"
   },
   "selected_r8": {
     "scope": "Actual N256/seed17 five-million-token source-R8/Atom-LR16 observations. Generated from an audited three-arm family; three-seed confirmation is still pending.",
@@ -154,5 +166,90 @@
     "source_reuse_proof_sha256": "db8dbae1e4182914b606922c21fc815e5a87e7ecb75a79f4123d36423c4c00c5",
     "archive_sha256": "c62faae68f548d0bbaf51e5f605f809063547d8a79a05fbe0420ccf1f9901453",
     "scope": "Whole Atom amplitude+centers+Polar outer time32/64 in stockCSTAdamW; ordinaryLR unchanged. N256c8seed17/976updates/common20M horizon. All16 quality baseline from auditedR12 with stock trajectory equality proof. Fresh controls exactly reproduce prior quality. Separate from amplitude-onlyR14; no convergence/optimum/3seed, speed or memory advantage claim."
+  },
+  "radius_review_r17": {
+    "scope": "Posthoc read-only checkpoint/recorded-history analysis. Weak physical amplitude, matched Atom IDs and radius interpolation; no training or runtime changes.",
+    "checkpoint_probe_sha256": "73d390297fa6ccfcc35304869b3053a3b31fec5fce653b7ea4b34b65b2efad41",
+    "weak_checkpoint_probe_sha256": "3e6664bb86b09b14b59e5bc36fe1bc1f23165cd61dfc8841bd7fd75a375187f0",
+    "analysis_sha256": "57ce158cfb048a69bb167315556149db276f5820b825f1e814f9235c409f346f",
+    "weak_analysis_sha256": "6343cdb4eeafbabcd854413975265e4c02d98c0435cc4f42a9615345c6625486",
+    "source_sha256": {
+      "probe.py": "752a54579e81a67ed80cbf969e8206d8b55dc293f0e32104830432e17dcaa336",
+      "probe-weak-amplitude.py": "4a545d512e9b0fe0becee09370818b486153fe121ad724ca2ebebb9d421f7761",
+      "analyze.py": "bb840d2f97553dd64a9537728f2be21ca19c98f6b49fb28c397d4a350debfd66",
+      "analyze-weak.py": "20163800fcaa19671adf6a68a3c9b46989d2ee64b4496c09708b56cc78785e51"
+    },
+    "R7_R12_identity": {
+      "train_ce": {
+        "common_steps": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          20,
+          40,
+          60,
+          80,
+          100,
+          120,
+          140,
+          160,
+          180,
+          200,
+          220,
+          240,
+          260,
+          280,
+          300,
+          320,
+          340,
+          360,
+          380,
+          400,
+          420,
+          440,
+          460,
+          480,
+          500,
+          520,
+          540,
+          560,
+          580,
+          600,
+          620,
+          640,
+          660,
+          680,
+          700,
+          720,
+          740,
+          760,
+          780,
+          800,
+          820,
+          840,
+          860,
+          880,
+          900,
+          920,
+          940,
+          960,
+          976
+        ],
+        "max_CE_error": 0.0
+      },
+      "development": {
+        "common_steps": [
+          0,
+          200,
+          400,
+          600,
+          800,
+          976
+        ],
+        "max_CE_error": 0.0
+      }
+    }
   }
 }
