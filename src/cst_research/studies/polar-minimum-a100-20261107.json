@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "polar-minimum-a100-20261107",
+  "title": "A100 minimum-based lower-envelope FFN screen",
+  "status": "PLANNED",
+  "status_note": "Three fresh400-update A100 FFN recipes; movement-adaptive update remains a subsequent separate stage.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "d2ca317f63b034e5138bb3471ede541159a9a60b",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/152",
+  "runner_entrypoint": "cst_research.experiments.ffn_envelope",
+  "protocol_source_path": "docs/polar-minimum-a100-20261107.md",
+  "protocol": {
+    "width": 256,
+    "blocks": 4,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "rational-q0",
+      "minimum-001",
+      "minimum-003"
+    ],
+    "q": 0.0,
+    "updates": 400,
+    "token_budget": 409600,
+    "schedule_tokens": 20000000,
+    "radius_minimum": 0.5,
+    "candidate_radius_birth": 0.5,
+    "epsilon": [
+      0.001,
+      0.003
+    ],
+    "center_motion": "read-only every-step shortest torus delta over previous radius",
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-feasibility-20261106/polar-minimum-a100-20261107-01"
+  }
+}

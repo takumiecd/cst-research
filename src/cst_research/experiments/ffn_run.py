@@ -160,7 +160,7 @@ def main(argv=None):
     )
     parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
     parser.add_argument(
-        "--radius-birth", type=float, choices=(1.0, 2.0, 4.0, 16.0), default=4.0
+        "--radius-birth", type=float, choices=(0.5, 1.0, 2.0, 4.0, 16.0), default=4.0
     )
     parser.add_argument(
         "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
@@ -188,6 +188,7 @@ def main(argv=None):
     parser.add_argument("--max-wall-seconds", type=int, default=3600)
     parser.add_argument("--repeat-fixed-batches", action="store_true")
     parser.add_argument("--track-atom-motion", action="store_true")
+    parser.add_argument("--track-center-motion", action="store_true")
     parser.add_argument(
         "--radius-envelope",
         choices=("rational", "closed_polynomial", "rational_zero_opening"),
@@ -347,6 +348,11 @@ def main(argv=None):
                 if isinstance(module, CSTLinear)
             }
         )
+    center_motion = None
+    if args.track_center_motion:
+        from .ffn_center_motion import CenterMotion
+
+        center_motion = CenterMotion(model)
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
     horizon_updates = args.schedule_tokens // tokens_per_update
@@ -517,6 +523,8 @@ def main(argv=None):
             )
             if motion is not None:
                 motion.update()
+            if center_motion is not None:
+                center_motion.update()
             if step <= 5 or step % 20 == 0 or step == updates:
                 log_geometry(step)
             value = float(loss_sum / args.accumulation)
@@ -539,6 +547,11 @@ def main(argv=None):
                         ],
                         "gradient_norm_before_clip": float(norm),
                         "complete_update_seconds": duration,
+                        **(
+                            {"center_motion": center_motion.report()}
+                            if center_motion is not None
+                            else {}
+                        ),
                         **(
                             {"amplitude_motion": motion.report()}
                             if motion is not None
@@ -567,6 +580,8 @@ def main(argv=None):
                 checkpoint(milestone=step in milestones)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
+        if center_motion is not None:
+            summary["center_motion"] = center_motion.report()
         if motion is not None:
             summary["amplitude_motion"] = motion.report()
         if args.repeat_fixed_batches:

@@ -97,23 +97,31 @@ def main(argv=None):
         required=True,
     )
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
+    parser.add_argument("--radius-birth", type=float, default=4.0)
+    parser.add_argument(
+        "--expected-gpu",
+        choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
+        default="NVIDIA GeForce RTX 4090",
+    )
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    assert torch.cuda.get_device_name(0) == "NVIDIA GeForce RTX 4090"
+    assert torch.cuda.get_device_name(0) == args.expected_gpu
     config = ModelConfig(
         q=args.q,
         radius_envelope=args.radius_envelope,
         atom_lr_multiplier=16,
         zero_opening_scale=args.zero_opening_scale,
+        radius_birth=args.radius_birth,
     )
     envelope = dict(
         radius_envelope=args.radius_envelope,
         closed_lower_power=4.0,
         closed_upper_power=1.0,
         zero_opening_scale=args.zero_opening_scale,
+        radius_birth=args.radius_birth,
     )
     result = {
         "state": "running",
