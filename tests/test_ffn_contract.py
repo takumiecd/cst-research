@@ -121,3 +121,19 @@ class RadiusFractionContractTests(unittest.TestCase):
         ]:
             with self.assertRaises(ValueError):
                 ModelConfig(width=512, heads=8, **values)
+
+    def test_probe_initialization_is_a_separate_qualification_recipe(self):
+        from dataclasses import replace
+
+        config = ModelConfig(
+            width=512,
+            heads=8,
+            radius_mode="envelope",
+            linear_backend="levels_wide_amplitude",
+            amplitude_max=32.0,
+        )
+        calibrated = replace(config, initialization_mode="probe_rms")
+        self.assertNotEqual(config.recipe(), calibrated.recipe())
+        self.assertEqual(calibrated.recipe()["initialization_mode"], "probe_rms")
+        with self.assertRaises(ValueError):
+            ModelConfig(initialization_mode="probe_rms")

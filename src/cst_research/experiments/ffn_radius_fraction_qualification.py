@@ -29,6 +29,7 @@ def config_for(
     radius_fraction=0.0,
     amplitude_max=1.0,
     linear_backend="levels",
+    initialization_mode="moments",
 ):
     return ModelConfig(
         width=512,
@@ -40,6 +41,7 @@ def config_for(
         atom_lr_multiplier=16.0,
         radius_fraction=radius_fraction,
         amplitude_max=amplitude_max,
+        initialization_mode=initialization_mode,
         radius_fraction_lr_multiplier=1.0,
     )
 
@@ -132,6 +134,7 @@ def main():
         "ffn_radius.py",
         "ffn_envelope.py",
         "ffn_radius_fraction.py",
+        "ffn_probe_initialization.py",
         Path(__file__).name,
     ]
     result = {
@@ -158,6 +161,11 @@ def main():
         for config in configs:
             model = LanguageModel(config, "cst", 17).cuda()
             configure_native(model)
+            calibration = None
+            if config.initialization_mode == "probe_rms":
+                from .ffn_probe_initialization import calibrate_model
+
+                calibration = calibrate_model(model, x[:1], second_probe=x[1:])
             layers = [m for m in model.modules() if isinstance(m, CSTLinear)]
             assert len(layers) == 8 and all(
                 m.atoms.p.shape == (8192, 4) for m in layers
@@ -210,6 +218,7 @@ def main():
                 "initial_fraction_learned": True,
                 "outstanding_forwards_equal": True,
                 "snapshot": snapshot(model, gradients=True),
+                "initial_probe_calibration": calibration,
             }
             # Exact serialized optimizer/moment/step-counter continuation at tau .03.
             if config.tau == 0.03 or (

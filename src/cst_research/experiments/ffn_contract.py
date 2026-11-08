@@ -52,6 +52,7 @@ class ModelConfig:
     attention_kind: str = "dense"
     linear_backend: str = "native"
     radius_mode: str = "polar"
+    initialization_mode: str = "moments"
     tau: float = 0.03
     radius_fraction: float = 0.0
     radius_fraction_lr_multiplier: float = 1.0
@@ -71,6 +72,7 @@ class ModelConfig:
                 "attention_kind",
                 "linear_backend",
                 "radius_mode",
+                "initialization_mode",
                 "atom_lr_multiplier",
                 "radius_envelope",
                 "closed_lower_power",
@@ -151,6 +153,11 @@ class ModelConfig:
                 self.linear_backend == "levels_wide_amplitude"
                 and self.radius_mode != "envelope"
             )
+            or self.initialization_mode not in ("moments", "probe_rms")
+            or (
+                self.initialization_mode == "probe_rms"
+                and self.radius_mode != "envelope"
+            )
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -205,6 +212,8 @@ class ModelConfig:
                 radius_fraction=self.radius_fraction,
                 radius_fraction_lr_multiplier=self.radius_fraction_lr_multiplier,
             )
+        if self.initialization_mode != "moments":
+            result["initialization_mode"] = self.initialization_mode
         return result
 
     @property
@@ -266,6 +275,8 @@ def qualification_covers_model(receipt, config, *, ffn_kind=None):
             radius_fraction=config.radius_fraction,
             radius_fraction_lr_multiplier=config.radius_fraction_lr_multiplier,
         )
+    if config.initialization_mode != "moments":
+        scalars["initialization_mode"] = config.initialization_mode
     dimensions = (
         [(config.width, config.width)]
         if config.attention_kind != "dense"

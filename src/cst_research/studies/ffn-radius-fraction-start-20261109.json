@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "ffn-radius-fraction-start-20261109",
   "title": "Smaller tau and broad initial radius fractions with matched Dense moments",
-  "status": "RUNNING",
-  "status_note": "Operator GPU regression68passed; all7 exact task configurations qualified, including serialized next update at initial fractions.5 and1. Short comparison is running; no learning result claim yet.",
+  "status": "COMPLETED",
+  "status_note": "All12 runs and12 trained audits completed. Initial actual FFN RMS can be4x Dense at fraction.5 and42x at1 despite matching expected Atom energy. Broad-start quality is confounded by this output-scale mismatch; preserve as diagnostic and rerun with actual probe-RMS initialization under a new source/protocol.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
@@ -58,6 +58,13 @@
     "source_archive_sha256": "24d576b9da54e2b539453425e661cfacd42a8d950b53413977d48db6796c321a",
     "qualification_sha256": "0922e491faee295d5cdaf4bcea827e3686d7572f0d2f86ab0344b5760c023514",
     "confirmation_evaluated": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "compact_archive_sha256": "44da9684ce4b0502f32a56ea94d82715bfca3060f064e6fb528358cb3266bedf",
+    "files_verified": 70,
+    "source_files_verified": 1837,
+    "checkpoints_verified": 12,
+    "trained_audit_models": 12,
+    "owned_processes_inactive": 17,
+    "diagnostic_record": "docs/ffn-radius-fraction-start-20261109-diagnostic.json"
   }
 }

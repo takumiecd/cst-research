@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "id": "ffn-probe-rms-start-20261109",
+  "title": "Actual-output-RMS matched lower-tau and broad-fraction FFN study",
+  "status": "PLANNED",
+  "status_note": "Fix the observed4x/42x output-RMS confound using one-time amplitude calibration against a fixed TRAIN window; old moment-only results preserved as diagnostic.",
+  "protocol_source_path": "docs/ffn-probe-rms-start-20261109.md",
+  "protocol": {
+    "amplitude_max": 32.0,
+    "tau_fraction_cases": [
+      [
+        0.003,
+        0.0
+      ],
+      [
+        0.001,
+        0.0
+      ],
+      [
+        0.0003,
+        0.0
+      ],
+      [
+        0.003,
+        0.25
+      ],
+      [
+        0.003,
+        0.5
+      ],
+      [
+        0.003,
+        1.0
+      ]
+    ],
+    "seed": 17,
+    "short_updates": 256,
+    "long_updates": 976,
+    "width": 512,
+    "blocks": 4,
+    "atoms_per_map": 8192,
+    "long_selection": "best smaller tau, best broader fraction, common baseline and Dense",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false,
+    "initialization_mode": "probe_rms",
+    "calibration_window_start": 0,
+    "second_train_probe_start": 128,
+    "calibration_relative_tolerance": 0.001,
+    "bridge": "fresh cap32/.003/fraction0 moment-only"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-probe-rms-start-20261109"
+  }
+}

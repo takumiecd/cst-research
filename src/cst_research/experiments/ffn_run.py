@@ -239,6 +239,9 @@ def main(argv=None):
     parser.add_argument("--tau", type=float, default=0.03)
     parser.add_argument("--radius-fraction", type=float, default=0.0)
     parser.add_argument("--radius-fraction-lr-multiplier", type=float, default=1.0)
+    parser.add_argument(
+        "--initialization-mode", choices=("moments", "probe_rms"), default="moments"
+    )
     parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
@@ -296,7 +299,14 @@ def main(argv=None):
         tau=args.tau,
         radius_fraction=args.radius_fraction,
         radius_fraction_lr_multiplier=args.radius_fraction_lr_multiplier,
+        initialization_mode=args.initialization_mode,
     )
+    if args.initialization_mode == "probe_rms":
+        name = "ffn_probe_initialization.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("probe initialization source differs from qualification")
     if args.radius_mode == "envelope":
         name = "ffn_radius_fraction.py"
         if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
@@ -377,8 +387,15 @@ def main(argv=None):
         else config.ffn_parameter_budget()[args.kind + "_parameters"]
     )
     assert actual_ffn_parameters == expected_ffn_parameters
+    calibration = None
     if args.kind == "cst" or config.attention_kind != "dense":
         configure_native(model)
+        if config.initialization_mode == "probe_rms":
+            from .ffn_probe_initialization import calibrate_model
+
+            calibration_x, _ = token_batch(data["train"], [0], config.context, "cuda")
+            second_x, _ = token_batch(data["train"], [128], config.context, "cuda")
+            calibration = calibrate_model(model, calibration_x, second_probe=second_x)
         if field_recipe is not None:
             from .ffn_field_lr import FieldRateOptimizer
 
@@ -443,6 +460,7 @@ def main(argv=None):
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(0),
         "initialization_reports": model.initialization_reports(),
+        "initial_probe_calibration": calibration,
         "ffn_budget": config.ffn_parameter_budget(),
         "total_parameters": sum(p.numel() for p in model.parameters()),
         "actual_ffn_parameters": actual_ffn_parameters,
