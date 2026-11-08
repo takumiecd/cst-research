@@ -56,3 +56,16 @@ probes and checkpoint IO are outside that timer and included in wall time.
 Allocator peaks are not total process GPU memory. Pool duration is not throughput.
 One seed/~1M tokens establish development behavior, not convergence, equivalence,
 noninferiority, minimum Atom count, cross-GPU bit identity or universal speed.
+
+## Execution preparation
+
+The frozen consumer is `10840baa8ce7f3570e7bf895f0618707b9f36652`.
+Two setup attempts stopped before learning: local venv ensurepip failed, then
+174 CUDA regression cases passed before a syntax-only test forced C++17 against
+Torch2.14 headers requiring C++20. The former is fixed with a private
+`--without-pip --system-site-packages` venv; the latter changes only the test
+compiler flag at operator `b393ac653f3b3893c378acda1c1752919c1539d1`.
+Numeric source remains identical to `df24415a`. Preserve both failures; the new
+attempt reruns all223 cases and all six model qualifications without relaxed
+tolerances. Installed L4 runtime observed: Torch2.14.1+cu130,CUDA13.0,Python3.13.16.
+Qualification and learning are not yet complete.

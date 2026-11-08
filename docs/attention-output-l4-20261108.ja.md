@@ -48,3 +48,16 @@ setup、評価、probe、checkpoint IOは計時外でwall timeには含む。
 allocatorピークは全GPU processメモリではなく、pool時間もthroughputではない。
 1seed/約1Mtokenのdevelopment挙動であり、収束・精度同等・非劣性・最小Atom数・
 GPU間byte一致・普遍的速度の結論にはしない。
+
+## 実行準備
+
+固定したconsumerは `10840baa8ce7f3570e7bf895f0618707b9f36652`。
+学習開始前に2回の準備失敗を保全した。最初はvenvのensurepipが失敗し、
+次はCUDA回帰174件通過後、構文検査がC++17を固定し、C++20を要求する
+Torch2.14のヘッダで停止した。前者は専用venvの
+`--without-pip --system-site-packages`、後者は検査だけのコンパイラ指定を
+変更したoperator `b393ac653f3b3893c378acda1c1752919c1539d1` で修正する。
+数値計算のソースは `df24415a` と同一。両失敗を残し、新しい実行では
+223件と6つのモデル資格検査を許容誤差を緩めず全てやり直す。
+観測したL4環境はTorch2.14.1+cu130、CUDA13.0、Python3.13.16。
+資格検査も学習もまだ完了していない。
