@@ -27,6 +27,8 @@ torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)�
 全15本と学習後監査を完了しました。976更新・3seedでDEV CEはDense3.2992、tau.003が3.4061、
 tau.01が3.4157。fractionは学習しますが、幅512では損失・速度の差が残り、ピークメモリの優位もありません。
 公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
+[初期fraction=.5固定のLR比較](docs/ffn-fraction-lr-20261109-results.ja.md)もRTX6000 Adaで完了。976更新・seed17でfraction LR1/4/16倍のDEV CEは3.5828/3.5594/3.4864、Denseは3.3090でした。平均がほぼ一定でも各Atomのfractionは動いており、この短期比較では高いLRで改善。RMS校正やdefault変更はしていません。
+
 [固定状態のFFN測定](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.ja.md)では、
 幅512・256行でphysical本体に対し21〜22%の追加コストでした。
 限定した演算の結果であり、LM throughputやDenseに対する優位性ではありません。

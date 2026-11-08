@@ -28,6 +28,8 @@ off-device recovery. The [radius-envelope implementation](https://github.com/tak
 now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
 RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109-results.md) completed all15 runs and trained audits. At976updates/three seeds, DEV CE was3.2992 Dense,3.4061 tau.003 and3.4157 tau.01. Fractions learn; width512 still has a loss/speed gap and no peak-memory advantage.
 The public API uses radius_fraction_init / radius_fraction without q aliases.
+A [fixed initial fraction=.5 LR comparison](docs/ffn-fraction-lr-20261109-results.md) completed on RTX6000 Ada: at976updates/seed17, fraction LR1/4/16× gave DEV CE3.5828/3.5594/3.4864 versus Dense3.3090. Per-Atom fractions move despite a nearly unchanged mean; higher LR helped this pilot, with no RMS calibration or default change.
+
 A [fixed-state FFN probe](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.md)
 measured21–22% envelope overhead over the physical core at width512/256 rows;
 this is a bounded operator result, not LM throughput or an advantage over Dense.

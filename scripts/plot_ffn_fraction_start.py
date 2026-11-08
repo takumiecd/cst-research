@@ -90,11 +90,9 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            (
-                "Direct fraction LR comparison, seed17 only"
-                if any("fraction_lr_multiplier" in r for r in rows)
-                else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
-            )
+            "Direct fraction LR comparison, seed17 only"
+            if any("fraction_lr_multiplier" in r for r in rows)
+            else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
         )
         save(fig, f"{stage}-learning-curves")
         cst = [r for r in selected if r["kind"] == "cst"]
@@ -277,7 +275,11 @@ def main():
         json.dumps(
             {
                 "runs": table,
-                "scope": "One development seed, selected after short screening; no optimality, convergence or causal initial-radius claim",
+                "scope": (
+                    "One development seed, fixed fraction LR family; no optimality or convergence claim"
+                    if any("fraction_lr_multiplier" in r for r in rows)
+                    else "One development seed, selected after short screening; no optimality, convergence or causal initial-radius claim"
+                ),
             },
             indent=2,
         )

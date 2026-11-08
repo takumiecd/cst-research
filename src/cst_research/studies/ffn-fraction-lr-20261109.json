@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-fraction-lr-20261109",
   "title": "Fixed initial fraction .5: isolated fraction LR multipliers1/4/16",
-  "status": "RUNNING",
-  "status_note": "All3 fresh LR configurations passed GPU qualification and serialized exact next update. Exact initial Parameter digest is shared across1x/4x/16x. Dense completed; LR runs are running. RMS calibration is not used.",
+  "status": "COMPLETED",
+  "status_note": "All4 runs completed at976 updates; 8 final/prefix checkpoints audited with exact DEV reproduction. Verified compact retrieval and6 observer snapshots. LR16 reduced DEV CE by0.0964 versus LR1; Dense gap0.1774 remains. One seed only; no RMS calibration, confirmation evaluation or public default adoption.",
   "protocol_source_path": "docs/ffn-fraction-lr-20261109.md",
   "protocol": {
     "width": 512,
@@ -32,7 +32,7 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "ffn-fraction-lr-20261109"
+    "relative_path": "ffn-fraction-lr-6000ada-20261109-01"
   },
   "execution": {
     "job_id": "ffn-fraction-lr-6000ada-20261109-01",
@@ -43,6 +43,14 @@
     "initial_cst_parameter_sha256": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "compact_archive_sha256": "d1bf5569c5803b57b8e925e682927c8fc9e698009afbfa55fdfc4ecbdfa6d999",
+    "compact_files_verified": 34,
+    "source_files_verified": 1849,
+    "checkpoints_hash_verified": 12,
+    "audited_checkpoints": 8,
+    "observer_snapshots_reproduced": 6,
+    "owned_processes_inactive": 8,
+    "results_source_path": "docs/ffn-fraction-lr-20261109-results.md"
   }
 }
