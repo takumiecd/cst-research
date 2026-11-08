@@ -35,6 +35,8 @@ def main():
     def name(row):
         if row["kind"] == "dense":
             return "Dense"
+        if "cst_lr_multiplier" in row:
+            return f"all CST fields LR{row['cst_lr_multiplier']:g}x"
         if "fraction_lr_multiplier" in row:
             return f"fraction LR{row['fraction_lr_multiplier']:g}x"
         if row["amplitude_max"] == 1:
@@ -90,7 +92,9 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            "Direct fraction LR comparison, seed17 only"
+            "All CST field LR comparison, seed17 only"
+            if any("cst_lr_multiplier" in r for r in rows)
+            else "Direct fraction LR comparison, seed17 only"
             if any("fraction_lr_multiplier" in r for r in rows)
             else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
         )
@@ -276,7 +280,9 @@ def main():
             {
                 "runs": table,
                 "scope": (
-                    "One development seed, fixed fraction LR family; no optimality or convergence claim"
+                    "One development seed, fixed all-CST-field LR family; no optimality or convergence claim"
+                    if any("cst_lr_multiplier" in r for r in rows)
+                    else "One development seed, fixed fraction LR family; no optimality or convergence claim"
                     if any("fraction_lr_multiplier" in r for r in rows)
                     else "One development seed, selected after short screening; no optimality, convergence or causal initial-radius claim"
                 ),

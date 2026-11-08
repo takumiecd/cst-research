@@ -33,7 +33,12 @@ def main():
         ]
         for r in rows
     }
-    colors = {1.0: "#1f77b4", 4.0: "#ff7f0e", 16.0: "#d62728"}
+    rates = sorted(histories)
+    colors = {
+        rate: color
+        for rate, color in zip(rates, ["#1f77b4", "#ff7f0e", "#d62728", "#9467bd"])
+    }
+    assert len(rates) <= 4
 
     def aggregate(entry):
         layers = list(entry["layers"].values())
@@ -114,9 +119,19 @@ def main():
         ax.set_xlabel("Optimizer updates")
         ax.grid(alpha=0.2)
     axes[0, 0].legend()
-    fig.suptitle("Same initial fraction .5: measured per-Atom motion, seed17")
+    fig.suptitle(
+        "All CST fields LR: same initial fraction .5, measured per-Atom motion, seed17"
+        if "cst_lr_multiplier" in rows[0]
+        else "Same initial fraction .5: measured per-Atom motion, seed17"
+    )
     save(fig, "fraction-movement")
-    fig, axes = plt.subplots(3, 2, figsize=(12, 10), layout="constrained")
+    fig, axes = plt.subplots(
+        len(rates),
+        2,
+        figsize=(12, 3.4 * len(rates)),
+        squeeze=False,
+        layout="constrained",
+    )
     for i, rate in enumerate(sorted(histories)):
         xs = [e["step"] for e in histories[rate]]
         for j, metric in enumerate(["mean_signed", "mean_absolute"]):
@@ -178,6 +193,11 @@ def main():
         records.append(
             {
                 "fraction_lr_multiplier": rate,
+                **(
+                    {"cst_lr_multiplier": rate}
+                    if "cst_lr_multiplier" in rows[0]
+                    else {}
+                ),
                 "frames": len(entries),
                 "at256": agg[rate][
                     next(i for i, e in enumerate(entries) if e["step"] == 256)

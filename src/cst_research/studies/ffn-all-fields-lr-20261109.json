@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-all-fields-lr-20261109",
   "title": "Fixed initial fraction .5: all CST field LR multipliers16/32/64/128",
-  "status": "PLANNED",
-  "status_note": "User authorized extending all CST field LRs to32/64/128 against fresh16x and Dense. One seed, same initialization/data/budget; no RMS calibration.",
+  "status": "RUNNING",
+  "status_note": "Fresh four-configuration GPU qualification running on verified idle RTX6000 Ada. Only the qualification helper changed; exact operator bytes/evidence are reused. All five learning runs pending qualification. No RMS calibration.",
   "protocol_source_path": "docs/ffn-all-fields-lr-20261109.md",
   "protocol": {
     "width": 512,
@@ -34,5 +34,14 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-all-fields-lr-6000ada-20261109-01"
+  },
+  "execution": {
+    "job_id": "ffn-all-fields-lr-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "86932ee557afabd446e5d438570194e396403450",
+    "source_archive_sha256": "cb19809064c8b82d5dfb8f10976cb1042d1bc6861fbf4ba297cf1ab85f83759f",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false
   }
 }
