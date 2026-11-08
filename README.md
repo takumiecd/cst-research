@@ -24,8 +24,9 @@ public API are separate decisions.
 
 The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
 all retired checkout payloads and Git history with independently verified
-off-device recovery. Current development proceeds with amplitude-dependent
-radius envelopes and a loss-trained per-Atom q in torchcst.
+off-device recovery. The [radius-envelope implementation](https://github.com/takumiecd/torchcst/pull/156)
+now supports configurable tau and a loss-trained per-Atom q. CPU/operator and
+RTX6000 Ada checks passed; LM learning with this new family remains untested.
 
 ## Current direction: FFN and Attention feasibility
 

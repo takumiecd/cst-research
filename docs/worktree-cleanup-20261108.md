@@ -53,3 +53,14 @@ controller or energy-amplitude substitution in this implementation. Torchcst
 owns the mathematical declaration, reference execution, gradients and optimizer
 projection; this repository owns any future LM study. Implementation validation
 is not a new LM learning result or an optimal-tau claim.
+
+The implementation is preserved in [torchcst PR156](https://github.com/takumiecd/torchcst/pull/156),
+stacked on PR155 and unmerged. The final source40e120c9f1b7260364f08bf6723185f62bf31ac6
+passed40 checks on RTX6000 Ada (14 actual CUDA/26 CPU-metadata), including
+radius maxima4.7/50 and both FFN directions at7/256 rows, q gradients/updates and
+serialized model/Adam next-update parity. Local full CPU2433 passed/2408 skipped
+on the runtime-equivalent a86db78d checkpoint; final targeted CPU24 passed/8
+CUDA skipped. The verification preserves environment failures and a corrected
+dtype-mismatched reference; runtime source stayed unchanged after ee9c8955.
+The operator validation record lives in torchcst, separately from future LM
+learning studies. No new registry study or learning result is declared here.

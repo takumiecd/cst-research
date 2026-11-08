@@ -21,7 +21,9 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [2026-11-08のworktree整理](docs/worktree-cleanup-20261108.ja.md)では、古いcheckoutの
 全payloadとGit履歴を別デバイスへ保全し、独立した復元検証を済ませました。
-現在はtorchcstで、振幅依存の半径境界と損失で学習する各Atomのqを実装しています。
+torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)を実装し、tauの調整と
+各Atomのqの学習に対応しました。CPU・演算とRTX6000 Adaでの検査は成功しました。
+この新方式によるLMの学習比較は未実施です。
 
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 

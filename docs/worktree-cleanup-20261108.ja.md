@@ -48,3 +48,12 @@ U=r_max、L=r_min+(r_max-r_min)exp(-(a/tau)^2)、r=L^(1-q)U^qとします。
 この実装には、中心移動量による制御やエネルギー振幅への置き換えは入れません。
 数学的宣言、参照実行、勾配、optimizerの射影はtorchcstが管理し、将来のLM研究は
 このrepoが管理します。実装検証は新しいLM学習結果や最適tauの主張ではありません。
+
+実装は[torchcst PR156](https://github.com/takumiecd/torchcst/pull/156)に保全しています。
+PR155を親にした未マージのPRです。最終source40e120c9f1b7260364f08bf6723185f62bf31ac6で、
+RTX6000 Ada上の40検査（実CUDA14・CPU/metadata26）が成功しました。最大半径4.7/50、
+両FFN方向・7/256行、qの勾配と更新、保存したモデルとAdamの次の更新の一致を含みます。
+同じruntimeのa86db78d時点のローカルCPU一式は2433成功・2408skip、最終対象CPUは24成功・CUDA8skipです。
+環境エラーと、精度形式が一致しなかった参照の修正も保全し、ee9c8955以降のruntime sourceは不変です。
+演算の検証記録はtorchcstで管理し、将来のLM学習研究と分けています。
+この更新で新しいregistry studyや学習結果は宣言しません。
