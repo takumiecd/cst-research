@@ -100,3 +100,9 @@ accumulation, clipping and optimizer are inside the timer; preserve historical
 clock definitions on their original sources. Geometry/rank/coverage diagnostics,
 evaluation and checkpoint IO stay outside primary timing. Any failed, partial,
 OOM or unsupported-shape case remains part of the record.
+
+Q/K/V remain three logical maps, with the Atom rule applied to each, as in the
+existing pilots. They are not silently replaced by one3N-output CST map with a
+different budget. With four blocks, CST site counts are8 (FFN),12 (QKV),20
+(QKV+FFN),24 (+O), then25 distinct learned matrices with tied vocabulary and26
+with position. Tied vocabulary has two uses but one learned matrix/state.

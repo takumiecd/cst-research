@@ -74,3 +74,8 @@ runtime/operator/backendはtorchcstに実装し、本research repoへ複製し�
 完全updateの時計にzero_grad/LR設定・転送・accumulation・clip・optimizerを含むかを明記し、
 過去の時計は元sourceの定義を保つ。geometry/rank/coverage診断、評価、checkpoint IOは主計時外。
 失敗・途中停止・OOM・未対応shapeも記録に残す。
+
+Q/K/Vは既存pilotと同じ3個の論理mapにそれぞれAtom則を適用する。予算が異なる
+出力3Nの単一CSTへ黙って変更しない。4blockならCST site数はFFN8、QKV12、
+QKV+FFN20、+O24。共有語彙を加えると異なる学習行列25個、位置も含めると26個。
+共有語彙は用途が2つでも学習行列・状態は1つである。
