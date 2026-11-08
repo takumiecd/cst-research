@@ -1,0 +1,243 @@
+{
+  "job_id": "ffn-radius-fraction-tau-6000ada-20261109-02",
+  "source_commits": {
+    "torchcst": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
+    "cst-research": "539af8e648031ccf2324eea28aeed3802dcde487"
+  },
+  "source_archive_sha256": "8501aa1c1d6c3fbe622b2709aacf386a5c752df329cc0e334b31c8ae1590f9a5",
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "compact_archive_sha256": "b464081160e67309d4dc6187e9f88ebd07c8208ea640a7dd00997f9d65e065c1",
+  "verification": {
+    "state": "passed",
+    "archive_sha256": "b464081160e67309d4dc6187e9f88ebd07c8208ea640a7dd00997f9d65e065c1",
+    "files_verified": 79,
+    "source_files_verified": 1814,
+    "checkpoint_hashes_verified_remotely": 15,
+    "audit_models": 9,
+    "source_unchanged": true,
+    "geometry_and_radius_timelines_complete": true,
+    "training_processes_inactive": 17,
+    "audit_processes_inactive": 2,
+    "gpu_after": "NVIDIA RTX 6000 Ada Generation, 0 %, 39 MiB"
+  },
+  "prior_failed_attempt": {
+    "job": "ffn-radius-fraction-tau-6000ada-20261109-01",
+    "archive_sha256": "b04f1fa64da9ebaa9be836aaa9ebee4ca7348717f337e5c4708266956a7c83a5",
+    "issue": "Verifier treated intentional load-generation invalidation as numeric mismatch; no learning ran. Numeric tolerances unchanged."
+  },
+  "short": [
+    {
+      "kind": "dense",
+      "tau": 0.03,
+      "seed": 17,
+      "development_ce": 4.148382440209389,
+      "updates": 256
+    },
+    {
+      "kind": "cst",
+      "tau": 0.003,
+      "seed": 17,
+      "development_ce": 4.3358412981033325,
+      "updates": 256
+    },
+    {
+      "kind": "cst",
+      "tau": 0.01,
+      "seed": 17,
+      "development_ce": 4.338757611811161,
+      "updates": 256
+    },
+    {
+      "kind": "cst",
+      "tau": 0.03,
+      "seed": 17,
+      "development_ce": 4.343493103981018,
+      "updates": 256
+    },
+    {
+      "kind": "cst",
+      "tau": 0.1,
+      "seed": 17,
+      "development_ce": 4.41618937253952,
+      "updates": 256
+    },
+    {
+      "kind": "cst",
+      "tau": 0.3,
+      "seed": 17,
+      "development_ce": 4.5241574347019196,
+      "updates": 256
+    }
+  ],
+  "long": [
+    {
+      "arm": "Dense",
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "development_ce": [
+        3.3089816197752953,
+        3.291380375623703,
+        3.297273799777031
+      ],
+      "mean_ce": 3.299211931725343,
+      "sample_std_ce": 0.008959253066399634,
+      "median_update_ms_by_seed": [
+        22.28084346279502,
+        22.36522873863578,
+        22.257407661527395
+      ],
+      "peak_allocated_mib_by_seed": [
+        952.66064453125,
+        952.66064453125,
+        952.66064453125
+      ],
+      "peak_reserved_mib_by_seed": [
+        1168.0,
+        1168.0,
+        1168.0
+      ]
+    },
+    {
+      "arm": "tau=0.003",
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "development_ce": [
+        3.407896153628826,
+        3.394959218800068,
+        3.4155517667531967
+      ],
+      "mean_ce": 3.406135713060697,
+      "sample_std_ce": 0.010408535970342504,
+      "median_update_ms_by_seed": [
+        118.2974916882813,
+        118.49030945450068,
+        118.51295223459601
+      ],
+      "peak_allocated_mib_by_seed": [
+        975.77880859375,
+        975.77880859375,
+        975.77880859375
+      ],
+      "peak_reserved_mib_by_seed": [
+        1300.0,
+        1300.0,
+        1300.0
+      ]
+    },
+    {
+      "arm": "tau=0.01",
+      "seeds": [
+        17,
+        29,
+        43
+      ],
+      "development_ce": [
+        3.422456033527851,
+        3.3955991566181183,
+        3.4290722757577896
+      ],
+      "mean_ce": 3.415709155301253,
+      "sample_std_ce": 0.017727174072256,
+      "median_update_ms_by_seed": [
+        126.74927385523915,
+        126.82321621105075,
+        126.882444601506
+      ],
+      "peak_allocated_mib_by_seed": [
+        975.77880859375,
+        975.77880859375,
+        975.77880859375
+      ],
+      "peak_reserved_mib_by_seed": [
+        1300.0,
+        1300.0,
+        1300.0
+      ]
+    }
+  ],
+  "final_geometry": [
+    {
+      "tau": 0.003,
+      "seed": 17,
+      "mean_radius": 1.2429781268774605,
+      "mean_radius_fraction": 0.006124642151520382,
+      "fraction_at_zero": 0.1138458251953125,
+      "fraction_at_one": 0.0
+    },
+    {
+      "tau": 0.01,
+      "seed": 17,
+      "mean_radius": 5.315854086230502,
+      "mean_radius_fraction": 0.0067931429773195155,
+      "fraction_at_zero": 0.100311279296875,
+      "fraction_at_one": 0.0
+    },
+    {
+      "tau": 0.003,
+      "seed": 29,
+      "mean_radius": 1.215157132694003,
+      "mean_radius_fraction": 0.006115744611929019,
+      "fraction_at_zero": 0.11322021484375,
+      "fraction_at_one": 0.0
+    },
+    {
+      "tau": 0.01,
+      "seed": 29,
+      "mean_radius": 5.269125083551444,
+      "mean_radius_fraction": 0.006731098138403301,
+      "fraction_at_zero": 0.100372314453125,
+      "fraction_at_one": 0.0
+    },
+    {
+      "tau": 0.01,
+      "seed": 43,
+      "mean_radius": 5.285577308914071,
+      "mean_radius_fraction": 0.006778966923098507,
+      "fraction_at_zero": 0.0991973876953125,
+      "fraction_at_one": 0.0
+    },
+    {
+      "tau": 0.003,
+      "seed": 43,
+      "mean_radius": 1.2561227871219671,
+      "mean_radius_fraction": 0.006101503533789493,
+      "fraction_at_zero": 0.1142578125,
+      "fraction_at_one": 0.0
+    }
+  ],
+  "audit": {
+    "models_checked": 9,
+    "max_ce_reproduction_error": 0.0,
+    "max_absolute_y_dx_dp_error": [
+      1.4472020559708199e-06,
+      2.2637074685860625e-06,
+      5.7220458984375e-06
+    ],
+    "atol": 0.0001,
+    "rtol": 0.004
+  },
+  "public_default_adopted": false,
+  "confirmation_evaluated": false,
+  "plot_source_sha256": "5f89cd88b60fe66df6748c8df87fd91abc0caa9a84a50376ccca91e66bb6e12c",
+  "figure_sha256": {
+    "long-field-gradients.png": "4a1867d1ca234f5258deb1ecee737da2a8eaf45e35a358d4e9043114a52fee00",
+    "long-learning-curves.png": "bb27a942bf6053ce33cd1c00a6cb288bd7292bd34141fbdaea5afbaf3e2966cd",
+    "long-learning-tail.png": "2b9ae0cfea491a6b569a429dabae245f5d2632e632cbced3bd9c37f6d0fc37e3",
+    "long-radius-layers.png": "b3049dc20ff89e48f4741512986f76e32209e3f82ef534955a4035aecc0ac94c",
+    "short-radius_fraction-layers.png": "58560eef83dcd2fd74a1f5c8d4a5537376e9b028f2aea46a2b585b4ffb0f8b47",
+    "short-field-gradients.png": "4c69b081627f8d9805dfa0e87af7614526f7c28197c746532093c6988d47ce57",
+    "short-learning-curves.png": "abf1d6c739ca062f4af097241e0ace19638e8d52f4294faf061a1e0bfccf8d6e",
+    "long-amplitude-radius.png": "162dec872d2a794edf0b34dac7e70ab80f22811a572b8114bb2cc841c3be155b",
+    "long-amplitude-radius_fraction.png": "91781206f86dba77e2384b617243878afd90386dcea00c6ef2b3afcdc475f339",
+    "long-radius_fraction-layers.png": "e5c131e441bed0e526b15fa4933308ceaf7f17ff8b3923e31635a96420f2cc75",
+    "short-amplitude-radius.png": "0d5cf30372911b0ea4e23fe024d4b9891d76dc9a981d6e621c87e38b9724af6a",
+    "short-amplitude-radius_fraction.png": "03b00c7cae7710adf4b0581a8b1b4bb19463414fff0ec716438c164575078d1e",
+    "short-radius-layers.png": "d59d195d1e6fd6b6db4553ded6235a05d34cb09cbb57bc48414bfe83a7f1b1f2"
+  }
+}

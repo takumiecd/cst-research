@@ -26,7 +26,7 @@ The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
 all retired checkout payloads and Git history with independently verified
 off-device recovery. The [radius-envelope implementation](https://github.com/takumiecd/torchcst/pull/156)
 now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
-RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109.md) is running, with five short tau arms and a prespecified longer three-seed follow-up.
+RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109-results.md) completed all15 runs and trained audits. At976updates/three seeds, DEV CE was3.2992 Dense,3.4061 tau.003 and3.4157 tau.01. Fractions learn; width512 still has a loss/speed gap and no peak-memory advantage.
 The public API uses radius_fraction_init / radius_fraction without q aliases.
 A [fixed-state FFN probe](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.md)
 measured21–22% envelope overhead over the physical core at width512/256 rows;

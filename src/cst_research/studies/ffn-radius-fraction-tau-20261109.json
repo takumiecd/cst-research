@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "ffn-radius-fraction-tau-20261109",
   "title": "Public radius-envelope tau screening and longer TinyStories FFN follow-up",
-  "status": "RUNNING",
+  "status": "COMPLETED",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
   "runner_entrypoint": "cst_research.experiments.ffn_run",
@@ -40,7 +40,7 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-radius-fraction-tau-20261109"
   },
-  "status_note": "Fresh full-model qualification passed for all five tau values, including exact next numerical model/optimizer state at tau.03 with mandated load-generation invalidation checked separately. First short Dense run completed; short tau screening and selected longer follow-up are running. First failed verifier attempt is preserved.",
+  "status_note": "All6 short runs and9 longer runs completed. Long3seed DEV CE mean/sampleSD: Dense3.299212/.008959, tau.0033.406136/.010409, tau.013.415709/.017727. Tau.003 is lower than.01 in all3 seeds, with a.106924 mean gap to Dense. Radius fractions learn but stay small; no convergence, noninferiority or universal-optimum claim. All9 trained audits passed;79 compact/1814 frozen source files and15 remote checkpoint hashes verified;19 owned training/audit processes inactive.",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157",
   "execution": {
     "job_id": "ffn-radius-fraction-tau-6000ada-20261109-02",
@@ -51,6 +51,17 @@
     "prior_failed_attempt": "ffn-radius-fraction-tau-6000ada-20261109-01",
     "prior_failed_archive_sha256": "b04f1fa64da9ebaa9be836aaa9ebee4ca7348717f337e5c4708266956a7c83a5",
     "confirmation_evaluated": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "compact_archive_sha256": "b464081160e67309d4dc6187e9f88ebd07c8208ea640a7dd00997f9d65e065c1",
+    "files_verified": 79,
+    "source_files_verified": 1814,
+    "checkpoints_verified": 15,
+    "trained_audit_models": 9,
+    "owned_processes_inactive": 19,
+    "selected_taus": [
+      0.003,
+      0.01
+    ],
+    "results_document": "docs/ffn-radius-fraction-tau-20261109-results.md"
   }
 }

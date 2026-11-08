@@ -86,6 +86,49 @@ def main():
             f"{stage.capitalize()} FFN comparison; development-selected family, not convergence"
         )
         save(fig, f"{stage}-learning-curves")
+    # Keep the full curves above and expose the small late loss gap separately.
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5), layout="constrained")
+    long_rows = [r for r in rows if r["stage"] == "long"]
+    for row in long_rows:
+        points = [
+            p for p in curves[row["label"]] if "train_ce" in p and p["step"] >= 200
+        ]
+        axes[0].plot(
+            [p["step"] for p in points],
+            [p["train_ce"] for p in points],
+            color=color(row),
+            alpha=0.55,
+            lw=1.0,
+            label=f"{name(row)} seed{row['seed']}",
+        )
+    for label in sorted({name(r) for r in long_rows}):
+        group = [r for r in long_rows if name(r) == label]
+        samples = [
+            [p for p in curves[r["label"]] if "development" in p and p["step"] >= 200]
+            for r in group
+        ]
+        steps = [p["step"] for p in samples[0]]
+        assert all([p["step"] for p in sample] == steps for sample in samples)
+        values = np.array(
+            [[p["development"]["ce"] for p in sample] for sample in samples]
+        )
+        mean = values.mean(0)
+        sd = values.std(0, ddof=1)
+        axes[1].plot(steps, mean, "o-", color=color(group[0]), label=label)
+        axes[1].fill_between(
+            steps, mean - sd, mean + sd, color=color(group[0]), alpha=0.15
+        )
+    axes[0].set_title("Train CE after warmup (all three seeds)")
+    axes[1].set_title("Development CE mean +/- sample SD (three seeds)")
+    axes[1].legend()
+    for ax in axes:
+        ax.set_xlabel("Optimizer updates")
+        ax.set_ylabel("Cross entropy")
+        ax.grid(alpha=0.2)
+    fig.suptitle(
+        "Selected longer FFN follow-up; no confidence-interval or convergence claim"
+    )
+    save(fig, "long-learning-tail")
     # Every actual FFN site, and current-amplitude conditional bins. Seed17 only
     # avoids conflating seed spread with amplitude-bin membership changes.
     for stage in ("short", "long"):

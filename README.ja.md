@@ -23,8 +23,9 @@ CSTをニューラルネットワークで使えるようにするための研�
 全payloadとGit履歴を別デバイスへ保全し、独立した復元検証を済ませました。
 torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)を実装し、tauの調整と
 各Atomの`radius_fraction`の学習に対応しました。CPU・演算とRTX6000 Adaでの検査は成功しました。
-[sourceを固定したTinyStories FFNのtau探索](docs/ffn-radius-fraction-tau-20261109.ja.md)を実行中です。
-5条件を短期比較し、事前に決めた規則で選ぶ2条件を長め・3seedで追試します。
+[sourceを固定したTinyStories FFNのtau探索](docs/ffn-radius-fraction-tau-20261109-results.ja.md)は、
+全15本と学習後監査を完了しました。976更新・3seedでDEV CEはDense3.2992、tau.003が3.4061、
+tau.01が3.4157。fractionは学習しますが、幅512では損失・速度の差が残り、ピークメモリの優位もありません。
 公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
 [固定状態のFFN測定](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.ja.md)では、
 幅512・256行でphysical本体に対し21〜22%の追加コストでした。
