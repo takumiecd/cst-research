@@ -39,6 +39,14 @@ The report retains learning/radius/gradient overlays, numerical gates and
 verified evidence. [Gradient/update equations](docs/radius-coordinate-gradient-discussion-20261108.md)
 separate a proposed radius-live Polar contract from coordinate-motion control.
 
+The subsequent [matched full-chain Polar pair](docs/ffn-polar-radius-gradient-20261108-results.md)
+keeps L/U and uses the same projected Cartesian Adam in both arms. At the same
+short width512 budget, detached/live DEV CE was3.42404/3.42239; the curves largely
+overlap. Live radius gradients reached the s/t radial direction and changed
+mean radius2.058→1.623 relative to the detached control (both grew from0.975).
+This qualified research composition uses the existing physical Linear Plan;
+public Polar is unchanged and the Python-map precision/overhead is documented.
+
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
 usefulness with a linear Atom budget and bounded aspect-ratio changes; it does

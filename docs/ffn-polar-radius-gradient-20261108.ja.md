@@ -61,3 +61,9 @@ runnerは `cst_research.experiments.ffn_polar_radius_qualification` と既存
 `cst_research.experiments.ffn_run --kind cst --attention-kind dense --width 512
 --heads 8 --linear-backend levels --radius-mode {polar_detached,polar_live}
 --track-radius --development-only`。固定したdata/admission hashと上記全設定を明示する。
+
+実行後の精度形式の明確化：同じ凍結sourceで、Parameterとphysical Linear Tensorは
+FP32だが、Python写像はFP64で計算し、autogradはFP64の写像中間値を保存し得る。
+Z/H/G response保存はFP32のまま。正しさ・学習の検証用adapterであり、全計算FP32の
+最適化kernelではない。[結果](ffn-polar-radius-gradient-20261108-results.ja.md)を参照。
+この説明のためにsource・データ・更新則・数値許容差は変更していない。

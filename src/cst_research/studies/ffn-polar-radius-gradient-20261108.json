@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "ffn-polar-radius-gradient-20261108",
   "title": "Matched Polar radius-live versus detached FFN projected-Adam pilot",
-  "status": "PLANNED",
-  "status_note": "Prospective pair; CPU fixture and endpoint checks implemented; GPU composition/model admission and learning not yet executed.",
+  "status": "COMPLETED",
+  "status_note": "Both paired modes completed976updates/999424tokens; DEV CE detached3.42403589/live3.42238586, difference\u2212.00165004 with overlapping curves. Mean q.078821/.068468, radius2.058201/1.622871. Full trained audits passed;29 compact files/1775 source files hash-verified and8 recorded PIDs inactive. Source99a1d03; public Polar/default unchanged. One development seed, not superiority/noninferiority or convergence.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
@@ -49,5 +49,19 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-polar-radius-gradient-20261108"
+  },
+  "execution": {
+    "job_id": "ffn-polar-radius-gradient-6000ada-20261108-01",
+    "consumer_commit": "99a1d033d19c2c3b6285cef46dd10a81cfe7b651",
+    "operator_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+    "request_sha256": "837c5d917716da25d83809cfb6e7f60ab7d526bb592906478624db4446b7a890",
+    "compact_archive_sha256": "c333107b820bd9dd4e1de4d8ab7a680b3999356a5157fd91649a16dc765db853",
+    "files_verified": 29,
+    "source_files_verified": 1775,
+    "recorded_processes_inactive": 8,
+    "results_document": "docs/ffn-polar-radius-gradient-20261108-results.md",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false,
+    "precision_scope": "FP32 Parameters/physical Tensor/Linear response storage; eager Python map and retained map intermediates may be FP64"
   }
 }

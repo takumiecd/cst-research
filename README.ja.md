@@ -33,6 +33,14 @@ DEV CEはPolar3.42441、直接の半径学習3.42438、物理表現の半径固�
 数値検査と検証済み証拠を保存しました。[勾配と更新則の数式](docs/radius-coordinate-gradient-discussion-20261108.ja.md)では、
 半径微分を通すPolar案と座標の移動量を使う制御を分けて記録しています。
 
+その後の[完全なPolar連鎖律の同条件比較](docs/ffn-polar-radius-gradient-20261108-results.ja.md)では、
+L/Uを保ち、両条件で同じCartesian Adam＋射影を使いました。同じ幅512の短期予算で、
+DEV CEはdetach/liveが3.42404/3.42239で、曲線はほぼ重なります。
+半径の勾配はs/tの半径方向へ届き、平均半径はなし側2.058に対してあり側1.623でした
+（両方とも初期0.975からは広がっています）。既存のphysical Linear Planを使う
+検証済み研究用合成であり、公開Polarは変更していません。Python写像の精度形式と
+overheadも結果に明記しています。
+
 合意した[FFN検証計画](docs/ffn-feasibility.ja.md)は`A=ceil(8*sqrt(d_in*d_out))`を使い、
 幅256から始めて128/512も確認します。線形Atom予算での有効性と限定した縦横比の変更を調べ、
 最小係数の探索は行いません。

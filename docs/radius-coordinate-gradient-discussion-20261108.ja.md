@@ -114,4 +114,11 @@ LM学習の検証ではない。
 LR・データ・初期値は共通にする。端点での内向き微分の約束と、Parameter・moment・
 復元を含む完全な検査が必要になる。既存の接線更新・activity clockのPolarは参考に
 残せるが、それに対してbackwardとoptimizerを同時に変えるだけでは半径勾配の
-効果を切り分けられない。このLM比較はまだ開始していない。
+効果を切り分けられない。この議論の時点ではLM比較は未開始だった。
+
+その後、Adaで[FFNの同条件比較](ffn-polar-radius-gradient-20261108-results.ja.md)を完了した。
+976更新後のdetach/liveのDEV CEは3.42403589/3.42238586、平均半径は
+2.058201/1.622871、平均qは0.078821/0.068468。初期Parameter/logitは完全一致し、
+学習後VJP・復元監査にも合格した。既存のphysical Linearを合成する研究用実装であり、
+公開PolarのCUDAやdefaultを変更したものではない。曲線は重なり、1seedで一貫した
+改善を示す結果ではない。

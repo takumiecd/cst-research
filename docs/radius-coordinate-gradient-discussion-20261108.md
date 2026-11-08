@@ -130,4 +130,12 @@ identical LR/data/initialization; radial proposals are allowed. This needs an
 explicit inward endpoint-gradient convention and full parameter/moment/resume
 qualification. The existing tangent-only/activity-clock Polar can be retained
 as context, but changing backward and optimizer together against it would not
-isolate the radius gradient. No such LM comparison has been launched yet.
+isolate the radius gradient. At that point this LM comparison had not launched.
+
+The follow-up [matched FFN comparison](ffn-polar-radius-gradient-20261108-results.md)
+subsequently completed on Ada: detached/live DEV CE3.42403589/3.42238586,
+mean radius2.058201/1.622871 and mean q0.078821/0.068468 after976 updates.
+Initial Parameters/logits matched exactly and trained VJP/resume audits passed.
+This implements the proposed chain as a research-local composition of the
+existing physical Linear, not a public Polar CUDA/default change. Learning
+curves overlap, and one seed does not establish a consistent improvement.

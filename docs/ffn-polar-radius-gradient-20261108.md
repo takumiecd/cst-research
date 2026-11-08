@@ -71,3 +71,10 @@ Runner: `cst_research.experiments.ffn_polar_radius_qualification`, then existing
 --heads 8 --linear-backend levels --radius-mode {polar_detached,polar_live}
 --track-radius --development-only` with explicit pinned data/admission hashes
 and all settings above (CLI flags use spaces, e.g. `--width 512 --heads 8`).
+
+Post-execution precision clarification of the same frozen source: Parameter and
+physical Linear Tensors are FP32, while the Python map computes in FP64 and
+its autograd may retain FP64 map intermediates. Z/H/G response storage remains
+FP32. This is a correctness/learning adapter, not an all-FP32 optimized kernel.
+See the [results](ffn-polar-radius-gradient-20261108-results.md); no source,
+data, update law or numerical tolerance was changed for this clarification.
