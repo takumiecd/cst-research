@@ -429,7 +429,11 @@ def main(argv=None):
         "scheduled_tokens": updates * tokens_per_update,
         "completed_updates": 0,
         "completed_tokens": 0,
-        "optimizer": "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config",
+        "optimizer": (
+            "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; physical fields, post-step amplitude/radius projection; Atom group multiplier from config"
+            if config.radius_mode != "polar"
+            else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config"
+        ),
         "measurement": "synchronized full optimizer update including accumulation/data transfer; no probes/evaluation in timed samples; eager FP32 TF32off",
         "atom_motion_diagnostics": "CPU copy after each update; instrumented wall time includes sampling. Use separate uninstrumented runs for primary time/memory claims."
         if motion is not None
