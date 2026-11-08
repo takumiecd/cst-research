@@ -108,8 +108,20 @@ def configure_native(model, *, linear_backend=None):
 
         registry.register(RadiusLMLevelsAlgorithm())
         registry.register(RadiusLMLevelsStream64Algorithm())
+    if any(
+        getattr(m, "independent_radius_mode", None) is not None for m in model.modules()
+    ):
+        from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.lm_multirow import (
+            LM_PHYSICAL_LEVELS,
+            RadiusLMPhysicalLevelsAlgorithm,
+        )
+
+        registry.register(RadiusLMPhysicalLevelsAlgorithm())
     for layer in model.modules():
         if isinstance(layer, CSTLinear):
+            if getattr(layer, "independent_radius_mode", None) is not None:
+                layer.selector = FixedSelector(LM_PHYSICAL_LEVELS, registry=registry)
+                continue
             plan = (
                 plans.GLOBAL_ACTIVE_GRAD4_NATIVE_RECTANGULAR_2048
                 if max(layer.in_features, layer.out_features) > 1024
@@ -122,6 +134,12 @@ def configure_native(model, *, linear_backend=None):
 
 def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") != "polar":
+        from .ffn_radius import physical_optimizer
+
+        return physical_optimizer(
+            model, atom_lr_multiplier=atom_lr_multiplier, **options
+        )
     from torchcst import CSTAdamW, CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.polar_update.plans import (
         RADIUS_FLAT_TORUS_FUSED,
@@ -390,6 +408,11 @@ class LanguageModel(nn.Module):
                     getattr(block.qkv, block.qkv.dense_name).weight.copy_(
                         packed[remaining]
                     )
+
+        if config.radius_mode != "polar" and kind == "cst":
+            from .ffn_radius import convert_ffn
+
+            convert_ffn(self)
 
     def forward(self, tokens, targets=None):
         if tokens.ndim != 2 or not 1 <= tokens.shape[1] <= self.config.context:

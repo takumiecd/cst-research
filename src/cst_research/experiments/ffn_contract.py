@@ -51,6 +51,7 @@ class ModelConfig:
     zero_opening_scale: float = 0.03
     attention_kind: str = "dense"
     linear_backend: str = "native"
+    radius_mode: str = "polar"
 
     def __post_init__(self):
         for key, value in asdict(self).items():
@@ -63,6 +64,7 @@ class ModelConfig:
                 "feature_order",
                 "attention_kind",
                 "linear_backend",
+                "radius_mode",
                 "atom_lr_multiplier",
                 "radius_envelope",
                 "closed_lower_power",
@@ -99,6 +101,8 @@ class ModelConfig:
             or self.attention_kind
             not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
             or self.linear_backend not in ("native", "levels", "levels_stream64")
+            or self.radius_mode not in ("polar", "learned", "fixed")
+            or (self.radius_mode != "polar" and self.attention_kind != "dense")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -145,6 +149,8 @@ class ModelConfig:
             result["attention_kind"] = self.attention_kind
         if self.linear_backend != "native":
             result["linear_backend"] = self.linear_backend
+        if self.radius_mode != "polar":
+            result["radius_mode"] = self.radius_mode
         return result
 
     @property
@@ -188,6 +194,8 @@ def qualification_covers_model(receipt, config, *, ffn_kind=None):
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
     }
+    if config.radius_mode != "polar":
+        scalars["radius_mode"] = config.radius_mode
     if config.linear_backend != "native":
         scalars["linear_backend"] = config.linear_backend
     if config.radius_envelope != "rational":

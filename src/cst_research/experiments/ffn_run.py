@@ -224,6 +224,10 @@ def main(argv=None):
     parser.add_argument("--closed-lower-power", type=float, default=4.0)
     parser.add_argument("--closed-upper-power", type=float, default=1.0)
     parser.add_argument("--track-envelope", action="store_true")
+    parser.add_argument(
+        "--radius-mode", choices=("polar", "learned", "fixed"), default="polar"
+    )
+    parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     args = parser.parse_args(argv)
@@ -276,7 +280,14 @@ def main(argv=None):
         closed_upper_power=args.closed_upper_power,
         zero_opening_scale=args.zero_opening_scale,
         attention_kind=args.attention_kind,
+        radius_mode=args.radius_mode,
     )
+    if args.radius_mode != "polar" or args.track_radius:
+        name = "ffn_radius.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("independent radius source differs from qualification")
     if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
@@ -434,6 +445,9 @@ def main(argv=None):
     geometry = (
         (args.output / "geometry.jsonl").open("x") if args.track_envelope else None
     )
+    radius_history = (
+        (args.output / "radius.jsonl").open("x") if args.track_radius else None
+    )
 
     def log_geometry(step):
         if geometry is not None:
@@ -450,6 +464,20 @@ def main(argv=None):
                 + "\n"
             )
             geometry.flush()
+        if radius_history is not None:
+            from .ffn_radius import probe_radius
+
+            radius_history.write(
+                json.dumps(
+                    {
+                        "step": step,
+                        "seen_tokens": step * tokens_per_update,
+                        **probe_radius(model, px, py),
+                    }
+                )
+                + "\n"
+            )
+            radius_history.flush()
 
     def save():
         (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -635,6 +663,8 @@ def main(argv=None):
         curves.close()
         if geometry is not None:
             geometry.close()
+        if radius_history is not None:
+            radius_history.close()
 
 
 if __name__ == "__main__":
