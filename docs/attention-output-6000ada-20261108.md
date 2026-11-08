@@ -99,7 +99,8 @@ Attempt `attention-output-6000ada-20261108-02` verifies the old request hash
 against its receipt, then its archive hash against that request. It uses the
 same frozen sources, data, models and numeric gates. Request SHA256 is
 `2df9d9a84d0db9b8b34955e054e87a25e94f2ef81d38fd765384fd300d5db9b8`.
-All three fresh model qualifications and strict admissions passed. Dense
-completed its 976 updates and trained-checkpoint audit; the FFN learner was
-observed running. Remaining arms and final local retrieval/verification are
-pending. Do not infer scientific admission from launch or registry status.
+All three fresh model qualifications, strict admissions and four trained
+checkpoint audits passed. All arms completed 976 updates. The compact archive
+was retrieved and its 47 files independently verified; all 17 owned experiment
+processes were inactive. See the [results and overlays](attention-output-6000ada-20261108-results.md).
+This completes the bounded pilot, not a convergence or noninferiority study.
