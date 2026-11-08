@@ -69,3 +69,21 @@ Numeric source remains identical to `df24415a`. Preserve both failures; the new
 attempt reruns all223 cases and all six model qualifications without relaxed
 tolerances. Installed L4 runtime observed: Torch2.14.1+cu130,CUDA13.0,Python3.13.16.
 Qualification and learning are not yet complete.
+
+## Prioritized short throughput pair
+
+Before long learning, the owner requested an early speed result. After the full
+qualification above, run the existing `ffn_run` for Dense and all24-site
+QKVO+FFN in one pool job on that same allocation/runtime. Each arm runs40 updates
+(40,960 tokens), retains the30 update durations after the first10 warmup updates,
+and saves its final checkpoint. Keep the same initialization, seed, batch,
+accumulation,20M-token data/LR horizon, optimizer and numeric settings. Run fresh
+binary independent VJPs before learning and the trained checkpoint audit afterward,
+with only the expected update/token/geometry counts adjusted to40/40960/8.
+Do not require a1M-token milestone checkpoint from this short run.
+
+Report median update milliseconds,1024 tokens per update divided by that median,
+and peak allocated/reserved memory. Source setup/compilation/evaluation/audits
+remain outside the update timer. Dense then CST is a single order and short
+initial trajectory, not a speed claim for a mature model or all widths, nor an
+accuracy/convergence comparison. The six-arm1M-token cohort has not been submitted.
