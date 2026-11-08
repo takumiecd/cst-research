@@ -120,6 +120,10 @@ def stats(tensor):
 
 @torch.no_grad()
 def radius_snapshot(model, *, gradients=False):
+    if model.config.radius_mode in ("polar_live", "polar_detached"):
+        from .ffn_polar_radius import snapshot
+
+        return snapshot(model, gradients=gradients)
     result = {}
     for name, layer in model.named_modules():
         if not isinstance(layer, CSTLinear):
@@ -154,12 +158,21 @@ def probe_radius(model, x, targets):
     """Fixed data task gradients, after the update and outside its timer."""
     model.train()
     model.zero_grad(set_to_none=True)
-    _, loss = model(x, targets)
-    loss.backward()
-    result = {
-        "loss": float(loss.detach()),
-        "layers": radius_snapshot(model, gradients=True),
-        "scope": "Fixed probe, unscaled/unclipped loss gradient; Polar radius is detached; fixed mode masks radius gradient",
-    }
-    model.zero_grad(set_to_none=True)
-    return result
+    from .ffn_polar_radius import projections
+
+    mapped = projections(model)
+    for _, layer in mapped:
+        layer.track_probe = True
+    try:
+        _, loss = model(x, targets)
+        loss.backward()
+        return {
+            "loss": float(loss.detach()),
+            "layers": radius_snapshot(model, gradients=True),
+            "scope": "Fixed probe, unscaled/unclipped task gradients. Mapped modes record physical radius partial before the map and propagated radius contribution separately; s/t field gradients are latent, not dLoss/dr.",
+        }
+    finally:
+        for _, layer in mapped:
+            layer.track_probe = False
+            layer._probe_physical = None
+        model.zero_grad(set_to_none=True)

@@ -134,6 +134,13 @@ def configure_native(model, *, linear_backend=None):
 
 def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") in (
+        "polar_live",
+        "polar_detached",
+    ):
+        from .ffn_polar_radius import optimizer
+
+        return optimizer(model, atom_lr_multiplier=atom_lr_multiplier, **options)
     if getattr(getattr(model, "config", None), "radius_mode", "polar") != "polar":
         from .ffn_radius import physical_optimizer
 
@@ -409,7 +416,11 @@ class LanguageModel(nn.Module):
                         packed[remaining]
                     )
 
-        if config.radius_mode != "polar" and kind == "cst":
+        if config.radius_mode in ("polar_live", "polar_detached") and kind == "cst":
+            from .ffn_polar_radius import convert_ffn
+
+            convert_ffn(self)
+        elif config.radius_mode != "polar" and kind == "cst":
             from .ffn_radius import convert_ffn
 
             convert_ffn(self)

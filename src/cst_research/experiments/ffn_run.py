@@ -225,7 +225,9 @@ def main(argv=None):
     parser.add_argument("--closed-upper-power", type=float, default=1.0)
     parser.add_argument("--track-envelope", action="store_true")
     parser.add_argument(
-        "--radius-mode", choices=("polar", "learned", "fixed"), default="polar"
+        "--radius-mode",
+        choices=("polar", "learned", "fixed", "polar_detached", "polar_live"),
+        default="polar",
     )
     parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
@@ -288,6 +290,12 @@ def main(argv=None):
             name
         ):
             parser.error("independent radius source differs from qualification")
+    if args.radius_mode in ("polar_live", "polar_detached"):
+        name = "ffn_polar_radius.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("mapped Polar source differs from qualification")
     if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
@@ -430,7 +438,9 @@ def main(argv=None):
         "completed_updates": 0,
         "completed_tokens": 0,
         "optimizer": (
-            "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; physical fields, post-step amplitude/radius projection; Atom group multiplier from config"
+            "Cartesian AdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0, clip1; post-step latent norm projection[1,2], Atom LR from config; no tangent projection"
+            if config.radius_mode in ("polar_live", "polar_detached")
+            else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; physical fields, post-step amplitude/radius projection; Atom group multiplier from config"
             if config.radius_mode != "polar"
             else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config"
         ),

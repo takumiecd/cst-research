@@ -101,7 +101,12 @@ class ModelConfig:
             or self.attention_kind
             not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
             or self.linear_backend not in ("native", "levels", "levels_stream64")
-            or self.radius_mode not in ("polar", "learned", "fixed")
+            or self.radius_mode
+            not in ("polar", "learned", "fixed", "polar_detached", "polar_live")
+            or (
+                self.radius_mode in ("polar_detached", "polar_live")
+                and self.linear_backend != "levels"
+            )
             or (self.radius_mode != "polar" and self.attention_kind != "dense")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope

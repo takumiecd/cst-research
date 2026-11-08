@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "ffn-polar-radius-gradient-20261108",
+  "title": "Matched Polar radius-live versus detached FFN projected-Adam pilot",
+  "status": "PLANNED",
+  "status_note": "Prospective pair; CPU fixture and endpoint checks implemented; GPU composition/model admission and learning not yet executed.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.ffn_polar_radius_qualification",
+  "protocol_source_path": "docs/ffn-polar-radius-gradient-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "atoms_per_ffn_map": 8192,
+    "cst_sites": 8,
+    "seed": 17,
+    "arms": [
+      "polar_detached",
+      "polar_live"
+    ],
+    "optimizer": "Cartesian AdamW + post-step annulus projection; same in both arms; no tangent removal/activity clock",
+    "latent_norm_bounds": [
+      1,
+      2
+    ],
+    "projection_storage_tolerance": 5e-07,
+    "radius_mode": "loss-radius chain on/off",
+    "q": 0,
+    "linear_backend": "levels",
+    "attention_kind": "dense",
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001,
+    "atom_lr_multiplier": 16,
+    "base_lr": 0.0003,
+    "updates": 976,
+    "token_budget": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "expected_gpu": "NVIDIA RTX 6000 Ada Generation",
+    "runtime_change": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-polar-radius-gradient-20261108"
+  }
+}
