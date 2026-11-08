@@ -41,3 +41,27 @@ class RadiusFractionTests(unittest.TestCase):
         self.assertEqual(result["all"]["fraction_at_zero"], 1.0)
         self.assertTrue(torch.equal(before, model.map.atoms.p))
         self.assertTrue(torch.equal(rng, torch.get_rng_state()))
+
+    def test_resume_allows_only_declared_layout_invalidation(self):
+        import copy
+
+        import torch
+        from torch import nn
+
+        from cst_research.experiments.ffn_radius_fraction import make_layer
+        from cst_research.experiments.ffn_radius_fraction_qualification import (
+            assert_model_resume,
+            config_for,
+        )
+
+        model = nn.Module()
+        model.config = config_for(0.03)
+        model.map = make_layer(128, 128, config=model.config, std=0.001, seed=17)
+        restored = copy.deepcopy(model)
+        restored.load_state_dict(model.state_dict())
+        transitions = assert_model_resume(model, restored)
+        self.assertEqual(list(transitions.values()), [[0, 1]])
+        with torch.no_grad():
+            restored.map.atoms.p[0, 0] += 0.001
+        with self.assertRaises(AssertionError):
+            assert_model_resume(model, restored)
