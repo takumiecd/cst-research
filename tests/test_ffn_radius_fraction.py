@@ -8,6 +8,39 @@ import unittest
     importlib.util.find_spec("torchcst"), "optional torchcst dependency"
 )
 class RadiusFractionTests(unittest.TestCase):
+    def test_runner_accepts_128x_before_frozen_source_admission(self):
+        from unittest.mock import patch
+
+        from cst_research.experiments.ffn_run import main
+
+        with (
+            patch(
+                "cst_research.experiments.ffn_run.sha",
+                side_effect=RuntimeError("reached source admission"),
+            ),
+            self.assertRaisesRegex(RuntimeError, "reached source admission"),
+        ):
+            main(
+                [
+                    "--data",
+                    "unused",
+                    "--qualification",
+                    "unused.json",
+                    "--qualification-sha256",
+                    "unused",
+                    "--data-manifest-sha256",
+                    "unused",
+                    "--output",
+                    "unused",
+                    "--kind",
+                    "cst",
+                    "--tokens",
+                    "1024",
+                    "--atom-lr-multiplier",
+                    "128",
+                ]
+            )
+
     def test_qualification_optimizer_uses_declared_atom_and_fraction_rates(self):
         import torch
         from torch import nn

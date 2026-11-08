@@ -7,7 +7,7 @@
   "id": "ffn-all-fields-lr-20261109",
   "title": "Fixed initial fraction .5: all CST field LR multipliers16/32/64/128",
   "status": "RUNNING",
-  "status_note": "Fresh four-configuration GPU qualification running on verified idle RTX6000 Ada. Only the qualification helper changed; exact operator bytes/evidence are reused. All five learning runs pending qualification. No RMS calibration.",
+  "status_note": "Dense and16/32/64x completed.128x rejected before training by CLI choices ending at64x (exit2), not numerical divergence. Preserve first receipt/source; audit valid cells. Recover128x plus fresh Dense under separately frozen CLI-only extension; no hyperparameter retuning.",
   "protocol_source_path": "docs/ffn-all-fields-lr-20261109.md",
   "protocol": {
     "width": 512,

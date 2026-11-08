@@ -44,3 +44,13 @@ net変化を独立に再現します。checkpoint/source/result hashを保全し
 probe・評価・observerを除きます。準備/wall時間とPyTorch allocated/reserved peakを記録。
 Graph/process全体のメモリ・普遍的速度は主張しません。高LRで学習後の処理量も変わります。
 開発1seedの機序検証であり、収束・非劣性・普遍最適値・公開defaultの結論にはしません。
+
+## 学習前のCLI拒否への追記
+
+初回jobのDense/16/32/64倍は完了しましたが、128倍はCLIの選択肢が64倍までだったため
+argparseのcode2で終了しました。数値発散ではなく、128倍の学習・結果はありません。
+失敗receipt・log・sourceを保全し、CLIで128倍を受け付ける修正を新しいconsumerに固定。
+新規qualification後、別jobで128倍と時間対照のDenseを新規実行します。有効な16〜64倍を
+再実行せず、ハイパーパラメータも再調整しません。最初の完了4条件は、固定sourceの全byte
+一致を再確認し、CLI拒否だけを明示的に除外する監査経路で検査します。両sourceを記録し、
+2job間の時間比較は探索的として扱います。

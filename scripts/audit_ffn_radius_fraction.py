@@ -67,11 +67,32 @@ def main():
     parser.add_argument("--expected-long-models", type=int, default=9)
     parser.add_argument("--include-short", action="store_true")
     parser.add_argument("--include-milestones", action="store_true")
+    parser.add_argument("--allow-cli-rejection", action="store_true")
     args = parser.parse_args()
     assert not args.output.exists()
     root = args.run.resolve()
     receipt = json.loads((root / "receipt.json").read_text())
-    assert receipt["status"] == "passed" and receipt["source_unchanged"]
+    rejected = None
+    if args.allow_cli_rejection:
+        assert receipt["status"] == "failed"
+        last = receipt["commands"][-1]
+        assert last["label"] == "cst-lr128" and last["returncode"] == 2
+        message = (root / "cst-lr128.log").read_text()
+        assert "invalid choice: '128.0'" in message
+        assert not (root / "cst-lr128" / "summary.json").exists()
+        assert len(receipt["results"]) == 4
+        source_files = json.loads((root / "source-files.json").read_text())
+        assert all(sha(root / "source" / n) == h for n, h in source_files.items())
+        rejected = {
+            "label": last["label"],
+            "returncode": 2,
+            "training_started": False,
+            "log_sha256": sha(root / "cst-lr128.log"),
+            "original_receipt_sha256": sha(root / "receipt.json"),
+            "source_unchanged_reverified": True,
+        }
+    else:
+        assert receipt["status"] == "passed" and receipt["source_unchanged"]
     protocol = receipt["protocol"]
     assert (
         torch.cuda.get_device_name(0) == receipt["gpu"]
@@ -92,6 +113,7 @@ def main():
         "confirmation_evaluated": False,
         "torch": torch.__version__,
         "gpu": torch.cuda.get_device_name(0),
+        "excluded_cli_rejection": rejected,
     }
 
     def save():

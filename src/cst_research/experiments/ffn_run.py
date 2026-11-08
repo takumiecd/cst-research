@@ -193,7 +193,10 @@ def main(argv=None):
         "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
     )
     parser.add_argument(
-        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0, 32.0, 64.0), default=1.0
+        "--atom-lr-multiplier",
+        type=float,
+        choices=(1.0, 16.0, 32.0, 64.0, 128.0),
+        default=1.0,
     )
     parser.add_argument(
         "--field-lr-arm",

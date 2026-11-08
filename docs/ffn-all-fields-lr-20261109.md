@@ -51,3 +51,15 @@ excluding zero_grad/LR setup/probes/evaluation/observer. Record setup/wall and
 PyTorch allocated/reserved peaks; no Graph/process-wide memory or universal
 speed claim. Higher LR changes learned workload. One development seed gives
 mechanism evidence, not convergence/noninferiority/universal optimum/default.
+
+## Launch-rejection amendment (before128× training)
+
+The first job completed Dense/16×/32×/64×, but128× exited with argparse code2:
+its CLI choices ended at64×. This was an admission failure, not numerical
+divergence; no128× training or result existed. Preserve the original failed
+receipt/log/source. Extend only the CLI accepted rates to128×, freeze a new
+consumer and run fresh qualification plus128× and a fresh Dense timing control
+in a new job. Do not rerun the valid16–64× cells or retune any hyperparameter.
+Audit the first four completed cells through an explicit rejected-launch path
+that rechecks unchanged source bytes and excludes only the proven CLI rejection.
+Report both source identities; timing across the two jobs remains exploratory.
