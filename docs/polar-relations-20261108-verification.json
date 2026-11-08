@@ -1,0 +1,395 @@
+{
+  "state": "passed",
+  "scope": "CPU FP64 N32 physical cell-mass M8/base1/merge2. Identities and selected branch derivatives only; no LM training or optimal-radius claim.",
+  "torch": "2.13.0",
+  "rows": [
+    {
+      "amplitude": 1.0,
+      "radius": 0.5005,
+      "phase": 0.0,
+      "matrix_sum": 1.0000000000000002,
+      "matrix_energy": 0.9940947528742756,
+      "energy_identity_error": 0.0,
+      "parameter_jacobian_frobenius": [
+        0.9970430045260212,
+        0.06348161775133061,
+        8.250018024720018e-05,
+        8.250018024720017e-05
+      ],
+      "geometry_derivative_mass_sums": [
+        2.2343238370581275e-15,
+        0.0,
+        0.0
+      ],
+      "input_effective_count": 1.002965765228336,
+      "output_effective_count": 1.002965765228336
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 0.5005,
+      "phase": 0.25,
+      "matrix_sum": 1.0000000000000004,
+      "matrix_energy": 0.8028093465212968,
+      "energy_identity_error": 1.1102230246251565e-16,
+      "parameter_jacobian_frobenius": [
+        0.8959962871135665,
+        0.423287478805623,
+        1.0206846736407504,
+        1.0206846736407507
+      ],
+      "geometry_derivative_mass_sums": [
+        -5.6066262743570405e-15,
+        6.645604510755691e-16,
+        6.661338147750939e-16
+      ],
+      "input_effective_count": 1.1160760534192382,
+      "output_effective_count": 1.1160760534192382
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 0.5005,
+      "phase": 0.49,
+      "matrix_sum": 1.0000000000000004,
+      "matrix_energy": 0.2505010954569834,
+      "energy_identity_error": 5.551115123125783e-17,
+      "parameter_jacobian_frobenius": [
+        0.5005008446116583,
+        0.03951519276998496,
+        2.464423058677395,
+        2.464423058677395
+      ],
+      "geometry_derivative_mass_sums": [
+        -2.6229018956769323e-15,
+        -9.629713760031207e-17,
+        0.0
+      ],
+      "input_effective_count": 1.997998626307826,
+      "output_effective_count": 1.997998626307826
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 1.1,
+      "phase": 0.0,
+      "matrix_sum": 0.9999999999999998,
+      "matrix_energy": 0.5911530619105912,
+      "energy_identity_error": 1.1102230246251565e-16,
+      "parameter_jacobian_frobenius": [
+        0.7688647877947015,
+        0.3595703253249473,
+        0.5037502870618324,
+        0.5037502870618326
+      ],
+      "geometry_derivative_mass_sums": [
+        2.1649348980190553e-15,
+        0.0,
+        0.0
+      ],
+      "input_effective_count": 1.3006188030385066,
+      "output_effective_count": 1.3006188030385066
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 1.1,
+      "phase": 0.25,
+      "matrix_sum": 0.9999999999999999,
+      "matrix_energy": 0.40263389908183794,
+      "energy_identity_error": 1.1102230246251565e-16,
+      "parameter_jacobian_frobenius": [
+        0.6345343955073184,
+        0.22248199538320604,
+        0.9838705451637655,
+        0.9838705451637656
+      ],
+      "geometry_derivative_mass_sums": [
+        -2.7755575615628914e-16,
+        4.259813395036602e-16,
+        4.440892098500626e-16
+      ],
+      "input_effective_count": 1.5759586983468206,
+      "output_effective_count": 1.5759586983468206
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 1.1,
+      "phase": 0.49,
+      "matrix_sum": 1.0000000000000007,
+      "matrix_energy": 0.24943218177110899,
+      "energy_identity_error": 2.7755575615628914e-17,
+      "parameter_jacobian_frobenius": [
+        0.49943185898689824,
+        0.008365235302760935,
+        1.1733345057460962,
+        1.173334505746096
+      ],
+      "geometry_derivative_mass_sums": [
+        -1.1275702593849246e-17,
+        -2.2528662353064714e-16,
+        -4.440892098500626e-16
+      ],
+      "input_effective_count": 2.0022751492636224,
+      "output_effective_count": 2.0022751492636224
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 2.3,
+      "phase": 0.0,
+      "matrix_sum": 1.0000000000000002,
+      "matrix_energy": 0.14769115754952608,
+      "energy_identity_error": 2.7755575615628914e-17,
+      "parameter_jacobian_frobenius": [
+        0.3843060727460937,
+        0.10757759827169681,
+        0.3560215217976001,
+        0.35602152179760005
+      ],
+      "geometry_derivative_mass_sums": [
+        -4.440892098500626e-16,
+        1.0065461918812302e-16,
+        1.6653345369377348e-16
+      ],
+      "input_effective_count": 2.6020926311531043,
+      "output_effective_count": 2.6020926311531043
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 2.3,
+      "phase": 0.25,
+      "matrix_sum": 1.0000000000000002,
+      "matrix_energy": 0.14664659280711256,
+      "energy_identity_error": 5.551115123125783e-17,
+      "parameter_jacobian_frobenius": [
+        0.3829446341275883,
+        0.1000662841576065,
+        0.3623343586232563,
+        0.3623343586232563
+      ],
+      "geometry_derivative_mass_sums": [
+        -3.469446951953614e-16,
+        -2.949368722339474e-17,
+        -1.3877787807814457e-17
+      ],
+      "input_effective_count": 2.6113435491220973,
+      "output_effective_count": 2.6113435491220973
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 2.3,
+      "phase": 0.49,
+      "matrix_sum": 1.0000000000000002,
+      "matrix_energy": 0.14560778533958516,
+      "energy_identity_error": 2.7755575615628914e-17,
+      "parameter_jacobian_frobenius": [
+        0.3815858819972052,
+        0.09206918364157615,
+        0.36847899519327115,
+        0.3684789951932711
+      ],
+      "geometry_derivative_mass_sums": [
+        -5.854691731421724e-18,
+        2.2575122110221613e-16,
+        1.942890293094024e-16
+      ],
+      "input_effective_count": 2.6206420289085113,
+      "output_effective_count": 2.6206420289085113
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 4.7,
+      "phase": 0.0,
+      "matrix_sum": 1.0000000000000002,
+      "matrix_energy": 0.040591490891502435,
+      "energy_identity_error": 6.938893903907228e-18,
+      "parameter_jacobian_frobenius": [
+        0.20147330069143746,
+        0.0289549763336371,
+        0.10009780134555535,
+        0.10009780134555535
+      ],
+      "geometry_derivative_mass_sums": [
+        7.684824998577255e-16,
+        6.049848122469115e-17,
+        4.163336342344337e-17
+      ],
+      "input_effective_count": 4.963436825465673,
+      "output_effective_count": 4.963436825465673
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 4.7,
+      "phase": 0.25,
+      "matrix_sum": 1.0,
+      "matrix_energy": 0.040591490891502435,
+      "energy_identity_error": 6.938893903907228e-18,
+      "parameter_jacobian_frobenius": [
+        0.20147330069143762,
+        0.028954976333637222,
+        0.10009780134555536,
+        0.10009780134555535
+      ],
+      "geometry_derivative_mass_sums": [
+        7.979727989493313e-17,
+        6.201636426617085e-17,
+        5.551115123125783e-17
+      ],
+      "input_effective_count": 4.963436825465673,
+      "output_effective_count": 4.963436825465673
+    },
+    {
+      "amplitude": 1.0,
+      "radius": 4.7,
+      "phase": 0.49,
+      "matrix_sum": 1.0,
+      "matrix_energy": 0.040591490891502435,
+      "energy_identity_error": 6.938893903907228e-18,
+      "parameter_jacobian_frobenius": [
+        0.20147330069143754,
+        0.028954976333637236,
+        0.1000978013455554,
+        0.10009780134555539
+      ],
+      "geometry_derivative_mass_sums": [
+        2.0643209364124004e-16,
+        1.2576745200831851e-16,
+        8.326672684688674e-17
+      ],
+      "input_effective_count": 4.963436825465672,
+      "output_effective_count": 4.963436825465672
+    }
+  ],
+  "zero_amplitude": {
+    "amplitude": 0.0,
+    "radius": 1.1,
+    "phase": 0.25,
+    "matrix_sum": 0.0,
+    "matrix_energy": 0.0,
+    "energy_identity_error": 0.0,
+    "parameter_jacobian_frobenius": [
+      0.6345343955073184,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "geometry_derivative_mass_sums": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "input_effective_count": null,
+    "output_effective_count": null
+  },
+  "amplitude_order_example": {
+    "narrow": {
+      "amplitude": 0.1,
+      "radius": 0.5005,
+      "phase": 0.0,
+      "matrix_sum": 0.10000000000000003,
+      "matrix_energy": 0.009940947528742757,
+      "energy_identity_error": 0.0,
+      "parameter_jacobian_frobenius": [
+        0.9970430045260212,
+        0.0063481617751331605,
+        8.25001802471181e-06,
+        8.250018024720016e-06
+      ],
+      "geometry_derivative_mass_sums": [
+        1.964574336543734e-16,
+        0.0,
+        0.0
+      ],
+      "input_effective_count": 1.002965765228336,
+      "output_effective_count": 1.002965765228336
+    },
+    "broad": {
+      "amplitude": 0.2,
+      "radius": 4.7,
+      "phase": 0.0,
+      "matrix_sum": 0.2,
+      "matrix_energy": 0.0016236596356600979,
+      "energy_identity_error": 2.168404344971009e-19,
+      "parameter_jacobian_frobenius": [
+        0.20147330069143746,
+        0.005790995266727429,
+        0.020019560269111083,
+        0.02001956026911107
+      ],
+      "geometry_derivative_mass_sums": [
+        1.1145598333150986e-16,
+        1.0462550964485118e-17,
+        1.0408340855860843e-17
+      ],
+      "input_effective_count": 4.963436825465673,
+      "output_effective_count": 4.963436825465672
+    },
+    "smaller_mass_has_larger_energy": true
+  },
+  "unit_energy": [
+    {
+      "radius": 0.5005,
+      "phase": 0.0,
+      "mass_amplitude_for_unit_energy": 1.002965765228336
+    },
+    {
+      "radius": 0.5005,
+      "phase": 0.25,
+      "mass_amplitude_for_unit_energy": 1.1160760534192382
+    },
+    {
+      "radius": 0.5005,
+      "phase": 0.49,
+      "mass_amplitude_for_unit_energy": 1.997998626307826
+    },
+    {
+      "radius": 1.1,
+      "phase": 0.0,
+      "mass_amplitude_for_unit_energy": 1.3006188030385066
+    },
+    {
+      "radius": 1.1,
+      "phase": 0.25,
+      "mass_amplitude_for_unit_energy": 1.5759586983468203
+    },
+    {
+      "radius": 1.1,
+      "phase": 0.49,
+      "mass_amplitude_for_unit_energy": 2.0022751492636224
+    },
+    {
+      "radius": 2.3,
+      "phase": 0.0,
+      "mass_amplitude_for_unit_energy": 2.6020926311531043
+    },
+    {
+      "radius": 2.3,
+      "phase": 0.25,
+      "mass_amplitude_for_unit_energy": 2.6113435491220978
+    },
+    {
+      "radius": 2.3,
+      "phase": 0.49,
+      "mass_amplitude_for_unit_energy": 2.620642028908511
+    },
+    {
+      "radius": 4.7,
+      "phase": 0.0,
+      "mass_amplitude_for_unit_energy": 4.963436825465672
+    },
+    {
+      "radius": 4.7,
+      "phase": 0.25,
+      "mass_amplitude_for_unit_energy": 4.963436825465672
+    },
+    {
+      "radius": 4.7,
+      "phase": 0.49,
+      "mass_amplitude_for_unit_energy": 4.963436825465672
+    }
+  ],
+  "unit_energy_geometry_inner_products": [
+    -1.942890293094024e-16,
+    -4.375641682231168e-18,
+    5.551115123125783e-17
+  ],
+  "maximum_mass_error": 6.661338147750939e-16,
+  "maximum_energy_identity_error": 1.1102230246251565e-16,
+  "script_sha256": "b220f39d5e2223b0d1d5771e2e326e15e3bbf98079de1deb0af5a9d8dbe7b3ea"
+}

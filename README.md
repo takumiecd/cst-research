@@ -47,6 +47,11 @@ mean radius2.058→1.623 relative to the detached control (both grew from0.975).
 This qualified research composition uses the existing physical Linear Plan;
 public Polar is unchanged and the Python-map precision/overhead is documented.
 
+[Established relations and latent-coordinate design](docs/polar-relations-20261108.md)
+separate exact cell-mass identities, measured behavior and radius-control
+hypotheses. A reproducible CPU audit distinguishes mass amplitude from Atom
+norm and records a proposed energy-amplitude chart; no new chart is adopted.
+
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
 usefulness with a linear Atom budget and bounded aspect-ratio changes; it does
