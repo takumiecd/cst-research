@@ -85,3 +85,21 @@ warmupとして除いた30更新の時間を保持し、最終checkpointを保�
 逆順2回で比較する。N2048と初期・更新後VJPの検査を通す。
 この演算子benchmarkをLM研究と分け、LM精度の結果とはしない。
 現在のL4全資格検査は継続し、長い学習jobはまだ投入していない。
+
+## 回収した動作検証
+
+L4 job `l4job-5b9ecc76e88f4537b178ab9287bee60c` は回帰223件と6条件全ての
+資格検査を通過した。[検証記録](attention-output-l4-20261108-admission.json)に
+ソースと各資格検査のhashを保存した。回収25ファイルのhashを独立に照合した。
+結果archiveのSHA256は
+`fd806ddf3f1397c08fea96c7eabb22d1516fc49bd5b544750b60b7518d591b85`。
+
+全R256のCPU FP64因子referenceに対する最大絶対誤差は、Y1.3452e-6、
+dX2.2687e-6、dAtoms2.6848e-5で、既存の要素ごとの許容誤差
+（atol3e-5、rtol3e-4）内だった。実モデルの全CST箇所に有限・非ゼロの勾配が
+届いて更新された。手書きcausal Attentionとの一致、未来tokenへの勾配が厳密に0、
+保存状態の厳密復元、次の実更新のParameter誤差0を確認した。制御した勾配による
+optimizer・moment・resumeの検査も通過した。24か所QKVO+FFNのlevelsと
+levels_stream64も含む。環境はTorch2.14.1+cu130/CUDA13.0。
+これは動作検証でありLMの学習精度・速度の結果ではない。
+長期・短期ともLMの学習は投入していない。

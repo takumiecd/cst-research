@@ -1,0 +1,83 @@
+{
+  "state": "passed_functional_qualification_only",
+  "source_commits": {
+    "torchcst": "b393ac653f3b3893c378acda1c1752919c1539d1",
+    "cst-research": "10840baa8ce7f3570e7bf895f0618707b9f36652"
+  },
+  "gpu": "NVIDIA L4",
+  "torch": "2.14.1+cu130",
+  "cuda": "13.0",
+  "job_id": "l4job-5b9ecc76e88f4537b178ab9287bee60c",
+  "archive_sha256": "fd806ddf3f1397c08fea96c7eabb22d1516fc49bd5b544750b60b7518d591b85",
+  "manifest_verified_files": 25,
+  "regression_passed": 223,
+  "all_case_max_abs_errors": {
+    "y": 1.3451688540833118e-06,
+    "dx": 2.268673695571266e-06,
+    "dp": 2.6847295863774434e-05
+  },
+  "model_admissions": {
+    "cst-ffn": {
+      "cst_sites": 8,
+      "cases": 2,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "0c55f1ab82e3d969087e71b94fc9e849610167d3800dfce231feff54b4efc167"
+    },
+    "cst-qkv": {
+      "cst_sites": 12,
+      "cases": 5,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "37049af6b43a34696e4eb4ee610bb364ed8ca2909d0002bc70b67e5eb467f074"
+    },
+    "cst-qkv-ffn": {
+      "cst_sites": 20,
+      "cases": 5,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "426167a201c38da13a92f9ba1c5a89129e129b66feb99ac0e6b31ee52a2828ab"
+    },
+    "cst-qkvo": {
+      "cst_sites": 16,
+      "cases": 6,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "91d0da056a30fdd98cf20df9dcadf2ca6311f501ec4b3629f2140886516bd32b"
+    },
+    "cst-qkvo-ffn": {
+      "cst_sites": 24,
+      "cases": 6,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "227b63cbbe3effec23c4bea079d542ba009f86822b6fbad996528f6f52261c98"
+    },
+    "stream64": {
+      "cst_sites": 24,
+      "cases": 6,
+      "future_token_gradient_exactly_zero": true,
+      "all_sites_updated": true,
+      "serialized_state_exact": true,
+      "resumed_task_parameter_max_error": 0.0,
+      "optimizer_resume_exact": true,
+      "qualification_sha256": "68611b9393246df7824e9df24f26245f830d9840ac0de2d94b06d9b0cb184c20"
+    }
+  },
+  "learning_runs_submitted": false,
+  "scope": "Width512,4 blocks,8 heads,R256,FP32/TF32off,explicit levels and24-site levels_stream64. Embedding/tied vocabulary remain Dense. No long learning, convergence, quality or speed claim."
+}

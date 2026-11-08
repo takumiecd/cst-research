@@ -96,3 +96,21 @@ orders, with N2048 and initial/updated VJP gates. Keep that operator benchmark
 separate from this LM study; it supplies no LM learning-quality result. The
 current full L4 qualification continues, while the long learner jobs remain
 unsubmitted.
+
+## Retrieved functional qualification
+
+L4 job `l4job-5b9ecc76e88f4537b178ab9287bee60c` completed all223 regressions
+and all six admissions. The [verified admission record](attention-output-l4-20261108-admission.json)
+contains exact sources and individual qualification hashes. All25 transported
+files were independently hash-verified; result archive SHA256 is
+`fd806ddf3f1397c08fea96c7eabb22d1516fc49bd5b544750b60b7518d591b85`.
+
+Across all full-R256 CPU-FP64 factor references, maximum absolute errors were
+Y1.3452e-6,dX2.2687e-6,dAtoms2.6848e-5, within unchanged per-element tolerances
+(atol3e-5,rtol3e-4). Each actual CST site received finite nonzero gradients and
+changed. Manual causal Attention matched, future-token gradients were exactly
+zero, serialized state restored exactly and the next real update had zero
+Parameter error; the controlled optimizer/moment/resume checks also passed.
+This includes24-site QKVO+FFN with both levels and levels_stream64. Runtime was
+Torch2.14.1+cu130/CUDA13.0. These are functional checks, not LM learning-quality
+or speed results. No long or short LM learner was submitted.
