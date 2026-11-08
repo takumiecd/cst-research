@@ -9,6 +9,7 @@ import json
 from dataclasses import asdict
 from pathlib import Path
 
+import numpy as np
 import torch
 from torchcst import CSTLinear, kernels
 from torchcst._backends.torch.parameterizations.radius_envelope import from_state
@@ -65,6 +66,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--expected-long-models", type=int, default=9)
     parser.add_argument("--include-short", action="store_true")
+    parser.add_argument("--include-milestones", action="store_true")
     args = parser.parse_args()
     assert not args.output.exists()
     root = args.run.resolve()
@@ -96,26 +98,72 @@ def main():
         args.output.write_text(json.dumps(result, indent=2) + "\n")
 
     save()
+    jobs = []
+    for row in receipt["results"]:
+        if row["stage"] != "long" and not args.include_short:
+            continue
+        directory = root / row["label"]
+        summary = json.loads((directory / "summary.json").read_text())
+        jobs.append(
+            (
+                row,
+                "checkpoint.pt",
+                summary["checkpoint_sha256"],
+                summary["latest_development"]["ce"],
+                False,
+            )
+        )
+        if args.include_milestones:
+            curves = [
+                json.loads(line)
+                for line in (directory / "curves.jsonl").read_text().splitlines()
+            ]
+            for filename, digest in summary.get(
+                "milestone_checkpoint_sha256", {}
+            ).items():
+                updates = int(filename.split("-")[1]) // 1024
+                if updates >= row["updates"]:
+                    continue
+                expected = next(
+                    x["development"]["ce"]
+                    for x in curves
+                    if x["step"] == updates and "development" in x
+                )
+                jobs.append(
+                    ({**row, "updates": updates}, filename, digest, expected, True)
+                )
     try:
-        for row in receipt["results"]:
-            if row["stage"] != "long" and not args.include_short:
-                continue
+        for row, filename, digest, expected, is_milestone in jobs:
             directory = root / row["label"]
             summary = json.loads((directory / "summary.json").read_text())
-            checkpoint = directory / "checkpoint.pt"
-            assert sha(checkpoint) == summary["checkpoint_sha256"]
+            checkpoint = directory / filename
+            assert sha(checkpoint) == digest
             saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
             config = ModelConfig(**saved["config"])
-            assert saved["updates"] == summary["completed_updates"] == row["updates"]
-            assert (
-                saved["completed_tokens"]
-                == summary["completed_tokens"]
-                == row["updates"] * 1024
-            )
+            assert saved["updates"] == row["updates"]
+            assert saved["completed_tokens"] == row["updates"] * 1024
             assert saved["seed"] == row["seed"] and saved["kind"] == row["kind"]
             assert asdict(config) == summary["config"]
             assert saved["data_manifest_sha256"] == protocol["data_manifest_sha256"]
             model = LanguageModel(config, row["kind"], row["seed"]).cuda()
+            if "initial_parameter_sha256" in summary:
+                from cst_research.experiments.ffn_model import parameter_digest
+
+                assert parameter_digest(model) == summary["initial_parameter_sha256"]
+            initial_radius = {}
+            initial_fraction = {}
+            if (directory / "fraction-updates.jsonl").exists():
+                with torch.no_grad():
+                    for name, layer in model.named_modules():
+                        if isinstance(layer, CSTLinear):
+                            initial_radius[name] = (
+                                from_state(layer.kernel, layer.atoms.p)[:, 1]
+                                .cpu()
+                                .double()
+                            )
+                            initial_fraction[name] = (
+                                layer.atoms.p[:, 1].detach().cpu().double().clone()
+                            )
             model.load_state_dict(saved["model"])
             if row["kind"] == "cst":
                 configure_native(model)
@@ -128,11 +176,12 @@ def main():
                         and torch.isfinite(state[name]).all()
                     )
             observed = evaluate(model, data["development"], 2)["ce"]
-            expected = summary["latest_development"]["ce"]
             assert abs(observed - expected) <= 1e-6, (observed, expected)
             record = {
                 **row,
-                "checkpoint_sha256": summary["checkpoint_sha256"],
+                "checkpoint_sha256": digest,
+                "checkpoint_filename": filename,
+                "milestone": is_milestone,
                 "reproduced_development_ce": observed,
                 "ce_absolute_difference": abs(observed - expected),
                 "optimizer_states_checked": len(states),
@@ -165,17 +214,65 @@ def main():
                     record["linear_oracles"].append(
                         layer_oracle(layer, row["seed"] + i + 640)
                     )
+            if initial_radius:
+                entries = [
+                    json.loads(line)
+                    for line in (directory / "fraction-updates.jsonl")
+                    .read_text()
+                    .splitlines()
+                ]
+                frame = next(e for e in entries if e["step"] == row["updates"])
+                assert frame["steps_observed"] == row["updates"]
+                named = {
+                    n: m for n, m in model.named_modules() if isinstance(m, CSTLinear)
+                }
+                assert named.keys() == frame["layers"].keys()
+                with torch.no_grad():
+                    for name, layer in named.items():
+                        q = layer.atoms.p[:, 1].detach().cpu().double()
+                        r = from_state(layer.kernel, layer.atoms.p)[:, 1].cpu().double()
+                        counter = layer.atoms.p.detach().clone()
+                        counter[:, 1].copy_(initial_fraction[name].to(counter))
+                        ar = from_state(layer.kernel, counter)[:, 1].cpu().double()
+                        for key, value in [
+                            ("net_fraction_delta", q - initial_fraction[name]),
+                            ("net_radius_delta", r - initial_radius[name]),
+                            ("radius_fraction_component", r - ar),
+                            ("radius_amplitude_component", ar - initial_radius[name]),
+                        ]:
+                            x = value.numpy()
+                            expected_stats = {
+                                "mean_signed": float(np.mean(x)),
+                                "mean_absolute": float(np.mean(np.abs(x))),
+                                "rms": float(np.sqrt(np.mean(x * x))),
+                            }
+                            for metric, number in expected_stats.items():
+                                assert np.isclose(
+                                    number,
+                                    frame["layers"][name][key][metric],
+                                    rtol=1e-10,
+                                    atol=1e-12,
+                                ), (name, key, metric)
+                        assert (
+                            frame["layers"][name]["fraction_path_length"][
+                                "mean_absolute"
+                            ]
+                            + 1e-12
+                            >= frame["layers"][name]["net_fraction_delta"][
+                                "mean_absolute"
+                            ]
+                        )
+                record["observer_net_statistics_reproduced"] = True
             result["models"].append(record)
             save()
             print("AUDIT PASS", row["label"], flush=True)
             del model, saved, states
             torch.cuda.empty_cache()
         assert (
-            sum(r["stage"] == "long" for r in result["models"])
+            sum(r["stage"] == "long" and not r["milestone"] for r in result["models"])
             == args.expected_long_models
         )
-        if args.include_short:
-            assert len(result["models"]) == len(receipt["results"])
+        assert len(result["models"]) == len(jobs)
         result["state"] = "passed"
         save()
     except BaseException as error:

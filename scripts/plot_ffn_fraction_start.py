@@ -35,6 +35,8 @@ def main():
     def name(row):
         if row["kind"] == "dense":
             return "Dense"
+        if "fraction_lr_multiplier" in row:
+            return f"fraction LR{row['fraction_lr_multiplier']:g}x"
         if row["amplitude_max"] == 1:
             return "cap1 bridge: tau=.003, f0=0"
         return f"tau={row['tau']:g}, f0={row['fraction']:g}"
@@ -49,7 +51,9 @@ def main():
             fig.savefig(out / f"{stem}.{ext}", dpi=160, bbox_inches="tight")
         plt.close(fig)
 
-    for stage in ("short", "long"):
+    for rate, color in [(1.0, "#1f77b4"), (4.0, "#ff7f0e"), (16.0, "#d62728")]:
+        colors[f"fraction LR{rate:g}x"] = color
+    for stage in dict.fromkeys(r["stage"] for r in rows):
         selected = [r for r in rows if r["stage"] == stage]
         fig, axes = plt.subplots(2, 2, figsize=(13, 8), layout="constrained")
         for row in selected:
@@ -86,7 +90,11 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
+            (
+                "Direct fraction LR comparison, seed17 only"
+                if any("fraction_lr_multiplier" in r for r in rows)
+                else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
+            )
         )
         save(fig, f"{stage}-learning-curves")
         cst = [r for r in selected if r["kind"] == "cst"]

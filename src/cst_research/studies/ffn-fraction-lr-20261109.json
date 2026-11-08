@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-fraction-lr-20261109",
   "title": "Fixed initial fraction .5: isolated fraction LR multipliers1/4/16",
-  "status": "PLANNED",
-  "status_note": "User approved direct LR comparison; RMS calibration remains unused. New source/consumer and read-only update observer qualification pending.",
+  "status": "RUNNING",
+  "status_note": "All3 fresh LR configurations passed GPU qualification and serialized exact next update. Exact initial Parameter digest is shared across1x/4x/16x. Dense completed; LR runs are running. RMS calibration is not used.",
   "protocol_source_path": "docs/ffn-fraction-lr-20261109.md",
   "protocol": {
     "width": 512,
@@ -33,5 +33,16 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-fraction-lr-20261109"
+  },
+  "execution": {
+    "job_id": "ffn-fraction-lr-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "9b531538a90014022dcaf20a0188446cce348f53",
+    "source_archive_sha256": "5d559937bd56e04ce210a287fe59dde3a514571264403dd331c6d6c5356bf1e9",
+    "qualification_sha256": "bd3a9298eaeeb9ca7fe1ad7415b790ede61942b0db9b059c30962992c3bff8cd",
+    "initial_cst_parameter_sha256": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false
   }
 }
