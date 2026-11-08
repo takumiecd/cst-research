@@ -3,9 +3,9 @@
   "id": "attention-output-20261108",
   "title": "Full CST Attention output and FFN width512 feasibility",
   "status": "PLANNED",
-  "status_note": "Fixed source/protocol before GPU execution; six fresh arms and all-model qualification required. No quality result yet.",
+  "status_note": "Attempt02 stopped before learning on an FP32 boundary-gradient regression. Signed-center correction is frozen for attempt03; all GPU/LM admission must pass before six fresh learners.",
   "source_repository": "https://github.com/takumiecd/torchcst",
-  "source_commit": "b14db87d34c1d6ba788517780528932473970505",
+  "source_commit": "df24415afe442b9916e902d0f590fa5207016f66",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
   "runner_entrypoint": "cst_research.experiments.attention_qualification",
   "protocol_source_path": "docs/attention-output-20261108.md",
@@ -53,6 +53,6 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "attention-output-20261108-02"
+    "relative_path": "attention-output-20261108-03"
   }
 }

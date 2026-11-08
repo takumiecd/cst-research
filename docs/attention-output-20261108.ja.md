@@ -3,7 +3,7 @@
 [English](attention-output-20261108.md) | 日本語
 
 torchcst PR154・cst-research PR34のmerge後、GPU実行前に準備。
-torchcst `b14db87d34c1d6ba788517780528932473970505`（明示LM levels/stream64対応、
+torchcst `df24415afe442b9916e902d0f590fa5207016f66`（明示LM levels/stream64対応、
 既存CUDA算術は不変）を使う。consumer sourceは実行前のdeploy manifestで固定する。
 許可された4090を1台使い、実機/runtime、隔離source、SM8.9 build、標準nohup、
 所有process receipt、hash照合した回収を確認。A100/Colabの追加確保はしない。
@@ -57,3 +57,5 @@ Q/K/V/O/FFNの各roleについて診断を残す。
 1seedのdevelopment成立確認であり、損失低下は学習の成立を示すが、収束・精度同等・
 非劣性を示さない。fresh Denseを対照とし、全失敗・全条件を公開する。
 長めの3seed確認、大規模幅、語彙/embedding置換は後続の固定した段階として扱う。
+
+試行02はGPU回帰で学習前に停止。独立境界診断でFP32正方向wrapの丸め落ちを特定し、符号付き周期代表に修正したsourceを試行03として固定する。元失敗を保全し、基準・予算・recipeは変更しない。

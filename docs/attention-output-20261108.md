@@ -3,7 +3,7 @@
 **English** | [日本語](attention-output-20261108.ja.md)
 
 Prepared after merging torchcst PR154 and cst-research PR34, before GPU execution.
-Use torchcst `b14db87d34c1d6ba788517780528932473970505` (explicit LM levels and
+Use torchcst `df24415afe442b9916e902d0f590fa5207016f66` (explicit LM levels and
 stream64 cohorts, unchanged existing CUDA arithmetic). Consumer source is pinned
 in the deployment manifest before execution. Use one owner-authorized RTX4090,
 verified actual hardware/runtime, isolated source and SM8.9 build, standard nohup,
@@ -69,3 +69,5 @@ This is a single-seed development feasibility study. Loss decreasing establishes
 learning, not convergence, quality equivalence or noninferiority. Keep fresh
 Dense as a control, disclose all failures and all arms. Long3seed confirmation,
 large width and vocabulary/embedding replacement require subsequent fixed stages.
+
+Attempt02 stopped during GPU regression before learning. The independent boundary diagnosis found FP32 positive-wrap rounding loss; revised source keeps signed periodic centers and is frozen as attempt03. Original failed evidence is preserved, and tolerances/budget/recipe remain unchanged.
