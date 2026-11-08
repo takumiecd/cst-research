@@ -88,10 +88,26 @@ def make_cst(
     return layer
 
 
-def configure_native(model):
+def configure_native(model, *, linear_backend=None):
     from torchcst import CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.linear.radius_cell_mass import plans
 
+    backend = linear_backend or getattr(
+        getattr(model, "config", None), "linear_backend", "native"
+    )
+    if backend not in ("native", "levels", "levels_stream64"):
+        raise ValueError("unknown explicit Linear backend")
+    registry = make_algorithm_registry()
+    if backend != "native":
+        from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.lm_multirow import (
+            LM_LEVELS,
+            LM_LEVELS_STREAM64,
+            RadiusLMLevelsAlgorithm,
+            RadiusLMLevelsStream64Algorithm,
+        )
+
+        registry.register(RadiusLMLevelsAlgorithm())
+        registry.register(RadiusLMLevelsStream64Algorithm())
     for layer in model.modules():
         if isinstance(layer, CSTLinear):
             plan = (
@@ -99,7 +115,9 @@ def configure_native(model):
                 if max(layer.in_features, layer.out_features) > 1024
                 else plans.GLOBAL_ACTIVE_GRAD4_NATIVE
             )
-            layer.selector = FixedSelector(plan, registry=make_algorithm_registry())
+            if backend != "native":
+                plan = LM_LEVELS if backend == "levels" else LM_LEVELS_STREAM64
+            layer.selector = FixedSelector(plan, registry=registry)
 
 
 def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
@@ -282,12 +300,23 @@ class Block(nn.Module):
         self.norm1 = nn.LayerNorm(config.width)
         self.qkv = (
             CSTAllQKVProjection(config, seed, index)
-            if config.attention_kind == "cst_qkv"
+            if config.attention_kind in ("cst_qkv", "cst_qkvo")
             else CSTAttentionProjection(config, seed, index)
             if config.attention_kind != "dense"
             else nn.Linear(config.width, config.width * 3)
         )
-        self.attention_out = nn.Linear(config.width, config.width)
+        self.attention_out = (
+            Projection(
+                config.width,
+                config.width,
+                config=config,
+                kind="cst",
+                std=config.init_std / math.sqrt(2 * config.layers),
+                seed=parameter_seed(seed, f"block{index}.attention.o"),
+            )
+            if config.attention_kind == "cst_qkvo"
+            else nn.Linear(config.width, config.width)
+        )
         self.norm2 = nn.LayerNorm(config.width)
         self.ffn = FeedForward(config, kind, seed, index)
 

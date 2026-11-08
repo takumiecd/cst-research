@@ -70,7 +70,16 @@ def probe(model, x, y):
     model.zero_grad(set_to_none=True)
     activations, handles = {}, []
     for name, module in model.named_modules():
-        if name.endswith((".ffn.up", ".ffn.down", ".qkv.value")):
+        if name.endswith(
+            (
+                ".ffn.up",
+                ".ffn.down",
+                ".qkv.query",
+                ".qkv.key",
+                ".qkv.value",
+                ".attention_out",
+            )
+        ):
 
             def capture(_module, _inputs, output, name=name):
                 activations[name] = float(
@@ -83,7 +92,9 @@ def probe(model, x, y):
         loss.backward()
         gradients = {}
         for name, p in model.named_parameters():
-            if (".ffn." in name or ".qkv." in name) and p.grad is not None:
+            if (
+                ".ffn." in name or ".qkv." in name or ".attention_out." in name
+            ) and p.grad is not None:
                 if not bool(torch.isfinite(p.grad).all()):
                     raise FloatingPointError("nonfinite FFN gradient: " + name)
                 gradients[name] = {
@@ -144,11 +155,17 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--attention-kind",
-        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv"),
+        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo"),
         default="dense",
     )
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
+    parser.add_argument("--heads", type=int, default=4)
+    parser.add_argument(
+        "--linear-backend",
+        choices=("native", "levels", "levels_stream64"),
+        default="native",
+    )
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
     parser.add_argument("--coefficient", type=int, choices=(8, 16, 32), default=8)
     parser.add_argument(
@@ -238,6 +255,8 @@ def main(argv=None):
             parser.error("model source differs from qualified source")
     requested = ModelConfig(
         width=args.width,
+        heads=args.heads,
+        linear_backend=args.linear_backend,
         expansion=args.expansion,
         coefficient=args.coefficient,
         q=args.q,

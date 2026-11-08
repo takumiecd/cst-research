@@ -50,6 +50,7 @@ class ModelConfig:
     closed_upper_power: float = 1.0
     zero_opening_scale: float = 0.03
     attention_kind: str = "dense"
+    linear_backend: str = "native"
 
     def __post_init__(self):
         for key, value in asdict(self).items():
@@ -61,6 +62,7 @@ class ModelConfig:
                 "radius_birth",
                 "feature_order",
                 "attention_kind",
+                "linear_backend",
                 "atom_lr_multiplier",
                 "radius_envelope",
                 "closed_lower_power",
@@ -95,7 +97,8 @@ class ModelConfig:
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
             or self.attention_kind
-            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv")
+            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
+            or self.linear_backend not in ("native", "levels", "levels_stream64")
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -127,6 +130,8 @@ class ModelConfig:
             result["zero_opening_scale"] = self.zero_opening_scale
         if self.attention_kind != "dense":
             result["attention_kind"] = self.attention_kind
+        if self.linear_backend != "native":
+            result["linear_backend"] = self.linear_backend
         return result
 
     @property
@@ -150,18 +155,28 @@ class ModelConfig:
 
 def qualification_covers_model(receipt, config, *, ffn_kind=None):
     """Admit both native directions and the full model's actual recipe."""
+    if (
+        config.linear_backend != "native" or config.attention_kind == "cst_qkvo"
+    ) and asdict(config) not in receipt.get("task_model_configs", []):
+        return False
     if config.recipe() not in receipt.get("task_recipes", []):
         return False
-    if ffn_kind is not None and config.attention_kind != "dense":
-        if {
+    if (
+        ffn_kind is not None
+        and config.attention_kind != "dense"
+        and {
             "ffn_kind": ffn_kind,
             "attention_kind": config.attention_kind,
-        } not in receipt.get("model_kinds", []):
-            return False
+        }
+        not in receipt.get("model_kinds", [])
+    ):
+        return False
     scalars = {
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
     }
+    if config.linear_backend != "native":
+        scalars["linear_backend"] = config.linear_backend
     if config.radius_envelope != "rational":
         scalars.update(
             radius_envelope=config.radius_envelope,
