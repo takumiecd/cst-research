@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "attention-output-20261108",
+  "title": "Full CST Attention output and FFN width512 feasibility",
+  "status": "PLANNED",
+  "status_note": "Fixed source/protocol before GPU execution; six fresh arms and all-model qualification required. No quality result yet.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "b14db87d34c1d6ba788517780528932473970505",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.attention_qualification",
+  "protocol_source_path": "docs/attention-output-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "dense",
+      "cst-ffn",
+      "cst-qkv",
+      "cst-qkv-ffn",
+      "cst-qkvo",
+      "cst-qkvo-ffn"
+    ],
+    "ffn_kind": [
+      "dense",
+      "cst"
+    ],
+    "cst_projection": "All blocks,FFN/QKV/QKVO crossed with Dense/CST FFN",
+    "q": 0.0,
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "cst_sites": [
+      0,
+      8,
+      12,
+      20,
+      16,
+      24
+    ],
+    "atoms_per_square_projection": 4096,
+    "atoms_per_rectangular_projection": 8192,
+    "linear_backend": "levels",
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "attention-output-20261108-02"
+  }
+}
