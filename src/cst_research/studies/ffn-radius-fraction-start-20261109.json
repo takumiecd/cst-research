@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "ffn-radius-fraction-start-20261109",
+  "title": "Smaller tau and broad initial radius fractions with matched Dense moments",
+  "status": "PLANNED",
+  "status_note": "Prospective source-qualified study; common amplitude cap32 approved by the user. CPU initialization feasibility passed; GPU gates and learning pending.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "protocol_source_path": "docs/ffn-radius-fraction-start-20261109.md",
+  "protocol": {
+    "amplitude_max": 32.0,
+    "tau_fraction_cases": [
+      [
+        0.003,
+        0.0
+      ],
+      [
+        0.001,
+        0.0
+      ],
+      [
+        0.0003,
+        0.0
+      ],
+      [
+        0.003,
+        0.25
+      ],
+      [
+        0.003,
+        0.5
+      ],
+      [
+        0.003,
+        1.0
+      ]
+    ],
+    "seed": 17,
+    "short_updates": 256,
+    "long_updates": 976,
+    "width": 512,
+    "blocks": 4,
+    "atoms_per_map": 8192,
+    "long_selection": "best smaller tau, best broader fraction, common baseline and Dense",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-radius-fraction-start-20261109"
+  }
+}

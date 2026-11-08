@@ -163,7 +163,7 @@ def main(argv=None):
     parser.add_argument("--heads", type=int, default=4)
     parser.add_argument(
         "--linear-backend",
-        choices=("native", "levels", "levels_stream64"),
+        choices=("native", "levels", "levels_stream64", "levels_wide_amplitude"),
         default="native",
     )
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
@@ -183,7 +183,7 @@ def main(argv=None):
         "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
     )
     parser.add_argument(
-        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0), default=1.0
+        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0, 32.0), default=1.0
     )
     parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
     parser.add_argument(

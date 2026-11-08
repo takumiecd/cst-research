@@ -22,16 +22,24 @@ from .ffn_run import sha, token_batch, verify_data
 TAUS = (0.003, 0.01, 0.03, 0.1, 0.3)
 
 
-def config_for(tau, *, vocabulary=50257):
+def config_for(
+    tau,
+    *,
+    vocabulary=50257,
+    radius_fraction=0.0,
+    amplitude_max=1.0,
+    linear_backend="levels",
+):
     return ModelConfig(
         width=512,
         heads=8,
         vocabulary=vocabulary,
-        linear_backend="levels",
+        linear_backend=linear_backend,
         radius_mode="envelope",
         tau=tau,
         atom_lr_multiplier=16.0,
-        radius_fraction=0.0,
+        radius_fraction=radius_fraction,
+        amplitude_max=amplitude_max,
         radius_fraction_lr_multiplier=1.0,
     )
 
@@ -95,6 +103,11 @@ def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--data-manifest-sha256", required=True)
+    parser.add_argument(
+        "--cases",
+        type=Path,
+        help="Explicit tau/fraction/amplitude/backend configurations",
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -104,7 +117,14 @@ def main():
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     assert torch.cuda.get_device_name(0) == "NVIDIA RTX 6000 Ada Generation"
-    configs = [config_for(tau, vocabulary=manifest["vocabulary"]) for tau in TAUS]
+    configs = (
+        [config_for(tau, vocabulary=manifest["vocabulary"]) for tau in TAUS]
+        if args.cases is None
+        else [
+            config_for(vocabulary=manifest["vocabulary"], **case)
+            for case in json.loads(args.cases.read_text())
+        ]
+    )
     names = [
         "ffn_model.py",
         "ffn_contract.py",
@@ -184,6 +204,7 @@ def main():
             )
             record = {
                 "tau": config.tau,
+                "config": asdict(config),
                 "loss": loss,
                 "initialization": [m.initialization_report for m in layers],
                 "initial_fraction_learned": True,
@@ -191,7 +212,9 @@ def main():
                 "snapshot": snapshot(model, gradients=True),
             }
             # Exact serialized optimizer/moment/step-counter continuation at tau .03.
-            if config.tau == 0.03:
+            if config.tau == 0.03 or (
+                config.amplitude_max > 1 and config.radius_fraction in (0.5, 1.0)
+            ):
                 payload = io.BytesIO()
                 torch.save(
                     {"model": model.state_dict(), "optimizer": opt.state_dict()},
@@ -217,7 +240,13 @@ def main():
                 )
             result["models"].append(record)
             save()
-            print("PASS tau", config.tau, flush=True)
+            print(
+                "PASS tau/fraction/cap",
+                config.tau,
+                config.radius_fraction,
+                config.amplitude_max,
+                flush=True,
+            )
             del model, opt, layers, grads, loss1, loss2
             torch.cuda.empty_cache()
         result["state"] = "passed"

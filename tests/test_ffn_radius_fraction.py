@@ -65,3 +65,13 @@ class RadiusFractionTests(unittest.TestCase):
             restored.map.atoms.p[0, 0] += 0.001
         with self.assertRaises(AssertionError):
             assert_model_resume(model, restored)
+
+    def test_wide_amplitude_bins_cover_the_explicit_domain(self):
+        from cst_research.experiments.ffn_radius_fraction import amplitude_edges
+
+        edges = amplitude_edges(32.0)
+        self.assertEqual(edges[0], 0.0)
+        self.assertGreater(edges[-1], 32.0)
+        self.assertEqual(list(edges), sorted(set(edges)))
+        self.assertIn(1.0, edges)
+        self.assertIn(16.0, edges)

@@ -100,3 +100,24 @@ class RadiusFractionContractTests(unittest.TestCase):
             }
             with self.assertRaises(ValueError):
                 ModelConfig(**values)
+
+    def test_wide_amplitude_requires_its_explicit_envelope_route(self):
+        ModelConfig(
+            width=512,
+            heads=8,
+            radius_mode="envelope",
+            linear_backend="levels_wide_amplitude",
+            amplitude_max=32.0,
+            radius_fraction=1.0,
+        )
+        for values in [
+            dict(radius_mode="polar", linear_backend="levels_wide_amplitude"),
+            dict(radius_mode="envelope", linear_backend="levels", amplitude_max=32.0),
+            dict(
+                radius_mode="envelope",
+                linear_backend="levels_wide_amplitude",
+                amplitude_max=33.0,
+            ),
+        ]:
+            with self.assertRaises(ValueError):
+                ModelConfig(width=512, heads=8, **values)

@@ -53,14 +53,22 @@ def make_layer(ni, no, *, config, std, seed):
 def configure_native(model):
     from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.radius_envelope import (
         RADIUS_ENVELOPE_CACHED_LM,
+        RADIUS_ENVELOPE_WIDE_AMPLITUDE_LM,
+        RadiusEnvelopeWideAmplitudeLMAlgorithm,
         RadiusEnvelopeCachedLMAlgorithm,
     )
 
     registry = make_algorithm_registry()
     registry.register(RadiusEnvelopeCachedLMAlgorithm())
+    registry.register(RadiusEnvelopeWideAmplitudeLMAlgorithm())
+    plan = (
+        RADIUS_ENVELOPE_WIDE_AMPLITUDE_LM
+        if model.config.linear_backend == "levels_wide_amplitude"
+        else RADIUS_ENVELOPE_CACHED_LM
+    )
     for layer in model.modules():
         if isinstance(layer, CSTLinear):
-            layer.selector = FixedSelector(RADIUS_ENVELOPE_CACHED_LM, registry=registry)
+            layer.selector = FixedSelector(plan, registry=registry)
 
 
 def optimizer(model, *, atom_lr_multiplier, **options):
@@ -84,12 +92,24 @@ def optimizer(model, *, atom_lr_multiplier, **options):
     return CSTAdamW(groups, model=model, **options)
 
 
+def amplitude_edges(cap):
+    """Keep the old bins at cap1, extend coverage for the explicit wider cohort."""
+    from .ffn_envelope import EDGES
+
+    if cap <= 1:
+        return EDGES
+    return tuple(
+        x
+        for x in (0.0, 0.001, 0.01, 0.03, 0.1, 0.3, 0.6, 1.0, 2.0, 4.0, 8.0, 16.0)
+        if x < cap
+    ) + (cap * (1 + 1e-6),)
+
+
 @torch.no_grad()
 def snapshot(model, *, gradients=False):
     from torchcst._backends.torch.parameterizations.radius_envelope import from_state
 
-    from .ffn_envelope import EDGES
-
+    edges = amplitude_edges(model.config.amplitude_max)
     result = {}
     for name, layer in model.named_modules():
         if not isinstance(layer, CSTLinear):
@@ -117,7 +137,7 @@ def snapshot(model, *, gradients=False):
             "all": row(torch.ones(len(a), dtype=torch.bool)),
             "bins": [
                 {"low": low, "high": high, **row((a.abs() >= low) & (a.abs() < high))}
-                for low, high in pairwise(EDGES)
+                for low, high in pairwise(edges)
             ],
         }
         assert sum(b["count"] for b in entry["bins"]) == len(a)

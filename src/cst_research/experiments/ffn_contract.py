@@ -109,7 +109,8 @@ class ModelConfig:
             or self.feature_order not in ("contiguous", "permuted")
             or self.attention_kind
             not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
-            or self.linear_backend not in ("native", "levels", "levels_stream64")
+            or self.linear_backend
+            not in ("native", "levels", "levels_stream64", "levels_wide_amplitude")
             or self.radius_mode
             not in (
                 "polar",
@@ -133,8 +134,22 @@ class ModelConfig:
                     self.width != 512
                     or self.expansion != 4
                     or self.coefficient != 8
-                    or self.linear_backend != "levels"
+                    or self.linear_backend not in ("levels", "levels_wide_amplitude")
                 )
+            )
+            or (
+                self.radius_mode == "envelope"
+                and (
+                    self.amplitude_max > 32
+                    or (
+                        self.amplitude_max > 1
+                        and self.linear_backend != "levels_wide_amplitude"
+                    )
+                )
+            )
+            or (
+                self.linear_backend == "levels_wide_amplitude"
+                and self.radius_mode != "envelope"
             )
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope

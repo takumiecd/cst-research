@@ -95,7 +95,7 @@ def configure_native(model, *, linear_backend=None):
     backend = linear_backend or getattr(
         getattr(model, "config", None), "linear_backend", "native"
     )
-    if backend not in ("native", "levels", "levels_stream64"):
+    if backend not in ("native", "levels", "levels_stream64", "levels_wide_amplitude"):
         raise ValueError("unknown explicit Linear backend")
     registry = make_algorithm_registry()
     if backend != "native":
