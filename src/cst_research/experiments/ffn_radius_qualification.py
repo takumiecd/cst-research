@@ -151,26 +151,24 @@ def physical_case(ni, no, std, seed, config):
     metrics = {
         n: compare(a, b) for n, a, b in zip(["y", "dx", "dp"], [y, *grads], expected)
     }
-    return dict(
-        config.recipe(),
+    return {
+        **config.recipe(),
         **config.envelope_settings(),
-        **{
-            "in": ni,
-            "out": no,
-            "atoms": live.atoms.count,
-            "batch": 2,
-            "tokens": 128,
-            "coefficient": config.coefficient,
-            "q": config.q,
-            "amplitude_max": config.amplitude_max,
-            "w_c": config.w_c,
-            "radius_birth": config.radius_birth,
-            "all_atoms_checked": True,
-            "checks": metrics,
-            "retained_backward_exact": True,
-            "radius_gradient_nonzero": True,
-        },
-    )
+        "in": ni,
+        "out": no,
+        "atoms": live.atoms.count,
+        "batch": 2,
+        "tokens": 128,
+        "coefficient": config.coefficient,
+        "q": config.q,
+        "amplitude_max": config.amplitude_max,
+        "w_c": config.w_c,
+        "radius_birth": config.radius_birth,
+        "all_atoms_checked": True,
+        "checks": metrics,
+        "retained_backward_exact": True,
+        "radius_gradient_nonzero": True,
+    }
 
 
 def matched_initialization(config):

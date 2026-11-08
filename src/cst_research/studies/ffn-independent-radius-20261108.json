@@ -3,7 +3,7 @@
   "id": "ffn-independent-radius-20261108",
   "title": "Matched physical radius gradient FFN pilot on RTX6000 Ada",
   "status": "PLANNED",
-  "status_note": "Attempts01/02/03 stopped before learning and are preserved.01 FP32 physical scratch;02 CPU-only oracle placement;03 FP32 signal helpers assumed Polar fields. Attempt04 adds physical amplitude/radius/gradient decoding and checks physical cases first. No model/data/LR/budget/tolerance change.",
+  "status_note": "Attempts01..04 stopped before learning and are preserved.04 passed231 CPU/CUDA regressions, physical quadrature and matched full-model initialization; result packing then failed on duplicate metadata keywords. Attempt05 fixes only receipt packing; reuses hash-verified identical-operator/same-runtime231 regressions and build, and reruns all model qualification. No model/data/LR/budget/tolerance changes.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
