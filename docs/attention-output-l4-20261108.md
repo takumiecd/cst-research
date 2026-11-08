@@ -87,3 +87,12 @@ and peak allocated/reserved memory. Source setup/compilation/evaluation/audits
 remain outside the update timer. Dense then CST is a single order and short
 initial trajectory, not a speed claim for a mature model or all widths, nor an
 accuracy/convergence comparison. The six-arm1M-token cohort has not been submitted.
+
+The owner subsequently clarified that the first speed result should instead be
+the isolated square Linear at N8192/16384,R256,A8N. The40-update LM pair above was
+prepared but never submitted. Prioritize the existing Linear workers, Dense,
+levels and levels_stream64,10 warmup+51 measured full updates and two reverse
+orders, with N2048 and initial/updated VJP gates. Keep that operator benchmark
+separate from this LM study; it supplies no LM learning-quality result. The
+current full L4 qualification continues, while the long learner jobs remain
+unsubmitted.
