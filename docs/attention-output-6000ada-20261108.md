@@ -85,3 +85,21 @@ learning behavior; it does not establish convergence, noninferiority or the
 speed of a fully trained LM. Publish all four arms and any failure. Keep this
 cohort separate from the unavailable earlier 4090 attempt and the stopped L4
 learning plan.
+
+## Deployment record
+
+Frozen consumer: `6bf20fe0cad5626374b9ebff93d892cc76801b33`.
+Attempt `attention-output-6000ada-20261108-01` stopped before qualification or
+learning because the controller read a missing archive-hash key from the old
+producer manifest. Its 15 compact files were retrieved and hash-verified;
+archive SHA256 `cb0b4b086ede2051d4e1d189ecc7d296dd4970fad4b9cdf9daa24a98763a131d`.
+All three owned processes were inactive. No model gate failed in that attempt.
+
+Attempt `attention-output-6000ada-20261108-02` verifies the old request hash
+against its receipt, then its archive hash against that request. It uses the
+same frozen sources, data, models and numeric gates. Request SHA256 is
+`2df9d9a84d0db9b8b34955e054e87a25e94f2ef81d38fd765384fd300d5db9b8`.
+All three fresh model qualifications and strict admissions passed. Dense
+completed its 976 updates and trained-checkpoint audit; the FFN learner was
+observed running. Remaining arms and final local retrieval/verification are
+pending. Do not infer scientific admission from launch or registry status.

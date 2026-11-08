@@ -75,3 +75,21 @@ setupと資格検査は別記する。メモリはallocatorの学習時ピーク
 1 seed・約1M tokenは学習挙動の確認で、収束・非劣性・学習完了LMの速度を示さない。
 全4条件と失敗を公開する。接続不能となった以前の4090試行、停止したL4学習計画とは
 別コホートとして扱う。
+
+## 配置記録
+
+固定consumerは `6bf20fe0cad5626374b9ebff93d892cc76801b33`。
+試行 `attention-output-6000ada-20261108-01` はcontrollerが以前のproducer manifestに
+存在しないarchive hashのキーを読んだため、資格検査・学習前に停止した。
+コンパクトな15ファイルを回収しhashを検証済み。archiveのSHA256は
+`cb0b4b086ede2051d4e1d189ecc7d296dd4970fad4b9cdf9daa24a98763a131d`。
+所有3 processは非稼働。モデルの検査に失敗した試行ではない。
+
+試行 `attention-output-6000ada-20261108-02` は以前のrequest hashをreceiptと照合し、
+archive hashをそのrequestと照合する。同じ固定ソース・データ・モデル・数値検査を使う。
+requestのSHA256は
+`2df9d9a84d0db9b8b34955e054e87a25e94f2ef81d38fd765384fd300d5db9b8`。
+新規3モデルの資格検査と厳密なadmissionが全て合格した。Denseは976更新と
+学習済みcheckpoint監査まで完了し、FFN学習の稼働も確認した。残り条件と最終的な
+ローカル回収・検証は未完了。
+起動や登録状態だけで科学的検証の合格と判断しない。
