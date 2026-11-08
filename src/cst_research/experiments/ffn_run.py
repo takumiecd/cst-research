@@ -226,9 +226,19 @@ def main(argv=None):
     parser.add_argument("--track-envelope", action="store_true")
     parser.add_argument(
         "--radius-mode",
-        choices=("polar", "learned", "fixed", "polar_detached", "polar_live"),
+        choices=(
+            "polar",
+            "learned",
+            "fixed",
+            "polar_detached",
+            "polar_live",
+            "envelope",
+        ),
         default="polar",
     )
+    parser.add_argument("--tau", type=float, default=0.03)
+    parser.add_argument("--radius-fraction", type=float, default=0.0)
+    parser.add_argument("--radius-fraction-lr-multiplier", type=float, default=1.0)
     parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
@@ -283,7 +293,16 @@ def main(argv=None):
         zero_opening_scale=args.zero_opening_scale,
         attention_kind=args.attention_kind,
         radius_mode=args.radius_mode,
+        tau=args.tau,
+        radius_fraction=args.radius_fraction,
+        radius_fraction_lr_multiplier=args.radius_fraction_lr_multiplier,
     )
+    if args.radius_mode == "envelope":
+        name = "ffn_radius_fraction.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("radius fraction source differs from qualification")
     if args.radius_mode != "polar" or args.track_radius:
         name = "ffn_radius.py"
         if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
@@ -438,7 +457,11 @@ def main(argv=None):
         "completed_updates": 0,
         "completed_tokens": 0,
         "optimizer": (
-            "Cartesian AdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0, clip1; post-step latent norm projection[1,2], Atom LR from config; no tangent projection"
+            "Ordinary torch.optim.AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0 global clip1"
+            if args.kind == "dense"
+            else "Public CSTAdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0 clip1; amplitude/centers16x, radius_fraction1x with same schedule; full bound-radius gradient"
+            if config.radius_mode == "envelope"
+            else "Cartesian AdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0, clip1; post-step latent norm projection[1,2], Atom LR from config; no tangent projection"
             if config.radius_mode in ("polar_live", "polar_detached")
             else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; physical fields, post-step amplitude/radius projection; Atom group multiplier from config"
             if config.radius_mode != "polar"
@@ -565,6 +588,10 @@ def main(argv=None):
             lr = learning_rate(step, horizon_updates)
             for group in optimizer.param_groups:
                 group["lr"] = lr * group.get("lr_scale", 1.0)
+                if config.radius_mode == "envelope" and "field_lrs" in group:
+                    group["field_lrs"]["radius_fraction"] = (
+                        lr * config.radius_fraction_lr_multiplier
+                    )
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
             tick = time.monotonic()

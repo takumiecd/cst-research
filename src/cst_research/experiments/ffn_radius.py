@@ -124,6 +124,10 @@ def radius_snapshot(model, *, gradients=False):
         from .ffn_polar_radius import snapshot
 
         return snapshot(model, gradients=gradients)
+    if model.config.radius_mode == "envelope":
+        from .ffn_radius_fraction import snapshot
+
+        return snapshot(model, gradients=gradients)
     result = {}
     for name, layer in model.named_modules():
         if not isinstance(layer, CSTLinear):

@@ -52,11 +52,17 @@ class ModelConfig:
     attention_kind: str = "dense"
     linear_backend: str = "native"
     radius_mode: str = "polar"
+    tau: float = 0.03
+    radius_fraction: float = 0.0
+    radius_fraction_lr_multiplier: float = 1.0
 
     def __post_init__(self):
         for key, value in asdict(self).items():
             if key not in (
                 "q",
+                "tau",
+                "radius_fraction",
+                "radius_fraction_lr_multiplier",
                 "init_std",
                 "amplitude_max",
                 "w_c",
@@ -73,6 +79,9 @@ class ModelConfig:
             ) and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
         for key in (
+            "tau",
+            "radius_fraction",
+            "radius_fraction_lr_multiplier",
             "q",
             "init_std",
             "amplitude_max",
@@ -102,12 +111,31 @@ class ModelConfig:
             not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
             or self.linear_backend not in ("native", "levels", "levels_stream64")
             or self.radius_mode
-            not in ("polar", "learned", "fixed", "polar_detached", "polar_live")
+            not in (
+                "polar",
+                "learned",
+                "fixed",
+                "polar_detached",
+                "polar_live",
+                "envelope",
+            )
             or (
                 self.radius_mode in ("polar_detached", "polar_live")
                 and self.linear_backend != "levels"
             )
             or (self.radius_mode != "polar" and self.attention_kind != "dense")
+            or self.tau <= 0
+            or not 0 <= self.radius_fraction <= 1
+            or self.radius_fraction_lr_multiplier <= 0
+            or (
+                self.radius_mode == "envelope"
+                and (
+                    self.width != 512
+                    or self.expansion != 4
+                    or self.coefficient != 8
+                    or self.linear_backend != "levels"
+                )
+            )
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -156,6 +184,12 @@ class ModelConfig:
             result["linear_backend"] = self.linear_backend
         if self.radius_mode != "polar":
             result["radius_mode"] = self.radius_mode
+        if self.radius_mode == "envelope":
+            result.update(
+                tau=self.tau,
+                radius_fraction=self.radius_fraction,
+                radius_fraction_lr_multiplier=self.radius_fraction_lr_multiplier,
+            )
         return result
 
     @property
@@ -211,6 +245,12 @@ def qualification_covers_model(receipt, config, *, ffn_kind=None):
         )
     if config.radius_envelope == "rational_zero_opening":
         scalars["zero_opening_scale"] = config.zero_opening_scale
+    if config.radius_mode == "envelope":
+        scalars.update(
+            tau=config.tau,
+            radius_fraction=config.radius_fraction,
+            radius_fraction_lr_multiplier=config.radius_fraction_lr_multiplier,
+        )
     dimensions = (
         [(config.width, config.width)]
         if config.attention_kind != "dense"

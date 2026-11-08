@@ -81,7 +81,7 @@ def make_cst(
     report = init.variance_scaling_(
         layer,
         variance=std**2,
-        q=q,
+        radius_fraction=q,
         generator=torch.Generator().manual_seed(seed + 1),
     )
     layer.initialization_report = asdict(report)
@@ -108,6 +108,10 @@ def configure_native(model, *, linear_backend=None):
 
         registry.register(RadiusLMLevelsAlgorithm())
         registry.register(RadiusLMLevelsStream64Algorithm())
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") == "envelope":
+        from .ffn_radius_fraction import configure_native as configure_envelope
+
+        return configure_envelope(model)
     if any(
         getattr(m, "independent_radius_mode", None) is not None for m in model.modules()
     ):
@@ -134,6 +138,10 @@ def configure_native(model, *, linear_backend=None):
 
 def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") == "envelope":
+        from .ffn_radius_fraction import optimizer
+
+        return optimizer(model, atom_lr_multiplier=atom_lr_multiplier, **options)
     if getattr(getattr(model, "config", None), "radius_mode", "polar") in (
         "polar_live",
         "polar_detached",
@@ -187,21 +195,26 @@ class Projection(nn.Module):
     def __init__(self, ni, no, *, config, kind, std, seed):
         super().__init__()
         if kind == "cst":
-            self.map = make_cst(
-                ni,
-                no,
-                coefficient=config.coefficient,
-                std=std,
-                q=config.q,
-                seed=seed,
-                amplitude_max=config.amplitude_max,
-                w_c=config.w_c,
-                radius_birth=config.radius_birth,
-                radius_envelope=config.radius_envelope,
-                closed_lower_power=config.closed_lower_power,
-                closed_upper_power=config.closed_upper_power,
-                zero_opening_scale=config.zero_opening_scale,
-            )
+            if config.radius_mode == "envelope":
+                from .ffn_radius_fraction import make_layer
+
+                self.map = make_layer(ni, no, config=config, std=std, seed=seed)
+            else:
+                self.map = make_cst(
+                    ni,
+                    no,
+                    coefficient=config.coefficient,
+                    std=std,
+                    q=config.q,
+                    seed=seed,
+                    amplitude_max=config.amplitude_max,
+                    w_c=config.w_c,
+                    radius_birth=config.radius_birth,
+                    radius_envelope=config.radius_envelope,
+                    closed_lower_power=config.closed_lower_power,
+                    closed_upper_power=config.closed_upper_power,
+                    zero_opening_scale=config.zero_opening_scale,
+                )
         else:
             self.map = nn.Linear(ni, no, bias=False)
         self.bias = nn.Parameter(torch.zeros(no))
@@ -420,7 +433,7 @@ class LanguageModel(nn.Module):
             from .ffn_polar_radius import convert_ffn
 
             convert_ffn(self)
-        elif config.radius_mode != "polar" and kind == "cst":
+        elif config.radius_mode not in ("polar", "envelope") and kind == "cst":
             from .ffn_radius import convert_ffn
 
             convert_ffn(self)

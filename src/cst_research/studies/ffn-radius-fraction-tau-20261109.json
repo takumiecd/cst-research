@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "ffn-radius-fraction-tau-20261109",
+  "title": "Public radius-envelope tau screening and longer TinyStories FFN follow-up",
+  "status": "PLANNED",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "protocol_source_path": "docs/ffn-radius-fraction-tau-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "atoms_per_map": 8192,
+    "tau": [
+      0.003,
+      0.01,
+      0.03,
+      0.1,
+      0.3
+    ],
+    "fraction_init": 0.0,
+    "fraction_lr_multiplier": 1.0,
+    "atom_lr_multiplier": 16.0,
+    "short_updates": 256,
+    "long_updates": 976,
+    "short_seed": 17,
+    "long_seeds": [
+      17,
+      29,
+      43
+    ],
+    "schedule_tokens": 20000000,
+    "selection": "two finite lowest short final development CE, smaller tau breaks ties",
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-radius-fraction-tau-20261109"
+  }
+}
