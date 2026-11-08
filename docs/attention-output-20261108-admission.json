@@ -1,0 +1,92 @@
+{
+  "status": "functional_admission_passed_learning_results_unverified",
+  "operator_commit": "df24415afe442b9916e902d0f590fa5207016f66",
+  "qualified_consumer_commit": "73751439a7643989adaab10889bdf6d547e67e3d",
+  "current_consumer_commit": "91ef5a6e4633ce358119130d9fc2bf1649729887",
+  "qualification_archive_sha256": "e1ebb4914dd52adfb1c493a25c9c53b4ba453735812264a796641b51c0304103",
+  "verification": {
+    "compact_files": 27,
+    "owned_prior_attempt_PIDs_inactive": 10
+  },
+  "GPU_campaign_tests_passed": 223,
+  "rows": {
+    "cst-ffn-qualification": {
+      "cst_sites": 8,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.4707656535838396e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    },
+    "cst-qkv-ffn-qualification": {
+      "cst_sites": 20,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.6847295863774434e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    },
+    "cst-qkv-qualification": {
+      "cst_sites": 12,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.6847295863774434e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    },
+    "cst-qkvo-ffn-qualification": {
+      "cst_sites": 24,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.6847295863774434e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    },
+    "cst-qkvo-qualification": {
+      "cst_sites": 16,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.6847295863774434e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    },
+    "stream64-qualification": {
+      "cst_sites": 24,
+      "max_abs_operator_errors": {
+        "y": 1.3451688540833118e-06,
+        "dx": 2.268651259296206e-06,
+        "dp": 2.6847295863774434e-05
+      },
+      "future_token_gradients_exactly_zero": true,
+      "same_gradient_optimizer_resume_exact": true,
+      "full_model_resumed_parameter_max_abs": 0.0,
+      "all_sites_changed": true
+    }
+  },
+  "limits": [
+    "Admission is not convergence or quality equivalence.",
+    "Width512,4preLNblocks,8heads,FP32/TF32off,c8; embedding/tied vocab and position remain Dense.",
+    "Attempt03 learner refused before construction on missing explicit default-envelope metadata; no training there.",
+    "Attempt04 fixes receipt emission; last observed all five levels qualifications/admissions passed, stream64 qualification in progress. Later training state unknown: Hub503,VPN connected; durable controller not restarted."
+  ]
+}

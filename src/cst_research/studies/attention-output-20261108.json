@@ -3,7 +3,7 @@
   "id": "attention-output-20261108",
   "title": "Full CST Attention output and FFN width512 feasibility",
   "status": "RUNNING",
-  "status_note": "Attempt03 passed223 regressions/all model qualifications, but missing explicit default-envelope metadata blocked Dense before construction. Attempt04 fixes receipt emission, preserves all evidence, and reruns consumer admission; physical recipe and numerical gates unchanged.",
+  "status_note": "Functional admission retrieved/verified for all24CST sites and stream64. Attempt04 with explicit receipt defaults passed five levels requalifications/admissions; last observed stream64 qualification. Hub503 prevents later learning-state verification; durable job not stopped/restarted. No quality claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "df24415afe442b9916e902d0f590fa5207016f66",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
@@ -56,11 +56,11 @@
     "relative_path": "attention-output-20261108-04"
   },
   "execution": {
-    "consumer_commit": "73751439a7643989adaab10889bdf6d547e67e3d",
-    "source_archive_sha256": "d98bfdb1a9f60863ea50b1bd5cebb5c6ec022b58fe5bfce94fca443a8670dc10",
+    "consumer_commit": "91ef5a6e4633ce358119130d9fc2bf1649729887",
+    "source_archive_sha256": "72e570b766e53b68c6b99ceda35b2fde7851e30fde1a64a3461b7e8af7c5ecc2",
     "gpu": "NVIDIA GeForce RTX 4090",
     "torch": "2.6.0+cu126",
-    "attempt": "attention-output-20261108-03",
+    "attempt": "attention-output-20261108-04",
     "qualification_or_learning_is_complete": false,
     "first_failed_attempt": {
       "id": "attention-output-20261108-02",
@@ -76,6 +76,10 @@
       "model_qualifications_passed": 6,
       "learning_started": false,
       "reason": "Receipt omitted default closed_lower_power and closed_upper_power; strict admission refused learner before construction"
-    }
+    },
+    "last_observed_phase": "stream64-qualification",
+    "learning_start_or_completion_observed": false,
+    "supervision": "Hub503 after execution ReadTimeout; VPN visibly connected, server not restarted",
+    "admission_document": "docs/attention-output-20261108-admission.md"
   }
 }
