@@ -31,6 +31,7 @@ def config_for(
     linear_backend="levels",
     initialization_mode="moments",
     radius_fraction_lr_multiplier=1.0,
+    atom_lr_multiplier=16.0,
 ):
     return ModelConfig(
         width=512,
@@ -39,7 +40,7 @@ def config_for(
         linear_backend=linear_backend,
         radius_mode="envelope",
         tau=tau,
-        atom_lr_multiplier=16.0,
+        atom_lr_multiplier=atom_lr_multiplier,
         radius_fraction=radius_fraction,
         amplitude_max=amplitude_max,
         initialization_mode=initialization_mode,
@@ -50,7 +51,7 @@ def config_for(
 def options(model):
     return cst_optimizer(
         model,
-        atom_lr_multiplier=16.0,
+        atom_lr_multiplier=model.config.atom_lr_multiplier,
         lr=0.0003,
         betas=(0.9, 0.95),
         weight_decay=0.0,

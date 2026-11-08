@@ -8,6 +8,40 @@ import unittest
     importlib.util.find_spec("torchcst"), "optional torchcst dependency"
 )
 class RadiusFractionTests(unittest.TestCase):
+    def test_qualification_optimizer_uses_declared_atom_and_fraction_rates(self):
+        import torch
+        from torch import nn
+
+        from cst_research.experiments.ffn_radius_fraction import make_layer
+        from cst_research.experiments.ffn_radius_fraction_qualification import (
+            config_for,
+            options,
+        )
+
+        for multiplier in (16.0, 32.0, 64.0, 128.0):
+            with self.subTest(multiplier=multiplier):
+                model = nn.Module()
+                model.config = config_for(
+                    0.003,
+                    radius_fraction=0.5,
+                    amplitude_max=32.0,
+                    linear_backend="levels_wide_amplitude",
+                    atom_lr_multiplier=multiplier,
+                    radius_fraction_lr_multiplier=multiplier,
+                )
+                model.map = make_layer(
+                    128, 128, config=model.config, std=0.001, seed=17
+                )
+                model.ordinary = nn.Parameter(torch.zeros(1))
+                opt = options(model)
+                self.assertAlmostEqual(opt.param_groups[0]["lr"], 0.0003)
+                for rate in opt.get_field_lrs()[-1].values():
+                    self.assertAlmostEqual(rate, 0.0003 * multiplier)
+                for group in opt.param_groups:
+                    group["lr"] *= 0.25
+                for rate in opt.get_field_lrs()[-1].values():
+                    self.assertAlmostEqual(rate, 0.0003 * multiplier * 0.25)
+
     def test_fraction_rate_tracks_group_schedule_once_and_probe_conserves_atoms(self):
         import torch
         from torch import nn

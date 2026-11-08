@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "id": "ffn-all-fields-lr-20261109",
+  "title": "Fixed initial fraction .5: all CST field LR multipliers16/32/64/128",
+  "status": "PLANNED",
+  "status_note": "User authorized extending all CST field LRs to32/64/128 against fresh16x and Dense. One seed, same initialization/data/budget; no RMS calibration.",
+  "protocol_source_path": "docs/ffn-all-fields-lr-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "initial_fraction": 0.5,
+    "tau": 0.003,
+    "amplitude_max": 32.0,
+    "initialization_mode": "moments",
+    "seed": 17,
+    "updates": 976,
+    "observation_updates": [
+      256
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false,
+    "cst_field_lr_multipliers": [
+      16.0,
+      32.0,
+      64.0,
+      128.0
+    ],
+    "non_atom_lr_multiplier": 1.0
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-all-fields-lr-6000ada-20261109-01"
+  }
+}
