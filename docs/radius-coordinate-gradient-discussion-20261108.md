@@ -49,6 +49,28 @@ terms; adding only a partial radius term would not be this chain rule.
 The independent-radius pilot tests direct physical gradient learning first;
 it does not test this Polar extension.
 
+The linear envelope above is a possible construction. The current implementation
+actually uses logarithmic interpolation, equivalent in exact arithmetic to
+`r=L(a)^(1-q) U(a)^q`. Its interior derivative is
+
+```math
+\partial_s r=r\left[\left((1-q)\frac{L'}L+q\frac{U'}U\right)
+\partial_s a+\log(U/L)\partial_s q\right].
+```
+
+For `rho=sqrt(s²+t²)`, the current map is `a=a_max s/rho`,
+`q=clamp((rho²-1)/3,0,1)`. Away from singularities/clamp boundaries,
+`a_s=a_max t²/rho³`, `a_t=-a_max st/rho³`, and in `1<rho<2`,
+`q_s=2s/3`, `q_t=2t/3`. Outside the unclipped q interval its derivative is0.
+Endpoint conventions need explicit tests, not an interior derivative assumption.
+
+There is also an update-law issue: the current Polar update projects the raw
+optimizer proposal onto the tangent of the `(s,t)` circle, then evolves radial
+activity using its separate activity/regularization law. Merely adding the loss
+radius derivative to backward would therefore **not** implement ordinary
+gradient descent in q. A radius-live Polar experiment must declare both its
+derivative and update contract and verify Parameters/moments/resume accordingly.
+
 ## Motion is a separate state/update proposal
 
 Raw absolute position should not control radius on a translation-invariant
