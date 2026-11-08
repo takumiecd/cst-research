@@ -98,3 +98,36 @@ between the two endpoint requests by giving the amplitude envelope priority.
 Exact L/U functions, any history averaging, escape mechanism and combination
 with task `g_r` remain undecided. No new motion-based experiment is authorized
 or launched by this discussion; inspect the current pilot before selecting one.
+
+## CPU chain-rule qualification and proposed next comparison
+
+After the independent-radius pilot completed, the full s/t radius chain rule
+was checked on six CPU FP64 Atoms with interior q values0.1/0.25/0.4/0.6/0.8/0.9.
+The hand-derived expression and autograd agreed to4.44089e-16 maximum absolute
+error; two central-difference spacings agreed within2.30e-9 over all four fields.
+The live gradient had nonzero radial components of both signs, while the
+radius-detached task gradient's radial component was numerical zero.
+The radius map's q0/q1 inward one-sided slopes were also checked; a central
+derivative at the clamp corners was not claimed.
+
+The existing value helper selects U for q>=1: its autograd slope at q1 is0,
+whereas the inward mathematical slope is nonzero in these cases. The current
+detached-radius contract does not use that slope. A new radius-live contract
+must explicitly implement its intended endpoint Jacobian; merely removing
+detach from the existing helper would not supply it.
+
+Run `python -m cst_research.experiments.polar_radius_chain_rule --output FRESH`
+with the qualified source dependencies. The [program](../src/cst_research/experiments/polar_radius_chain_rule.py)
+and [compact CPU verification](radius-coordinate-chain-rule-20261108.json) are
+inspectable. This verifies the algebra on branch interiors, not a new CUDA
+backward, optimizer, boundary-routing implementation or LM learning result.
+
+The next proposed learning comparison keeps the current amplitude-dependent
+L/U and logarithmic radius map, and compares radius-live versus radius-detached
+task gradients under the **same** update law. One concrete candidate is ordinary
+Adam followed by projection to `1<=sqrt(s²+t²)<=2`, with periodic centers and
+identical LR/data/initialization; radial proposals are allowed. This needs an
+explicit inward endpoint-gradient convention and full parameter/moment/resume
+qualification. The existing tangent-only/activity-clock Polar can be retained
+as context, but changing backward and optimizer together against it would not
+isolate the radius gradient. No such LM comparison has been launched yet.

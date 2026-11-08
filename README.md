@@ -29,6 +29,16 @@ establish practical use in FFNs and Attention.** This direction was adopted on
 2026-11-06. FFN and Attention development pilots are now complete, including
 combined QKV and QKV+FFN substitutions in all four blocks.
 
+The [RTX6000 Ada independent-radius FFN pilot](docs/ffn-independent-radius-20261108-results.md)
+also completed with matched initial physical values and8192 Atoms per map.
+At width512/seed17/999424 tokens, DEV CE was3.42441 for Polar,3.42438 for direct
+radius learning and3.42865 for a physical fixed-radius control. All eight maps
+had live radius gradients; mean radius grew0.975→1.048 while12.59% reached0.5.
+This is a bounded development observation, not noninferiority or an optimum.
+The report retains learning/radius/gradient overlays, numerical gates and
+verified evidence. [Gradient/update equations](docs/radius-coordinate-gradient-discussion-20261108.md)
+separate a proposed radius-live Polar contract from coordinate-motion control.
+
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks
 usefulness with a linear Atom budget and bounded aspect-ratio changes; it does

@@ -1,0 +1,73 @@
+{
+  "state": "passed",
+  "scope": "CPU FP64 mathematical derivative qualification only; no live-radius Polar GPU learner/optimizer implemented or run.",
+  "atoms_checked": 6,
+  "fields_per_atom": 4,
+  "q_values": [
+    0.1,
+    0.25,
+    0.4,
+    0.6,
+    0.8,
+    0.9
+  ],
+  "manual_chain_max_absolute_error": 4.440892098500626e-16,
+  "finite_differences": [
+    {
+      "epsilon": 1e-06,
+      "max_absolute_error": 2.188916714551681e-09
+    },
+    {
+      "epsilon": 5e-07,
+      "max_absolute_error": 2.2999390170141965e-09
+    }
+  ],
+  "full_radial_gradient": [
+    -0.24624597437073936,
+    -0.09704830962473857,
+    0.019610154948215552,
+    0.0147054461253855,
+    -0.22422947704122972,
+    0.3817681702880457
+  ],
+  "detached_radial_gradient": [
+    -1.3877787807814457e-16,
+    -5.551115123125783e-17,
+    0.0,
+    -4.336808689942018e-19,
+    0.0,
+    -3.469446951953614e-18
+  ],
+  "endpoints": {
+    "0.0": {
+      "side": "right/inward",
+      "max_absolute_error": 1.9246070226408563e-07,
+      "inward_drdq": [
+        1.252857068050044,
+        1.3993464472137458,
+        1.252857068050044
+      ],
+      "current_value_helper_autograd_drdq": [
+        1.252857068050044,
+        1.3993464472137458,
+        1.252857068050044
+      ]
+    },
+    "1.0": {
+      "side": "left/inward",
+      "max_absolute_error": 3.0288112107257348e-06,
+      "inward_drdq": [
+        15.345581187092762,
+        21.955503673021912,
+        15.345581187092762
+      ],
+      "current_value_helper_autograd_drdq": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "script_sha256": "d800031c1fcba7f8a2323a97cc0cfe3c01dedcb683ce91da56fce5ac261a54b0",
+  "torch": "2.13.0"
+}
