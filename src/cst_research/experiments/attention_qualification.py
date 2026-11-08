@@ -154,12 +154,21 @@ def main(argv=None):
     )
     p.add_argument("--radius-birth", type=float, default=4.0)
     p.add_argument("--zero-opening-scale", type=float, default=0.03)
+    p.add_argument(
+        "--expected-gpu",
+        choices=(
+            "NVIDIA GeForce RTX 4090",
+            "NVIDIA A100 80GB PCIe MIG 3g.40gb",
+            "NVIDIA L4",
+        ),
+        default="NVIDIA GeForce RTX 4090",
+    )
     args = p.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    assert torch.cuda.get_device_name(0) == "NVIDIA GeForce RTX 4090"
+    assert torch.cuda.get_device_name(0) == args.expected_gpu
     settings = {
         "width": args.width,
         "heads": args.heads,

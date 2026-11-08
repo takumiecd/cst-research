@@ -170,7 +170,11 @@ def main(argv=None):
     parser.add_argument("--coefficient", type=int, choices=(8, 16, 32), default=8)
     parser.add_argument(
         "--expected-gpu",
-        choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
+        choices=(
+            "NVIDIA GeForce RTX 4090",
+            "NVIDIA A100 80GB PCIe MIG 3g.40gb",
+            "NVIDIA L4",
+        ),
         default="NVIDIA GeForce RTX 4090",
     )
     parser.add_argument(
