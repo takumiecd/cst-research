@@ -141,7 +141,11 @@ class RegistryTests(unittest.TestCase):
         self,
     ):
         studies = {study["id"]: study for study in load_studies()}
-        self.assertEqual(len(studies), 23)
+        self.assertEqual(len(studies), 24)
+        new = studies["attention-output-20261108"]
+        self.assertEqual(new["status"], "PLANNED")
+        self.assertEqual(new["protocol"]["cst_sites"], [0, 8, 12, 20, 16, 24])
+        self.assertFalse(new["protocol"]["confirmation_evaluated"])
         for identifier in (
             STUDY_ID,
             "higgs-dst-comparison-20261105",
