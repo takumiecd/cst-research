@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "ffn-radius-fraction-tau-20261109",
   "title": "Public radius-envelope tau screening and longer TinyStories FFN follow-up",
-  "status": "PLANNED",
+  "status": "RUNNING",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
   "runner_entrypoint": "cst_research.experiments.ffn_run",
@@ -40,6 +40,17 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-radius-fraction-tau-20261109"
   },
-  "status_note": "First model qualification stopped at intended load-time layout-generation invalidation; no learning ran. Numerical oracle/tolerances unchanged; fresh consumer qualification distinguishes exact numerical state from mandated placement-certificate invalidation.",
-  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157"
+  "status_note": "Fresh full-model qualification passed for all five tau values, including exact next numerical model/optimizer state at tau.03 with mandated load-generation invalidation checked separately. First short Dense run completed; short tau screening and selected longer follow-up are running. First failed verifier attempt is preserved.",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157",
+  "execution": {
+    "job_id": "ffn-radius-fraction-tau-6000ada-20261109-02",
+    "consumer_commit": "539af8e648031ccf2324eea28aeed3802dcde487",
+    "operator_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
+    "source_archive_sha256": "8501aa1c1d6c3fbe622b2709aacf386a5c752df329cc0e334b31c8ae1590f9a5",
+    "qualification_sha256": "6e78fafcbce9f22c94b5a07c50bb072681a9462205fa3269deb236e21f81e61a",
+    "prior_failed_attempt": "ffn-radius-fraction-tau-6000ada-20261109-01",
+    "prior_failed_archive_sha256": "b04f1fa64da9ebaa9be836aaa9ebee4ca7348717f337e5c4708266956a7c83a5",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false
+  }
 }

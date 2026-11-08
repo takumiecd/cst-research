@@ -26,11 +26,12 @@ The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
 all retired checkout payloads and Git history with independently verified
 off-device recovery. The [radius-envelope implementation](https://github.com/takumiecd/torchcst/pull/156)
 now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
-RTX6000 Ada checks passed; LM learning with this new family remains untested.
+RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109.md) is running, with five short tau arms and a prespecified longer three-seed follow-up.
 The public API uses radius_fraction_init / radius_fraction without q aliases.
 A [fixed-state FFN probe](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.md)
 measured21–22% envelope overhead over the physical core at width512/256 rows;
 this is a bounded operator result, not LM throughput or an advantage over Dense.
+An [explicit prepared-map candidate](https://github.com/takumiecd/torchcst/pull/157) reduced the old envelope step by about3–4% in one paired pilot; it is not a public default. The optional `ffn` install now pins the operator used by the new study.
 
 ## Current direction: FFN and Attention feasibility
 
