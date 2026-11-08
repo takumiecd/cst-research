@@ -3,7 +3,7 @@
   "id": "attention-output-l4-20261108",
   "title": "Complete CST Attention and FFN width512 Colab L4 pilot",
   "status": "RUNNING",
-  "status_note": "L4223 regressions and all six model qualifications passed and hash-verified. No LM learner jobs submitted; owner prioritized isolated Linear N8192/16384 speed, running as a separate operator benchmark.",
+  "status_note": "L4 qualification complete and verified; no LM learners submitted. First large-Linear result download failed after remote completion marker, numeric status unknown; retry changes transport only and requalifies a fresh L4. LM comparison moves to separately registered RTX3090 cohort.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "b393ac653f3b3893c378acda1c1752919c1539d1",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",

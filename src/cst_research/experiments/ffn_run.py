@@ -172,6 +172,7 @@ def main(argv=None):
         "--expected-gpu",
         choices=(
             "NVIDIA GeForce RTX 4090",
+            "NVIDIA GeForce RTX 3090",
             "NVIDIA A100 80GB PCIe MIG 3g.40gb",
             "NVIDIA L4",
         ),
