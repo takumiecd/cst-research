@@ -60,3 +60,16 @@ Raw sources, logs, checkpoints and token data stay in ignored/external storage.
 Register job/source/data/archive hashes and verify retrieved compact files before
 claiming completion. Old Polar curves remain historical context with their exact
 source; do not splice them into new paired speed comparisons.
+
+
+The post-training read-only audit criteria were fixed before running that audit:
+reproduce every long checkpoint's development CE within1e-6, verify checkpoint
+hashes and all976 Adam step counters/finite FP32 moments, and compare trained
+block0 up/down Y,dX and all Atom gradients with the encoded-row FP64 physical
+reference at7 noncontiguous rows. Retain the existing atol1e-4/rtol4e-3 gate.
+Check all eight maps' finite values and amplitude/fraction bounds. Loading may
+invalidate placement generations; it must not alter numerical continuation.
+The first qualification attempt incorrectly demanded equality of those management
+generations. It stopped before learning, was preserved, and was replaced by a
+new source-bound attempt; no numerical tolerance or learning recipe was relaxed.
+The read-only audit script is separately hashed and never modifies frozen sources.

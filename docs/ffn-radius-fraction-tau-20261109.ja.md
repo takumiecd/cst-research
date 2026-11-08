@@ -49,3 +49,14 @@ Graph・GPUプロセス全体ピークは主張しない。平均だけでなく
 raw source/log/checkpoint/tokenはignored/externalへ。job/source/data/archive hashを残し、
 取得したcompactファイルを検証してから完了とする。旧Polar曲線は当時のsourceの文脈に
 留め、新しい同条件の速度比較に流用しない。
+
+
+学習後の読み取り専用監査は、実行前に次の基準を固定する。
+長い全checkpointのDEV CEを1e-6以内で再現し、checkpoint hash、Adam step976、
+全FP32 momentsの有限性を検査する。学習済みblock0のup/downについて、
+非連続7行入力でY/dX/全Atom勾配を、FP32物理行を保つFP64参照に照合し、
+既存のatol1e-4/rtol4e-3を維持する。8射影すべての有限値と振幅/fraction範囲も検査。
+復元時の配置世代更新は許容するが、数値の継続性は変えてはならない。
+最初の検査では管理用世代の一致まで要求して学習前に停止したため、記録を保全し、
+新しいsourceを固定した試行へ分けた。数値許容差や学習条件は緩めていない。
+読み取り専用auditスクリプトを別途hash化し、凍結sourceを書き換えない。
