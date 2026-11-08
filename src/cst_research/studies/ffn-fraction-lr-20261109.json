@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "id": "ffn-fraction-lr-20261109",
+  "title": "Fixed initial fraction .5: isolated fraction LR multipliers1/4/16",
+  "status": "PLANNED",
+  "status_note": "User approved direct LR comparison; RMS calibration remains unused. New source/consumer and read-only update observer qualification pending.",
+  "protocol_source_path": "docs/ffn-fraction-lr-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "initial_fraction": 0.5,
+    "tau": 0.003,
+    "amplitude_max": 32.0,
+    "fraction_lr_multipliers": [
+      1.0,
+      4.0,
+      16.0
+    ],
+    "amplitude_center_lr_multiplier": 16.0,
+    "initialization_mode": "moments",
+    "seed": 17,
+    "updates": 976,
+    "observation_updates": [
+      256
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-fraction-lr-20261109"
+  }
+}

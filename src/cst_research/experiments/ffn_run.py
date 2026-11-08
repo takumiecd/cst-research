@@ -15,7 +15,7 @@ import numpy as np
 import torch
 
 from .ffn_contract import ModelConfig, learning_rate, qualification_covers_model
-from .ffn_model import LanguageModel, configure_native, cst_optimizer
+from .ffn_model import LanguageModel, configure_native, cst_optimizer, parameter_digest
 
 
 def sha(path):
@@ -242,6 +242,8 @@ def main(argv=None):
     parser.add_argument(
         "--initialization-mode", choices=("moments", "probe_rms"), default="moments"
     )
+    parser.add_argument("--track-fraction-updates", action="store_true")
+    parser.add_argument("--observe-update", type=int, action="append", default=[])
     parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
@@ -301,6 +303,12 @@ def main(argv=None):
         radius_fraction_lr_multiplier=args.radius_fraction_lr_multiplier,
         initialization_mode=args.initialization_mode,
     )
+    if args.track_fraction_updates:
+        name = "ffn_fraction_updates.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("fraction update observer differs from qualification")
     if args.initialization_mode == "probe_rms":
         name = "ffn_probe_initialization.py"
         if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
@@ -437,6 +445,11 @@ def main(argv=None):
         from .ffn_center_motion import CenterMotion
 
         center_motion = CenterMotion(model)
+    fraction_updates = None
+    if args.track_fraction_updates:
+        from .ffn_fraction_updates import FractionUpdates
+
+        fraction_updates = FractionUpdates(model)
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
     horizon_updates = args.schedule_tokens // tokens_per_update
@@ -444,6 +457,9 @@ def main(argv=None):
     order = np.random.default_rng(args.seed + 888).permutation(windows)
     total_microbatches = updates * args.accumulation
     assert total_microbatches * args.batch <= len(order)
+    observation_updates = set(args.observe_update)
+    if any(n < 1 or n > updates for n in observation_updates):
+        parser.error("observation updates must lie inside the run")
     milestones = {
         n // tokens_per_update for n in (1000000, 5000000, 10000000, 20000000)
     }
@@ -459,6 +475,7 @@ def main(argv=None):
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(0),
+        "initial_parameter_sha256": parameter_digest(model),
         "initialization_reports": model.initialization_reports(),
         "initial_probe_calibration": calibration,
         "ffn_budget": config.ffn_parameter_budget(),
@@ -477,7 +494,7 @@ def main(argv=None):
         "optimizer": (
             "Ordinary torch.optim.AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0 global clip1"
             if args.kind == "dense"
-            else "Public CSTAdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0 clip1; amplitude/centers16x, radius_fraction1x with same schedule; full bound-radius gradient"
+            else f"Public CSTAdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0 clip1; amplitude/centers{config.atom_lr_multiplier:g}x, radius_fraction{config.radius_fraction_lr_multiplier:g}x with same schedule; full bound-radius gradient"
             if config.radius_mode == "envelope"
             else "Cartesian AdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0, clip1; post-step latent norm projection[1,2], Atom LR from config; no tangent projection"
             if config.radius_mode in ("polar_live", "polar_detached")
@@ -504,7 +521,25 @@ def main(argv=None):
         (args.output / "radius.jsonl").open("x") if args.track_radius else None
     )
 
+    fraction_history = (
+        (args.output / "fraction-updates.jsonl").open("x")
+        if fraction_updates is not None
+        else None
+    )
+
     def log_geometry(step):
+        if fraction_history is not None:
+            fraction_history.write(
+                json.dumps(
+                    {
+                        "step": step,
+                        "seen_tokens": step * tokens_per_update,
+                        **fraction_updates.report(optimizer),
+                    }
+                )
+                + "\n"
+            )
+            fraction_history.flush()
         if geometry is not None:
             from .ffn_envelope import envelope_snapshot
 
@@ -633,11 +668,18 @@ def main(argv=None):
             summary["peak_reserved_bytes"] = max(
                 summary["peak_reserved_bytes"], torch.cuda.max_memory_reserved()
             )
+            if fraction_updates is not None:
+                fraction_updates.update()
             if motion is not None:
                 motion.update()
             if center_motion is not None:
                 center_motion.update()
-            if step <= 5 or step % 20 == 0 or step == updates:
+            if (
+                step <= 5
+                or step % 20 == 0
+                or step == updates
+                or step in observation_updates
+            ):
                 log_geometry(step)
             value = float(loss_sum / args.accumulation)
             if not math.isfinite(value):
@@ -646,7 +688,12 @@ def main(argv=None):
             summary["completed_tokens"] = step * tokens_per_update
             if step > 10:
                 summary["timing_samples_seconds"].append(duration)
-            if step <= 5 or step % 20 == 0 or step == updates:
+            if (
+                step <= 5
+                or step % 20 == 0
+                or step == updates
+                or step in observation_updates
+            ):
                 log(
                     {
                         "step": step,
@@ -674,7 +721,12 @@ def main(argv=None):
             if step in (10, 100):
                 summary["diagnostics"][str(step)] = probe(model, px, py)
                 torch.cuda.empty_cache()
-            if step % 200 == 0 or step == updates or step in milestones:
+            if (
+                step % 200 == 0
+                or step == updates
+                or step in milestones
+                or step in observation_updates
+            ):
                 dev = evaluate(model, data["development"], args.batch)
                 log(
                     {
@@ -689,7 +741,7 @@ def main(argv=None):
                     summary["atom_geometry_history"][str(step)] = geometry_snapshot(
                         model
                     )
-                checkpoint(milestone=step in milestones)
+                checkpoint(milestone=step in milestones or step in observation_updates)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
         if center_motion is not None:
@@ -716,6 +768,8 @@ def main(argv=None):
         summary["total_elapsed_seconds"] = time.monotonic() - began
         save()
         curves.close()
+        if fraction_history is not None:
+            fraction_history.close()
         if geometry is not None:
             geometry.close()
         if radius_history is not None:

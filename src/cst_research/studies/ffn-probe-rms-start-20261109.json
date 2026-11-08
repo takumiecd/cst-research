@@ -7,7 +7,7 @@
   "id": "ffn-probe-rms-start-20261109",
   "title": "Actual-output-RMS matched lower-tau and broad-fraction FFN study",
   "status": "PLANNED",
-  "status_note": "Fix the observed4x/42x output-RMS confound using one-time amplitude calibration against a fixed TRAIN window; old moment-only results preserved as diagnostic.",
+  "status_note": "Preparation only; no GPU/learning execution. Deferred while the user prioritizes direct fraction LR comparison without RMS calibration.",
   "protocol_source_path": "docs/ffn-probe-rms-start-20261109.md",
   "protocol": {
     "amplitude_max": 32.0,

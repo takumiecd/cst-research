@@ -15,7 +15,7 @@ from torchcst._backends.torch.parameterizations.radius_envelope import (
 )
 
 from .ffn_contract import ModelConfig
-from .ffn_model import LanguageModel, configure_native, cst_optimizer
+from .ffn_model import LanguageModel, configure_native, cst_optimizer, parameter_digest
 from .ffn_radius_fraction import snapshot
 from .ffn_run import sha, token_batch, verify_data
 
@@ -30,6 +30,7 @@ def config_for(
     amplitude_max=1.0,
     linear_backend="levels",
     initialization_mode="moments",
+    radius_fraction_lr_multiplier=1.0,
 ):
     return ModelConfig(
         width=512,
@@ -42,7 +43,7 @@ def config_for(
         radius_fraction=radius_fraction,
         amplitude_max=amplitude_max,
         initialization_mode=initialization_mode,
-        radius_fraction_lr_multiplier=1.0,
+        radius_fraction_lr_multiplier=radius_fraction_lr_multiplier,
     )
 
 
@@ -135,6 +136,7 @@ def main():
         "ffn_envelope.py",
         "ffn_radius_fraction.py",
         "ffn_probe_initialization.py",
+        "ffn_fraction_updates.py",
         Path(__file__).name,
     ]
     result = {
@@ -166,6 +168,7 @@ def main():
                 from .ffn_probe_initialization import calibrate_model
 
                 calibration = calibrate_model(model, x[:1], second_probe=x[1:])
+            initial_parameter_sha256 = parameter_digest(model)
             layers = [m for m in model.modules() if isinstance(m, CSTLinear)]
             assert len(layers) == 8 and all(
                 m.atoms.p.shape == (8192, 4) for m in layers
@@ -204,8 +207,13 @@ def main():
                     torch.testing.assert_close(p.grad, grads[n], atol=0, rtol=0)
             model.zero_grad(set_to_none=True)
             opt = options(model)
+            from .ffn_fraction_updates import FractionUpdates
+
+            updates_observer = FractionUpdates(model)
             initial_fraction = [m.atoms.p[:, 1].detach().clone() for m in layers]
             loss = step(model, opt, x, y)
+            updates_observer.update()
+            observed_updates = updates_observer.report(opt)
             assert any(
                 not torch.equal(m.atoms.p[:, 1], f)
                 for m, f in zip(layers, initial_fraction)
@@ -216,9 +224,11 @@ def main():
                 "loss": loss,
                 "initialization": [m.initialization_report for m in layers],
                 "initial_fraction_learned": True,
+                "initial_parameter_sha256": initial_parameter_sha256,
                 "outstanding_forwards_equal": True,
                 "snapshot": snapshot(model, gradients=True),
                 "initial_probe_calibration": calibration,
+                "observed_updates": observed_updates,
             }
             # Exact serialized optimizer/moment/step-counter continuation at tau .03.
             if config.tau == 0.03 or (

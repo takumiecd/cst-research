@@ -19,6 +19,16 @@ def parameter_seed(seed, name):
     ) % (2**63 - 1)
 
 
+def parameter_digest(model):
+    """Exact named Parameter bytes, independent of optimizer/config metadata."""
+    digest = hashlib.sha256()
+    for name, p in model.named_parameters():
+        digest.update(name.encode())
+        digest.update(str((p.dtype, tuple(p.shape))).encode())
+        digest.update(p.detach().cpu().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+
 def make_cst(
     d_in,
     d_out,
