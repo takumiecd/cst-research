@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "attention-output-6000ada-20261108",
+  "title": "Four-arm CST Attention and FFN width512 RTX6000 Ada pilot",
+  "status": "PLANNED",
+  "status_note": "Owner authorized Dense, FFN, QKVO and all block projections on actual RTX6000 Ada. Fresh three-model qualification precedes four 976-update learners. No learning result yet.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "b393ac653f3b3893c378acda1c1752919c1539d1",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.attention_qualification",
+  "protocol_source_path": "docs/attention-output-6000ada-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "dense",
+      "cst-ffn",
+      "cst-qkvo",
+      "cst-qkvo-ffn"
+    ],
+    "ffn_kind": [
+      "dense",
+      "cst"
+    ],
+    "cst_projection": "All blocks,FFN/QKV/QKVO crossed with Dense/CST FFN",
+    "q": 0.0,
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "cst_sites": [
+      0,
+      8,
+      16,
+      24
+    ],
+    "atoms_per_square_projection": 4096,
+    "atoms_per_rectangular_projection": 8192,
+    "linear_backend": "levels",
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001,
+    "expected_gpu": "NVIDIA RTX 6000 Ada Generation",
+    "runtime": "Verified RTX6000 Ada 48GB, CC8.9, Torch2.9.1+cu128, CUDA12.8; recheck before launch",
+    "results_document": "docs/attention-output-6000ada-20261108-results.md"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "attention-output-6000ada-20261108"
+  }
+}
