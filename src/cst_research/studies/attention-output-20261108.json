@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "attention-output-20261108",
   "title": "Full CST Attention output and FFN width512 feasibility",
-  "status": "PLANNED",
-  "status_note": "Attempt02 stopped before learning on an FP32 boundary-gradient regression. Signed-center correction is frozen for attempt03; all GPU/LM admission must pass before six fresh learners.",
+  "status": "RUNNING",
+  "status_note": "Attempt03 passed223 GPU/scope regressions and five complete LM qualifications, including24-site QKVO+FFN; stream64 qualification and six fresh learners are supervised. Attempt02 failed before learning and is preserved; no result/admission claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "df24415afe442b9916e902d0f590fa5207016f66",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
@@ -54,5 +54,21 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "attention-output-20261108-03"
+  },
+  "execution": {
+    "consumer_commit": "73751439a7643989adaab10889bdf6d547e67e3d",
+    "source_archive_sha256": "d98bfdb1a9f60863ea50b1bd5cebb5c6ec022b58fe5bfce94fca443a8670dc10",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.6.0+cu126",
+    "attempt": "attention-output-20261108-03",
+    "qualification_or_learning_is_complete": false,
+    "first_failed_attempt": {
+      "id": "attention-output-20261108-02",
+      "before_learning": true,
+      "passed_GPU_cases": 32,
+      "failed_GPU_cases": 1,
+      "reason": "FP32 positive periodic wrapping lost fractional center bits",
+      "archive_sha256": "c53f64e369bd5eaac9d9f804cddc80e48a99b9943024e646427733179cb8a7d8"
+    }
   }
 }

@@ -143,7 +143,7 @@ class RegistryTests(unittest.TestCase):
         studies = {study["id"]: study for study in load_studies()}
         self.assertEqual(len(studies), 24)
         new = studies["attention-output-20261108"]
-        self.assertEqual(new["status"], "PLANNED")
+        self.assertIn(new["status"], ("PLANNED", "RUNNING", "COMPLETED", "STOPPED"))
         self.assertEqual(new["protocol"]["cst_sites"], [0, 8, 12, 20, 16, 24])
         self.assertFalse(new["protocol"]["confirmation_evaluated"])
         for identifier in (
