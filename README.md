@@ -25,8 +25,12 @@ public API are separate decisions.
 The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
 all retired checkout payloads and Git history with independently verified
 off-device recovery. The [radius-envelope implementation](https://github.com/takumiecd/torchcst/pull/156)
-now supports configurable tau and a loss-trained per-Atom q. CPU/operator and
+now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
 RTX6000 Ada checks passed; LM learning with this new family remains untested.
+The public API uses radius_fraction_init / radius_fraction without q aliases.
+A [fixed-state FFN probe](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.md)
+measured21–22% envelope overhead over the physical core at width512/256 rows;
+this is a bounded operator result, not LM throughput or an advantage over Dense.
 
 ## Current direction: FFN and Attention feasibility
 

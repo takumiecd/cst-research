@@ -22,8 +22,12 @@ CSTをニューラルネットワークで使えるようにするための研�
 [2026-11-08のworktree整理](docs/worktree-cleanup-20261108.ja.md)では、古いcheckoutの
 全payloadとGit履歴を別デバイスへ保全し、独立した復元検証を済ませました。
 torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)を実装し、tauの調整と
-各Atomのqの学習に対応しました。CPU・演算とRTX6000 Adaでの検査は成功しました。
+各Atomの`radius_fraction`の学習に対応しました。CPU・演算とRTX6000 Adaでの検査は成功しました。
 この新方式によるLMの学習比較は未実施です。
+公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
+[固定状態のFFN測定](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.ja.md)では、
+幅512・256行でphysical本体に対し21〜22%の追加コストでした。
+限定した演算の結果であり、LM throughputやDenseに対する優位性ではありません。
 
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
