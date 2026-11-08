@@ -40,6 +40,6 @@
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-radius-fraction-tau-20261109"
   },
-  "status_note": "Prospective protocol and consumer prepared; actual model qualification and tau learning not yet executed.",
+  "status_note": "First model qualification stopped at intended load-time layout-generation invalidation; no learning ran. Numerical oracle/tolerances unchanged; fresh consumer qualification distinguishes exact numerical state from mandated placement-certificate invalidation.",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157"
 }

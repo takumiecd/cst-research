@@ -71,6 +71,26 @@ def assert_nested(a, b):
         assert a == b
 
 
+def assert_model_resume(model, restored):
+    """Numerical state is exact; load invalidates old placement certificates."""
+    left, right = model.state_dict(), restored.state_dict()
+    assert left.keys() == right.keys()
+    transitions = {}
+    for key in left:
+        if key.endswith("atom_state._extra_state"):
+            a, b = left[key], right[key]
+            assert a.keys() == b.keys() == {"format_version", "shape", "layout_version"}
+            assert a["format_version"] == b["format_version"] == 1
+            assert a["shape"] == b["shape"]
+            # Restored models are newly constructed: set_extra_state deliberately
+            # uses max(current_generation+1, saved_generation).
+            assert b["layout_version"] == max(1, a["layout_version"])
+            transitions[key] = [a["layout_version"], b["layout_version"]]
+        else:
+            assert_nested(left[key], right[key])
+    return transitions
+
+
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--data", type=Path, required=True)
@@ -174,7 +194,8 @@ def main():
             if config.tau == 0.03:
                 payload = io.BytesIO()
                 torch.save(
-                    {"model": model.state_dict(), "optimizer": opt.state_dict()}, payload
+                    {"model": model.state_dict(), "optimizer": opt.state_dict()},
+                    payload,
                 )
                 payload.seek(0)
                 saved = torch.load(payload, weights_only=False)
@@ -185,7 +206,8 @@ def main():
                 other.load_state_dict(saved["optimizer"])
                 step(model, opt, x, y)
                 step(restored, other, x, y)
-                assert_nested(model.state_dict(), restored.state_dict())
+                record["load_layout_generations"] = assert_model_resume(model, restored)
+                assert len(record["load_layout_generations"]) == 8
                 assert_nested(opt.state_dict(), other.state_dict())
                 record["serialized_next_step_bitexact"] = True
                 del restored, other, saved, payload
