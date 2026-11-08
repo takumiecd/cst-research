@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--expected-long-models", type=int, default=9)
+    parser.add_argument("--include-short", action="store_true")
     args = parser.parse_args()
     assert not args.output.exists()
     root = args.run.resolve()
@@ -97,7 +98,7 @@ def main():
     save()
     try:
         for row in receipt["results"]:
-            if row["stage"] != "long":
+            if row["stage"] != "long" and not args.include_short:
                 continue
             directory = root / row["label"]
             summary = json.loads((directory / "summary.json").read_text())
@@ -105,8 +106,12 @@ def main():
             assert sha(checkpoint) == summary["checkpoint_sha256"]
             saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
             config = ModelConfig(**saved["config"])
-            assert saved["updates"] == summary["completed_updates"] == 976
-            assert saved["completed_tokens"] == summary["completed_tokens"] == 999424
+            assert saved["updates"] == summary["completed_updates"] == row["updates"]
+            assert (
+                saved["completed_tokens"]
+                == summary["completed_tokens"]
+                == row["updates"] * 1024
+            )
             assert saved["seed"] == row["seed"] and saved["kind"] == row["kind"]
             assert asdict(config) == summary["config"]
             assert saved["data_manifest_sha256"] == protocol["data_manifest_sha256"]
@@ -116,7 +121,7 @@ def main():
                 configure_native(model)
             states = saved["optimizer"]["state"]
             for state in states.values():
-                assert int(state["step"]) == 976
+                assert int(state["step"]) == row["updates"]
                 for name in ("exp_avg", "exp_avg_sq"):
                     assert (
                         state[name].dtype == torch.float32
@@ -136,6 +141,7 @@ def main():
             if row["kind"] == "cst":
                 layers = [m for m in model.modules() if isinstance(m, CSTLinear)]
                 assert len(layers) == 8
+                record["fraction_changes"] = []
                 for layer in layers:
                     p = layer.atoms.p
                     assert (
@@ -143,6 +149,16 @@ def main():
                         and (p[:, 0].abs() <= config.amplitude_max).all()
                     )
                     assert ((p[:, 1] >= 0) & (p[:, 1] <= 1)).all()
+                    delta = p[:, 1].detach().double() - config.radius_fraction
+                    record["fraction_changes"].append(
+                        {
+                            "mean_signed": float(delta.mean()),
+                            "mean_absolute": float(delta.abs().mean()),
+                            "p90_absolute": float(torch.quantile(delta.abs(), 0.9)),
+                            "maximum_absolute": float(delta.abs().max()),
+                            "changed_fraction": float((delta != 0).double().mean()),
+                        }
+                    )
                 for i, layer in enumerate(
                     (model.blocks[0].ffn.up.map, model.blocks[0].ffn.down.map)
                 ):
@@ -154,7 +170,12 @@ def main():
             print("AUDIT PASS", row["label"], flush=True)
             del model, saved, states
             torch.cuda.empty_cache()
-        assert len(result["models"]) == args.expected_long_models
+        assert (
+            sum(r["stage"] == "long" for r in result["models"])
+            == args.expected_long_models
+        )
+        if args.include_short:
+            assert len(result["models"]) == len(receipt["results"])
         result["state"] = "passed"
         save()
     except BaseException as error:
