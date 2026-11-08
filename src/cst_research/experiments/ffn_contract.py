@@ -107,6 +107,19 @@ class ModelConfig:
         ):
             raise ValueError("invalid head divisibility, q or initialization scale")
 
+    def envelope_settings(self):
+        """Explicit kernel constructor defaults also required in admission receipts."""
+        return {
+            key: getattr(self, key)
+            for key in (
+                "radius_envelope",
+                "radius_birth",
+                "closed_lower_power",
+                "closed_upper_power",
+                "zero_opening_scale",
+            )
+        }
+
     def recipe(self):
         result = {
             key: getattr(self, key)

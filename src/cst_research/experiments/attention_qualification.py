@@ -204,11 +204,7 @@ def main(argv=None):
     try:
         r["shared_initialization"] = shared_initialization(config, args.ffn_kind)
         save()
-        envelope = {
-            "radius_envelope": config.radius_envelope,
-            "radius_birth": config.radius_birth,
-            "zero_opening_scale": config.zero_opening_scale,
-        }
+        envelope = config.envelope_settings()
         r["quadrature"] = independent_quadrature_check(q=0.0, std=0.001, **envelope)
         save()
         cases = [

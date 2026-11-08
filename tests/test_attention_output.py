@@ -37,6 +37,46 @@ class OutputAttentionTests(unittest.TestCase):
         del row["linear_backend"]
         self.assertFalse(qualification_covers_model(receipt, c, ffn_kind="dense"))
 
+    def test_default_envelope_fields_are_explicit_in_produced_receipts(self):
+        c = ModelConfig(
+            width=512,
+            heads=8,
+            attention_kind="cst_qkvo",
+            linear_backend="levels",
+            radius_envelope="rational_zero_opening",
+            radius_birth=0.5,
+            zero_opening_scale=0.001,
+            atom_lr_multiplier=16,
+        )
+        row = dict(
+            c.envelope_settings(),
+            **{
+                "in": 512,
+                "out": 512,
+                "coefficient": 8,
+                "atoms": 4096,
+                "q": 0.0,
+                "amplitude_max": 1.0,
+                "w_c": 0.3,
+                "linear_backend": "levels",
+            },
+        )
+        receipt = {
+            "task_recipes": [c.recipe()],
+            "task_model_configs": [asdict(c)],
+            "model_kinds": [{"ffn_kind": "dense", "attention_kind": "cst_qkvo"}],
+            "cases": [row],
+        }
+        self.assertTrue(qualification_covers_model(receipt, c, ffn_kind="dense"))
+        for key in ("closed_lower_power", "closed_upper_power"):
+            missing = dict(row)
+            del missing[key]
+            self.assertFalse(
+                qualification_covers_model(
+                    {**receipt, "cases": [missing]}, c, ffn_kind="dense"
+                )
+            )
+
     def test_all_24_sites_have_residual_output_target_and_tied_vocab(self):
         try:
             import torch  # noqa: F401

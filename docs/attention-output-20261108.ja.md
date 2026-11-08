@@ -59,3 +59,5 @@ Q/K/V/O/FFNの各roleについて診断を残す。
 長めの3seed確認、大規模幅、語彙/embedding置換は後続の固定した段階として扱う。
 
 試行02はGPU回帰で学習前に停止。独立境界診断でFP32正方向wrapの丸め落ちを特定し、符号付き周期代表に修正したsourceを試行03として固定する。元失敗を保全し、基準・予算・recipeは変更しない。
+
+試行03はGPU223件と全6モデル検証に合格したが、receiptに既定のclosed-envelope powerがなく、Dense構築前に起動を拒否された。試行04は全constructor設定を明記し、基準・物理値・データ・予算は変えない。同一torchcstのhash照合済み回帰/buildだけ再利用し、consumer検証は全て再実行。拒否されたreceiptも保全する。

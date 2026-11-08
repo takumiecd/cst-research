@@ -3,7 +3,7 @@
   "id": "attention-output-20261108",
   "title": "Full CST Attention output and FFN width512 feasibility",
   "status": "RUNNING",
-  "status_note": "Attempt03 passed223 GPU/scope regressions and five complete LM qualifications, including24-site QKVO+FFN; stream64 qualification and six fresh learners are supervised. Attempt02 failed before learning and is preserved; no result/admission claim.",
+  "status_note": "Attempt03 passed223 regressions/all model qualifications, but missing explicit default-envelope metadata blocked Dense before construction. Attempt04 fixes receipt emission, preserves all evidence, and reruns consumer admission; physical recipe and numerical gates unchanged.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "df24415afe442b9916e902d0f590fa5207016f66",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
@@ -53,7 +53,7 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "attention-output-20261108-03"
+    "relative_path": "attention-output-20261108-04"
   },
   "execution": {
     "consumer_commit": "73751439a7643989adaab10889bdf6d547e67e3d",
@@ -69,6 +69,13 @@
       "failed_GPU_cases": 1,
       "reason": "FP32 positive periodic wrapping lost fractional center bits",
       "archive_sha256": "c53f64e369bd5eaac9d9f804cddc80e48a99b9943024e646427733179cb8a7d8"
+    },
+    "pretraining_provenance_failure": {
+      "id": "attention-output-20261108-03",
+      "GPU_regressions_passed": 223,
+      "model_qualifications_passed": 6,
+      "learning_started": false,
+      "reason": "Receipt omitted default closed_lower_power and closed_upper_power; strict admission refused learner before construction"
     }
   }
 }

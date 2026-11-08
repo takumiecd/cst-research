@@ -71,3 +71,5 @@ Dense as a control, disclose all failures and all arms. Long3seed confirmation,
 large width and vocabulary/embedding replacement require subsequent fixed stages.
 
 Attempt02 stopped during GPU regression before learning. The independent boundary diagnosis found FP32 positive-wrap rounding loss; revised source keeps signed periodic centers and is frozen as attempt03. Original failed evidence is preserved, and tolerances/budget/recipe remain unchanged.
+
+Attempt03 passed all223 GPU regressions and all six model qualifications, but Dense launch was refused before model construction because the receipt omitted the default closed-envelope powers. Attempt04 emits every constructor setting explicitly; gates/physical values/data/budget are unchanged. Reuse only the hash-verified, byte-identical torchcst regression/build evidence; rerun all consumer qualifications and retain the rejected receipt.
