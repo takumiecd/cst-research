@@ -8,6 +8,11 @@ used in the current FFN experiments. Other CST kernels can have different
 normalization contracts. We retain the distinction between algebra, measured
 behavior and proposed learning priors.
 
+Follow-up design decision: retain mass amplitude a and independently learn q
+inside the tau-controlled radius envelope. The energy-amplitude chart in
+section5 remains an unselected analytical candidate. See the
+[implementation and preservation record](worktree-cleanup-20261108.md).
+
 ## 1. What amplitude actually measures
 
 Write a single Atom, with amplitude-free input/output factors, as

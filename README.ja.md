@@ -19,6 +19,10 @@ CSTをニューラルネットワークで使えるようにするための研�
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
+[2026-11-08のworktree整理](docs/worktree-cleanup-20261108.ja.md)では、古いcheckoutの
+全payloadとGit履歴を別デバイスへ保全し、独立した復元検証を済ませました。
+現在はtorchcstで、振幅依存の半径境界と損失で学習する各Atomのqを実装しています。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**

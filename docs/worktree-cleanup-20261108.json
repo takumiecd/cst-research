@@ -1,0 +1,83 @@
+{
+  "verified": true,
+  "worktrees": 11,
+  "files": 11613,
+  "archive_sha256": "fe33c29026b1df6fcac6cb4ba7430bae668b1cf0b6e6522b9c1bf1c3a008c62c",
+  "bundles": {
+    "torchcst": "5ab3cef16117301ddf71ba04ee68dab22958e009187cf71d829eff9248752434",
+    "cst-research": "5b42245ffb4db4314b594c0aac5341d17356e3a05ced111f5a777f373938e171"
+  },
+  "verification": "Independent extraction, every file SHA256/symlink target, mirror clone, branch HEAD parity and git fsck on Windows E drive",
+  "removed": 11,
+  "branches_deleted": 0,
+  "canonical_output_removed": false,
+  "archive_id": "20261108-cst-worktrees-01",
+  "worktree_heads": [
+    {
+      "repo": "torchcst",
+      "key": "torchcst/center-activity-polar",
+      "branch": "refs/heads/kernel/center-activity-polar",
+      "head": "7e269b8799925469c3522f9e301c2273f688b67b"
+    },
+    {
+      "repo": "torchcst",
+      "key": "torchcst/closed-radius-envelope",
+      "branch": "refs/heads/kernel/closed-radius-envelope",
+      "head": "7be68e4faf1813dd4b1a677ee432da5e3a8da9bd"
+    },
+    {
+      "repo": "torchcst",
+      "key": "torchcst/ffn-rectangular-2048",
+      "branch": "refs/heads/feat/optimizer-field-lrs",
+      "head": "21ac2029dae2cf32a4d0c8e48d167cca826b5dbd"
+    },
+    {
+      "repo": "torchcst",
+      "key": "torchcst/minimum-radius-envelope",
+      "branch": "refs/heads/kernel/minimum-radius-envelope",
+      "head": "d2ca317f63b034e5138bb3471ede541159a9a60b"
+    },
+    {
+      "repo": "torchcst",
+      "key": "torchcst/multirow-packed",
+      "branch": "refs/heads/kernel/multirow-width-scale",
+      "head": "51e050dbc292d3755d5d4ad6b73875bc77343613"
+    },
+    {
+      "repo": "torchcst",
+      "key": "torchcst/multirow-radius",
+      "branch": "refs/heads/kernel/multirow-radius",
+      "head": "807814226a3d0dc0a70c733a9ed41031744caf14"
+    },
+    {
+      "repo": "cst-research",
+      "key": "cst-research/attention-polar-pilots",
+      "branch": "refs/heads/feat/attention-polar-pilots",
+      "head": "1e1aa1b781b68b3af10d2ce95a9a680813a66e99"
+    },
+    {
+      "repo": "cst-research",
+      "key": "cst-research/ffn-center-activity",
+      "branch": "refs/heads/feat/ffn-center-activity",
+      "head": "8492b5e89aa50f5fcfd2a489ead90e7ec5e2a770"
+    },
+    {
+      "repo": "cst-research",
+      "key": "cst-research/ffn-closed-envelope",
+      "branch": "refs/heads/feat/ffn-closed-envelope",
+      "head": "f131d9cd215b588eeb35513f9e362c38504fa778"
+    },
+    {
+      "repo": "cst-research",
+      "key": "cst-research/ffn-feasibility",
+      "branch": "refs/heads/docs/ffn-radius-diagnostics",
+      "head": "74276426445f352a6b52593954e85bf711ae94b9"
+    },
+    {
+      "repo": "cst-research",
+      "key": "cst-research/lm-width-scaling",
+      "branch": "refs/heads/docs/lm-width-scaling",
+      "head": "791c9e273c8c93a571487e5e5efba5703ddc7bb1"
+    }
+  ]
+}

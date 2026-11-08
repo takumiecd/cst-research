@@ -22,6 +22,11 @@ private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
+The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
+all retired checkout payloads and Git history with independently verified
+off-device recovery. Current development proceeds with amplitude-dependent
+radius envelopes and a loss-trained per-Atom q in torchcst.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
