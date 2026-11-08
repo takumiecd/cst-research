@@ -588,10 +588,6 @@ def main(argv=None):
             lr = learning_rate(step, horizon_updates)
             for group in optimizer.param_groups:
                 group["lr"] = lr * group.get("lr_scale", 1.0)
-                if config.radius_mode == "envelope" and "field_lrs" in group:
-                    group["field_lrs"]["radius_fraction"] = (
-                        lr * config.radius_fraction_lr_multiplier
-                    )
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
             tick = time.monotonic()
