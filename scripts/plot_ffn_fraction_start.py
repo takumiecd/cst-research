@@ -1,0 +1,281 @@
+"""Plot verified lower-tau/broad-start evidence; selection is fixed by protocol."""
+
+import argparse
+import json
+import math
+import statistics
+from pathlib import Path
+
+import matplotlib
+import numpy as np
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+
+def main():
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument("--run", type=Path, required=True)
+    args = parser.parse_args()
+    root = args.run.resolve()
+    assert (
+        json.loads((root / "retrieval-integrity.json").read_text())["state"] == "passed"
+    )
+    data = root / "retrieved"
+    read = lambda p: json.loads(p.read_text())
+    lines = lambda p: [json.loads(x) for x in p.read_text().splitlines()]
+    receipt = read(data / "receipt.json")
+    assert receipt["status"] == "passed"
+    out = root / "figures"
+    out.mkdir(exist_ok=True)
+    rows = receipt["results"]
+    summaries = {r["label"]: read(data / r["label"] / "summary.json") for r in rows}
+    curves = {r["label"]: lines(data / r["label"] / "curves.jsonl") for r in rows}
+
+    def name(row):
+        if row["kind"] == "dense":
+            return "Dense"
+        if row["amplitude_max"] == 1:
+            return "cap1 bridge: tau=.003, f0=0"
+        return f"tau={row['tau']:g}, f0={row['fraction']:g}"
+
+    names = list(dict.fromkeys(name(r) for r in rows))
+    colors = {n: plt.get_cmap("tab10")(i) for i, n in enumerate(names)}
+    colors["Dense"] = "#222222"
+    colors["cap1 bridge: tau=.003, f0=0"] = "#999999"
+
+    def save(fig, stem):
+        for ext in ("png", "svg"):
+            fig.savefig(out / f"{stem}.{ext}", dpi=160, bbox_inches="tight")
+        plt.close(fig)
+
+    for stage in ("short", "long"):
+        selected = [r for r in rows if r["stage"] == stage]
+        fig, axes = plt.subplots(2, 2, figsize=(13, 8), layout="constrained")
+        for row in selected:
+            label = name(row)
+            hist = curves[row["label"]]
+            train = [p for p in hist if "train_ce" in p]
+            dev = [p for p in hist if "development" in p]
+            style = "--" if row["amplitude_max"] == 1 else "-"
+            for ax, points, key, scale in [
+                (axes[0, 0], train, "step", 1),
+                (axes[0, 1], dev, "step", 1),
+                (axes[1, 0], train, "elapsed_seconds", 60),
+                (axes[1, 1], dev, "elapsed_seconds", 60),
+            ]:
+                ax.plot(
+                    [p[key] / scale for p in points],
+                    [
+                        p["train_ce"] if "train_ce" in p else p["development"]["ce"]
+                        for p in points
+                    ],
+                    style,
+                    color=colors[label],
+                    label=label,
+                    lw=1.5,
+                )
+        for j, title in enumerate(("Train CE", "Development CE")):
+            axes[0, j].set_title(title)
+            axes[0, j].set_xlabel("Optimizer updates")
+            axes[1, j].set_xlabel(
+                "Elapsed wall minutes, includes setup/probes/evaluation"
+            )
+            for ax in axes[:, j]:
+                ax.set_ylabel("Cross entropy")
+                ax.grid(alpha=0.2)
+        axes[0, 1].legend(fontsize=8, ncol=2)
+        fig.suptitle(
+            f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
+        )
+        save(fig, f"{stage}-learning-curves")
+        cst = [r for r in selected if r["kind"] == "cst"]
+        geo = {r["label"]: lines(data / r["label"] / "geometry.jsonl") for r in cst}
+        sites = list(next(iter(geo.values()))[0]["layers"])
+        for metric in ("radius", "radius_fraction", "fraction_change"):
+            fig, axes = plt.subplots(4, 2, figsize=(12, 12), layout="constrained")
+            for ax, site in zip(axes.flat, sites):
+                for row in cst:
+                    entries = geo[row["label"]]
+                    key = "radius_fraction" if metric == "fraction_change" else metric
+                    offset = row["fraction"] if metric == "fraction_change" else 0
+                    ax.plot(
+                        [e["step"] for e in entries],
+                        [
+                            e["layers"][site]["all"][key]["mean"] - offset
+                            for e in entries
+                        ],
+                        color=colors[name(row)],
+                        label=name(row),
+                    )
+                if metric == "radius":
+                    ax.set_yscale("log")
+                ax.set_title(site)
+                ax.set_xlabel("Updates")
+                ax.grid(alpha=0.2)
+            axes[0, 0].legend(fontsize=7)
+            fig.suptitle(f"{stage.capitalize()} {metric}; every FFN site")
+            save(fig, f"{stage}-{metric}-layers")
+        common = [r for r in cst if r["amplitude_max"] == 32]
+        count = len(geo[common[0]["label"]][0]["layers"][sites[0]]["bins"])
+        for metric in ("radius", "radius_fraction"):
+            fig, axes = plt.subplots(
+                math.ceil(count / 4),
+                4,
+                figsize=(15, 3.4 * math.ceil(count / 4)),
+                layout="constrained",
+            )
+            for i, ax in enumerate(axes.flat):
+                if i >= count:
+                    ax.axis("off")
+                    continue
+                for row in common:
+                    xs, ys = [], []
+                    for entry in geo[row["label"]]:
+                        bins = [v["bins"][i] for v in entry["layers"].values()]
+                        n = sum(b["count"] for b in bins)
+                        xs.append(entry["step"])
+                        ys.append(
+                            sum(
+                                b["count"] * b[metric]["mean"]
+                                for b in bins
+                                if b["count"]
+                            )
+                            / n
+                            if n
+                            else np.nan
+                        )
+                    ax.plot(xs, ys, color=colors[name(row)], label=name(row), lw=1.3)
+                b = geo[common[0]["label"]][0]["layers"][sites[0]]["bins"][i]
+                ax.set_title(f"{b['low']:g} <= |a| < {b['high']:g}")
+                ax.set_xlabel("Updates")
+                ax.set_ylabel(metric)
+                if metric == "radius":
+                    ax.set_yscale("log")
+                ax.grid(alpha=0.2)
+            axes[0, 0].legend(fontsize=7)
+            fig.suptitle(
+                f"{stage.capitalize()} current-amplitude {metric}, common cap32"
+            )
+            save(fig, f"{stage}-amplitude-{metric}")
+        fig, axes = plt.subplots(2, 2, figsize=(11, 7), layout="constrained")
+        for row in cst:
+            entries = lines(data / row["label"] / "radius.jsonl")
+            for k, ax in enumerate(axes.flat):
+                ax.plot(
+                    [e["step"] for e in entries],
+                    [
+                        np.sqrt(
+                            np.mean(
+                                [
+                                    v["field_gradient_rms"][k] ** 2
+                                    for v in e["layers"].values()
+                                ]
+                            )
+                        )
+                        for e in entries
+                    ],
+                    color=colors[name(row)],
+                    label=name(row),
+                )
+                ax.set_title(
+                    ["Amplitude", "Radius fraction", "Output center", "Input center"][k]
+                )
+                ax.set_xlabel("Updates")
+                ax.set_yscale("log")
+                ax.grid(alpha=0.2)
+        axes[0, 0].legend(fontsize=7)
+        fig.suptitle(
+            f"{stage.capitalize()} fixed-probe task gradients, unscaled/unclipped"
+        )
+        save(fig, f"{stage}-field-gradients")
+        dense = next(r for r in selected if r["kind"] == "dense")
+        fig, axes = plt.subplots(1, 2, figsize=(16, 6), layout="constrained")
+        for ax, phase in zip(axes, ("initial", "final")):
+            sites = list(
+                summaries[dense["label"]]["diagnostics"][phase]["activation_rms"]
+            )
+            baseline = summaries[dense["label"]]["diagnostics"][phase]["activation_rms"]
+            values = np.array(
+                [
+                    [
+                        summaries[r["label"]]["diagnostics"][phase]["activation_rms"][s]
+                        / baseline[s]
+                        for s in sites
+                    ]
+                    for r in selected
+                ]
+            )
+            im = ax.imshow(
+                np.log2(values), cmap="coolwarm", vmin=-2, vmax=2, aspect="auto"
+            )
+            for i in range(len(selected)):
+                for j in range(len(sites)):
+                    ax.text(
+                        j,
+                        i,
+                        f"{values[i, j]:.2f}",
+                        ha="center",
+                        va="center",
+                        fontsize=7,
+                    )
+            ax.set_yticks(range(len(selected)), [name(r) for r in selected], fontsize=8)
+            ax.set_xticks(
+                range(len(sites)),
+                [s.replace("blocks.", "b").replace(".ffn.", " ") for s in sites],
+                rotation=45,
+                ha="right",
+                fontsize=8,
+            )
+            ax.set_title(f"{phase.capitalize()} actual activation RMS / Dense")
+        fig.colorbar(
+            im,
+            ax=axes,
+            label="log2 RMS ratio (moment targets match; activations need not)",
+        )
+        save(fig, f"{stage}-activation-rms")
+    table = []
+    for row in rows:
+        s = summaries[row["label"]]
+        record = {
+            **row,
+            "median_update_ms": statistics.median(s["timing_samples_seconds"]) * 1000,
+            "setup_seconds": s["setup_seconds"],
+            "total_wall_seconds": s["total_elapsed_seconds"],
+            "ffn_parameters": s["actual_ffn_parameters"],
+            "initial_activation_rms": s["diagnostics"]["initial"]["activation_rms"],
+            "final_activation_rms": s["diagnostics"]["final"]["activation_rms"],
+        }
+        if row["kind"] == "cst":
+            hist = lines(data / row["label"] / "geometry.jsonl")
+            record["initial_radius_mean"] = statistics.mean(
+                v["all"]["radius"]["mean"] for v in hist[0]["layers"].values()
+            )
+            last = [v["all"] for v in hist[-1]["layers"].values()]
+            record["final_radius_mean"] = statistics.mean(
+                v["radius"]["mean"] for v in last
+            )
+            record["final_fraction_mean"] = statistics.mean(
+                v["radius_fraction"]["mean"] for v in last
+            )
+            record["fraction_at_zero"] = statistics.mean(
+                v["fraction_at_zero"] for v in last
+            )
+            record["fraction_at_one"] = statistics.mean(
+                v["fraction_at_one"] for v in last
+            )
+        table.append(record)
+    (out / "summary.json").write_text(
+        json.dumps(
+            {
+                "runs": table,
+                "scope": "One development seed, selected after short screening; no optimality, convergence or causal initial-radius claim",
+            },
+            indent=2,
+        )
+        + "\n"
+    )
+
+
+if __name__ == "__main__":
+    main()

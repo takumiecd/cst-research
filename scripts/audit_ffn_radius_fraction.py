@@ -63,6 +63,7 @@ def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--expected-long-models", type=int, default=9)
     args = parser.parse_args()
     assert not args.output.exists()
     root = args.run.resolve()
@@ -137,7 +138,10 @@ def main():
                 assert len(layers) == 8
                 for layer in layers:
                     p = layer.atoms.p
-                    assert torch.isfinite(p).all() and (p[:, 0].abs() <= 1).all()
+                    assert (
+                        torch.isfinite(p).all()
+                        and (p[:, 0].abs() <= config.amplitude_max).all()
+                    )
                     assert ((p[:, 1] >= 0) & (p[:, 1] <= 1)).all()
                 for i, layer in enumerate(
                     (model.blocks[0].ffn.up.map, model.blocks[0].ffn.down.map)
@@ -150,7 +154,7 @@ def main():
             print("AUDIT PASS", row["label"], flush=True)
             del model, saved, states
             torch.cuda.empty_cache()
-        assert len(result["models"]) == 9
+        assert len(result["models"]) == args.expected_long_models
         result["state"] = "passed"
         save()
     except BaseException as error:
