@@ -84,7 +84,8 @@ warmupとして除いた30更新の時間を保持し、最終checkpointを保�
 既存Linear workerでDense・levels・levels_stream64を、10 warmup＋51計測更新、
 逆順2回で比較する。N2048と初期・更新後VJPの検査を通す。
 この演算子benchmarkをLM研究と分け、LM精度の結果とはしない。
-現在のL4全資格検査は継続し、長い学習jobはまだ投入していない。
+この判断時にはL4全資格検査が継続中だった。その後、以下の通り完了した。
+長い学習jobは投入しなかった。
 
 ## 回収した動作検証
 
@@ -103,3 +104,16 @@ optimizer・moment・resumeの検査も通過した。24か所QKVO+FFNのlevels�
 levels_stream64も含む。環境はTorch2.14.1+cu130/CUDA13.0。
 これは動作検証でありLMの学習精度・速度の結果ではない。
 長期・短期ともLMの学習は投入していない。
+
+## GPU選定の測定完了
+
+別実験のN8192/16384 Linear比較は回収・検証済み。
+日英の[GPU比較記録](https://github.com/takumiecd/torchcst/blob/kernel/lm-attention-levels/docs/research-history/cuda-linear/multirow-hardware-20261108.ja.md)に
+Dense・levels・stream64の時間、メモリ、ソースと環境の区別、元のL4監査ファイル名の
+失敗とローカルでの修正・合格を記録した。最初のL4転送失敗は不完全な証拠として
+残し、新規L4で成功した測定とは分けた。RTX 6000 Adaは逆順2回、G4は短期1順序を
+完了し、3090は途中結果のみ。これらは演算子の結果で、LMの結果ではない。
+
+所有Colab runtimeは全て停止済み。このL4 LMコホートは動作検証後のSTOPPEDで、
+学習は未投入。GPU選定中に代替LMコホートの学習も開始しておらず、学習研究全体が
+完了したという意味ではない。

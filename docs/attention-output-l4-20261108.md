@@ -94,8 +94,8 @@ prepared but never submitted. Prioritize the existing Linear workers, Dense,
 levels and levels_stream64,10 warmup+51 measured full updates and two reverse
 orders, with N2048 and initial/updated VJP gates. Keep that operator benchmark
 separate from this LM study; it supplies no LM learning-quality result. The
-current full L4 qualification continues, while the long learner jobs remain
-unsubmitted.
+full L4 qualification was still running at that decision point; it subsequently
+completed as recorded below. The long learner jobs remained unsubmitted.
 
 ## Retrieved functional qualification
 
@@ -114,3 +114,17 @@ Parameter error; the controlled optimizer/moment/resume checks also passed.
 This includes24-site QKVO+FFN with both levels and levels_stream64. Runtime was
 Torch2.14.1+cu130/CUDA13.0. These are functional checks, not LM learning-quality
 or speed results. No long or short LM learner was submitted.
+
+## Hardware-selection closeout
+
+The separate N8192/16384 Linear comparison is now retrieved and verified.
+See the bilingual [hardware report](https://github.com/takumiecd/torchcst/blob/kernel/lm-attention-levels/docs/research-history/cuda-linear/multirow-hardware-20261108.md)
+for Dense, levels and stream64 timings, memory, source/runtime boundaries and
+the preserved L4 audit-filename failure with its successful local correction.
+The first L4 transport failure remains incomplete evidence; the successful fresh
+L4 cohort is separate. RTX 6000 Ada completed two orders; G4 completed one short
+order, and 3090 evidence is partial. These are operator results, not LM results.
+
+All owned Colab runtimes are stopped. This L4 LM cohort is STOPPED after
+functional qualification, with its learners unsubmitted. Hardware selection
+did not launch a replacement LM cohort; this is not a completed learning study.

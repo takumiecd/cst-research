@@ -2,6 +2,19 @@
 
 [English](attention-output-3090-20261108.md) | **日本語**
 
+## Linear比較後の資源状況
+
+これは計画段階のプロトコルで、RTX 3090のLM学習は投入していない。
+別のLinear測定中に所有者がHubのprofileを変更し、その後RTX 6000 Adaを確保した。
+3090はN8192の初回順序だけ回収済みで、N16384と逆順の完了は未確認。
+新サーバーから元ジョブの保存先は見えていない。これらの演算子測定を根拠に、
+このLM研究をRUNNINGやCOMPLETEDとして扱わない。
+
+検証済みの[GPU比較記録](https://github.com/takumiecd/torchcst/blob/kernel/lm-attention-levels/docs/research-history/cuda-linear/multirow-hardware-20261108.ja.md)に
+3090の途中結果と、別測定のRTX 6000 Ada・L4・G4の証拠を記録した。
+GPU選定中に新しいLM学習は開始していない。以下のプロトコルは、利用可能な機器で
+改めてソースと条件を固定する将来のコホート用として残す。
+
 九工大Hubの復旧後、4090を確保できなかったため依頼者が3090を確保した。
 読み取りで承認済み3090 profile、実機NVIDIA GeForce RTX3090、24GB級メモリ、
 compute capability8.6、Torch2.6.0+cu126、CUDA12.6を確認した。

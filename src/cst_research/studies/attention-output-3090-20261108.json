@@ -3,7 +3,7 @@
   "id": "attention-output-3090-20261108",
   "title": "Complete CST Attention and FFN width512 RTX3090 pilot",
   "status": "PLANNED",
-  "status_note": "Owner reserved RTX3090; actual GPU,24GB,CC8.6,Torch2.6.0+cu126 verified. Earlier4090 files not visible on this server; fresh isolated cohort with full new admission before six learner arms.",
+  "status_note": "Planned only: no RTX3090 LM learner submitted. GPU/profile was verified, but owner changed Hub profile during separate Linear timing and secured RTX6000 Ada. Only first-order N8192 Linear evidence retrieved; N16384/reverse order unknown. Hardware comparison completed separately; no replacement LM learner started.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "b393ac653f3b3893c378acda1c1752919c1539d1",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",

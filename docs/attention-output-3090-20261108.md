@@ -2,6 +2,20 @@
 
 **English** | [日本語](attention-output-3090-20261108.ja.md)
 
+## Resource status after the Linear comparison
+
+This is a planned protocol; no RTX 3090 LM learner was submitted. The owner
+changed the Hub profile during the separate Linear benchmark and subsequently
+secured an RTX 6000 Ada. Only the 3090 N8192 first-order Linear results were
+retrieved; N16384 and reverse-order completion remain unknown. The original
+job directory was not visible on the new server. Do not label this LM study
+RUNNING or COMPLETED from those operator measurements.
+
+The verified [hardware comparison](https://github.com/takumiecd/torchcst/blob/kernel/lm-attention-levels/docs/research-history/cuda-linear/multirow-hardware-20261108.md)
+records the partial 3090 results and separate RTX 6000 Ada, L4 and G4 evidence.
+No new LM learner was started during hardware selection. The protocol below
+is retained for a future explicitly frozen cohort on an available device.
+
 The owner obtained an RTX 3090 after the Kyutech Hub recovered and a4090 was
 unavailable. Read-only inspection confirmed the approved3090 profile, actual
 NVIDIA GeForce RTX3090,24GB-class memory,compute capability8.6,Torch2.6.0+cu126
