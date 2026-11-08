@@ -3,7 +3,7 @@
 **English** | [日本語](attention-output-20261108.ja.md)
 
 Prepared after merging torchcst PR154 and cst-research PR34, before GPU execution.
-Use torchcst `a6b5ab22667f6f59854b054948aa2caba4dc1be6` (explicit LM levels and
+Use torchcst `b14db87d34c1d6ba788517780528932473970505` (explicit LM levels and
 stream64 cohorts, unchanged existing CUDA arithmetic). Consumer source is pinned
 in the deployment manifest before execution. Use one owner-authorized RTX4090,
 verified actual hardware/runtime, isolated source and SM8.9 build, standard nohup,

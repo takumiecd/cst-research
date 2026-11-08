@@ -3,7 +3,7 @@
 [English](attention-output-20261108.md) | 日本語
 
 torchcst PR154・cst-research PR34のmerge後、GPU実行前に準備。
-torchcst `a6b5ab22667f6f59854b054948aa2caba4dc1be6`（明示LM levels/stream64対応、
+torchcst `b14db87d34c1d6ba788517780528932473970505`（明示LM levels/stream64対応、
 既存CUDA算術は不変）を使う。consumer sourceは実行前のdeploy manifestで固定する。
 許可された4090を1台使い、実機/runtime、隔離source、SM8.9 build、標準nohup、
 所有process receipt、hash照合した回収を確認。A100/Colabの追加確保はしない。
