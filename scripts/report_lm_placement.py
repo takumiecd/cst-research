@@ -79,11 +79,16 @@ def heat(
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
+    p.add_argument("--dst-run", type=Path, required=True)
     p.add_argument("--analysis", type=Path, required=True)
     p.add_argument("--atom-state", type=Path, required=True)
     p.add_argument("--ablation", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
+    if a.dst_run.resolve() != (a.run / "dst-pair12").resolve():
+        raise ValueError(
+            "this fixed study requires its freshly trained, verified colocated DST-pair12 control"
+        )
     a.output.mkdir(parents=True, exist_ok=False)
     manifest = read(a.run / "manifest.json")
     assert all(
