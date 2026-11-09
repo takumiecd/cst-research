@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "fourier-scale-connection-20261109",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/inspect_fourier_connection.py",
+  "title": "Two-bank Fourier connection law and geometry-constrained CPU conformance",
+  "status": "PLANNED",
+  "status_note": "New mathematical composition proposal, not an adopted kernel; protocol and5independent tests prepared.",
+  "protocol_source_path": "docs/fourier-scale-connection-20261109.md",
+  "protocol": {
+    "device": "CPU",
+    "dtype": "FP64",
+    "modes": [
+      8,
+      16,
+      32
+    ],
+    "delta": 0.1,
+    "upper": 0.9,
+    "kappa": 1.25,
+    "lower": 0.72,
+    "tiles_per_bank": 3,
+    "max_active_banks": 2,
+    "max_active_windows": 4,
+    "fixtures": 20,
+    "records": 140,
+    "finite_displacements": 1120,
+    "tail_samples": 492,
+    "geometry_samples": 49,
+    "training_updates": 0,
+    "gpu_used": false,
+    "production_backend": false,
+    "public_default_adopted": false,
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "fourier-scale-connection-cpu-20261109-01"
+  }
+}
