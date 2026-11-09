@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/audit_lm_signals.py",
+  "id": "lm-signal-diagnostics-20261109",
+  "title": "Post-hoc task-LM output distributions and activation-cotangent diagnostics",
+  "status": "PLANNED",
+  "status_note": "Read-only evaluator and CPU observer tests prepared after initial RMS observations. No new task training, Dense teacher or GPU diagnostic result yet.",
+  "protocol_source_path": "docs/lm-signal-diagnostics-20261109.md",
+  "protocol": {
+    "objective": "Diagnose task-learning output/gradient behavior without optimizing Dense reconstruction",
+    "sources": [
+      "ffn-site-count-20261109",
+      "ffn-block-placement-20261109"
+    ],
+    "models": 17,
+    "states_per_model": [
+      0,
+      976,
+      4882
+    ],
+    "model_states": 51,
+    "probe_records": 68,
+    "data": "TRAIN prefix128 targets at each state, plus fixed512 TRAIN targets at final; no DEV/confirmation selection",
+    "measurements": [
+      "input/output mean,std,RMS,max,exact/relative near-zero fractions,sampled absolute quantiles",
+      "input/output activation cotangent statistics at every block,norm,QKV,O,FFN up/down and residual FFN",
+      "raw parameter-gradient RMS and packed field RMS; do not compare coordinate magnitudes as identical parameterizations",
+      "centered covariance participation/stable rank on at most128 token rows; not full matrix rank",
+      "causal attention logit dispersion,entropy normalized by available keys,max probability,Q/K/V RMS"
+    ],
+    "validation": [
+      "preserve numerical Parameters and CPU/CUDA RNG",
+      "reproduce original128 TRAIN loss within1e-6 and FFN gradient RMS within atol1e-10/rtol1e-5",
+      "all underlying frozen training/audit/source controls remain unchanged",
+      "known-answer CPU uniform-attention and feature-rank tests; hooks preserve ordinary task gradients"
+    ],
+    "hypotheses": [
+      "initial attenuation versus learned signal-scale drift",
+      "layer-internal versus residual-stream gradient attenuation",
+      "realized update scale mismatch versus representation diversity/interaction"
+    ],
+    "role_followup": "Historical QKV success was width256/oldPolar and QKVO was width512/oldPolar. Matched current-recipe Q/K/V/O-only and combinations required before identifying O as the cause. This evaluator observes full-network behavior of the FFN cohorts; it is not that new attention-training study.",
+    "post_hoc": true,
+    "confirmation_evaluated": false,
+    "training_updates": 0,
+    "limitations": [
+      "observational,one seed; no causal identification",
+      "fixed TRAIN probes not the full data distribution",
+      "sample covariance rank bounded by token rows",
+      "same activation gradients comparable; parameter-coordinate gradients not directly comparable"
+    ]
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-signal-diagnostics-4090-20261109-01"
+  },
+  "execution": {
+    "state": "not_started",
+    "confirmation_evaluated": false,
+    "training_updates": 0
+  }
+}
