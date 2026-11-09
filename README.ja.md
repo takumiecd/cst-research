@@ -21,7 +21,7 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [検証済み5M-token置換箇所数比較](docs/ffn-site-count-20261109-results.ja.md)を完了。このseedでは中央1/2ブロックの上下CSTはDenseに近く、全8写像で差が増えました。11条件・33checkpoint・学習済み96写像oracle・ローカル証拠回収すべて成功。[本来のタスクによる分散配置とFFN内連続の比較](docs/ffn-block-placement-20261109.ja.md)を、各ブロック1個・同予算DST対照・永続証拠保存で実行中です。
 
-[RTX4090の20M-token比較](docs/ffn-long-horizon-20261109.ja.md)は学習終了を確認しましたが、検証済みローカル回収前のHub停止でcontainer-homeの証拠が見つからなくなりました。科学的検証完了・正答率の完了結果とは扱いません。永続NFS保存とDense/DST対照を用いる[1/2/4/8写像の新規比較](docs/ffn-site-count-20261109.ja.md)を準備しています。
+[RTX4090の20M-token比較](docs/ffn-long-horizon-20261109.ja.md)は学習終了を確認しましたが、検証済みローカル回収前のHub停止でcontainer-homeの証拠が見つからなくなりました。科学的検証完了・正答率の完了結果とは扱いません。source/protocolと丸めたstatus観測値は保全し、旧20M prefixを借用しません。
 
 [0スタートのtau探索と同条件DST対照](docs/ffn-zero-start-tau-dst-20261109-results.ja.md)も完了。tau.0003/.001/.003/.01のDEV CEは3.3964/3.3987/3.3930/3.3954、LR調整したRigL-style DST3.3507、Dense3.3090(976step・seed17)。小tauでは差は埋まりませんでした。学習曲線の比較には検証済みDSTを含め、DSTの全4LR候補も残します。
 

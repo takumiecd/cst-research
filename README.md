@@ -24,7 +24,7 @@ public API are separate decisions.
 
 The [verified5M-token site-count comparison](docs/ffn-site-count-20261109-results.md) is complete: one/two paired middle blocks remain close to Dense in this seed, while all8 CST maps show a larger gap. All11 arms,33 checkpoints,96 trained map oracles and local evidence retrieval passed. The [task-only distributed-versus-paired follow-up](docs/ffn-block-placement-20261109.md) is running with one replacement per block, matched DST controls and persistent evidence.
 
-The [20M-token RTX4090 comparison](docs/ffn-long-horizon-20261109.md) finished training, but its container-home evidence disappeared on a Hub stop before verified local retrieval. It is not scientifically admitted or a completed accuracy result. A [fresh1/2/4/8-map composition study](docs/ffn-site-count-20261109.md) is being prepared with persistent NFS storage and matched Dense/DST controls.
+The [20M-token RTX4090 comparison](docs/ffn-long-horizon-20261109.md) finished training, but its container-home evidence disappeared on a Hub stop before verified local retrieval. It is not scientifically admitted or a completed accuracy result. Source/protocol copies and the captured rounded status metrics remain preserved; no old20M prefix is borrowed.
 
 The [zero-start tau sweep with a matched DST reference](docs/ffn-zero-start-tau-dst-20261109-results.md) is complete: tau.0003/.001/.003/.01 gave DEV CE3.3964/3.3987/3.3930/3.3954; tuned RigL-style DST3.3507,Dense3.3090 (976steps,seed17). Smaller tau did not close the gap. Learning-curve comparisons now include a verified DST reference; all four DST LR candidates are retained.
 
