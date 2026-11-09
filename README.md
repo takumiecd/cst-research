@@ -45,6 +45,8 @@ The [local tangent/history and Atom attribution](docs/lm-tangent-history-2026110
 
 The [CPU Gaussian/Fourier continuity diagnostic](docs/kernel-taylor-continuity-20261109-results.md) completed152 cases and1216 finite displacements. Gaussian fixed-cell integrals agree with derivatives across the tested center/width boundaries; current Fourier same-branch controls also agree. Increasing M suppresses sampled center jumps but leaves large hierarchy-radius discontinuities. No Gaussian adoption, CUDA change, speed result or learning experiment.
 
+The [compact-profile boundary diagnostic](docs/compact-boundary-20261109-results.md) completed240 CPU cases/1920 displacements. Triweight support edges join zero with vanishing first/second derivatives; sampled L2 normalization adds a separate floor kink and zero-gradient regimes. An independent fixed-cell Triweight control is not a new public backend. Polynomial-moment acceleration is a derived possibility only, without timing or training evidence.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to

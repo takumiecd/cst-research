@@ -43,6 +43,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [CPU Gaussian・Fourier連続性診断](docs/kernel-taylor-continuity-20261109-results.ja.md)152条件・1216変位を完了。Gaussianの固定cell積分は、調べた中心・幅の境界で微分と一致し、現行Fourierも同じ枝内では一致しました。Mを増やすと座標の跳びは減りましたが、階層による半径の大きな不連続は残りました。Gaussian採用・CUDA変更・速度結果・学習実験はありません。
 
+[Compact profile境界診断](docs/compact-boundary-20261109-results.ja.md)CPU240条件・1920変位を完了。Triweightの支持端は一次・二次微分もゼロでつながりますが、点評価L2正規化には別のfloorの折れと勾配ゼロの領域があります。独立した固定cell Triweight対照は新public backendではありません。多項式momentによる高速化は導出上の可能性だけで、時間・学習の証拠はありません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
