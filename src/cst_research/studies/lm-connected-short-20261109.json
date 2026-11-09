@@ -7,7 +7,7 @@
   "id": "lm-connected-short-20261109",
   "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
   "status": "RUNNING",
-  "status_note": "First attempt stopped before training because an imported optimizer symbol was not re-exported. Native78 tests passed. New immutable consumer retry prepared; no results yet.",
+  "status_note": "Immutable retry02 running; all controls and both CST arms require full-model gates before training. No changes to hyperparameters or tolerances.",
   "protocol_source_path": "docs/lm-connected-short-20261109.md",
   "protocol": {
     "arms": [
@@ -61,13 +61,14 @@
     "relative_path": "lm-connected-short-4090-20261109-02"
   },
   "execution": {
-    "job": "lm-connected-short-4090-20261109-01",
+    "job": "lm-connected-short-4090-20261109-02",
     "driver_pid": 22723,
     "operator_commit": "1605fa8f0d0eaf57e7c1548968e1b6281daba031",
-    "consumer_commit": "bf1a846f32604a724ee233af04e2955db768f2b9",
-    "source_files": 2107,
+    "consumer_commit": "144d8cfc5f56772016ebeb1f6f33c98cc12fc53a",
+    "source_files": 2108,
     "public_default_adopted": false,
     "failed_attempt": "lm-connected-short-4090-20261109-01",
-    "native_tests_passed": 78
+    "native_tests_passed": 78,
+    "native_qualification": "reused78 passing tests from failed-before-training attempt01; all operator source hashes verified identical"
   }
 }

@@ -25,6 +25,58 @@ class ConnectedDiagnosticTests(unittest.TestCase):
 
         self.assertTrue(callable(lm_connected_run.make_optimizer))
 
+    def test_connected_chain_predicts_fraction_step_across_old_radius_boundary(self):
+        from dataclasses import replace
+
+        from torchcst import ChebyshevSpec, CSTLinear, chart_presets, kernels
+        from torchcst._backends.torch.parameterizations.radius_envelope import (
+            physical_parameters,
+        )
+        from torchcst.kernels.spec import RadiusConnectionSpec
+
+        from cst_research.experiments.lm_connected import physical_reference
+
+        kernel = kernels.product(
+            kernels.cell_mass(ChebyshevSpec(modes=16)),
+            coordinates=kernels.radius_envelope(
+                radius_min=0.5, radius_max=50.0, tau=0.003, amplitude_max=32.0
+            ),
+        )
+        kernel = replace(
+            kernel,
+            revision=10,
+            profiles=tuple(
+                replace(p, connection=RadiusConnectionSpec()) for p in kernel.profiles
+            ),
+        )
+        layer = CSTLinear(
+            chart_presets.regular_grid(256, spacing=1.0, geometry="flat_torus"),
+            chart_presets.regular_grid(128, spacing=1.0, geometry="flat_torus"),
+            atoms=1,
+            kernel=kernel,
+            dtype=torch.float32,
+            backend="factored",
+        )
+        reference = physical_reference(layer.execution_declaration())
+        x = torch.randn(
+            7, 128, dtype=torch.float64, generator=torch.Generator().manual_seed(9)
+        )
+
+        def action(p):
+            physical = physical_parameters(
+                p, radius_min=0.5, radius_max=50.0, tau=0.003, amplitude_max=32.0
+            ).double()
+            vi, vo = reference.operator.factors(physical)
+            return (x @ vi) @ vo.T
+
+        p = torch.tensor([[1.0, 0.0, 7.3, 13.7]])
+        v = torch.tensor([[0.0, 1e-4, 0.0, 0.0]])
+        base, j = torch.autograd.functional.jvp(action, p, v)
+        finite = action(p + v) - base
+        stat = self.m.statistics(finite, j, -finite)
+        self.assertGreater(stat["linear_finite_cosine"], 0.999)
+        self.assertLess(stat["relative_defect_to_prediction"], 0.01)
+
     def test_wrapped_delta_and_exact_field_endpoint(self):
         old = torch.tensor([[0.3, 0.0, 127.9, 255.9]])
         new = torch.tensor([[0.4, 0.2, 0.1, 0.1]])
