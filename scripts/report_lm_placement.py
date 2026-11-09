@@ -353,7 +353,7 @@ def main():
         ("row_centered_rms", "feature_dc_energy_share", "row_centered_rms"),
         (
             "Block row-centered output RMS / Dense",
-            "Block output feature-mean energy share",
+            "Block output feature-mean energy (%)",
             "Block row-centered cotangent RMS / Dense",
         ),
     ):
@@ -366,6 +366,8 @@ def main():
                     value /= index[("dense", site, final)][field]["mean_components"][
                         key
                     ]
+                else:
+                    value *= 100
                 row.append(value)
             values.append(row)
         heat(
@@ -375,7 +377,7 @@ def main():
             arms,
             blocks,
             title,
-            limit=(-1.5, 1.5) if key == "row_centered_rms" else (0, 1),
+            limit=(-1.5, 1.5) if key == "row_centered_rms" else (0, 0.2),
             cmap="coolwarm" if key == "row_centered_rms" else "viridis",
             log=key == "row_centered_rms",
         )
