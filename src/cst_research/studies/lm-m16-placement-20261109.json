@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "95f647f97749f61f5f5c15ac29932f908fb334ce",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
+  "runner_entrypoint": "cst_research.experiments.lm_placement_run",
+  "id": "lm-m16-placement-20261109",
+  "title": "Connected M16 matched-count FFN placement and task signal analysis",
+  "status": "COMPLETED",
+  "status_note": "Eleven matched-protocol5M-token arms,33 checkpoint audits,108 explicit post-failure numerical checks,1056 layer records,120 moment records,44 branch ablations and40 saved-task VJPs complete and retrieved with verified hashes. Placement effects, Dense branch dependence and sharp-atom geometry attenuation are exploratory findings; no unique-cause or remedy claim. Original component-gate failure remains retained.",
+  "protocol_source_path": "docs/lm-m16-placement-20261109.md",
+  "protocol": {
+    "primary_family": "six two-block pairs plus up-even/down-even; CST4 up2/down2",
+    "controls": [
+      "dense",
+      "dst-pair12",
+      "all-cst"
+    ],
+    "seed": 17,
+    "steps": 4882,
+    "training_tokens": 4999168,
+    "schedule_tokens": 20000000,
+    "signals": [
+      0,
+      976,
+      2441,
+      4882
+    ],
+    "train_offsets": [
+      0,
+      4096,
+      8192,
+      12288
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-m16-placement-4090-20261110-02"
+  },
+  "execution": {
+    "job": "lm-m16-placement-4090-20261110-02",
+    "consumer_commit": "c886bd93850169973607aa762520dd00517f3697",
+    "analysis_commit": "d815ed2dcffd4bb0d5e2f9ed32d9a149e6b04179",
+    "consumer_pull_request": "https://github.com/takumiecd/cst-research/pull/37",
+    "native_tests_passed": 84,
+    "source_archive_sha256": "8e18fba8f1e9cad5c10d516a6dde523bdb6722eeb015e1eab60cddc285d31889",
+    "runtime_reused_from": "lm-connected-short-4090-20261109-03, all archived src files hash equal",
+    "public_default_adopted": false,
+    "failed_job": "lm-m16-placement-4090-20261109-01",
+    "failed_compact_sha256": "1936947217cb3315686dbc370e1b8dbc83fb62bce58a1d6788f2adf2b81987e2",
+    "continuation_job": "lm-m16-placement-4090-20261110-02",
+    "original_componentwise_gate_passed": false,
+    "numerical_gate_amendment": "max abs<=3e-4 AND relative L2<=1e-4 separately for Y,dX and each raw field; original failures counted; independent integral witness required",
+    "training_core_unchanged": true,
+    "original_job": "lm-m16-placement-4090-20261109-01",
+    "training_core_commit": "8adc651324468915c413a8dba44fb1d593cb9a42",
+    "ablation_commit": "353cdcc039e84c8d6955fb02fc9d11d60e728405",
+    "geometry_diagnostic_commit": "a7d4aa5a68d3aba0b7e3d601f9683e6bcd8f25ff",
+    "plot_commit": "47210e2a1b6955aadc09de4310af399f16f9df2a",
+    "learning_complete": true,
+    "checkpoint_audits": 33,
+    "field_numerical_checks": 108,
+    "original_component_failures_retained": 23,
+    "task_branch_ablations": 44,
+    "saved_task_VJP_maps": 40,
+    "local_CPU_passed": 232,
+    "local_optional_skipped": 61,
+    "main_compact_sha256": "001de63634e4fae1eecdcf65d1ede414f4099b4191dde30c545a86fb3d1eaed8",
+    "analysis_compact_sha256": "9569798604332ba14e3b3cdb7414961797ebe6815d2ed52795bfb89d34092fef",
+    "geometry_compact_sha256": "7e641a014358e6c1c64c1923a8d4af79db34a4243224c7fa1d6883f7f5454110",
+    "retrieval_verified": true,
+    "resource_state": "all owned jobs finished; Hub left running, GPU idle0percent40MiB",
+    "default_adopted": false
+  },
+  "results_source_path": "docs/lm-m16-placement-20261109-results.md"
+}
