@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-long-horizon-20261109",
   "title": "Fixed 20M-token TinyStories FFN Dense, DST and CST comparison on RTX 4090",
-  "status": "PLANNED",
-  "status_note": "Fresh fixed arms after short-run tuning; no long GPU execution yet. All GPU gates rerun on4090; no confirmation evaluation or new HPO.",
+  "status": "RUNNING",
+  "status_note": "RTX4090 identity confirmed; fresh68 operator tests, exact CST model and long-DST branch qualifications passed; sequential Dense/DST/CST20M training running. No scientific admission yet.",
   "protocol_source_path": "docs/ffn-long-horizon-20261109.md",
   "protocol": {
     "architecture": {
@@ -160,9 +160,15 @@
     "relative_path": "ffn-long-horizon-4090-20261109-01"
   },
   "execution": {
-    "state": "not_started",
+    "state": "running",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "consumer_commit": "f1742ffa344478a3bb54e7a027677f2674055e0b",
+    "source_archive_sha256": "21ec24615f7e3c0966a6ef4dfab7b7f905510628d9b047e00417efd281193347",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "fresh_operator_tests_passed": 68
   }
 }

@@ -33,6 +33,43 @@ def load_inputs(root, recovery=None, dst_run=None):
                 }
             )
             directories[public_label] = data / label
+    if any(r.get("long_horizon_comparison") for r in rows):
+        assert recovery is None and dst_run is None
+        assert len(rows) == 3 and {r["kind"] for r in rows} == {"dense", "dst", "cst"}
+        assert all(r.get("long_horizon_comparison") for r in rows)
+        assert {r["updates"] for r in rows} == {19531}
+        assert {r["seed"] for r in rows} == {17}
+        base = root / "retrieved"
+        da = json.loads((base / "dst-audit/audit.json").read_text())
+        ca = json.loads((base / "trained-audit.json").read_text())
+        assert da["state"] == ca["state"] == "passed"
+        assert len(da["models"]) == 5 and len(ca["models"]) == 10
+        summaries = {
+            r["kind"]: json.loads(
+                (directories[r["label"]] / "summary.json").read_text()
+            )
+            for r in rows
+        }
+        assert len({s["data_order_sha256"] for s in summaries.values()}) == 1
+        assert all(s["completed_tokens"] == 19999744 for s in summaries.values())
+        for key in (
+            "width",
+            "layers",
+            "heads",
+            "context",
+            "vocabulary",
+            "expansion",
+            "attention_kind",
+            "feature_order",
+        ):
+            assert len({s["config"][key] for s in summaries.values()}) == 1
+        assert (
+            summaries["dst"]["active_ffn_scalar_slots_including_bias"]
+            == summaries["cst"]["actual_ffn_parameters"]
+            == 272384
+        )
+        assert summaries["dst"]["actual_adam_updates"] == 19473
+        assert len(summaries["dst"]["topology_events"]) == 58
     if dst_run is not None:
         base = root / "retrieved"
         data = dst_run / "retrieved"

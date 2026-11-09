@@ -31,6 +31,8 @@ def main():
         parser.error(
             "This tau comparison requires the source-qualified --dst-run baseline"
         )
+    long_run = any(r.get("long_horizon_comparison") for r in rows)
+    has_dst = any(r["kind"] == "dst" for r in rows)
     out = root / "figures"
     out.mkdir(exist_ok=True)
     summaries = {
@@ -42,6 +44,12 @@ def main():
         if row["kind"] == "dense":
             return (
                 "Dense (recovery)" if row["label"].startswith("recovery-") else "Dense"
+            )
+        if row.get("long_horizon_comparison"):
+            return (
+                "DST (RigL-style, fixed prior LR.003)"
+                if row["kind"] == "dst"
+                else "CST (tau.003, f0=0, all fields32x)"
             )
         if row["kind"] == "dst":
             return f"DST (RigL-style, LR{row['sparse_peak_lr']:g}; DEV selected)"
@@ -120,7 +128,7 @@ def main():
             axes[0, j].set_title(title)
             axes[0, j].set_xlabel(
                 "Training steps (DST topology events included)"
-                if args.dst_run
+                if has_dst
                 else "Optimizer updates"
             )
             axes[1, j].set_xlabel(
@@ -131,7 +139,9 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            "Zero-start tau comparison with DEV-selected DST, common CST LR32x, seed17"
+            "Fixed20M-token FFN comparison, seed17, RTX4090; no new tuning"
+            if long_run
+            else "Zero-start tau comparison with DEV-selected DST, common CST LR32x, seed17"
             if any(r.get("tau_comparison") for r in rows)
             else "Initial fraction0 versus.5, common CST LR32x, seed17 only"
             if any(r.get("fraction_start_comparison") for r in rows)
@@ -142,9 +152,9 @@ def main():
             else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
         )
         save(fig, f"{stage}-learning-curves")
-        if args.dst_run:
+        if has_dst:
             fig, axes = plt.subplots(1, 2, figsize=(13, 4), layout="constrained")
-            for ax, start in zip(axes, (200, 600)):
+            for ax, start in zip(axes, (4882, 9765) if long_run else (200, 600)):
                 for row in selected:
                     points = [
                         r
@@ -163,7 +173,11 @@ def main():
                 ax.set_title(f"Development CE, from step{start}")
                 ax.grid(alpha=0.2)
             axes[0].legend(fontsize=7)
-            fig.suptitle("Tail zoom, seed17; DST selected on DEV, no confirmation")
+            fig.suptitle(
+                "Tail zoom, seed17; DST LR fixed from prior DEV, no confirmation"
+                if long_run
+                else "Tail zoom, seed17; DST selected on DEV, no confirmation"
+            )
             save(fig, f"{stage}-development-tail")
         cst = [r for r in selected if r["kind"] == "cst"]
         geo = {
@@ -357,7 +371,9 @@ def main():
             {
                 "runs": table,
                 "scope": (
-                    "One development seed, zero-start tau family and DEV-selected DST; no optimality or convergence claim"
+                    "One development seed, fixed20M-token Dense/DST/CST arms; prior DEV choices, no new tuning or confirmation; no convergence or generalization claim"
+                    if long_run
+                    else "One development seed, zero-start tau family and DEV-selected DST; no optimality or convergence claim"
                     if any(r.get("tau_comparison") for r in rows)
                     else "One development seed, initial fraction0/.5 at common32x; no optimality or convergence claim"
                     if any(r.get("fraction_start_comparison") for r in rows)

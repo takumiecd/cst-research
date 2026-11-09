@@ -110,3 +110,68 @@ class DSTPlotInputTests(unittest.TestCase):
                 p.write_text(json.dumps(x))
                 with self.assertRaises(AssertionError):
                     module.load_inputs(a, dst_run=b)
+
+
+class LongDSTPlotInputTests(unittest.TestCase):
+    def fixture(self, root):
+        r, _ = DSTPlotInputTests().fixture(root)
+        d = r / "retrieved"
+        old = json.loads((d / "arm/summary.json").read_text())
+        rows = []
+        for kind in ("dense", "cst", "dst"):
+            (d / kind).mkdir()
+            summary = {
+                **old,
+                "data_order_sha256": "same-order",
+                "completed_tokens": 19999744,
+                "actual_adam_updates": 19473,
+                "topology_events": [{}] * 58,
+            }
+            (d / kind / "summary.json").write_text(json.dumps(summary))
+            rows.append(
+                {
+                    "label": kind,
+                    "kind": kind,
+                    "seed": 17,
+                    "updates": 19531,
+                    "long_horizon_comparison": True,
+                }
+            )
+        p = d / "receipt.json"
+        receipt = json.loads(p.read_text())
+        receipt["results"] = rows
+        p.write_text(json.dumps(receipt))
+        (d / "trained-audit.json").write_text(
+            json.dumps({"state": "passed", "models": [{}] * 10})
+        )
+        (d / "dst-audit").mkdir()
+        (d / "dst-audit/audit.json").write_text(
+            json.dumps({"state": "passed", "models": [{}] * 5})
+        )
+        return r
+
+    def test_long_fixed_three_arm_inputs_require_equal_order_budget_and_audits(self):
+        for change in (None, "order", "tokens", "clock", "audit", "model", "budget"):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as t:
+                r = self.fixture(Path(t))
+                p = r / "retrieved/dst/summary.json"
+                x = json.loads(p.read_text())
+                if change == "order":
+                    x["data_order_sha256"] = "other"
+                elif change == "tokens":
+                    x["completed_tokens"] -= 1024
+                elif change == "clock":
+                    x["actual_adam_updates"] = 19531
+                elif change == "model":
+                    x["config"]["context"] = 256
+                elif change == "budget":
+                    x["active_ffn_scalar_slots_including_bias"] = 32768
+                elif change == "audit":
+                    p = r / "retrieved/dst-audit/audit.json"
+                    x = {"state": "passed", "models": [{}] * 4}
+                p.write_text(json.dumps(x))
+                if change is None:
+                    self.assertEqual(len(module.load_inputs(r)[0]), 3)
+                else:
+                    with self.assertRaises(AssertionError):
+                        module.load_inputs(r)
