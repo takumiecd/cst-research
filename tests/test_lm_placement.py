@@ -37,6 +37,22 @@ class PlacementTests(unittest.TestCase):
 
         self.assertTrue(callable(lm_placement_run.train))
 
+    def test_cka_recognizes_rotated_features_without_cosine_agreement(self):
+        import importlib.util
+        from pathlib import Path
+
+        path = Path(__file__).resolve().parents[1] / "scripts/analyze_lm_placement.py"
+        spec = importlib.util.spec_from_file_location("placement_analysis", path)
+        analysis = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(analysis)
+        x = torch.tensor([[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]])
+        rotation = torch.tensor([[0.0, 1.0], [-1.0, 0.0]])
+        self.assertAlmostEqual(analysis.cka(x, x @ rotation), 1.0)
+        self.assertAlmostEqual(analysis.cosine(x, x @ rotation), 0.0)
+        self.assertIsNone(analysis.cka(x, torch.ones_like(x)))
+        with self.assertRaises(ValueError):
+            analysis.cka(x, x[:2])
+
 
 if __name__ == "__main__":
     unittest.main()
