@@ -231,10 +231,8 @@ def main():
                 "initial_probe_calibration": calibration,
                 "observed_updates": observed_updates,
             }
-            # Exact serialized optimizer/moment/step-counter continuation at tau .03.
-            if config.tau == 0.03 or (
-                config.amplitude_max > 1 and config.radius_fraction in (0.5, 1.0)
-            ):
+            # Include boundary starts in the wide-amplitude continuation gate.
+            if config.tau == 0.03 or config.amplitude_max > 1:
                 payload = io.BytesIO()
                 torch.save(
                     {"model": model.state_dict(), "optimizer": opt.state_dict()},
