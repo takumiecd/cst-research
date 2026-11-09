@@ -45,6 +45,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [Compact profile境界診断](docs/compact-boundary-20261109-results.ja.md)CPU240条件・1920変位を完了。Triweightの支持端は一次・二次微分もゼロでつながりますが、点評価L2正規化には別のfloorの折れと勾配ゼロの領域があります。独立した固定cell Triweight対照は新public backendではありません。多項式momentによる高速化は導出上の可能性だけで、時間・学習の証拠はありません。
 
+[Fourierの2bank接続案](docs/fourier-scale-connection-20261109-results.ja.md)で、余白・最大2bank/4固定窓・接続weightの完全な微分を含むC2の座標/半径接続を導出しました。CPU140条件・1120変位を確認しましたが、例のM8の裾は最大約0.65%で、狭い帯では勾配が急になります。補助bankの半径/tile比は[.5,1]から緩和が必要です。新しい数学定義案で、runtime・初期化・学習・速度の採用はありません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**

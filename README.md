@@ -47,6 +47,8 @@ The [CPU Gaussian/Fourier continuity diagnostic](docs/kernel-taylor-continuity-2
 
 The [compact-profile boundary diagnostic](docs/compact-boundary-20261109-results.md) completed240 CPU cases/1920 displacements. Triweight support edges join zero with vanishing first/second derivatives; sampled L2 normalization adds a separate floor kink and zero-gradient regimes. An independent fixed-cell Triweight control is not a new public backend. Polynomial-moment acceleration is a derived possibility only, without timing or training evidence.
 
+The [two-bank Fourier connection proposal](docs/fourier-scale-connection-20261109-results.md) derives C2 position/radius glue with padding, at most2 banks/4 fixed windows per axis, and full connection-weight derivatives. Its140 CPU cases/1120 displacements pass; the illustrative M8 tail screen still leaks up to0.65%, and narrower bands increase derivative stiffness. The helper-bank radius/tile ratio must relax beyond[.5,1]. This is a new mathematical definition, with no runtime, initialization, training or speed adoption.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
