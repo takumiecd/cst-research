@@ -182,6 +182,7 @@ def train(args, data):
     digest = parameter_digest(m)
     assert digest == q["models"][0]["initial_parameter_sha256"]
     initial_masks = dst.invariants(m)
+    assert initial_masks == q["models"][0]["initial_masks"]
     active = sum(r["active_slots"] for r in initial_masks.values()) + sum(
         p.numel()
         for n, p in m.named_parameters()
