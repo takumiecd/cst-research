@@ -419,7 +419,7 @@ def main():
             ]
             total = sum(r["count"] for r in rows)
 
-            def average(fn):
+            def average(fn, rows=rows, total=total):
                 return sum(r["count"] * fn(r) for r in rows if r["count"]) / total
 
             values[0].append(
