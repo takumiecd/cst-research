@@ -26,8 +26,11 @@ def main():
     p.add_argument("--data", type=Path, required=True)
     p.add_argument("--data-manifest-sha256", required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument(
+        "--launch-blocking", action=argparse.BooleanOptionalAction, default=True
+    )
     a = p.parse_args()
-    assert os.environ.get("CUDA_LAUNCH_BLOCKING") == "1"
+    assert (os.environ.get("CUDA_LAUNCH_BLOCKING") == "1") == a.launch_blocking
     assert torch.cuda.get_device_name() == "NVIDIA GeForce RTX 3090"
     assert torch.cuda.get_device_capability() == (8, 6)
     assert sha(a.data / "manifest.json") == a.data_manifest_sha256
@@ -38,7 +41,8 @@ def main():
     report = {
         "state": "running",
         "stages": [],
-        "synchronized_debug_only": True,
+        "launch_blocking": a.launch_blocking,
+        "debug_only_no_timing_claim": True,
         "script_sha256": sha(Path(__file__)),
         "gpu": torch.cuda.get_device_name(),
         "torch": torch.__version__,
