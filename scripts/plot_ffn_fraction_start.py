@@ -76,6 +76,7 @@ def main():
         (0.0003, 0.001, 0.003, 0.01), ("#1f77b4", "#ff7f0e", "#d62728", "#9467bd")
     ):
         colors[f"CST tau={tau:g}, f0=0, LR32x"] = color
+    colors["CST (tau.003, f0=0, all fields32x)"] = "#1f77b4"
     colors["Dense"] = "#222222"
     colors["Dense (recovery)"] = "#777777"
     colors["cap1 bridge: tau=.003, f0=0"] = "#999999"
