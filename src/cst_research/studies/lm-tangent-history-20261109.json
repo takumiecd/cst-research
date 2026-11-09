@@ -7,7 +7,7 @@
   "id": "lm-tangent-history-20261109",
   "title": "Analysis-only local tangent, Adam history and finite-response attribution",
   "status": "RUNNING",
-  "status_note": "Primary21observations completed and compact locally verified. Recorded analysis-only extension for nonconverged tangent solve, finite routing/rounding and cross-batch history interpretation; no training or improvement experiments.",
+  "status_note": "Primary and extended21observations completed and compact locally verified. Field and Atom attribution follow-up prepared,9CSTobservations; no training or improvement.",
   "protocol_source_path": "docs/lm-tangent-history-20261109.md",
   "protocol": {
     "objective": "Separate numerically resolved local Atom geometry, Adam first/second-moment history and finite-response effects. Original task gradients only.",
@@ -80,6 +80,17 @@
       ],
       "training_updates": 0,
       "model_or_kernel_changes": false
+    },
+    "post_hoc_field_atom_analysis": {
+      "records": 9,
+      "fields": [
+        "amplitude",
+        "radius_fraction",
+        "output_center",
+        "input_center"
+      ],
+      "atom_score": "task inner product, not individual loss change",
+      "training_updates": 0
     }
   },
   "evidence": {
@@ -94,6 +105,7 @@
     "primary_records": 21,
     "training_updates": 0,
     "improvement_experiments": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "extension_compact_sha256": "4e0ea6c0bd62c591a56450b0f2e9c042a7210f8f6352aa51fecb9bbf8c8134a0"
   }
 }

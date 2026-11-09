@@ -383,6 +383,108 @@ def analyze_map(layer, row, kind, factors, primary, extended=False):
     return result
 
 
+def atom_score_summary(scores, changed=None):
+    """Signed per-Atom contributions to <-g, delta output>; not loss changes."""
+    scores = scores.double()
+    total_abs = max(float(scores.abs().sum()), 1e-30)
+    result = {
+        "count": len(scores),
+        "negative_atom_fraction": float((scores < 0).double().mean()),
+        "negative_absolute_score_share": float((-scores.clamp_max(0)).sum())
+        / total_abs,
+        "signed_sum": float(scores.sum()),
+        "absolute_sum": float(scores.abs().sum()),
+    }
+    if changed is not None:
+        changed = changed.to(scores.device)
+        result["changed_route_absolute_score_share"] = (
+            float(scores[changed].abs().sum()) / total_abs
+        )
+        result["changed_route_signed_sum"] = float(scores[changed].sum())
+    return result
+
+
+def analyze_fields(layer, row, factors):
+    """One restored observed displacement, split by fields and by Atom.
+
+    Amplitude is a raw envelope field, so its isolated update also changes radius.
+    This is analysis of the existing update, not a new optimizer/training recipe.
+    """
+    x, target = row["x"], -row["g"]
+    op = FactorTangent(x, *factors)
+    cpu = copy.deepcopy(layer.map).cpu()
+    point = row["old_p"]
+    routes = route_signature(cpu, point)
+    count = point.numel()
+    actual = row["actual_vector"].clone()
+    actual[count:] = 0  # isolate Atom output; projection bias is separately recorded
+    task_fields = op.vjp(target)[:count].reshape_as(point)
+    result = {"fields": {}, "bias_delta_norm": float(row["bias_delta"].norm())}
+    cases = [(field, k) for k, field in enumerate(FIELDS)] + [("all_atom_fields", None)]
+    for field, k in cases:
+        vector = actual.clone()
+        if k is not None:
+            d = vector[:count].reshape_as(point)
+            d[:, [j for j in range(4) if j != k]] = 0
+        displacement = vector[:count].reshape_as(point)
+        candidate = point + displacement.cpu()
+        for col, period in ((2, layer.map.out_features), (3, layer.map.in_features)):
+            candidate[:, col].remainder_(period)
+        with torch.no_grad():
+            vi, uo = cpu.operator.factors(candidate)
+            vi, uo = vi.to(x), uo.to(x)
+            new_b = x @ vi
+            db, du = new_b - op.b, uo - op.uo
+            change = db @ op.uo.T + new_b @ du.T
+        linear = op.jvp(vector)
+        changed = (route_signature(cpu, candidate) != routes).any(1)
+        mask = changed.to(x.device)
+        changed_delta = db[:, mask] @ op.uo[:, mask].T + new_b[:, mask] @ du[:, mask].T
+        changed_linear = op.atom_subset_jvp(vector, mask)
+        residual = change - linear
+        changed_residual = changed_delta - changed_linear
+        remaining = residual - changed_residual
+        residual_norm = max(math.sqrt(dot(residual, residual)), 1e-30)
+        # This separable expression attributes the exact output change to each Atom.
+        scores = (
+            (db.double() * (target @ op.uo).double())
+            + (new_b.double() * (target @ du).double())
+        ).sum(0)
+        expected_score = dot(change, target)
+        assert abs(float(scores.sum()) - expected_score) <= 2e-5 * max(
+            float(scores.abs().sum()), 1e-20
+        )
+        directions = {}
+        for name, value in row["vectors"].items():
+            values = value[:count].reshape_as(point)
+            values = values if k is None else values[:, k : k + 1]
+            cotangent = task_fields if k is None else task_fields[:, k : k + 1]
+            directions[name] = atom_score_summary(
+                (values.double() * cotangent.double()).sum(1)
+            )
+        result["fields"][field] = {
+            "finite_cosine": cosine(change, target),
+            "tangent_cosine": cosine(linear, target),
+            "linear_finite_cosine": cosine(change, linear),
+            "finite_norm": math.sqrt(dot(change, change)),
+            "tangent_norm": math.sqrt(dot(linear, linear)),
+            "relative_defect": relative_error(change, linear),
+            "changed_route_fraction": float(changed.double().mean()),
+            "changed_atom_defect_norm_ratio": math.sqrt(
+                dot(changed_residual, changed_residual)
+            )
+            / residual_norm,
+            "unchanged_atom_defect_norm_ratio": math.sqrt(dot(remaining, remaining))
+            / residual_norm,
+            "atom_finite_scores": atom_score_summary(scores, changed),
+            "atom_linear_scores": atom_score_summary(
+                (displacement.double() * task_fields.double()).sum(1), changed
+            ),
+            "history_atom_linear_scores": directions,
+        }
+    return result
+
+
 def cross_batch_analysis(layer, batches, site, kind, factors):
     names = (
         "historical_m_historical_v",
@@ -428,6 +530,7 @@ def main():
     p.add_argument("--base-run", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--extended-analysis", action="store_true")
+    p.add_argument("--field-analysis-only", action="store_true")
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     parent = read(args.base_run / "receipt.json")
@@ -464,6 +567,8 @@ def main():
     save()
     try:
         for arm, sites in CASES.items():
+            if args.field_analysis_only and not arm.startswith("cst"):
+                continue
             s = read(args.base_run / arm / "summary.json")
             checkpoint = args.base_run / arm / "checkpoint-4999168-tokens.pt"
             assert sha(checkpoint) == s["milestone_checkpoint_sha256"][checkpoint.name]
@@ -513,9 +618,13 @@ def main():
                         row,
                         m.kind,
                         cached.get(site),
-                        offset == 0,
+                        offset == 0 and not args.field_analysis_only,
                         args.extended_analysis,
                     )
+                    if args.field_analysis_only:
+                        result["field_attribution"] = analyze_fields(
+                            projections(m)[site], row, cached[site]
+                        )
                     result.update(
                         arm=arm,
                         site=site,
@@ -547,7 +656,7 @@ def main():
             assert sha(checkpoint) == s["milestone_checkpoint_sha256"][checkpoint.name]
             del m, o, saved, cached, retained
             torch.cuda.empty_cache()
-        assert len(summary["records"]) == 21
+        assert len(summary["records"]) == (9 if args.field_analysis_only else 21)
         summary.update(state="passed", checkpoint_files_unchanged=True)
         save()
     except BaseException as e:

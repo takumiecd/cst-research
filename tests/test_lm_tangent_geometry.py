@@ -137,6 +137,64 @@ class TangentGeometryTests(unittest.TestCase):
             op.vjp(g)[:-32].reshape_as(p), expected, atol=1e-5, rtol=1e-4
         )
 
+    @unittest.skipUnless(
+        importlib.util.find_spec("torchcst"), "optional operator source"
+    )
+    def test_field_atom_scores_sum_to_task_output_inner_product(self):
+        from types import SimpleNamespace
+
+        import torch
+        from analyze_lm_tangent_history import analyze_fields, atom_score_summary
+        from torchcst import ChebyshevSpec, CSTLinear, chart_presets, kernels
+
+        torch.manual_seed(73)
+        layer = CSTLinear(
+            chart_presets.regular_grid(16, spacing=1.0, geometry="flat_torus"),
+            chart_presets.regular_grid(32, spacing=1.0, geometry="flat_torus"),
+            atoms=3,
+            dtype=torch.float64,
+            backend="factored",
+            kernel=kernels.product(
+                kernels.cell_mass(ChebyshevSpec(modes=8), merge_factor=2),
+                coordinates=kernels.radius_envelope(
+                    radius_min=0.5,
+                    radius_max=8.0,
+                    tau=0.03,
+                    radius_fraction_init=0.25,
+                    amplitude_max=32.0,
+                ),
+            ),
+        )
+        point = layer.atoms.p.detach().clone()
+        x, g = (
+            torch.randn(7, 32, dtype=torch.float64),
+            torch.randn(7, 16, dtype=torch.float64),
+        )
+        factors = self.math.factor_partials(layer, point)
+        op = self.math.FactorTangent(x, *factors)
+        actual = torch.randn(op.size, dtype=torch.float64) * 1e-4
+        row = {
+            "x": x,
+            "g": g,
+            "old_p": point,
+            "actual_vector": actual,
+            "bias_delta": torch.zeros(16, dtype=torch.float64),
+            "vectors": {"current_gradient": -op.vjp(g)},
+        }
+        result = analyze_fields(SimpleNamespace(map=layer), row, factors)
+        self.assertEqual(len(result["fields"]), 5)
+        for field in result["fields"].values():
+            self.assertGreaterEqual(field["changed_route_fraction"], 0)
+            self.assertEqual(
+                field["history_atom_linear_scores"]["current_gradient"][
+                    "negative_atom_fraction"
+                ],
+                0,
+            )
+        known = atom_score_summary(torch.tensor([2.0, -1.0, 0.0]))
+        self.assertEqual(known["signed_sum"], 1.0)
+        self.assertAlmostEqual(known["negative_absolute_score_share"], 1 / 3)
+
     def test_history_factorial_has_exact_no_history_limit(self):
         import torch
 
