@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-zero-start-tau-dst-20261109",
   "title": "Zero-start/common32x tau grid with matched TinyStories RigL-style reference",
-  "status": "PLANNED",
-  "status_note": "User authorized lower tau exploration and DST on all comparison plots. Freeze four CST tau arms plus fresh Dense; implement and qualify rectangular RigL-style LM reference separately before execution.",
+  "status": "RUNNING",
+  "status_note": "Four CST tau configurations source-frozen and running on RTX6000 Ada with fresh Dense. DST rectangular reference CPU tests passed; full CPU suite running, GPU qualification/training pending. No HIGGS curve reused.",
   "protocol_source_path": "docs/ffn-zero-start-tau-dst-20261109.md",
   "protocol": {
     "width": 512,
@@ -57,5 +57,17 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-zero-start-tau-6000ada-20261109-01"
+  },
+  "execution": {
+    "cst": {
+      "job_id": "ffn-zero-start-tau-6000ada-20261109-01",
+      "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+      "consumer_commit": "cd7d7476db40202d3f0febdccf2caf46e0909e32",
+      "source_archive_sha256": "63376b2cd42a33cda9e87bb29dc6c67b2c84d4cd1f07d2fefbb64139dc795473"
+    },
+    "dst_status": "CPU-tested preparation; GPU not yet executed",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false
   }
 }
