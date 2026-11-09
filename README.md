@@ -41,6 +41,8 @@ An [explicit prepared-map candidate](https://github.com/takumiecd/torchcst/pull/
 
 The [task-update behavior analysis](docs/lm-task-update-behavior-20261109-results.md) adds36 restored TRAIN probes: useful update alignment differs even at a singleton CST map, while immediate finite-step layer interference is not unusually large on the sampled states. This is descriptive analysis; no optimizer/kernel/default recommendation is adopted.
 
+The [local tangent/history and Atom attribution](docs/lm-tangent-history-20261109-results.md) is complete. In9 CST field observations, radius-fraction displacements differ sharply from derivative predictions at discrete window changes; amplitude and centers largely follow predictions. A no-optimizer FP64 single-Atom witness reproduces jumps in both radius directions. Adam-history effects also occur in Dense/DST. No repair or improvement experiment has been performed.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to

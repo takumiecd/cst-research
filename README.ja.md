@@ -39,6 +39,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [タスク更新の癖の分析](docs/lm-task-update-behavior-20261109-results.ja.md)では36組の復元型TRAIN probeを追加。単独CST写像にも有効な更新方向の一致度の差があり、今回の状態では即時の有限step層間干渉だけが極端に大きくありません。挙動の記述であり、optimizer/kernel/既定値の推奨・採用はしません。
 
+[局所接線・履歴・Atom別分析](docs/lm-tangent-history-20261109-results.ja.md)を完了。CSTフィールド9観測では、半径の割合の変位が離散的な区間切替で微分予測から大きく外れ、振幅と座標は概ね予測通りでした。optimizerを使わないFP64の1 Atom試験で、半径の拡大・縮小の両方の跳びを再現。Adam履歴の影響はDense/DSTにもあります。修正・改善実験は実施していません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**

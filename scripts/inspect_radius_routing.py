@@ -64,6 +64,39 @@ def main():
                 "rows": rows,
             }
         )
+    bidirectional = []
+    for amplitude in (0.1, 1.0, 10.0):
+        low = torch.tensor([[amplitude, 0.0, 7.3, 13.7]], dtype=torch.float64)
+        high = low.clone()
+        high[:, 1] = 1e-12
+        direction = torch.zeros_like(low)
+        direction[:, 1] = 1
+        for label, start, end, sign in (
+            ("expand", low, high, 1),
+            ("shrink", high, low, -1),
+        ):
+
+            def weight(point):
+                vi, uo = layer.operator.factors(point)
+                return uo @ vi.T
+
+            initial, derivative = torch.autograd.functional.jvp(
+                weight, start, sign * direction
+            )
+            change = weight(end) - initial
+            bidirectional.append(
+                {
+                    "direction": label,
+                    "amplitude": amplitude,
+                    "start_radius": float(from_state(layer.kernel, start)[0, 1]),
+                    "end_radius": float(from_state(layer.kernel, end)[0, 1]),
+                    "start_routing": route_signature(layer, start)[0].tolist(),
+                    "end_routing": route_signature(layer, end)[0].tolist(),
+                    "weight_change_frobenius": float(change.norm()),
+                    "predicted_change_frobenius": 1e-12 * float(derivative.norm()),
+                }
+            )
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(
@@ -81,6 +114,7 @@ def main():
                     "base_tile_sites": 1,
                 },
                 "results": results,
+                "bidirectional_amplitude_check": bidirectional,
             },
             indent=2,
         )
