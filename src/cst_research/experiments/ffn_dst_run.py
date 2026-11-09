@@ -365,12 +365,27 @@ def audit(args, data):
         p = args.run / f"checkpoint-{step * 1024}-tokens.pt"
         assert sha(p) == summary["milestone_checkpoint_sha256"][p.name]
         saved = torch.load(p, map_location="cpu", weights_only=False)
-        m = dst.make_model(ModelConfig(**saved["config"]), 17).cuda()
+        dense = saved["kind"] == "dense"
+        cfg = ModelConfig(**saved["config"])
+        m = (
+            LanguageModel(cfg, "dense", 17) if dense else dst.make_model(cfg, 17)
+        ).cuda()
         m.load_state_dict(saved["model"])
-        o = dst.make_optimizer(m, saved["sparse_lr"])
+        o = (
+            torch.optim.AdamW(
+                m.parameters(),
+                lr=0.0003,
+                betas=(0.9, 0.95),
+                eps=1e-8,
+                weight_decay=0.0,
+                foreach=False,
+            )
+            if dense
+            else dst.make_optimizer(m, saved["sparse_lr"])
+        )
         o.load_state_dict(saved["optimizer"])
-        expected = step - sum(k <= step for k in (250, 500))
-        assert saved["actual_adam_updates"] == expected
+        expected = step if dense else step - sum(k <= step for k in (250, 500))
+        assert saved.get("actual_adam_updates", step) == expected
         for state in o.state.values():
             assert int(state["step"]) == expected
             for key in ("exp_avg", "exp_avg_sq"):
@@ -400,7 +415,9 @@ def audit(args, data):
                 "oracles": [
                     oracle(m.blocks[0].ffn.up.map, 91),
                     oracle(m.blocks[0].ffn.down.map, 92),
-                ],
+                ]
+                if not dense
+                else [],
             }
         )
         print("AUDIT PASS", args.run.name, step, flush=True)
