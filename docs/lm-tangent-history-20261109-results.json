@@ -6290,10 +6290,1076 @@
         "weight_change_frobenius": 0.9947844213839745,
         "predicted_change_frobenius": 1.1335836740611063e-11
       }
+    ],
+    "coordinate_boundary_check": [
+      {
+        "radius": 0.5,
+        "field": "output_center",
+        "boundary": 7.0,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.3864370107597205e-06,
+            "predicted_weight_change_norm": 1.154297620943472e-06
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.1185813196133915e-06,
+            "predicted_weight_change_norm": 9.891873121832253e-11
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.1185565925124755e-06,
+            "predicted_weight_change_norm": 9.891708572916854e-15
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.1185565900668525e-06,
+            "predicted_weight_change_norm": 9.891636940322076e-19
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.1185565900668525e-06,
+            "predicted_weight_change_norm": 9.891713186720433e-23
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              2,
+              6,
+              1,
+              2,
+              13
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              13
+            ],
+            "actual_weight_change_norm": 6.1185565900668525e-06,
+            "predicted_weight_change_norm": 1.0592785634877715e-26
+          }
+        ]
+      },
+      {
+        "radius": 0.5,
+        "field": "input_center",
+        "boundary": 7.0,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.3864370107597265e-06,
+            "predicted_weight_change_norm": 1.154297620943473e-06
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.118581319613396e-06,
+            "predicted_weight_change_norm": 9.891873121832262e-11
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.118556592512481e-06,
+            "predicted_weight_change_norm": 9.891708572916863e-15
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.118556590066858e-06,
+            "predicted_weight_change_norm": 9.891636940322084e-19
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.118556590066858e-06,
+            "predicted_weight_change_norm": 9.89171318672044e-23
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              6
+            ],
+            "end_routing": [
+              1,
+              2,
+              7,
+              1,
+              2,
+              7
+            ],
+            "actual_weight_change_norm": 6.118556590066858e-06,
+            "predicted_weight_change_norm": 1.0592785634877724e-26
+          }
+        ]
+      },
+      {
+        "radius": 0.5001,
+        "field": "output_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.06298176095060525,
+            "predicted_weight_change_norm": 0.06290116410870705
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0011159415186577704,
+            "predicted_weight_change_norm": 0.0006301194607512359
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0009210398478209736,
+            "predicted_weight_change_norm": 6.301195716203044e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0009210182952375299,
+            "predicted_weight_change_norm": 6.301195716313914e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0009210182930823181,
+            "predicted_weight_change_norm": 6.301195716313924e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0009210182930821024,
+            "predicted_weight_change_norm": 6.301195716313922e-12
+          }
+        ]
+      },
+      {
+        "radius": 0.5001,
+        "field": "input_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0629817609506054,
+            "predicted_weight_change_norm": 0.06290116410870714
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0011159415186577717,
+            "predicted_weight_change_norm": 0.0006301194607512367
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0009210398478209746,
+            "predicted_weight_change_norm": 6.30119571620305e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0009210182952375308,
+            "predicted_weight_change_norm": 6.30119571631392e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.000921018293082319,
+            "predicted_weight_change_norm": 6.30119571631393e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0009210182930821034,
+            "predicted_weight_change_norm": 6.30119571631393e-12
+          }
+        ]
+      },
+      {
+        "radius": 0.75,
+        "field": "output_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.04988713810631515,
+            "predicted_weight_change_norm": 0.049845888500355574
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 0.0004990916681819644,
+            "predicted_weight_change_norm": 0.0004990776361632311
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 6.234820357676405e-06,
+            "predicted_weight_change_norm": 4.990776980738922e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 3.7373280293533437e-06,
+            "predicted_weight_change_norm": 4.990776980800834e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 3.736994817045971e-06,
+            "predicted_weight_change_norm": 4.990776980800838e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              13
+            ],
+            "end_routing": [
+              1,
+              3,
+              7,
+              1,
+              3,
+              13
+            ],
+            "actual_weight_change_norm": 3.736994783723235e-06,
+            "predicted_weight_change_norm": 4.990776980800839e-12
+          }
+        ]
+      },
+      {
+        "radius": 0.75,
+        "field": "input_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.04988713810631522,
+            "predicted_weight_change_norm": 0.049845888500355616
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 0.0004990916681819644,
+            "predicted_weight_change_norm": 0.0004990776361632316
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 6.234820357676407e-06,
+            "predicted_weight_change_norm": 4.990776980738927e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 3.737328029353348e-06,
+            "predicted_weight_change_norm": 4.990776980800838e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 3.736994817045975e-06,
+            "predicted_weight_change_norm": 4.990776980800844e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              6
+            ],
+            "end_routing": [
+              1,
+              3,
+              6,
+              1,
+              3,
+              7
+            ],
+            "actual_weight_change_norm": 3.7369947837232393e-06,
+            "predicted_weight_change_norm": 4.9907769808008445e-12
+          }
+        ]
+      },
+      {
+        "radius": 1.5,
+        "field": "output_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 0.020941028797333557,
+            "predicted_weight_change_norm": 0.02093561785560168
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 0.0002094503866358011,
+            "predicted_weight_change_norm": 0.00020943795662329017
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 3.096925377608471e-06,
+            "predicted_weight_change_norm": 2.0943796480224706e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 2.281437995243572e-06,
+            "predicted_weight_change_norm": 2.0943796480306496e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 2.2813418699305045e-06,
+            "predicted_weight_change_norm": 2.09437964803065e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              6
+            ],
+            "end_routing": [
+              2,
+              3,
+              3,
+              2,
+              3,
+              6
+            ],
+            "actual_weight_change_norm": 2.28134186042116e-06,
+            "predicted_weight_change_norm": 2.0943796480306498e-12
+          }
+        ]
+      },
+      {
+        "radius": 1.5,
+        "field": "input_center",
+        "boundary": 7.5,
+        "rows": [
+          {
+            "epsilon": 0.01,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 0.02094102879733363,
+            "predicted_weight_change_norm": 0.020935617855601683
+          },
+          {
+            "epsilon": 0.0001,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 0.0002094503866358011,
+            "predicted_weight_change_norm": 0.00020943795662329025
+          },
+          {
+            "epsilon": 1e-06,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 3.0969253775976656e-06,
+            "predicted_weight_change_norm": 2.094379648022471e-06
+          },
+          {
+            "epsilon": 1e-08,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 2.281437995243572e-06,
+            "predicted_weight_change_norm": 2.0943796480306502e-08
+          },
+          {
+            "epsilon": 1e-10,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 2.2813418699305053e-06,
+            "predicted_weight_change_norm": 2.0943796480306513e-10
+          },
+          {
+            "epsilon": 1e-12,
+            "start_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              2
+            ],
+            "end_routing": [
+              2,
+              3,
+              2,
+              2,
+              3,
+              3
+            ],
+            "actual_weight_change_norm": 2.2813418604211603e-06,
+            "predicted_weight_change_norm": 2.094379648030651e-12
+          }
+        ]
+      }
     ]
   },
-  "witness_sha256": "a59ff7a5c6dc440802ec68023a20f353f00c7c8baa3d982e020bea96360a07d3",
-  "witness_script_sha256": "0bca524b9a5b1f0b34380c7cfbb7a55105cd8c4b9132bc5fe70a1e845c69fbc2",
+  "witness_sha256": "de52515524f2f4b2c47edee5ebb61c7deb5ca23d3cc74ba5563ae0761d2f6083",
+  "witness_script_sha256": "2ff9a3e32e0e339fb1c677f057b7b190600f9401bae73b69e374c574565396eb",
   "evidence": [
     {
       "job": "lm-tangent-history-4090-20261109-02",

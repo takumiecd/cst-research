@@ -53,7 +53,9 @@ Only1.22–1.68% of Atoms change routing in the fraction-only update, yet their
 contribution reconstructs nearly the entire linearization residual. Ratios are
 norms, not additive variance percentages; small cancellation can make them
 slightly exceed1. The unchanged-Atom contribution is tiny. Not every route
-change is disruptive: center-window shifts in these observations remain smooth.
+change is equally disruptive: center-window shifts in these observations closely
+follow derivative predictions. This does not establish continuity at every
+position boundary.
 
 ![Field task alignment](assets/lm-tangent-history-20261109/field-directions.png)
 
@@ -80,6 +82,18 @@ not sufficient. At the same radii, amplitudes0.1/1/10 yield jumps
 0.00994784/0.09947844/0.99478442 in both directions: amplitude amplifies the jump.
 FP32 rounds the tiniest displacements away; it does not remove the underlying
 FP64 discontinuity. This boundary witness is not a claim about every boundary.
+
+A subsequent CPU FP64 position-window witness also finds center discontinuities.
+At fixed radius0.5001 and amplitude1, moving either center from7.5-1e-12 to
+7.5+1e-12 changes first tile6 to7, with tile width1 and K3 unchanged. A site
+window[6,7,8] becomes[7,8,9]. The dropped site's mass is nonzero; it is reassigned
+at the opposite window edge. Actual weight change is0.000921018293 versus a
+6.30120e-12 derivative prediction. The input/output-center witnesses agree.
+Additional fixed radii0.5/0.75/1.5 and six displacement scales are recorded in
+JSON. Smaller errors in the sampled training updates therefore do not mean
+center routing is inherently continuous. Both window position and size require
+boundary checks; blending only as a function of radius does not repair position
+switches. No operator or optimizer was modified.
 
 ![Single-Atom witness](assets/lm-tangent-history-20261109/single-atom-witness.png)
 

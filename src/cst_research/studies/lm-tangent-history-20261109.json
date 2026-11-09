@@ -117,7 +117,8 @@
     "fresh_native_tests_per_job": 68,
     "local_tests": 272,
     "local_passed": 211,
-    "local_skipped": 61
+    "local_skipped": 61,
+    "cpu_coordinate_witness": "FP64 output/input center boundary switches at4 fixed radii,6 displacement scales; K/tile unchanged, first tile changes; no optimizer."
   },
   "results_source_path": "docs/lm-tangent-history-20261109-results.md"
 }

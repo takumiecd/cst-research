@@ -2,12 +2,70 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 import torch
 from analyze_lm_tangent_history import route_signature
 from torchcst import ChebyshevSpec, CSTLinear, chart_presets, kernels
 from torchcst._backends.torch.parameterizations.radius_envelope import from_state
+
+
+def coordinate_boundary_check(layer):
+    """Same-radius position-window switches, independent of any optimizer."""
+
+    def weight(point):
+        vi, uo = layer.operator.factors(point)
+        return uo @ vi.T
+
+    results = []
+    for radius in (0.5, 0.5001, 0.75, 1.5):
+        for column in (2, 3):
+            fraction = math.log(radius / 0.5) / math.log(100.0)
+            boundary = 7.0 if radius == 0.5 else 7.5
+            rows = []
+            for epsilon in (1e-2, 1e-4, 1e-6, 1e-8, 1e-10, 1e-12):
+                start = torch.tensor([[1.0, fraction, 7.3, 13.7]], dtype=torch.float64)
+                start[:, column] = boundary - epsilon
+                end = start.clone()
+                end[:, column] = boundary + epsilon
+                direction = torch.zeros_like(start)
+                direction[:, column] = 1
+                initial, derivative = torch.autograd.functional.jvp(
+                    weight, start, direction
+                )
+                first, last = (
+                    route_signature(layer, start)[0],
+                    route_signature(layer, end)[0],
+                )
+                assert torch.equal(first[[0, 1, 3, 4]], last[[0, 1, 3, 4]])
+                assert not torch.equal(first, last)
+                assert torch.equal(
+                    from_state(layer.kernel, start)[:, 1],
+                    from_state(layer.kernel, end)[:, 1],
+                )
+                rows.append(
+                    {
+                        "epsilon": epsilon,
+                        "start_routing": first.tolist(),
+                        "end_routing": last.tolist(),
+                        "actual_weight_change_norm": float(
+                            (weight(end) - initial).norm()
+                        ),
+                        "predicted_weight_change_norm": 2
+                        * epsilon
+                        * float(derivative.norm()),
+                    }
+                )
+            results.append(
+                {
+                    "radius": radius,
+                    "field": "output_center" if column == 2 else "input_center",
+                    "boundary": boundary,
+                    "rows": rows,
+                }
+            )
+    return results
 
 
 def main():
@@ -115,6 +173,7 @@ def main():
                 },
                 "results": results,
                 "bidirectional_amplitude_check": bidirectional,
+                "coordinate_boundary_check": coordinate_boundary_check(layer),
             },
             indent=2,
         )
