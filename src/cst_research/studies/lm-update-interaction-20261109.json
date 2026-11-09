@@ -6,8 +6,8 @@
   "runner_entrypoint": "scripts/audit_lm_updates.py and scripts/screen_lm_updates.py",
   "id": "lm-update-interaction-20261109",
   "title": "Task update direction, finite-step interaction and bounded field-rate continuation",
-  "status": "PLANNED",
-  "status_note": "Owner-authorized stage A36restored one-step diagnostics and stage B10fixed512-update continuations; implementation prepared, no GPU result yet.",
+  "status": "RUNNING",
+  "status_note": "Fresh native68gate and30CST/Dense diagnostic records passed on attempt01; DST nonpersistent scratch check corrected in separate immutable attempt02. Prior30records must reproduce exactly; no continuation training completed yet.",
   "protocol_source_path": "docs/lm-update-interaction-20261109.md",
   "protocol": {
     "objective": "Original TinyStories task labels; diagnose useful update direction and inter-layer interference; no Dense teacher",
@@ -107,10 +107,15 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-update-interaction-4090-20261109-01"
+    "relative_path": "lm-update-interaction-4090-20261109-02"
   },
   "execution": {
-    "state": "not_started",
+    "state": "running",
+    "consumer_commit": "c448ec58da06e7ffdb89c83467d0ef6759f9380d",
+    "runtime_import_consumer_commit": "7b89c7db7105b4212fa9aee3efbc2870f1b848e3",
+    "source_archive_sha256": "f4f5fe9b82c713df29fe1fb1046db46ee200ba99228893a94de7937a4b75f841",
+    "previous_attempt": "lm-update-interaction-4090-20261109-01",
+    "measurement_fix": "Declared DST nonpersistent dense_gradient is checked against unmasked task gradient; all persistent buffers remain exact; all buffers restored. No numerical tolerance relaxation.",
     "confirmation_evaluated": false,
     "public_default_adopted": false
   }

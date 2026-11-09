@@ -34,6 +34,11 @@ def clone_state(model):
     return {n: x.detach().clone() for n, x in model.named_parameters()}
 
 
+def load_optimizer_snapshot(optimizer, state):
+    """load_state_dict may alias CPU counters and same-device moment tensors."""
+    optimizer.load_state_dict(copy.deepcopy(state))
+
+
 def validate_regular_buffers(model, before, raw_gradients):
     """DST's declared nonpersistent gradient scratch changes; masks must not."""
     from cst_research.experiments.ffn_dst import MaskedLinear
@@ -275,7 +280,7 @@ def diagnose(model, optimizer, batches, step, *, replay_check=False):
         )
         if replay_check:
             endpoint(model, old, new, [])
-            optimizer.load_state_dict(old_optimizer)
+            load_optimizer_snapshot(optimizer, old_optimizer)
             torch.set_rng_state(cpu_rng)
             torch.cuda.set_rng_state(cuda_rng)
             unhooked, _ = accumulate(model, optimizer, batches)
@@ -289,7 +294,7 @@ def diagnose(model, optimizer, batches, step, *, replay_check=False):
         with torch.no_grad():
             for name, buffer in model.named_buffers():
                 buffer.copy_(buffers[name])
-        optimizer.load_state_dict(old_optimizer)
+        load_optimizer_snapshot(optimizer, old_optimizer)
         optimizer.zero_grad(set_to_none=True)
         torch.set_rng_state(cpu_rng)
         torch.cuda.set_rng_state(cuda_rng)
@@ -365,7 +370,11 @@ def main():
                     if s["kind"] == "cst":
                         configure_native(model)
                     optimizer = make_optimizer(model)
-                    optimizer.load_state_dict(saved["optimizer"])
+                    load_optimizer_snapshot(optimizer, saved["optimizer"])
+                    assert all(
+                        int(s["step"]) == saved["actual_adam_updates"]
+                        for s in optimizer.state.values()
+                    )
                     for group in optimizer.param_groups:
                         group["lr"] = learning_rate(
                             step + 1, plan.schedule_steps
@@ -389,7 +398,13 @@ def main():
                         checkpoint_step=step,
                         batch_offset_steps=offset,
                         checkpoint_sha256=s["milestone_checkpoint_sha256"][path.name],
+                        optimizer_clock_after_restore=sorted(
+                            {int(s["step"]) for s in optimizer.state.values()}
+                        ),
                     )
+                    assert row["optimizer_clock_after_restore"] == [
+                        saved["actual_adam_updates"]
+                    ]
                     result["records"].append(row)
                     save()
                     print("UPDATE AUDIT PASS", arm, step, offset, flush=True)

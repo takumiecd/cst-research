@@ -9,6 +9,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from audit_lm_updates import load_optimizer_snapshot
 
 RECIPES = {
     "control32": (32, 32, 32, 32),
@@ -145,7 +146,7 @@ def main():
                 if m.kind == "cst":
                     configure_native(m)
                 o = make_optimizer(m)
-                o.load_state_dict(state["optimizer"])
+                load_optimizer_snapshot(o, state["optimizer"])
                 configure_rates(o, recipe)
                 return m, o
 

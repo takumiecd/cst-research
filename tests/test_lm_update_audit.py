@@ -27,6 +27,32 @@ class UpdateAuditTests(unittest.TestCase):
         self.assertIsNone(v["descent_cosine"])
         self.assertEqual(v["predicted_loss_reduction"], 0)
 
+    def test_optimizer_snapshot_counter_and_moments_survive_repeated_restores(self):
+        import copy
+
+        import torch
+
+        p = torch.nn.Parameter(torch.tensor([1.0]))
+        o = torch.optim.AdamW([p], lr=0.1, weight_decay=0, foreach=False)
+        p.grad = torch.tensor([2.0])
+        o.step()
+        point = p.detach().clone()
+        frozen = copy.deepcopy(o.state_dict())
+        original = copy.deepcopy(frozen)
+        next_points = []
+        for _ in range(2):
+            with torch.no_grad():
+                p.copy_(point)
+            self.audit.load_optimizer_snapshot(o, frozen)
+            p.grad = torch.tensor([-3.0])
+            o.step()
+            next_points.append(p.detach().clone())
+            for key in ("step", "exp_avg", "exp_avg_sq"):
+                self.assertTrue(
+                    torch.equal(frozen["state"][0][key], original["state"][0][key])
+                )
+        self.assertTrue(torch.equal(*next_points))
+
     def test_endpoint_restores_complement_and_two_layer_interaction(self):
         import torch
         from torch import nn
@@ -82,6 +108,7 @@ class UpdateAuditTests(unittest.TestCase):
     def test_dst_scratch_is_validated_against_raw_gradient_but_mask_is_immutable(self):
         import torch
         from torch import nn
+
         from cst_research.experiments.ffn_dst import MaskedLinear
 
         model = nn.Module()
