@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "id": "kernel-taylor-continuity-20261109",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/compare_kernel_taylor.py",
+  "title": "CPU Gaussian and Fourier-window first-order response continuity",
+  "status": "PLANNED",
+  "status_note": "Protocol and independent Gaussian checks prepared; no learning, optimizer, GPU or production kernel change.",
+  "protocol_source_path": "docs/kernel-taylor-continuity-20261109.md",
+  "protocol": {
+    "device": "CPU",
+    "profiles": [
+      "wrapped_gaussian_fixed_cells",
+      "chebyshev_M4",
+      "chebyshev_M8",
+      "chebyshev_M16",
+      "chebyshev_M32",
+      "chebyshev_M64"
+    ],
+    "fixtures": 19,
+    "records": 152,
+    "finite_displacements": 1216,
+    "primary_dtype": "FP64",
+    "secondary_dtype": "FP32 Gaussian/current M8",
+    "images": [
+      -4,
+      4
+    ],
+    "training_updates": 0,
+    "production_kernel_changes": false,
+    "speed_measurement": false,
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "kernel-taylor-continuity-cpu-20261109-01"
+  }
+}
