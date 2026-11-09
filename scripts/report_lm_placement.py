@@ -377,7 +377,7 @@ def main():
             arms,
             blocks,
             title,
-            limit=(-1.5, 1.5) if key == "row_centered_rms" else (0, 0.2),
+            limit=(-1.5, 1.5) if key == "row_centered_rms" else (0, 0.35),
             cmap="coolwarm" if key == "row_centered_rms" else "viridis",
             log=key == "row_centered_rms",
         )
