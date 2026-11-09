@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "95f647f97749f61f5f5c15ac29932f908fb334ce",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
+  "id": "lm-geometry-epsilon-capacity-20261110",
+  "title": "All-FFN CST capacity versus Adam epsilon pilot",
+  "status": "PLANNED",
+  "status_note": "Prepared fixed short pilot; no new GPU result yet.",
+  "runner_entrypoint": "cst_research.experiments.lm_geometry_trial_run",
+  "protocol_source_path": "docs/lm-geometry-epsilon-capacity-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-geometry-epsilon-capacity-3090-20261110-01"
+  },
+  "protocol": {
+    "seed": 17,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "coefficients": [
+      8,
+      16
+    ],
+    "atom_epsilons": [
+      1e-08,
+      1e-10
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  }
+}

@@ -135,7 +135,7 @@ class ModelConfig:
                 and (
                     self.width != 512
                     or self.expansion != 4
-                    or self.coefficient != 8
+                    or self.coefficient not in (8, 16)
                     or self.linear_backend not in ("levels", "levels_wide_amplitude")
                 )
             )
