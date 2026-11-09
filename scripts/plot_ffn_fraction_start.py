@@ -179,6 +179,71 @@ def main():
                 else "Tail zoom, seed17; DST selected on DEV, no confirmation"
             )
             save(fig, f"{stage}-development-tail")
+        if long_run:
+            fig, axes = plt.subplots(1, 2, figsize=(13, 4), layout="constrained")
+            for row in selected:
+                points = [
+                    p
+                    for p in curves[row["label"]]
+                    if "development" in p and p["step"] >= 10
+                ]
+                timings = summaries[row["label"]]["timing_samples_seconds"]
+                assert len(timings) == row["updates"] - 10
+                cumulative = np.r_[0.0, np.cumsum(timings)]
+                ce = [p["development"]["ce"] for p in points]
+                axes[0].plot(
+                    [p["seen_tokens"] / 1e6 for p in points],
+                    ce,
+                    color=colors[name(row)],
+                    label=name(row),
+                )
+                axes[1].plot(
+                    [cumulative[p["step"] - 10] / 60 for p in points],
+                    ce,
+                    color=colors[name(row)],
+                    label=name(row),
+                )
+            axes[0].set_xlabel("Training tokens (millions)")
+            axes[1].set_xlabel("Accumulated measured training minutes, steps11+")
+            for ax in axes:
+                ax.set_ylabel("Development cross entropy")
+                ax.grid(alpha=0.2)
+            axes[0].legend(fontsize=8)
+            fig.suptitle(
+                "Fixed20M-token arms; timing excludes DEV/checkpoints/observers, includes DST topology"
+            )
+            save(fig, f"{stage}-development-training-time")
+        if long_run:
+            extra = read(root / "retrieved/checkpoint-metrics.json")
+            assert extra["state"] == "passed" and len(extra["models"]) == 15
+            fig, axes = plt.subplots(1, 2, figsize=(13, 4), layout="constrained")
+            for row in selected:
+                points = sorted(
+                    [p for p in extra["models"] if p["kind"] == row["kind"]],
+                    key=lambda p: p["step"],
+                )
+                assert len(points) == 5 and all(p["tokens"] == 8192 for p in points)
+                for ax, metric, factor in (
+                    (axes[0], "ce", 1),
+                    (axes[1], "next_token_top1_accuracy", 100),
+                ):
+                    ax.plot(
+                        [p["completed_tokens"] / 1e6 for p in points],
+                        [p[metric] * factor for p in points],
+                        "o-",
+                        color=colors[name(row)],
+                        label=name(row),
+                    )
+            axes[0].set_ylabel("Development cross entropy")
+            axes[1].set_ylabel("Teacher-forced next-token top1 accuracy (%)")
+            for ax in axes:
+                ax.set_xlabel("Training tokens (millions)")
+                ax.grid(alpha=0.2)
+            axes[0].legend(fontsize=8)
+            fig.suptitle(
+                "Same8192 DEV targets; supplementary top1 at5 checkpoints/arm, no confirmation"
+            )
+            save(fig, f"{stage}-development-accuracy")
         cst = [r for r in selected if r["kind"] == "cst"]
         geo = {
             r["label"]: lines(directories[r["label"]] / "geometry.jsonl") for r in cst
@@ -341,6 +406,10 @@ def main():
         record = {
             **row,
             "median_update_ms": statistics.median(s["timing_samples_seconds"]) * 1000,
+            "mean_update_ms": statistics.mean(s["timing_samples_seconds"]) * 1000,
+            "p90_update_ms": float(np.quantile(s["timing_samples_seconds"], 0.9))
+            * 1000,
+            "measured_training_seconds_steps11plus": sum(s["timing_samples_seconds"]),
             "setup_seconds": s["setup_seconds"],
             "total_wall_seconds": s["total_elapsed_seconds"],
             "ffn_parameters": s["actual_ffn_parameters"],

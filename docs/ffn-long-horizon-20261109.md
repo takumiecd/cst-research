@@ -55,3 +55,18 @@ checkpoint filename hashes (final aliases included). Retrieve hash-verified comp
 logs/receipts/source archives; leave bulky checkpoints on the GPU. Record actual
 hardware and runtime, admission and limitations in a separate results note.
 Evidence: CST_RESEARCH_EVIDENCE_ROOT/ffn-long-horizon-4090-20261109-01.
+
+## Supplementary token accuracy
+
+At the owner's request during Dense training, add teacher-forced next-token top1
+accuracy on the same8192 DEV targets for all15 unique milestone checkpoints.
+This evaluation is post hoc to source freeze and supplements the original CE and
+perplexity; it does not change training, primary metrics, selection or confirmation.
+Run its separately hash-identified evaluator after all training and trained audits,
+so it cannot interfere with step timing. Verify its CE against the original logs.
+Token top1 is not sentence exact match or free-generation quality. DEV is story-
+disjoint from training, but8192 targets and one seed remain a small development pilot.
+Report cumulative measured training time separately from elapsed wall time:
+ordinary Dense/CST save checkpoints every200 steps, DST saves only milestones,
+and CST also has geometry observers. These overheads make wall curves diagnostic,
+not a controlled sparse arithmetic comparison.

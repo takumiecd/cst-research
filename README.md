@@ -28,6 +28,8 @@ off-device recovery. The [radius-envelope implementation](https://github.com/tak
 now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
 RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109-results.md) completed all15 runs and trained audits. At976updates/three seeds, DEV CE was3.2992 Dense,3.4061 tau.003 and3.4157 tau.01. Fractions learn; width512 still has a loss/speed gap and no peak-memory advantage.
 The public API uses radius_fraction_init / radius_fraction without q aliases.
+The [fixed20M-token Dense/DST/CST comparison on RTX4090](docs/ffn-long-horizon-20261109.md) is running after fresh GPU qualification. CST uses initialfraction0/tau.003/common32x; DST uses the previous DEV-selected sparse LR.003. Both restart from initialization; no new tuning or confirmation. Long-run results are pending.
+
 The [zero-start tau sweep with a matched DST reference](docs/ffn-zero-start-tau-dst-20261109-results.md) is complete: tau.0003/.001/.003/.01 gave DEV CE3.3964/3.3987/3.3930/3.3954; tuned RigL-style DST3.3507,Dense3.3090 (976steps,seed17). Smaller tau did not close the gap. Learning-curve comparisons now include a verified DST reference; all four DST LR candidates are retained.
 
 A [matched initial fraction0/.5 comparison at common CST LR32×](docs/ffn-fraction-zero-start-20261109-results.md) gave DEV CE3.3930/3.4328 versus Dense3.3090 at976updates/seed17. Zero start learns(mean fraction0→.1406) and improves this pilot; mean radius remains smaller. No RMS calibration or default adoption.

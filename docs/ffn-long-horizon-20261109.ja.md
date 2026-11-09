@@ -50,3 +50,16 @@ tokens軸・経過時間軸の曲線を残す。
 compact archiveをハッシュ検証して回収し、大きなcheckpointはGPU側に残す。
 実機・runtime・検証結果・制限は別の結果文書に記録する。
 証拠：CST_RESEARCH_EVIDENCE_ROOT/ffn-long-horizon-4090-20261109-01。
+
+## 追加のトークン正答率
+
+Dense学習中の所有者の依頼により、同じ8192 DEV targetsでteacher forcingによる
+次トークンtop1正答率を15個すべての節目checkpointから追加集計する。
+source固定後の追加評価であり、従来のCE・perplexityを補足する。学習・主指標・
+選択・confirmationの扱いは変えない。ステップ計時に干渉しないよう、全学習と
+学習済み監査の後に、別途ハッシュを残したevaluatorを実行し、CEが元ログと一致することも確認。
+トークン正答率は文全体の完全一致率や自由生成の品質ではない。
+DEVは学習とstoryが重複しないが、8192 targets・1 seedの小さな開発実験である。
+計測した学習ステップ累積時間と実経過時間を分けて報告する。
+Dense/CSTは200ステップごとにcheckpointを保存する一方DSTは節目のみであり、
+CSTには幾何observerもある。このためwall曲線は診断用で、疎演算の公平な効率比較ではない。

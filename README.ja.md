@@ -27,6 +27,8 @@ torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)�
 全15本と学習後監査を完了しました。976更新・3seedでDEV CEはDense3.2992、tau.003が3.4061、
 tau.01が3.4157。fractionは学習しますが、幅512では損失・速度の差が残り、ピークメモリの優位もありません。
 公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
+[RTX4090での固定20M-token Dense・DST・CST比較](docs/ffn-long-horizon-20261109.ja.md)を、実機で再検査したうえで実行中です。CSTは初期fraction0・tau.003・共通32倍、DSTは以前DEVで選んだ疎LR.003。すべて新規初期化し、追加調整・confirmation評価はしません。長期の結果は未確定です。
+
 [0スタートのtau探索と同条件DST対照](docs/ffn-zero-start-tau-dst-20261109-results.ja.md)も完了。tau.0003/.001/.003/.01のDEV CEは3.3964/3.3987/3.3930/3.3954、LR調整したRigL-style DST3.3507、Dense3.3090(976step・seed17)。小tauでは差は埋まりませんでした。学習曲線の比較には検証済みDSTを含め、DSTの全4LR候補も残します。
 
 [共通CST LR32倍で初期fraction0/.5を揃えた比較](docs/ffn-fraction-zero-start-20261109-results.ja.md)は976更新・seed17でDEV CE3.3930/3.4328、Dense3.3090でした。0スタートでも平均fractionは0→.1406へ学習し、この短期比較では改善。平均半径も小さい状態で、RMS校正・default採用はしていません。

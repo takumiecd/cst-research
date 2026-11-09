@@ -153,7 +153,14 @@
       "memory": "peak allocated and reserved; DST dense storage is an accuracy reference, not sparse kernel efficiency"
     },
     "admission": "Fresh 68 operator tests plus exact CST model qualification, long-DST branch/oracle qualification, all15 unique trained checkpoint audits, source and data-order hash match, verified compact retrieval",
-    "scope": "One exploratory DEV seed, not a quality parity or generalization claim; no confirmation/test or Omega inference"
+    "scope": "One exploratory DEV seed, not a quality parity or generalization claim; no confirmation/test or Omega inference",
+    "supplementary_evaluation": {
+      "metric": "teacher-forced next-token top1 accuracy",
+      "data": "same8192 DEV targets",
+      "checkpoints": "all15 unique frozen milestones",
+      "added": "owner request during Dense long training, after source freeze; no model selection or training change",
+      "primary_unchanged": "DEV CE and perplexity"
+    }
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
