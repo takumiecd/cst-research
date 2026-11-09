@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "source_repository": "https://github.com/takumiecd/torchcst",
-  "source_commit": "1605fa8f0d0eaf57e7c1548968e1b6281daba031",
+  "source_commit": "00aae6afaf3615da6bccd986c75c14cd7b2ca64b",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
   "runner_entrypoint": "cst_research.experiments.lm_connected_run",
   "id": "lm-connected-short-20261109",
   "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
   "status": "RUNNING",
-  "status_note": "Immutable retry02 running; all controls and both CST arms require full-model gates before training. No changes to hyperparameters or tolerances.",
+  "status_note": "Retry02 stopped before training at a bitwise qualification gate, after full-A numerical oracle. Separate ordered direct-level executor prepared; same protocol, rates and exact-state gates.",
   "protocol_source_path": "docs/lm-connected-short-20261109.md",
   "protocol": {
     "arms": [
@@ -58,7 +58,7 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-connected-short-4090-20261109-02"
+    "relative_path": "lm-connected-short-4090-20261109-03"
   },
   "execution": {
     "job": "lm-connected-short-4090-20261109-02",
@@ -69,6 +69,8 @@
     "public_default_adopted": false,
     "failed_attempt": "lm-connected-short-4090-20261109-01",
     "native_tests_passed": 78,
-    "native_qualification": "reused78 passing tests from failed-before-training attempt01; all operator source hashes verified identical"
+    "native_qualification": "reused78 passing tests from failed-before-training attempt01; all operator source hashes verified identical",
+    "second_failed_attempt": "lm-connected-short-4090-20261109-02",
+    "ordered_executor": "cuda_connected_m16_ordered_envelope"
   }
 }

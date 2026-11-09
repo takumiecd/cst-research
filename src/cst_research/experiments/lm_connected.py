@@ -5,8 +5,8 @@ from dataclasses import replace
 import torch
 from torchcst import ChebyshevSpec, CSTLinear, FixedSelector, make_algorithm_registry
 from torchcst._backends.cuda.algorithms.linear.connected_cell_mass_coalesced.envelope import (
-    CONNECTED_ENVELOPE,
-    ConnectedEnvelopeAlgorithm,
+    CONNECTED_ORDERED_ENVELOPE,
+    ConnectedOrderedEnvelopeAlgorithm,
 )
 from torchcst.kernels.spec import RadiusConnectionSpec
 
@@ -63,10 +63,10 @@ def model_for(arm, device="cuda"):
             configure_native(model)
         else:
             registry = make_algorithm_registry()
-            registry.register(ConnectedEnvelopeAlgorithm())
+            registry.register(ConnectedOrderedEnvelopeAlgorithm())
             for projection in projections(model).values():
                 projection.map.selector = FixedSelector(
-                    CONNECTED_ENVELOPE, registry=registry
+                    CONNECTED_ORDERED_ENVELOPE, registry=registry
                 )
     model.study_arm = arm
     return model

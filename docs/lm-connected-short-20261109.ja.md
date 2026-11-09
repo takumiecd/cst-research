@@ -55,3 +55,14 @@ CSTの各最終状態でも全A oracleを再実施。実モデルの許容差は
 command・PID、checkpoint、raw曲線/probeを固定・hash化。失敗試行と過去証拠を保全する。
 予約済み4090で直列に実行し、追加資源の確保や公開既定値の採用はしない。
 各repoのPRを通し、mainと旧実行は変更しない。結果は未取得。
+
+## 学習前の実行上の修正記録
+
+試行01はnative78テストを通過したが、runnerのoptimizer import漏れで検証・学習前に停止。
+直接importとGPU不要の起動テストで修正し、ハイパーパラメータ・許容差は変更しない。
+試行02ではDense/DST/従来CSTの検証とconnectedの全A数値oracleを通過した後、
+次更新のbit一致で停止した（最初の埋め込み最大差7.451e-9）。
+別の順序固定direct-level physical/包絡実装で、浮動小数atomicのsite集約を
+階層ごとのscratchと固定順のsite加算へ変更する。演算順序の変更であり、profile、
+初期化、LR、optimizerは変更しない。試行03でも厳密な再開・hook検証ゲートを維持する。
+失敗試行と固定sourceを保全し、いずれの試行にもタスク学習結果はない。

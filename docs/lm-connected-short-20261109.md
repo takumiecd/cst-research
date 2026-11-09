@@ -69,3 +69,16 @@ raw curves/probes are fixed and hashed. Preserve failed attempts and old evidenc
 Use the reserved4090, run arms sequentially, no new resource allocation or public
 default adoption. Integrate through separate PRs; leave main and old runs unchanged.
 Results are pending.
+
+## Recorded pre-training execution amendments
+
+Attempt01 passed78 native tests but stopped before qualification/training due to
+an optimizer import error in the runner. A direct import and GPU-free runner
+smoke test fix this; no hyperparameters or tolerances changed. Attempt02 passed
+Dense/DST/legacy qualification and the connected full-A numerical oracle, then
+failed bitwise next-update equality (first embedding maximum7.451e-9). A separate
+ordered-direct-level physical/envelope executor replaces floating atomic site
+sums with level scratch and fixed-order site accumulation. This is an arithmetic
+schedule change, not a kernel-profile, initialization, LR or optimizer change.
+Exact resume/hook gates are retained for attempt03. Failed attempts and their
+frozen sources remain preserved; no task-learning result existed in either.

@@ -64,12 +64,12 @@ def native_layer(operator, p):
     registry = make_algorithm_registry()
     if operator.kernel.revision == 10:
         from torchcst._backends.cuda.algorithms.linear.connected_cell_mass_coalesced.envelope import (
-            CONNECTED_ENVELOPE,
-            ConnectedEnvelopeAlgorithm,
+            CONNECTED_ORDERED_ENVELOPE,
+            ConnectedOrderedEnvelopeAlgorithm,
         )
 
-        registry.register(ConnectedEnvelopeAlgorithm())
-        plan = CONNECTED_ENVELOPE
+        registry.register(ConnectedOrderedEnvelopeAlgorithm())
+        plan = CONNECTED_ORDERED_ENVELOPE
     else:
         from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.radius_envelope import (
             RADIUS_ENVELOPE_WIDE_AMPLITUDE_LM,
