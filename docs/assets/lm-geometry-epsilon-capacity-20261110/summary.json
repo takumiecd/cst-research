@@ -1,0 +1,234 @@
+{
+  "scope": "same retained raw Atom rows, original TRAIN X and task cotangent; CPU FP64 factors after FP32 envelope decode; degree/connection paired local VJP, not retrained M8 causal attribution",
+  "sampling": "all-cst and pair12, all selected sites, first up to2 witnesses per preexisting geometry category",
+  "summary": {
+    "all-cst/sharp_both_near_grid": {
+      "M8 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          0.0005052246851846576,
+          1.3810873952024849e-05,
+          6.103412601987657e-07,
+          1.100828455946612e-06
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          0.0005052246851846576,
+          1.3810873952024849e-05,
+          6.103412601987657e-07,
+          1.100828455946612e-06
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          0.0005064441502327099,
+          5.7300624245471e-09,
+          1.2085515921356205e-09,
+          2.4820653310442253e-09
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          0.0005064441502327099,
+          5.7300624245471e-09,
+          1.2085515921356205e-09,
+          2.4820653310442253e-09
+        ]
+      }
+    },
+    "all-cst/sharp_both_away_grid": {
+      "M8 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          8.288558819913305e-05,
+          4.0679412904864876e-06,
+          2.6402955199955613e-06,
+          2.392436726950109e-06
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          8.288558819913305e-05,
+          6.871387540741125e-06,
+          3.2987611575663323e-06,
+          3.0428667514570407e-06
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          8.818866990623064e-05,
+          5.837424907895183e-07,
+          7.755601245662547e-07,
+          2.8742783797497395e-07
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          8.818866990623064e-05,
+          8.153101873631385e-07,
+          7.755601245662547e-07,
+          2.907743663627116e-07
+        ]
+      }
+    },
+    "all-cst/wide": {
+      "M8 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          1.5678150703024585e-05,
+          4.966251481164363e-06,
+          1.6002971392481413e-07,
+          1.006139793702232e-07
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          1.5678150703024585e-05,
+          4.966967935615685e-06,
+          1.6002022107386438e-07,
+          1.006119187962895e-07
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          1.9531152247509453e-05,
+          1.0625935829011723e-05,
+          3.4501184131841e-07,
+          1.2750189881671758e-07
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 16,
+        "median_abs_raw_gradient": [
+          1.9531152247509453e-05,
+          1.0625935829011723e-05,
+          3.4501184131841e-07,
+          1.2750189881671758e-07
+        ]
+      }
+    },
+    "pair12/sharp_both_near_grid": {
+      "M8 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          0.000309472277876921,
+          8.93082506081555e-06,
+          2.943194346016753e-07,
+          2.3760881617818086e-07
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          0.00030927907209843397,
+          8.93082506081555e-06,
+          2.943194346016753e-07,
+          2.3760881617818086e-07
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          0.00030955171678215265,
+          1.0248335235996109e-09,
+          3.8044788153168696e-10,
+          3.325693331834856e-10
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          0.00030955167312640697,
+          1.3867702541858762e-09,
+          3.8044788153168696e-10,
+          3.325693331834856e-10
+        ]
+      }
+    },
+    "pair12/sharp_both_away_grid": {
+      "M8 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          2.657818367879372e-05,
+          1.6867149099653034e-07,
+          1.7096341764499812e-07,
+          3.681759821461128e-07
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          2.657818367879372e-05,
+          2.200768776106088e-07,
+          2.5133649472763864e-07,
+          3.681759821461128e-07
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          2.6375492780061904e-05,
+          6.188633872028504e-08,
+          1.6286568982337712e-08,
+          6.362668791837223e-08
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          2.6375492780061904e-05,
+          6.188633872028504e-08,
+          1.6578475481310306e-08,
+          6.362668791837223e-08
+        ]
+      }
+    },
+    "pair12/wide": {
+      "M8 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          9.769495136424666e-06,
+          3.713341016009508e-06,
+          6.453749890056315e-08,
+          2.1698619789844997e-08
+        ]
+      },
+      "M8 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          9.769495136424666e-06,
+          3.713341016009508e-06,
+          6.453749890056315e-08,
+          2.1698619789844997e-08
+        ]
+      },
+      "M16 unconnected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          1.3110875443089753e-05,
+          6.878356316519785e-06,
+          1.754989860103251e-07,
+          2.3356164291499226e-07
+        ]
+      },
+      "M16 connected": {
+        "witnesses": 8,
+        "median_abs_raw_gradient": [
+          1.3110875443089753e-05,
+          6.878356316519785e-06,
+          1.754989860103251e-07,
+          2.3356164291499226e-07
+        ]
+      }
+    }
+  }
+}

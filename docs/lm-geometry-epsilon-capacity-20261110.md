@@ -100,3 +100,40 @@ No learning arm started. Do not call the full-model gate passed or infer quality
 Original failed evidence remains unchanged; seven compact payload hashes were
 verified. Failed archive SHA256:
 `5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501`.
+
+## Recovery and paired derivative result
+
+After the user restarted3090, both synchronized and ordinary asynchronous
+reproductions passed the same original prefix: full-A up/down oracles,256-row
+update, restore,128-row probe backward, and exact second model/optimizer updates.
+This does not identify the earlier GPU failure's cause. The runtime was unchanged.
+An isolated attempt `lm-geometry-epsilon-capacity-3090-20261110-02` restarts the
+native suites and all-arm qualification from the original frozen consumer76e80b6.
+No failed trajectory or qualification is relabeled as passed.
+
+The CPU2×2 result used36 site/category records (72 selected atoms,12 sites), with
+identical raw rows, original TRAIN X/cotangent and FP32 envelope decode followed
+by FP64 factors. Connected-M16 witnesses reproduce the prior saved task VJPs.
+In the16 selected all-cst sharp-near-grid witnesses, median absolute raw VJPs are:
+
+| Field | Unconnected M8 | Connected M16 | M8/M16 median ratio |
+| --- | --- | --- | --- |
+| amplitude | 5.05225e-4 | 5.06444e-4 | 1.00 |
+| radius fraction | 1.38109e-5 | 5.73006e-9 | 2410 |
+| output center | 6.10341e-7 | 1.20855e-9 | 505 |
+| input center | 1.10083e-6 | 2.48207e-9 | 444 |
+
+Connection on/off gives identical VJPs within each degree for these16 witnesses;
+the local difference is degree sensitivity. Other categories differ: wide-radius
+witnesses can have larger M16 gradients. Thus M16 is not irrelevant to local
+geometry attenuation, but this is not a population sample or a retrained-M8 task
+comparison: the rows and cotangents were selected from final M16 models. It does
+not establish the quality gap's main cause or demonstrate a remedy.
+
+![Paired local degree/connection VJPs](assets/lm-geometry-epsilon-capacity-20261110/profile-sensitivity.png)
+
+[Selected medians](assets/lm-geometry-epsilon-capacity-20261110/summary.json).
+The figure and medians come from `scripts/report_lm_profile_sensitivity.py`.
+Recovery/profile compact SHA256:
+`57967c2ebe8aa83491f57a74d7346e93711cbe0f6c92316dca10577dc41552e0`;
+12 payload hashes and unchanged frozen source verified locally.

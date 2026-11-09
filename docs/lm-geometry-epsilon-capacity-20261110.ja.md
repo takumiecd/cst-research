@@ -89,3 +89,37 @@ nvidia-smiがGPUなしを返した。原因は未特定で、カーネル起因�
 元の失敗証拠は変更せず保全し、compactの7payloadのhashを検証した。
 失敗アーカイブSHA256:
 `5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501`。
+
+## 復旧と次数ごとの局所微分
+
+ユーザーが3090を再起動した後、同期実行と通常の非同期実行の両方で同じ元の手順に合格した。
+全A up/down oracle、256行更新、復元、128行probeの逆伝播、2回目のモデル・optimizer更新の
+完全一致まで確認した。以前のGPU故障の原因を特定したわけではなく、runtimeも変更していない。
+分離したattempt `lm-geometry-epsilon-capacity-3090-20261110-02`で、元の固定consumer76e80b6から
+native suiteと全条件qualificationをやり直す。失敗した軌跡や検証を合格へ書き換えない。
+
+CPUの2×2比較は36個のsite/category記録（12site・選択した72Atom）について、同じraw値と
+元のTRAIN入力/cotangentを固定し、FP32 envelope decode後のFP64 factorで行った。
+接続M16は以前保存したタスクVJPを再現した。all-cstの小半径・格子点近傍の選択16例では、
+raw VJPの絶対値の中央値は以下だった。
+
+| Field | 非接続M8 | 接続M16 | 中央値のM8/M16比 |
+| --- | --- | --- | --- |
+| amplitude | 5.05225e-4 | 5.06444e-4 | 1.00 |
+| radius fraction | 1.38109e-5 | 5.73006e-9 | 2410 |
+| output center | 6.10341e-7 | 1.20855e-9 | 505 |
+| input center | 1.10083e-6 | 2.48207e-9 | 444 |
+
+この16例では次数ごとの接続有無でVJPが一致しており、局所の差は次数に依存する。
+他のカテゴリでは異なり、広い半径の例ではM16の勾配が大きいこともある。
+よって局所幾何勾配の減衰についてM16と無関係とは言えない。ただし、母集団の無作為標本でも、
+M8を再学習したタスク比較でもない。M16終端モデルから選んだraw値・cotangentを使っている。
+精度差の主因の特定や解決策の実証にはならない。
+
+![次数と接続を揃えて比較した局所VJP](assets/lm-geometry-epsilon-capacity-20261110/profile-sensitivity.png)
+
+[選択例の中央値](assets/lm-geometry-epsilon-capacity-20261110/summary.json)。
+図と中央値の生成は`scripts/report_lm_profile_sensitivity.py`。
+復旧・profile compact SHA256:
+`57967c2ebe8aa83491f57a74d7346e93711cbe0f6c92316dca10577dc41552e0`。
+12payloadのhashと、固定ソースが変更されていないことをlocalで検証済み。

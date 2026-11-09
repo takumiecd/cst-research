@@ -5,13 +5,13 @@
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
   "id": "lm-geometry-epsilon-capacity-20261110",
   "title": "All-FFN CST capacity versus Adam epsilon pilot",
-  "status": "STOPPED",
-  "status_note": "Stopped before learning:84 native tests and c8 M16 full-A up/down oracles passed, but128-row full-model probe backward raised CUDA unspecified launch failure; GPU then vanished from nvidia-smi. Seven compact payloads retrieved and hash verified. User restarted3090; targeted synchronized reproduction pending. No quality result.",
+  "status": "RUNNING",
+  "status_note": "After user3090 restart, synchronized and asynchronous exact qualification-prefix reproductions passed;36 paired CPU degree/connection records retrieved and verified. A new identical-source attempt02 is running initial GPU gates before learning. First failed attempt retained. No quality result yet.",
   "runner_entrypoint": "cst_research.experiments.lm_geometry_trial_run",
   "protocol_source_path": "docs/lm-geometry-epsilon-capacity-20261110.md",
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-geometry-epsilon-capacity-3090-20261110-01"
+    "relative_path": "lm-geometry-epsilon-capacity-3090-20261110-02"
   },
   "protocol": {
     "seed": 17,
@@ -30,7 +30,7 @@
     "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
   },
   "execution": {
-    "job": "lm-geometry-epsilon-capacity-3090-20261110-01",
+    "job": "lm-geometry-epsilon-capacity-3090-20261110-02",
     "consumer_commit": "76e80b6816269f63b02ff85ad262746f14754726",
     "consumer_pull_request": "https://github.com/takumiecd/cst-research/pull/38",
     "source_archive_sha256": "e0342a39b6367a899a528b85a0d69d8995a772a99c6f4b54571060bb20f920d6",
@@ -45,10 +45,17 @@
     "public_default_adopted": false,
     "local_CPU_passed": 234,
     "local_optional_skipped": 61,
-    "native_tests_passed": 84,
     "learning_started": false,
     "failed_compact_sha256": "5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501",
     "failed_payloads_verified": 7,
-    "source_unchanged_before_failure": true
+    "source_unchanged_before_failure": true,
+    "first_failed_job": "lm-geometry-epsilon-capacity-3090-20261110-01",
+    "first_attempt_native_tests_passed": 84,
+    "reproduction_job": "lm-geometry-probe-3090-20261110-01",
+    "reproduction_compact_sha256": "57967c2ebe8aa83491f57a74d7346e93711cbe0f6c92316dca10577dc41552e0",
+    "reproduction_payloads_verified": 12,
+    "synchronized_and_asynchronous_next_update_exact": true,
+    "paired_CPU_profile_records": 36,
+    "restarted_attempt_native_validation": "pending"
   }
 }
