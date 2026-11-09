@@ -76,6 +76,20 @@ def spatial_statistics(value):
     }
 
 
+def mean_components(value):
+    x = value.reshape(-1, value.shape[-1]).double()
+    mean = x.mean(-1, keepdim=True)
+    total = x.square().mean()
+    return {
+        "rms": float(total.sqrt()),
+        "feature_mean_rms": float(mean.square().mean().sqrt()),
+        "row_centered_rms": float((x - mean).square().mean().sqrt()),
+        "feature_dc_energy_share": float(mean.square().mean() / total)
+        if total > 0
+        else None,
+    }
+
+
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
@@ -107,6 +121,7 @@ def main():
                         "cosine_to_dense": cosine(value, base[site][key]),
                         "cka_to_dense": cka(value, base[site][key]),
                         "spatial": spatial_statistics(value),
+                        "mean_components": mean_components(value),
                     }
                     if key in ("x", "y"):
                         metrics[key]["spectrum"] = spectrum(value)

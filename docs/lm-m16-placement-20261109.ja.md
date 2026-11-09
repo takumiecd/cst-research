@@ -106,3 +106,14 @@ x,y,dx,dyに同じ定義を適用する。これは順序・基底依存の指�
 滑らかさやrankの高低そのものを良し悪しとは扱わない。
 事後の記述的追加であり、学習条件、Dense教師、因果介入、固定runtimeや
 学習軌跡の変更ではない。
+
+全CSTの5M時点を確認した後、出力/cotangent RMSを特徴軸の行平均成分と
+行中心化成分にも分解する。pre-norm残差にはLayerNormで除かれる特徴一定成分が
+含まれ得るためである。全CST条件の保存済み3時点から、物理半径、振幅、fraction
+境界、中心と格子点の距離も記述する。保存されたsemantic optimizer-field
+manifestでParameterとmomentを対応させ、全Atom、|a|>=.01、|a|<.003の集合で、
+bias補正Adam scaleのepsに対する大きさ、保持momentからの提案量、方向別FP32
+半ULPとの比較を出す。保存momentの診断であり、実際の次更新の再現やoptimizer
+変更ではない。fraction境界で外向きの保持momentも記録する。
+閾値は探索的な記述用binであり、全checkpointに同じ分析を適用する。
+モデル・optimizer・GPU学習状態は変更せず、正確な分析スクリプトを保存する。

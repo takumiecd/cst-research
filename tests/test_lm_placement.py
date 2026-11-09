@@ -73,6 +73,13 @@ class PlacementTests(unittest.TestCase):
         self.assertAlmostEqual(
             analysis.spatial_statistics(high)["lag_cosines"]["1"], -1.0
         )
+        parts = analysis.mean_components(torch.tensor([[1.0, 3.0], [3.0, 5.0]]))
+        self.assertAlmostEqual(parts["row_centered_rms"], 1.0)
+        self.assertAlmostEqual(parts["feature_dc_energy_share"], 10 / 11)
+        self.assertAlmostEqual(
+            parts["rms"] ** 2,
+            parts["feature_mean_rms"] ** 2 + parts["row_centered_rms"] ** 2,
+        )
 
 
 if __name__ == "__main__":

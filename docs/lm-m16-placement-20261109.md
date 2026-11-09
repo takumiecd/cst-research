@@ -113,3 +113,16 @@ sensitive, whereas CKA/rank are rotation invariant. They test a possible
 coordinate-geometry bias; neither smoothness nor high/low rank is inherently
 good or bad. This is a post hoc descriptive extension, not a new training arm,
 Dense teacher, causal intervention, or change to the frozen runtime/trajectory.
+
+After the all-CST5M endpoint, also separate output/cotangent RMS into feature-row
+mean and row-centered components: pre-norm residual streams can carry a feature-
+constant component removed by LayerNorm. Read all three saved milestones of every
+CST arm to describe physical radii, amplitude magnitude, fraction boundaries and
+center distance to grid sites. Use the saved semantic optimizer-field manifest to
+associate Parameters and moments. For all atoms and |a|>=.01 / |a|<.003 subsets,
+report bias-corrected Adam scales relative to eps, retained-moment proposals and
+their size relative to half a directional FP32 ULP. These are diagnostics of
+saved moments, not replayed/actual next updates or a change to the optimizer.
+Also report outward retained-moment pressure at fraction boundaries. Thresholds
+are exploratory descriptive bins. No model, optimizer or GPU training state is
+modified; apply the same analysis to all checkpoints and retain the exact scripts.

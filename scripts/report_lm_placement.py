@@ -23,7 +23,21 @@ PRIMARY = (
     "down-even",
 )
 COLORS = {"dense": "#333333", "dst-pair12": "#9a7919", "all-cst": "#b12337"}
-COLORS.update(zip(PRIMARY, plt.get_cmap("tab10").colors))
+COLORS.update(
+    zip(
+        PRIMARY,
+        (
+            "#277bb8",
+            "#8054a0",
+            "#ed9224",
+            "#248148",
+            "#37a6a6",
+            "#d471a5",
+            "#8a6c4f",
+            "#727f9e",
+        ),
+    )
+)
 
 
 def read(p):
@@ -66,6 +80,7 @@ def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
     p.add_argument("--analysis", type=Path, required=True)
+    p.add_argument("--atom-state", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=False)
@@ -79,6 +94,11 @@ def main():
     audit = read(a.run / "audit/audit.json")
     assert audit["state"] == "passed"
     analysis = read(a.analysis)
+    atoms = read(a.atom_state)
+    assert (
+        atoms["state"] == "passed"
+        and atoms["source_commits"] == analysis["source_commits"]
+    )
     assert (
         analysis["state"] == "passed"
         and analysis["source_commits"] == receipt["protocol"]["source_commits"]
@@ -124,6 +144,7 @@ def main():
             "color": COLORS[arm],
             "label": arm,
             "lw": 2 if arm in ("dense", "all-cst", "pair12") else 1.2,
+            "ls": "--" if arm == "all-cst" else "-",
         }
         axes[0].plot(x, ys, **style)
         axes[1].plot(
@@ -386,6 +407,79 @@ def main():
     axes[0, 0].legend(fontsize=8, ncol=2)
     fig.tight_layout()
     save(fig, a.output, "signal-trajectories")
+    fig, axes = plt.subplots(2, 3, figsize=(17, 9), sharex=True)
+    for arm in (*PRIMARY, "all-cst"):
+        clocks = sorted({r["step"] for r in atoms["records"] if r["arm"] == arm})
+        values = [[] for _ in range(6)]
+        for clock in clocks:
+            rows = [
+                r["subsets"]["active_amp_ge_0.01"]
+                for r in atoms["records"]
+                if r["arm"] == arm and r["step"] == clock
+            ]
+            total = sum(r["count"] for r in rows)
+
+            def average(fn):
+                return sum(r["count"] * fn(r) for r in rows if r["count"]) / total
+
+            values[0].append(
+                average(lambda r: r["absolute_amplitude"]["rms"] ** 2) ** 0.5
+            )
+            values[1].append(average(lambda r: r["radius"]["mean"]))
+            values[2].append(average(lambda r: r["fraction_at_zero_share"]))
+            values[3].append(
+                average(
+                    lambda r: (
+                        sum(
+                            r["fields"][f]["adam_scale_below_eps_share"]
+                            for f in ("output_center", "input_center")
+                        )
+                        / 2
+                    )
+                )
+            )
+            values[4].append(
+                average(
+                    lambda r: (
+                        sum(
+                            r["fields"][f]["sub_half_ulp_proposal_share"]
+                            for f in ("output_center", "input_center")
+                        )
+                        / 2
+                    )
+                )
+            )
+            values[5].append(average(lambda r: r["centers_both_within_0.01_share"]))
+        for ax, v in zip(axes.flat, values):
+            ax.plot(
+                np.array(clocks) * 1024 / 1e6,
+                v,
+                "o-",
+                label=arm,
+                color=COLORS[arm],
+                ms=4,
+            )
+    for ax, title in zip(
+        axes.flat,
+        (
+            "Pooled amplitude RMS",
+            "Mean physical radius",
+            "Fraction at lower boundary0",
+            "Center Adam scale < epsilon share",
+            "Center moment proposal < half ULP share",
+            "Both centers within0.01 of grid sites share",
+        ),
+    ):
+        ax.set_title(title)
+        ax.grid(alpha=0.2)
+    for ax in axes[1]:
+        ax.set_xlabel("Training targets (millions)")
+    axes[0, 0].legend(fontsize=7, ncol=3)
+    fig.suptitle(
+        "Post-hoc checkpoint diagnostics, active |amplitude|>=0.01; moments are not actual next updates"
+    )
+    fig.tight_layout()
+    save(fig, a.output, "atom-dynamics")
     (a.output / "results.json").write_text(
         json.dumps(
             {
