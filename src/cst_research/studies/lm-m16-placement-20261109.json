@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "95f647f97749f61f5f5c15ac29932f908fb334ce",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
+  "runner_entrypoint": "cst_research.experiments.lm_placement_run",
+  "id": "lm-m16-placement-20261109",
+  "title": "Connected M16 matched-count FFN placement and task signal analysis",
+  "status": "PLANNED",
+  "status_note": "Protocol fixed before execution; eight matched-count placements and three context controls.",
+  "protocol_source_path": "docs/lm-m16-placement-20261109.md",
+  "protocol": {
+    "primary_family": "six two-block pairs plus up-even/down-even; CST4 up2/down2",
+    "controls": [
+      "dense",
+      "dst-pair12",
+      "all-cst"
+    ],
+    "seed": 17,
+    "steps": 4882,
+    "training_tokens": 4999168,
+    "schedule_tokens": 20000000,
+    "signals": [
+      0,
+      976,
+      2441,
+      4882
+    ],
+    "train_offsets": [
+      0,
+      4096,
+      8192,
+      12288
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-m16-placement-4090-20261109-01"
+  }
+}
