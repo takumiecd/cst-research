@@ -146,7 +146,7 @@ def main():
     }
     for arm in arms:
         tr = [r for r in curves[arm] if "train_ce" in r]
-        de = [r for r in curves[arm] if "development" in r and r["step"]]
+        de = [r for r in curves[arm] if "development" in r]
         x = np.array([r["seen_tokens"] for r in tr]) / 1e6
         yy = np.array([r["train_ce"] for r in tr])
         # Trailing five logged observations (~100 updates); raw rows remain available.
@@ -168,8 +168,8 @@ def main():
             [r["development"]["ce"] - dense_dev[r["step"]] for r in de],
             **style,
         )
-    axes[0].set(title="TRAIN CE (trailing 5 logs)", ylim=(2.35, 4.5))
-    axes[1].set(title="DEV CE, same8192 targets", ylim=(2.45, 4.5))
+    axes[0].set(title="TRAIN CE (trailing 5 logs)")
+    axes[1].set(title="DEV CE, same8192 targets")
     axes[2].set(title="DEV CE minus Dense")
     axes[2].axhline(0, color="gray", lw=0.7)
     for ax in axes:
@@ -179,6 +179,12 @@ def main():
     fig.suptitle(
         "Connected M16: eight matched CST4 placements + three controls; seed17"
     )
+    for extension in ("png", "svg"):
+        fig.savefig(
+            a.output / f"learning-full.{extension}", dpi=160, bbox_inches="tight"
+        )
+    axes[0].set_ylim(2.35, 4.5)
+    axes[1].set_ylim(2.45, 4.5)
     save(fig, a.output, "learning")
     # Four context means for own-state signal metrics; these are not confidence intervals.
     final = receipt["protocol"]["steps"]
