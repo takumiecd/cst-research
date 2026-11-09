@@ -54,7 +54,7 @@ CSTの各最終状態でも全A oracleを再実施。実モデルの許容差は
 独立primitiveの3e-4ゲートとは区別する。source・archive・data manifest/order、GPU/runtime、
 command・PID、checkpoint、raw曲線/probeを固定・hash化。失敗試行と過去証拠を保全する。
 予約済み4090で直列に実行し、追加資源の確保や公開既定値の採用はしない。
-各repoのPRを通し、mainと旧実行は変更しない。結果は未取得。
+各repoのPRを通し、mainと旧実行は変更しない。[完了結果と図](lm-connected-short-20261109-results.ja.md)を別に保存した。
 
 ## 学習前の実行上の修正記録
 

@@ -68,7 +68,7 @@ archives, data manifest/order, hardware/runtime, commands, PIDs, checkpoints and
 raw curves/probes are fixed and hashed. Preserve failed attempts and old evidence.
 Use the reserved4090, run arms sequentially, no new resource allocation or public
 default adoption. Integrate through separate PRs; leave main and old runs unchanged.
-Results are pending.
+[Completed results and plots](lm-connected-short-20261109-results.md) are recorded separately.
 
 ## Recorded pre-training execution amendments
 
