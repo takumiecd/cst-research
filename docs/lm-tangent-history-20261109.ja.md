@@ -37,3 +37,7 @@ checkpoint hashを確認。公開operatorは固定し、研究コードは公開
 計測処理を含む時間は性能benchmarkには使いません。
 
 証拠:CST_RESEARCH_EVIDENCE_ROOT/lm-tangent-history-4090-20261109-01。
+
+## 記録した分析の追加
+
+初回21観測は通過しましたが、256反復のAtom射影は未収束で、履歴を外すとDenseでも同一batchの一致度が上がりました。別の不変snapshotで、分析用CGLSの上限を2048へ増やし、有限epsilon.001/.0001、routingが変わったAtomと変わらないAtomの線形近似誤差への寄与、各source batchの方向を全3target TRAIN batchで評価する3x3比較を追加します。同一batchへの適合と、履歴が共通方向を捉える働きを区別します。同じcheckpoint/data/operator/数値基準で、学習・改善介入は行わず、初回証拠も変更しません。

@@ -54,3 +54,7 @@ NFS and retrieve hash-verified compact evidence, including failures and
 nonconvergence. Timing is instrumented and not a performance benchmark.
 
 Evidence:CST_RESEARCH_EVIDENCE_ROOT/lm-tangent-history-4090-20261109-01.
+
+## Recorded analysis extension
+
+The primary21 observations passed;256-iteration Atom projections did not converge, and history removal also raised Dense within-batch alignment. A separate immutable follow-up therefore raises the analysis-only CGLS bound to2048, adds finite epsilon.001/.0001, partitions the linearization defect into changed-route and unchanged-route Atom contributions, and evaluates each source-batch direction on all three target TRAIN batches. This3x3 cross-batch check distinguishes fitting the current batch from history that tracks shared directions. Same checkpoints,data,operators and numerical gates; no training or improvement intervention. Primary artifacts remain unchanged.

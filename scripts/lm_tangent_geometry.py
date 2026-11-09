@@ -67,6 +67,13 @@ class FactorTangent:
         )
         return torch.cat((fields.flatten(), g.sum(0)))
 
+    def atom_subset_jvp(self, v, mask):
+        """Additive atom contribution only; bias is excluded from this subset."""
+        p = v[: self.atoms * 4].reshape(self.atoms, 4)[mask]
+        left = sum(c[:, mask] * p[:, k] for k, c in enumerate(self.cs))
+        right = sum(d[:, mask] * p[:, k] for k, d in enumerate(self.dos))
+        return left @ self.uo[:, mask].T + self.b[:, mask] @ right.T
+
     def column_norms(self):
         b = self.b.double()
         u = self.uo.double()

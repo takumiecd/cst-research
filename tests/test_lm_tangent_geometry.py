@@ -79,6 +79,13 @@ class TangentGeometryTests(unittest.TestCase):
         goal = torch.randn(7, 2, dtype=torch.float64)
         torch.testing.assert_close(op.vjp(goal), jac.T @ goal.flatten())
         torch.testing.assert_close(op.column_norms(), jac.square().sum(0).sqrt())
+        mask = torch.tensor([True, False, True])
+        pieces = (
+            op.atom_subset_jvp(vector, mask)
+            + op.atom_subset_jvp(vector, ~mask)
+            + vector[-2:]
+        )
+        torch.testing.assert_close(pieces, op.jvp(vector))
 
     def test_free_and_masked_known_subspaces(self):
         import torch

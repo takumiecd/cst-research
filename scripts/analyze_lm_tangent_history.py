@@ -233,7 +233,7 @@ def captured_step(model, optimizer, batches, step, sites):
     return result, float(norm)
 
 
-def analyze_map(layer, row, kind, factors, primary):
+def analyze_map(layer, row, kind, factors, primary, extended=False):
     x, g = row["x"], row["g"]
     target = -g
     if kind == "cst":
@@ -298,7 +298,12 @@ def analyze_map(layer, row, kind, factors, primary):
             **singular,
         }
         if kind == "cst":
-            projected, audit = tangent_projection(op, target, row["actual_vector"])
+            projected, audit = tangent_projection(
+                op,
+                target,
+                row["actual_vector"],
+                max_iterations=2048 if extended else 256,
+            )
             result["atom_tangent_projection"] = {
                 "cosine": cosine(projected, target),
                 **audit,
@@ -309,7 +314,9 @@ def analyze_map(layer, row, kind, factors, primary):
             count = row["old_p"].numel()
             delta = row["actual_vector"][:count].reshape_as(row["old_p"]).cpu()
             old_reference = reference_y
-            for epsilon in (1.0, 0.1, 0.01):
+            for epsilon in (
+                (1.0, 0.1, 0.01, 0.001, 0.0001) if extended else (1.0, 0.1, 0.01)
+            ):
                 point = row["old_p"] + epsilon * delta
                 for k, period in (
                     (2, layer.map.out_features),
@@ -335,6 +342,32 @@ def analyze_map(layer, row, kind, factors, primary):
                     "finite_norm": math.sqrt(dot(change, change)),
                     "tangent_norm": epsilon * math.sqrt(dot(linear, linear)),
                 }
+                if extended:
+                    mask = changed.to(x.device)
+                    changed_delta = (x @ vi[:, changed].to(x)) @ uo[:, changed].to(
+                        x
+                    ).T - (x @ op.vi[:, mask]) @ op.uo[:, mask].T
+                    changed_linear = epsilon * op.atom_subset_jvp(
+                        row["actual_vector"], mask
+                    )
+                    residual = change - epsilon * linear
+                    changed_residual = changed_delta - changed_linear
+                    remaining = residual - changed_residual
+                    total_norm = max(math.sqrt(dot(residual, residual)), 1e-30)
+                    entry.update(
+                        changed_atom_defect_norm_ratio=math.sqrt(
+                            dot(changed_residual, changed_residual)
+                        )
+                        / total_norm,
+                        unchanged_atom_defect_norm_ratio=math.sqrt(
+                            dot(remaining, remaining)
+                        )
+                        / total_norm,
+                        route_component_change_fractions=[
+                            float((routes[:, k] != old_routes[:, k]).float().mean())
+                            for k in range(6)
+                        ],
+                    )
                 if epsilon == 1:
                     entry["reference_native_delta_relative_error"] = relative_error(
                         change, row["finite_delta"]
@@ -350,6 +383,37 @@ def analyze_map(layer, row, kind, factors, primary):
     return result
 
 
+def cross_batch_analysis(layer, batches, site, kind, factors):
+    names = (
+        "historical_m_historical_v",
+        "current_g_historical_v",
+        "current_g_current_g2",
+        "current_gradient",
+    )
+    matrices = {name: [[None] * len(batches) for _ in batches] for name in names}
+    for j, (_, rows) in enumerate(batches):
+        target_row = rows[site]
+        x = target_row["x"]
+        goal = -target_row["g"]
+        op = (
+            FactorTangent(x, *factors)
+            if kind == "cst"
+            else LinearTangent(x, goal.shape[1], target_row["mask"])
+        )
+        for i, (_, sources) in enumerate(batches):
+            for name in names:
+                v = bound_tangent(sources[site]["vectors"][name], layer, kind)
+                matrices[name][i][j] = cosine(
+                    op.jvp(v / max(float(v.abs().max()), 1e-30)), goal
+                )
+    return {
+        "source_offsets": [k for k, _ in batches],
+        "target_offsets": [k for k, _ in batches],
+        "cosines": matrices,
+        "scope": "Directions computed on one TRAIN batch and evaluated on other TRAIN batches at identical Parameters; no updates or selection.",
+    }
+
+
 def main():
     from cst_research.experiments.ffn_contract import ModelConfig, learning_rate
     from cst_research.experiments.ffn_model import configure_native, parameter_digest
@@ -363,6 +427,7 @@ def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--base-run", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--extended-analysis", action="store_true")
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     parent = read(args.base_run / "receipt.json")
@@ -387,6 +452,7 @@ def main():
         "data_manifest_sha256": parent["protocol"]["data_manifest_sha256"],
         "checkpoint_step": 4882,
         "records": [],
+        "cross_batch": [],
         "training_updates": 0,
         "scope": "Read-only local geometry/history attribution; no continuation, LR search, teacher or adoption",
     }
@@ -428,6 +494,7 @@ def main():
                     )
                     print("FACTOR CACHE PASS", arm, site, flush=True)
                     del f, cpu
+            retained = []
             for offset in (0, 32, 64):
                 batches = []
                 for micro in range(4):
@@ -442,7 +509,12 @@ def main():
                     row = rows[site]
                     row["global_gradient_norm"] = norm
                     result = analyze_map(
-                        projections(m)[site], row, m.kind, cached.get(site), offset == 0
+                        projections(m)[site],
+                        row,
+                        m.kind,
+                        cached.get(site),
+                        offset == 0,
+                        args.extended_analysis,
                     )
                     result.update(
                         arm=arm,
@@ -460,10 +532,20 @@ def main():
                     int(state["step"]) == saved["actual_adam_updates"]
                     for state in o.state.values()
                 )
+                if args.extended_analysis:
+                    retained.append((offset, rows))
                 del rows, batches
                 torch.cuda.empty_cache()
+            if args.extended_analysis:
+                for site in sites:
+                    cross = cross_batch_analysis(
+                        projections(m)[site], retained, site, m.kind, cached.get(site)
+                    )
+                    cross.update(arm=arm, site=site)
+                    summary["cross_batch"].append(cross)
+                    save()
             assert sha(checkpoint) == s["milestone_checkpoint_sha256"][checkpoint.name]
-            del m, o, saved, cached
+            del m, o, saved, cached, retained
             torch.cuda.empty_cache()
         assert len(summary["records"]) == 21
         summary.update(state="passed", checkpoint_files_unchanged=True)
