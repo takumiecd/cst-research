@@ -48,6 +48,8 @@ def heat(
     axis.set_title(title)
     for i in range(len(arms)):
         for j in range(len(sites)):
+            red, green, blue, _ = im.cmap(im.norm(shown[i, j]))
+            luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
             axis.text(
                 j,
                 i,
@@ -55,7 +57,7 @@ def heat(
                 ha="center",
                 va="center",
                 fontsize=7,
-                color="white" if abs(shown[i, j]) > 0.7 else "black",
+                color="black" if luminance > 0.55 else "white",
             )
     fig.colorbar(im, ax=axis, shrink=0.8, label="log2 ratio" if log else None)
 
@@ -152,6 +154,58 @@ def main():
         arm: read(a.run / arm / f"signals-{final}.json")["records"] for arm in arms
     }
     sites = [f"{i}.{d}" for i in range(4) for d in ("up", "down")]
+
+    from matplotlib.colors import ListedColormap
+
+    fig, axes = plt.subplots(
+        1, 2, figsize=(12, 7), gridspec_kw={"width_ratios": [1.2, 1]}
+    )
+    layout = [
+        [
+            (2 if arm == "dst-pair12" else 1) if site in summaries[arm]["sites"] else 0
+            for site in sites
+        ]
+        for arm in arms
+    ]
+    axes[0].imshow(
+        layout,
+        cmap=ListedColormap(["#e2e6ec", "#3678a0", "#ae8c36"]),
+        vmin=0,
+        vmax=2,
+        aspect="auto",
+    )
+    axes[0].set_xticks(range(8), sites, rotation=45, ha="right")
+    axes[0].set_yticks(range(len(arms)), arms)
+    for i, row in enumerate(layout):
+        for j, value in enumerate(row):
+            axes[0].text(
+                j,
+                i,
+                ("D", "C", "S")[value],
+                ha="center",
+                va="center",
+                color="black" if value == 0 else "white",
+            )
+    base_ce = analysis["endpoints"]["dense"]["development"]["ce"]
+    gaps = [analysis["endpoints"][arm]["development"]["ce"] - base_ce for arm in arms]
+    axes[1].barh(range(len(arms)), gaps, color=[COLORS[arm] for arm in arms])
+    axes[1].set_yticks(range(len(arms)), arms)
+    axes[1].invert_yaxis()
+    axes[1].axvline(0, color="gray", lw=0.8)
+    axes[1].set_xlim(min(-0.005, min(gaps) - 0.01), max(gaps) + 0.03)
+    for i, arm in enumerate(arms):
+        ce = analysis["endpoints"][arm]["development"]["ce"]
+        axes[1].text(
+            max(0, gaps[i]) + 0.001, i, f"CE {ce:.4f}", va="center", fontsize=8
+        )
+    axes[0].set_title("FFN layout: D=Dense, C=CST, S=DST")
+    axes[1].set_title("Final DEV CE minus Dense (lower is better)")
+    axes[1].set_xlabel("CE gap at 4,999,168 training targets")
+    fig.suptitle(
+        "Eight CST4 placements match up2/down2 and active scalar count; controls differ"
+    )
+    fig.tight_layout()
+    save(fig, a.output, "placement")
 
     fig, axes = plt.subplots(2, 2, figsize=(15, 13))
     for ax, key, title in zip(
