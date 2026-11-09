@@ -71,7 +71,7 @@
       "probes": 32,
       "training_updates": 0,
       "script": "scripts/observe_lm_connected_signals.py",
-      "observer_commit": "91802c4",
+      "observer_commit": "91802c48a148166a12a646fc03810e19a4a89c31",
       "job": "lm-connected-signals-4090-20261109-01",
       "archive_sha256": "2dea863d7439bd5f22b30e2aeacd4dff95c0b5259aa5042309eef2c6e09e61b7",
       "scope": "four within-context ratios, not pooled; context ranges are not confidence intervals; no causal scale or compensation intervention"

@@ -110,10 +110,10 @@ atol1e-4/rtol4e-3を通過。全4モデルで直列化後のmodel/optimizer次�
 順序固定版の8192 Linear単体は12.923ms、直前12.811ms、Dense4.908msで、scratchは32MiB増。
 公開deterministic/Graph modeは未対応のまま。
 
-- Learning/analysis: operator `00aae6afaf3615da6bccd986c75c14cd7b2ca64b`, consumer `4110c0df1452200ba2591861b3d90276f663107c`, job `lm-connected-short-4090-20261109-03`.
-- Final compact SHA256: `e2e396767e3d1864edefee65c68560a0ae80977c6dad99ca9e52022a1a2502ab`; 26 payload files and all 2108 frozen source identities verified locally. External driver SHA256 `30d322f9bbbcc33d8b93d5a1e5b4eb51adceb2472285b34cdd99d141672b7f60` matches the remote copy.
-- Read-only signal job `lm-connected-signals-4090-20261109-01`: archive `2dea863d7439bd5f22b30e2aeacd4dff95c0b5259aa5042309eef2c6e09e61b7`; 32 probes, Parameters/buffers/CPU+CUDA RNG unchanged.
-- Checkpoint audit and ordered Linear cost: `connected-m16-ordered-4090-20261109-01`; archive `6ec0c5e958cb6c1b9163cf8b49ae064ea1a9010320d807bb2d1f08bd827d97c1`. All eight milestone file hashes verified; four final Parameter digests reproduce live models; Adam clocks976 except DST973, all moments finite FP32.
+- 学習/解析: operator `00aae6afaf3615da6bccd986c75c14cd7b2ca64b`, consumer `4110c0df1452200ba2591861b3d90276f663107c`, job `lm-connected-short-4090-20261109-03`.
+- 最終compact SHA256: `e2e396767e3d1864edefee65c68560a0ae80977c6dad99ca9e52022a1a2502ab`。26 payloadファイルと固定source2108件をローカル照合。外部driver SHA256 `30d322f9bbbcc33d8b93d5a1e5b4eb51adceb2472285b34cdd99d141672b7f60`はリモートコピーと一致。
+- 読み取り専用信号job `lm-connected-signals-4090-20261109-01`: archive `2dea863d7439bd5f22b30e2aeacd4dff95c0b5259aa5042309eef2c6e09e61b7`。32probeでParameter・buffer・CPU/CUDA RNGの不変を確認。
+- checkpoint監査と順序固定Linearコスト: `connected-m16-ordered-4090-20261109-01`; archive `6ec0c5e958cb6c1b9163cf8b49ae064ea1a9010320d807bb2d1f08bd827d97c1`. 全8中間ファイルhashを照合し、4最終Parameter digestが実モデルを再現。Adam時計は976（DST973）、momentsはすべて有限FP32。
 
 
 [集計JSON](lm-connected-short-20261109-results.json)に全観測とhashを保存。
