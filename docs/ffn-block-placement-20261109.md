@@ -51,3 +51,5 @@ it does not itself prove vanishing gradients or a kernel bug. The mixed comparis
 matches direction counts but still changes positions. Position counterbalancing,
 LR/gain interventions and extra seeds require a separately recorded next step.
 Evidence:CST_RESEARCH_EVIDENCE_ROOT/ffn-block-placement-4090-20261109-01.
+
+[Completed results and verified recovery](lm-composition-20261109-results.md).

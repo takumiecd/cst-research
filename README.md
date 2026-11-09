@@ -22,7 +22,7 @@ private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
-The [verified5M-token site-count comparison](docs/ffn-site-count-20261109-results.md) is complete: one/two paired middle blocks remain close to Dense in this seed, while all8 CST maps show a larger gap. All11 arms,33 checkpoints,96 trained map oracles and local evidence retrieval passed. The [task-only distributed-versus-paired follow-up](docs/ffn-block-placement-20261109.md) is running with one replacement per block, matched DST controls and persistent evidence.
+The [verified5M-token site-count comparison](docs/ffn-site-count-20261109-results.md) is complete: one/two paired middle blocks remain close to Dense in this seed, while all8 CST maps show a larger gap. All11 arms,33 checkpoints,96 trained map oracles and local evidence retrieval passed. The [distributed-versus-paired follow-up and signal diagnostics](docs/lm-composition-20261109-results.md) also completed: all17 task models and51 checkpoints are audited, and102 read-only TRAIN probes are preserved. Equal-count placement changes performance in this seed; larger residual signals and smaller cotangents do not establish gradient death.
 
 The [20M-token RTX4090 comparison](docs/ffn-long-horizon-20261109.md) finished training, but its container-home evidence disappeared on a Hub stop before verified local retrieval. It is not scientifically admitted or a completed accuracy result. Source/protocol copies and the captured rounded status metrics remain preserved; no old20M prefix is borrowed.
 

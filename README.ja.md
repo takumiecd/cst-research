@@ -19,7 +19,7 @@ CSTをニューラルネットワークで使えるようにするための研�
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
-[検証済み5M-token置換箇所数比較](docs/ffn-site-count-20261109-results.ja.md)を完了。このseedでは中央1/2ブロックの上下CSTはDenseに近く、全8写像で差が増えました。11条件・33checkpoint・学習済み96写像oracle・ローカル証拠回収すべて成功。[本来のタスクによる分散配置とFFN内連続の比較](docs/ffn-block-placement-20261109.ja.md)を、各ブロック1個・同予算DST対照・永続証拠保存で実行中です。
+[検証済み5M-token置換箇所数比較](docs/ffn-site-count-20261109-results.ja.md)を完了。このseedでは中央1/2ブロックの上下CSTはDenseに近く、全8写像で差が増えました。11条件・33checkpoint・学習済み96写像oracle・ローカル証拠回収すべて成功。[分散配置とFFN内連続の比較・信号診断](docs/lm-composition-20261109-results.ja.md)も完了。全17タスクモデル・51checkpointを監査し、読み取り専用TRAIN probe102回も保全しました。同数でも配置で性能が変わり、残差出力増大とcotangent低下だけでは勾配消失とは判断できません。
 
 [RTX4090の20M-token比較](docs/ffn-long-horizon-20261109.ja.md)は学習終了を確認しましたが、検証済みローカル回収前のHub停止でcontainer-homeの証拠が見つからなくなりました。科学的検証完了・正答率の完了結果とは扱いません。source/protocolと丸めたstatus観測値は保全し、旧20M prefixを借用しません。
 

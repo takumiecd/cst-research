@@ -38,3 +38,5 @@ O/FFNの本質的な弱点と主張する前に、現recipe・同条件のQ/K/V/
 現radius-envelope physical native adapterの検証範囲は幅512・拡張4の長方形、1..256行に限定される。
 現envelopeによるAttention役割比較の前には、正方形のbackend検証が別途必要で、FFNの証拠だけで
 shape gateを緩和しない。追加TRAIN文脈は別々の128行呼び出しとし、既存の契約範囲を守る。
+
+[完了した結果と証拠の復旧](lm-composition-20261109-results.ja.md).

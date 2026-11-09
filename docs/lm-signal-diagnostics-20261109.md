@@ -52,3 +52,5 @@ width512 expansion4 rectangles and1..256 rows. Square attention maps require a
 separate backend qualification before a current-envelope role trial; do not relax
 that shape gate based on FFN evidence. The supplementary TRAIN contexts are
 separate128-row calls and stay within the existing contract.
+
+[Completed results and verified recovery](lm-composition-20261109-results.md).

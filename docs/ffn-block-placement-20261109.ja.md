@@ -42,3 +42,5 @@ GPU・ログ一致を確認した場合のみ。前cohortのGPU処理終了後�
 証明ではない。mixed比較も方向の個数は揃うが位置が変わる。
 位置の反転、LR/gain介入、seed追加は次段階として別記録し、自動追加しない。
 証拠：CST_RESEARCH_EVIDENCE_ROOT/ffn-block-placement-4090-20261109-01。
+
+[完了した結果と証拠の復旧](lm-composition-20261109-results.ja.md).
