@@ -142,3 +142,27 @@ proof of the mechanism causing the original training gap. Apply uniformly to all
 11 arms, record every result and keep this post hoc evaluation separate from the
 original learning/measurement protocol. Execute only after training/state audit,
 on the same reserved4090, with no additional GPU allocation.
+
+## Post-hoc geometry-gradient localization check
+
+After the saved-moment analysis, active atoms (|a|>=.01) show a large population
+whose coordinate/fraction Adam scale is below epsilon, while amplitude scales
+remain above epsilon. To distinguish an aggregate-RMS illusion, geometry and
+optimizer history, evaluate local VJPs at all40 selected CST maps of the final
+nine CST arms, using the exact retained offset0 TRAIN input and cotangent.
+Require each field's gradient RMS to reproduce the original full-model probe
+(atol1e-10/rtol1e-5). Partition by physical radius<.6, radius>=.6 and radius>=16;
+for the sharp group also partition each center's distance to a grid site<.01
+or>.1. Report current task-gradient magnitudes separately from historical
+bias-corrected clipped-training Adam scales. The task cotangent is unscaled and
+unclipped, so these are deliberately different distributions.
+
+For each site, select the first up to4 active sharp atoms with both centers
+near grid sites,4 sharp atoms with both centers away, and4 wide atoms, and check
+local raw gradients through FP64 physical factors with the same retained task
+input/cotangent. This is a deterministic mechanism witness, not population
+sampling, and does not define a new gate or modify any optimizer. Preserve raw
+samples only in ignored evidence; public notes contain derived summaries.
+No new training or improvement condition is added. Small gradients or Adam
+attenuation alone do not prove that unfreezing those degrees of freedom will
+close the task-quality gap.
