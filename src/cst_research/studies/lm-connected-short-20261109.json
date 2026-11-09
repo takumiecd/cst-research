@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.lm_connected_run",
   "id": "lm-connected-short-20261109",
   "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
-  "status": "PLANNED",
-  "status_note": "Protocol fixed; execution and retrieval pending.",
+  "status": "RUNNING",
+  "status_note": "Frozen source deployed to reserved RTX4090; admission/qualification before short learning. No results adopted.",
   "protocol_source_path": "docs/lm-connected-short-20261109.md",
   "protocol": {
     "arms": [
@@ -59,5 +59,13 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-connected-short-4090-20261109-01"
+  },
+  "execution": {
+    "job": "lm-connected-short-4090-20261109-01",
+    "driver_pid": 22723,
+    "operator_commit": "1605fa8f0d0eaf57e7c1548968e1b6281daba031",
+    "consumer_commit": "bf1a846f32604a724ee233af04e2955db768f2b9",
+    "source_files": 2107,
+    "public_default_adopted": false
   }
 }
