@@ -74,3 +74,18 @@ checkpointとraw tensorはremote保存し、小さなreportをhash検証して�
 入口は`cst_research.experiments.lm_geometry_trial_run`のqualify/train/auditと
 `scripts/compare_lm_profile_sensitivity.py`。正確なdata manifest SHA、明示したarm、
 qualification receipt、未使用output directoryを渡す。
+
+## 最初の3090実行は学習前に停止
+
+job `lm-geometry-epsilon-capacity-3090-20261110-01`はnative84件と接続M16 c8の
+全A up/down oracleに合格した。Dense/DST-c8の保存後次更新も完全一致した。
+M16 c8では最初の256行更新が完了した後、128行probeの逆伝播で
+`CUDA error: unspecified launch failure`が出た。その後Hubはreadyのまま
+nvidia-smiがGPUなしを返した。原因は未特定で、カーネル起因ともhost/driver起因とも
+断定しない。ユーザーが3090サーバーを再起動した。
+`scripts/reproduce_lm_geometry_probe.py`に同期実行による同じ確認手順を準備した。
+
+学習条件は未開始。全モデルの検証合格や精度の結果とは扱わない。
+元の失敗証拠は変更せず保全し、compactの7payloadのhashを検証した。
+失敗アーカイブSHA256:
+`5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501`。

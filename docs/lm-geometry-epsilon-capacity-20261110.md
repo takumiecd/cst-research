@@ -84,3 +84,19 @@ reports, and preserve source/config identities and failures.
 Entrypoints: `cst_research.experiments.lm_geometry_trial_run` (`qualify`, `train`,
 `audit`) and `scripts/compare_lm_profile_sensitivity.py`. Supply the exact data
 manifest SHA, explicit arm, qualification receipt and an unused output directory.
+
+## First3090 attempt stopped before learning
+
+Job `lm-geometry-epsilon-capacity-3090-20261110-01` passed84 native tests
+and connected-M16 c8 full-A up/down oracles. Dense/DST-c8 serialized next-update
+checks passed. The M16 c8 model completed its first256-row update, then failed
+in the128-row probe backward with `CUDA error: unspecified launch failure`.
+Afterward nvidia-smi reported no devices while the Hub remained ready. The
+cause is unresolved; neither a kernel fault nor a host/driver fault is established.
+The user restarted the3090 server. A synchronized qualification-prefix
+reproduction is prepared in `scripts/reproduce_lm_geometry_probe.py`.
+
+No learning arm started. Do not call the full-model gate passed or infer quality.
+Original failed evidence remains unchanged; seven compact payload hashes were
+verified. Failed archive SHA256:
+`5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501`.
