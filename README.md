@@ -43,6 +43,8 @@ The [task-update behavior analysis](docs/lm-task-update-behavior-20261109-result
 
 The [local tangent/history and Atom attribution](docs/lm-tangent-history-20261109-results.md) is complete. In9 CST field observations, radius-fraction displacements differ sharply from derivative predictions at discrete window changes; amplitude and centers largely follow predictions. A no-optimizer FP64 single-Atom witness reproduces jumps in both radius directions. Adam-history effects also occur in Dense/DST. No repair or improvement experiment has been performed.
 
+The [CPU Gaussian/Fourier continuity diagnostic](docs/kernel-taylor-continuity-20261109-results.md) completed152 cases and1216 finite displacements. Gaussian fixed-cell integrals agree with derivatives across the tested center/width boundaries; current Fourier same-branch controls also agree. Increasing M suppresses sampled center jumps but leaves large hierarchy-radius discontinuities. No Gaussian adoption, CUDA change, speed result or learning experiment.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to

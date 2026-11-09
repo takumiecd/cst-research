@@ -41,6 +41,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 
 [局所接線・履歴・Atom別分析](docs/lm-tangent-history-20261109-results.ja.md)を完了。CSTフィールド9観測では、半径の割合の変位が離散的な区間切替で微分予測から大きく外れ、振幅と座標は概ね予測通りでした。optimizerを使わないFP64の1 Atom試験で、半径の拡大・縮小の両方の跳びを再現。Adam履歴の影響はDense/DSTにもあります。修正・改善実験は実施していません。
 
+[CPU Gaussian・Fourier連続性診断](docs/kernel-taylor-continuity-20261109-results.ja.md)152条件・1216変位を完了。Gaussianの固定cell積分は、調べた中心・幅の境界で微分と一致し、現行Fourierも同じ枝内では一致しました。Mを増やすと座標の跳びは減りましたが、階層による半径の大きな不連続は残りました。Gaussian採用・CUDA変更・速度結果・学習実験はありません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
