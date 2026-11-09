@@ -138,3 +138,13 @@ python scripts/plot_ffn_fraction_lr.py --run "$CST_RESEARCH_EVIDENCE_ROOT/ffn-fr
 固定source archive、protocol.json・cases.json・driver.py・launch/receipt・hashに
 実行条件を保全。再実行には検証済みtoken dataと承認済みGPU接続が必要です。
 別seed・長期学習・別fraction/tau/Atom数/幅は今回の結果の範囲外です。
+
+## 同条件DSTの追加重ね描き、2026-11-09
+
+上の元の学習データは変更していません。学習曲線には[Tau/DST研究](ffn-zero-start-tau-dst-20261109-results.ja.md)の
+source/runtime/データ/形/有効予算を照合したTinyStories DSTも追加しました。
+DEVで選択した疎重みLR.003、CE3.350667です。Dense保存のRigL-style精度参照であり、
+疎実装の効率の証拠ではありません。独立した対照と更新した図のhashは、元の3runの数値と
+分けてJSONに記録しています。
+
+![同条件DSTを追加した終盤の曲線](assets/ffn-fraction-zero-start-20261109/long-development-tail.png)

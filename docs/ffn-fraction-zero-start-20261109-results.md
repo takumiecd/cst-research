@@ -149,3 +149,14 @@ Frozen source archive,protocol.json,cases.json,driver.py,launch/receipt and hash
 retain the exact recipe. Re-execution requires verified token data and approved
 GPU access. More seeds,longer training,other fractions,tau,Atom counts and widths
 are outside this result.
+
+## Post hoc matched DST overlay,2026-11-09
+
+The original learning data above remain unchanged. The learning figure now also
+includes the source/runtime/data/shape/active-budget-matched TinyStories DST
+reference from the [tau/DST study](ffn-zero-start-tau-dst-20261109-results.md):
+DEV-selected sparse LR.003,CE3.350667. It is a dense-storage RigL-style accuracy
+reference,not sparse efficiency evidence. JSON records the independent reference
+and updated figure hashes separately from the original three-run metrics.
+
+![Matched DST tail overlay](assets/ffn-fraction-zero-start-20261109/long-development-tail.png)

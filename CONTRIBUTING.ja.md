@@ -29,6 +29,15 @@ RUNNINGをCOMPLETEDへ変えるのは、必要な実行と回収・検証が実�
 既存HIGGSの条件を変える場合は新しいstudy IDを使います。現在の学習はtorchcst側にあり、
 このrepoでの登録やCLI検査を、学習移管・再実行・結果採用と扱いません。
 
+## LM学習曲線の対照
+
+所有者の指示により、新しいLMの学習曲線比較にはDenseとsourceを検証したDST対照を
+含めます。データ・モデル/通常初期化・学習token予算・有効FFN scalar予算を揃え、
+DST方式・mask/更新規則・LR調整を記録。全候補を保全し、DEV選択と明示します。
+作図の--dst-runと互換性検査を使用し、HIGGSや不適合なタスク/source/予算の曲線を
+代用しません。半径/fraction診断はCSTのみです。Dense保存のDST精度参照から、
+疎kernelの速度・メモリ効率を主張しません。
+
 ## 実験と証拠
 
 実行前にsource/data/config identityを固定します。ownerのGPUを使う場合は、

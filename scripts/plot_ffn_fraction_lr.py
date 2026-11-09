@@ -25,12 +25,23 @@ def main():
     rows = [r for r in all_rows if r["kind"] == "cst"]
     out = root / "figures"
     out.mkdir(exist_ok=True)
+    tau_comparison = any(r.get("tau_comparison") for r in rows)
     start_comparison = any(r.get("fraction_start_comparison") for r in rows)
-    key = lambda r: r["fraction"] if start_comparison else r["fraction_lr_multiplier"]
+    key = lambda r: (
+        r["tau"]
+        if tau_comparison
+        else r["fraction"]
+        if start_comparison
+        else r["fraction_lr_multiplier"]
+    )
     keyed_rows = {key(r): r for r in rows}
     assert len(keyed_rows) == len(rows)
     labels = {
-        k: f"f0={r['fraction']:g}, LR32x" if start_comparison else f"{k:g}x"
+        k: f"tau={r['tau']:g}"
+        if tau_comparison
+        else f"f0={r['fraction']:g}, LR32x"
+        if start_comparison
+        else f"{k:g}x"
         for k, r in keyed_rows.items()
     }
     histories = {
@@ -129,7 +140,9 @@ def main():
         ax.grid(alpha=0.2)
     axes[0, 0].legend()
     fig.suptitle(
-        "Initial fraction0 versus.5, common CST LR32x: per-Atom fraction motion, seed17"
+        "Zero-start tau comparison, common CST LR32x: per-Atom fraction motion, seed17"
+        if tau_comparison
+        else "Initial fraction0 versus.5, common CST LR32x: per-Atom fraction motion, seed17"
         if start_comparison
         else "All CST fields LR: same initial fraction .5, measured per-Atom motion, seed17"
         if "cst_lr_multiplier" in rows[0]
@@ -205,6 +218,7 @@ def main():
             {
                 "fraction_lr_multiplier": keyed_rows[rate]["fraction_lr_multiplier"],
                 "initial_fraction": keyed_rows[rate]["fraction"],
+                "tau": keyed_rows[rate]["tau"],
                 **(
                     {"cst_lr_multiplier": keyed_rows[rate]["cst_lr_multiplier"]}
                     if "cst_lr_multiplier" in rows[0]

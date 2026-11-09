@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-zero-start-tau-dst-20261109",
   "title": "Zero-start/common32x tau grid with matched TinyStories RigL-style reference",
-  "status": "RUNNING",
-  "status_note": "Four CST tau configurations source-frozen and running on RTX6000 Ada with fresh Dense. DST rectangular reference CPU tests passed; full CPU suite running, GPU qualification/training pending. No HIGGS curve reused.",
+  "status": "COMPLETED",
+  "status_note": "All4 CST tau arms and4 DST LR arms plus2 fresh Dense controls completed976training steps(seed17);DST974Adam updates by design. Best CST tau0.003,CE3.393048;DEV-selected DST LR0.003,CE3.350667;Dense3.308982. All20 checkpoint audits/30remote hashes verified;one seed,no confirmation/RMS calibration/default adoption.",
   "protocol_source_path": "docs/ffn-zero-start-tau-dst-20261109.md",
   "protocol": {
     "width": 512,
@@ -63,11 +63,38 @@
       "job_id": "ffn-zero-start-tau-6000ada-20261109-01",
       "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
       "consumer_commit": "cd7d7476db40202d3f0febdccf2caf46e0909e32",
-      "source_archive_sha256": "63376b2cd42a33cda9e87bb29dc6c67b2c84d4cd1f07d2fefbb64139dc795473"
+      "source_archive_sha256": "63376b2cd42a33cda9e87bb29dc6c67b2c84d4cd1f07d2fefbb64139dc795473",
+      "qualification_sha256": "aeba44e0c6d4c31f49bab5e62e7e36a2d553c5d56a8e7a77daa51f43e44db9e0",
+      "compact_archive_sha256": "2999fa8cc45676925e7e6a7cd707f9b3b450a176bd8be58921ed3f09b1d2baff",
+      "compact_files_verified": 40,
+      "source_files_verified": 1902,
+      "checkpoints_verified": 15,
+      "audited_checkpoints": 10,
+      "owned_processes_inactive": 9
     },
-    "dst_status": "CPU-tested preparation; GPU not yet executed",
+    "dst_status": "All4 LR candidates qualified,trained,audited,retrieved;selected by frozen DEV criterion",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "dst": {
+      "job_id": "ffn-dst-tinystories-6000ada-20261109-01",
+      "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+      "consumer_commit": "778c57e889c2b2c9a9bcc5f8316ca88443bb1af1",
+      "source_archive_sha256": "f307928998af1d6505277b6a0c8c51a8ae3593d7df91c1e4913198d129d29251",
+      "qualification_sha256": "c54bafccab3a7212af146e86e7875069be380a77bafa8c983ed667a9c92599df",
+      "compact_archive_sha256": "c4b0f9b4a7d19f23fdcd4521f75f460b6d761b12d5ce6c173ac3a193efede6a5",
+      "compact_files_verified": 34,
+      "source_files_verified": 1905,
+      "checkpoints_verified": 15,
+      "audited_checkpoints": 10,
+      "owned_processes_inactive": 12
+    },
+    "results_source_path": "docs/ffn-zero-start-tau-dst-20261109-results.md",
+    "dst_selection": {
+      "label": "dst-lr-0.003",
+      "sparse_lr": 0.003,
+      "development_ce": 3.350666970014572,
+      "criterion": "minimum final976 DEV CE, ties lower LR; development tuning only"
+    }
   }
 }

@@ -18,6 +18,7 @@ def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--recovery-run", type=Path)
+    parser.add_argument("--dst-run", type=Path)
     args = parser.parse_args()
     root = args.run.resolve()
     assert (
@@ -25,7 +26,11 @@ def main():
     )
     read = lambda p: json.loads(p.read_text())
     lines = lambda p: [json.loads(x) for x in p.read_text().splitlines()]
-    rows, directories = load_inputs(root, args.recovery_run)
+    rows, directories = load_inputs(root, args.recovery_run, args.dst_run)
+    if any(r.get("tau_comparison") for r in rows) and args.dst_run is None:
+        parser.error(
+            "This tau comparison requires the source-qualified --dst-run baseline"
+        )
     out = root / "figures"
     out.mkdir(exist_ok=True)
     summaries = {
@@ -38,6 +43,10 @@ def main():
             return (
                 "Dense (recovery)" if row["label"].startswith("recovery-") else "Dense"
             )
+        if row["kind"] == "dst":
+            return f"DST (RigL-style, LR{row['sparse_peak_lr']:g}; DEV selected)"
+        if row.get("tau_comparison"):
+            return f"CST tau={row['tau']:g}, f0=0, LR32x"
         if row.get("fraction_start_comparison"):
             return (
                 f"fraction init{row['fraction']:g}, CST LR{row['cst_lr_multiplier']:g}x"
@@ -52,6 +61,13 @@ def main():
 
     names = list(dict.fromkeys(name(r) for r in rows))
     colors = {n: plt.get_cmap("tab10")(i) for i, n in enumerate(names)}
+    for r in rows:
+        if r["kind"] == "dst":
+            colors[name(r)] = "#2ca02c"
+    for tau, color in zip(
+        (0.0003, 0.001, 0.003, 0.01), ("#1f77b4", "#ff7f0e", "#d62728", "#9467bd")
+    ):
+        colors[f"CST tau={tau:g}, f0=0, LR32x"] = color
     colors["Dense"] = "#222222"
     colors["Dense (recovery)"] = "#777777"
     colors["cap1 bridge: tau=.003, f0=0"] = "#999999"
@@ -102,7 +118,11 @@ def main():
                 )
         for j, title in enumerate(("Train CE", "Development CE")):
             axes[0, j].set_title(title)
-            axes[0, j].set_xlabel("Optimizer updates")
+            axes[0, j].set_xlabel(
+                "Training steps (DST topology events included)"
+                if args.dst_run
+                else "Optimizer updates"
+            )
             axes[1, j].set_xlabel(
                 "Elapsed wall minutes, includes setup/probes/evaluation"
             )
@@ -111,7 +131,9 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            "Initial fraction0 versus.5, common CST LR32x, seed17 only"
+            "Zero-start tau comparison with DEV-selected DST, common CST LR32x, seed17"
+            if any(r.get("tau_comparison") for r in rows)
+            else "Initial fraction0 versus.5, common CST LR32x, seed17 only"
             if any(r.get("fraction_start_comparison") for r in rows)
             else "All CST field LR comparison, seed17 only"
             if any("cst_lr_multiplier" in r for r in rows)
@@ -120,6 +142,29 @@ def main():
             else f"{stage.capitalize()} lower-tau and broad-start exploration, seed17 only"
         )
         save(fig, f"{stage}-learning-curves")
+        if args.dst_run:
+            fig, axes = plt.subplots(1, 2, figsize=(13, 4), layout="constrained")
+            for ax, start in zip(axes, (200, 600)):
+                for row in selected:
+                    points = [
+                        r
+                        for r in curves[row["label"]]
+                        if "development" in r and r["step"] >= start
+                    ]
+                    ax.plot(
+                        [r["step"] for r in points],
+                        [r["development"]["ce"] for r in points],
+                        color=colors[name(row)],
+                        label=name(row),
+                        lw=1.5,
+                    )
+                ax.set_xlabel("Training steps (DST includes topology events)")
+                ax.set_ylabel("Development cross entropy")
+                ax.set_title(f"Development CE, from step{start}")
+                ax.grid(alpha=0.2)
+            axes[0].legend(fontsize=7)
+            fig.suptitle("Tail zoom, seed17; DST selected on DEV, no confirmation")
+            save(fig, f"{stage}-development-tail")
         cst = [r for r in selected if r["kind"] == "cst"]
         geo = {
             r["label"]: lines(directories[r["label"]] / "geometry.jsonl") for r in cst
@@ -312,7 +357,9 @@ def main():
             {
                 "runs": table,
                 "scope": (
-                    "One development seed, initial fraction0/.5 at common32x; no optimality or convergence claim"
+                    "One development seed, zero-start tau family and DEV-selected DST; no optimality or convergence claim"
+                    if any(r.get("tau_comparison") for r in rows)
+                    else "One development seed, initial fraction0/.5 at common32x; no optimality or convergence claim"
                     if any(r.get("fraction_start_comparison") for r in rows)
                     else "One development seed, fixed all-CST-field LR family; no optimality or convergence claim"
                     if any("cst_lr_multiplier" in r for r in rows)

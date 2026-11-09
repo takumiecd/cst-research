@@ -1,0 +1,3790 @@
+{
+  "study": {
+    "schema_version": 1,
+    "source_repository": "https://github.com/takumiecd/torchcst",
+    "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+    "runner_entrypoint": "cst_research.experiments.ffn_run",
+    "id": "ffn-zero-start-tau-dst-20261109",
+    "title": "Zero-start/common32x tau grid with matched TinyStories RigL-style reference",
+    "status": "COMPLETED",
+    "status_note": "All4 CST tau arms and4 DST LR arms plus2 fresh Dense controls completed976training steps(seed17);DST974Adam updates by design. Best CST tau0.003,CE3.393048;DEV-selected DST LR0.003,CE3.350667;Dense3.308982. All20 checkpoint audits/30remote hashes verified;one seed,no confirmation/RMS calibration/default adoption.",
+    "protocol_source_path": "docs/ffn-zero-start-tau-dst-20261109.md",
+    "protocol": {
+      "width": 512,
+      "blocks": 4,
+      "amplitude_max": 32.0,
+      "initialization_mode": "moments",
+      "seed": 17,
+      "updates": 976,
+      "observation_updates": [
+        256
+      ],
+      "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+      "confirmation_evaluated": false,
+      "non_atom_lr_multiplier": 1.0,
+      "cst_field_lr_multiplier": 32.0,
+      "initial_fraction": 0.0,
+      "taus": [
+        0.0003,
+        0.001,
+        0.003,
+        0.01
+      ],
+      "dst": {
+        "method": "row-balanced RigL-style dense-storage reference",
+        "active_weights_per_map": 32768,
+        "row_active_up": 16,
+        "row_active_down": 64,
+        "sparse_weight_peak_lrs": [
+          0.0003,
+          0.001,
+          0.003,
+          0.01
+        ],
+        "ordinary_peak_lr": 0.0003,
+        "cadence": 250,
+        "initial_drop_fraction": 0.3,
+        "topology_end_training_fraction": 0.75,
+        "topology_steps": [
+          250,
+          500
+        ],
+        "topology_steps_replace_all_parameter_adam_update": true,
+        "selection": "minimum final976 DEV CE, ties lower LR; no confirmation",
+        "actual_adam_updates": 974
+      }
+    },
+    "evidence": {
+      "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+      "relative_path": "ffn-zero-start-tau-6000ada-20261109-01"
+    },
+    "execution": {
+      "cst": {
+        "job_id": "ffn-zero-start-tau-6000ada-20261109-01",
+        "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+        "consumer_commit": "cd7d7476db40202d3f0febdccf2caf46e0909e32",
+        "source_archive_sha256": "63376b2cd42a33cda9e87bb29dc6c67b2c84d4cd1f07d2fefbb64139dc795473",
+        "qualification_sha256": "aeba44e0c6d4c31f49bab5e62e7e36a2d553c5d56a8e7a77daa51f43e44db9e0",
+        "compact_archive_sha256": "2999fa8cc45676925e7e6a7cd707f9b3b450a176bd8be58921ed3f09b1d2baff",
+        "compact_files_verified": 40,
+        "source_files_verified": 1902,
+        "checkpoints_verified": 15,
+        "audited_checkpoints": 10,
+        "owned_processes_inactive": 9
+      },
+      "dst_status": "All4 LR candidates qualified,trained,audited,retrieved;selected by frozen DEV criterion",
+      "confirmation_evaluated": false,
+      "rms_calibration_executed": false,
+      "public_default_adopted": false,
+      "dst": {
+        "job_id": "ffn-dst-tinystories-6000ada-20261109-01",
+        "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+        "consumer_commit": "778c57e889c2b2c9a9bcc5f8316ca88443bb1af1",
+        "source_archive_sha256": "f307928998af1d6505277b6a0c8c51a8ae3593d7df91c1e4913198d129d29251",
+        "qualification_sha256": "c54bafccab3a7212af146e86e7875069be380a77bafa8c983ed667a9c92599df",
+        "compact_archive_sha256": "c4b0f9b4a7d19f23fdcd4521f75f460b6d761b12d5ce6c173ac3a193efede6a5",
+        "compact_files_verified": 34,
+        "source_files_verified": 1905,
+        "checkpoints_verified": 15,
+        "audited_checkpoints": 10,
+        "owned_processes_inactive": 12
+      },
+      "results_source_path": "docs/ffn-zero-start-tau-dst-20261109-results.md",
+      "dst_selection": {
+        "label": "dst-lr-0.003",
+        "sparse_lr": 0.003,
+        "development_ce": 3.350666970014572,
+        "criterion": "minimum final976 DEV CE, ties lower LR; development tuning only"
+      }
+    }
+  },
+  "main_overlay_metrics": {
+    "runs": [
+      {
+        "stage": "long",
+        "kind": "dense",
+        "tau": 0.0003,
+        "fraction": 0.0,
+        "tau_comparison": true,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 32.0,
+        "cst_lr_multiplier": 32.0,
+        "seed": 17,
+        "label": "dense",
+        "development_ce": 3.3089816197752953,
+        "updates": 976,
+        "peak_allocated_bytes": 998937088,
+        "peak_reserved_bytes": 1224736768,
+        "origin_label": "dense",
+        "origin_job": "ffn-zero-start-tau-6000ada-20261109-01",
+        "median_update_ms": 21.625485736876726,
+        "setup_seconds": 0.9727819096297026,
+        "total_wall_seconds": 40.833124205470085,
+        "ffn_parameters": 8398848,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.4517275393009186,
+          "blocks.0.ffn.down": 0.0815994068980217,
+          "blocks.1.attention_out": 0.0356425940990448,
+          "blocks.1.ffn.up": 0.45087000727653503,
+          "blocks.1.ffn.down": 0.08240608870983124,
+          "blocks.2.attention_out": 0.04506503790616989,
+          "blocks.2.ffn.up": 0.45188528299331665,
+          "blocks.2.ffn.down": 0.08035017549991608,
+          "blocks.3.attention_out": 0.04756489023566246,
+          "blocks.3.ffn.up": 0.4538961350917816,
+          "blocks.3.ffn.down": 0.08379099518060684
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.04198923334479332,
+          "blocks.0.ffn.up": 0.6830833554267883,
+          "blocks.0.ffn.down": 0.7318371534347534,
+          "blocks.1.attention_out": 0.2604719400405884,
+          "blocks.1.ffn.up": 0.9483500123023987,
+          "blocks.1.ffn.down": 0.4036603569984436,
+          "blocks.2.attention_out": 0.22883787751197815,
+          "blocks.2.ffn.up": 1.0782043933868408,
+          "blocks.2.ffn.down": 0.43058931827545166,
+          "blocks.3.attention_out": 0.2369016408920288,
+          "blocks.3.ffn.up": 0.9549332857131958,
+          "blocks.3.ffn.down": 0.5059561133384705
+        }
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.0003,
+        "fraction": 0.0,
+        "tau_comparison": true,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 32.0,
+        "cst_lr_multiplier": 32.0,
+        "seed": 17,
+        "label": "tau-0.0003",
+        "development_ce": 3.3964227437973022,
+        "updates": 976,
+        "peak_allocated_bytes": 1022916096,
+        "peak_reserved_bytes": 1363148800,
+        "origin_label": "tau-0.0003",
+        "origin_job": "ffn-zero-start-tau-6000ada-20261109-01",
+        "median_update_ms": 125.91689033433795,
+        "setup_seconds": 3.285204735584557,
+        "total_wall_seconds": 142.095012601465,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44648775458335876,
+          "blocks.0.ffn.down": 0.08474177867174149,
+          "blocks.1.attention_out": 0.03281209617853165,
+          "blocks.1.ffn.up": 0.4494607746601105,
+          "blocks.1.ffn.down": 0.08738785237073898,
+          "blocks.2.attention_out": 0.04471449553966522,
+          "blocks.2.ffn.up": 0.45493972301483154,
+          "blocks.2.ffn.down": 0.08704359829425812,
+          "blocks.3.attention_out": 0.04875412583351135,
+          "blocks.3.ffn.up": 0.4591965973377228,
+          "blocks.3.ffn.down": 0.09093837440013885
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.052410803735256195,
+          "blocks.0.ffn.up": 0.7224072813987732,
+          "blocks.0.ffn.down": 0.6577932834625244,
+          "blocks.1.attention_out": 0.174398735165596,
+          "blocks.1.ffn.up": 0.7146199345588684,
+          "blocks.1.ffn.down": 0.6072676777839661,
+          "blocks.2.attention_out": 0.19367337226867676,
+          "blocks.2.ffn.up": 0.7177785634994507,
+          "blocks.2.ffn.down": 0.5905625820159912,
+          "blocks.3.attention_out": 0.27977511286735535,
+          "blocks.3.ffn.up": 0.682784378528595,
+          "blocks.3.ffn.down": 0.537192165851593
+        },
+        "initial_radius_mean": 0.5787186933503108,
+        "final_radius_mean": 1.5498119674994086,
+        "final_fraction_mean": 0.1413827960300861,
+        "fraction_at_zero": 0.240081787109375,
+        "fraction_at_one": 0.000244140625
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.001,
+        "fraction": 0.0,
+        "tau_comparison": true,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 32.0,
+        "cst_lr_multiplier": 32.0,
+        "seed": 17,
+        "label": "tau-0.001",
+        "development_ce": 3.3986531272530556,
+        "updates": 976,
+        "peak_allocated_bytes": 1022916096,
+        "peak_reserved_bytes": 1365245952,
+        "origin_label": "tau-0.001",
+        "origin_job": "ffn-zero-start-tau-6000ada-20261109-01",
+        "median_update_ms": 126.64405722171068,
+        "setup_seconds": 3.349506343714893,
+        "total_wall_seconds": 143.40003219805658,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44648754596710205,
+          "blocks.0.ffn.down": 0.08474117517471313,
+          "blocks.1.attention_out": 0.03281310573220253,
+          "blocks.1.ffn.up": 0.4494599997997284,
+          "blocks.1.ffn.down": 0.08738647401332855,
+          "blocks.2.attention_out": 0.04471497982740402,
+          "blocks.2.ffn.up": 0.4549309015274048,
+          "blocks.2.ffn.down": 0.08703439682722092,
+          "blocks.3.attention_out": 0.04875275865197182,
+          "blocks.3.ffn.up": 0.4591943025588989,
+          "blocks.3.ffn.down": 0.09095118939876556
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.05318637192249298,
+          "blocks.0.ffn.up": 0.7242641448974609,
+          "blocks.0.ffn.down": 0.6614213585853577,
+          "blocks.1.attention_out": 0.18354827165603638,
+          "blocks.1.ffn.up": 0.716920793056488,
+          "blocks.1.ffn.down": 0.6093664169311523,
+          "blocks.2.attention_out": 0.19173671305179596,
+          "blocks.2.ffn.up": 0.7195908427238464,
+          "blocks.2.ffn.down": 0.5934275388717651,
+          "blocks.3.attention_out": 0.2760225236415863,
+          "blocks.3.ffn.up": 0.6836804151535034,
+          "blocks.3.ffn.down": 0.5400335788726807
+        },
+        "initial_radius_mean": 0.7574868124956993,
+        "final_radius_mean": 1.6158443820704633,
+        "final_fraction_mean": 0.1405265045337092,
+        "fraction_at_zero": 0.23834228515625,
+        "fraction_at_one": 0.0002899169921875
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.0,
+        "tau_comparison": true,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 32.0,
+        "cst_lr_multiplier": 32.0,
+        "seed": 17,
+        "label": "tau-0.003",
+        "development_ce": 3.3930482044816017,
+        "updates": 976,
+        "peak_allocated_bytes": 1022916096,
+        "peak_reserved_bytes": 1365245952,
+        "origin_label": "tau-0.003",
+        "origin_job": "ffn-zero-start-tau-6000ada-20261109-01",
+        "median_update_ms": 127.5201621465385,
+        "setup_seconds": 3.399509221315384,
+        "total_wall_seconds": 145.6090196268633,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.4464856684207916,
+          "blocks.0.ffn.down": 0.08474020659923553,
+          "blocks.1.attention_out": 0.03282735124230385,
+          "blocks.1.ffn.up": 0.4493887424468994,
+          "blocks.1.ffn.down": 0.0873517394065857,
+          "blocks.2.attention_out": 0.04474282264709473,
+          "blocks.2.ffn.up": 0.4549660086631775,
+          "blocks.2.ffn.down": 0.08699070662260056,
+          "blocks.3.attention_out": 0.04874720051884651,
+          "blocks.3.ffn.up": 0.4592386484146118,
+          "blocks.3.ffn.down": 0.090985007584095
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.05226119980216026,
+          "blocks.0.ffn.up": 0.7194662094116211,
+          "blocks.0.ffn.down": 0.6575155854225159,
+          "blocks.1.attention_out": 0.17705321311950684,
+          "blocks.1.ffn.up": 0.7217203974723816,
+          "blocks.1.ffn.down": 0.6184352040290833,
+          "blocks.2.attention_out": 0.18192297220230103,
+          "blocks.2.ffn.up": 0.7100124359130859,
+          "blocks.2.ffn.down": 0.5789125561714172,
+          "blocks.3.attention_out": 0.288747638463974,
+          "blocks.3.ffn.up": 0.6813955307006836,
+          "blocks.3.ffn.down": 0.537209153175354
+        },
+        "initial_radius_mean": 1.2667088470416275,
+        "final_radius_mean": 1.9032074103224659,
+        "final_fraction_mean": 0.14055295826861813,
+        "fraction_at_zero": 0.2353363037109375,
+        "fraction_at_one": 0.0001220703125
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.01,
+        "fraction": 0.0,
+        "tau_comparison": true,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 32.0,
+        "cst_lr_multiplier": 32.0,
+        "seed": 17,
+        "label": "tau-0.01",
+        "development_ce": 3.395446814596653,
+        "updates": 976,
+        "peak_allocated_bytes": 1022916096,
+        "peak_reserved_bytes": 1365245952,
+        "origin_label": "tau-0.01",
+        "origin_job": "ffn-zero-start-tau-6000ada-20261109-01",
+        "median_update_ms": 130.65896462649107,
+        "setup_seconds": 3.5389886470511556,
+        "total_wall_seconds": 150.76925560180098,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44645339250564575,
+          "blocks.0.ffn.down": 0.08455637097358704,
+          "blocks.1.attention_out": 0.03283004090189934,
+          "blocks.1.ffn.up": 0.4491046667098999,
+          "blocks.1.ffn.down": 0.08736170828342438,
+          "blocks.2.attention_out": 0.044781725853681564,
+          "blocks.2.ffn.up": 0.45505696535110474,
+          "blocks.2.ffn.down": 0.08728646486997604,
+          "blocks.3.attention_out": 0.04879448935389519,
+          "blocks.3.ffn.up": 0.45920875668525696,
+          "blocks.3.ffn.down": 0.09140656888484955
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.05263107270002365,
+          "blocks.0.ffn.up": 0.717258632183075,
+          "blocks.0.ffn.down": 0.6509310603141785,
+          "blocks.1.attention_out": 0.16835446655750275,
+          "blocks.1.ffn.up": 0.7155357003211975,
+          "blocks.1.ffn.down": 0.5878454446792603,
+          "blocks.2.attention_out": 0.18898998200893402,
+          "blocks.2.ffn.up": 0.6937409043312073,
+          "blocks.2.ffn.down": 0.5374858975410461,
+          "blocks.3.attention_out": 0.3045409023761749,
+          "blocks.3.ffn.up": 0.6760125160217285,
+          "blocks.3.ffn.down": 0.5137099623680115
+        },
+        "initial_radius_mean": 3.0270595067449904,
+        "final_radius_mean": 3.9988423017148307,
+        "final_fraction_mean": 0.15565660732569622,
+        "fraction_at_zero": 0.2148590087890625,
+        "fraction_at_one": 0.0001678466796875
+      },
+      {
+        "stage": "long",
+        "kind": "dst",
+        "tau": 0.003,
+        "fraction": 0.0,
+        "amplitude_max": 32.0,
+        "seed": 17,
+        "label": "dst-dst-lr-0.003",
+        "sparse_peak_lr": 0.003,
+        "development_ce": 3.350666970014572,
+        "updates": 976,
+        "actual_adam_updates": 974,
+        "peak_allocated_bytes": 991809536,
+        "peak_reserved_bytes": 1059061760,
+        "origin_label": "dst-lr-0.003",
+        "origin_job": "ffn-dst-tinystories-6000ada-20261109-01",
+        "development_selected": true,
+        "median_update_ms": 22.195477969944477,
+        "setup_seconds": 1.0128624495118856,
+        "total_wall_seconds": 24.601597431115806,
+        "ffn_parameters": 8398848,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.4485393464565277,
+          "blocks.0.ffn.down": 0.08285829424858093,
+          "blocks.1.attention_out": 0.04061739891767502,
+          "blocks.1.ffn.up": 0.4525909721851349,
+          "blocks.1.ffn.down": 0.08204637467861176,
+          "blocks.2.attention_out": 0.04672055318951607,
+          "blocks.2.ffn.up": 0.45655637979507446,
+          "blocks.2.ffn.down": 0.08546717464923859,
+          "blocks.3.attention_out": 0.04996700584888458,
+          "blocks.3.ffn.up": 0.44914278388023376,
+          "blocks.3.ffn.down": 0.08192139863967896
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.044327497482299805,
+          "blocks.0.ffn.up": 0.6572683453559875,
+          "blocks.0.ffn.down": 0.43972301483154297,
+          "blocks.1.attention_out": 0.1266546994447708,
+          "blocks.1.ffn.up": 0.6748877167701721,
+          "blocks.1.ffn.down": 0.4134212136268616,
+          "blocks.2.attention_out": 0.12282542884349823,
+          "blocks.2.ffn.up": 0.6689653396606445,
+          "blocks.2.ffn.down": 0.43547505140304565,
+          "blocks.3.attention_out": 0.14219968020915985,
+          "blocks.3.ffn.up": 0.6268155574798584,
+          "blocks.3.ffn.down": 0.39898139238357544
+        }
+      }
+    ],
+    "scope": "One development seed, zero-start tau family and DEV-selected DST; no optimality or convergence claim"
+  },
+  "cst_fraction_motion": {
+    "arms": [
+      {
+        "fraction_lr_multiplier": 32.0,
+        "initial_fraction": 0.0,
+        "tau": 0.0003,
+        "cst_lr_multiplier": 32.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 0.0002263214936577499,
+            "mean_absolute": 0.001229545381407753,
+            "rms": 0.001775489392088753
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.061550433068349814,
+            "mean_absolute": 0.061550433068349814,
+            "rms": 0.09037427552093236
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.19756983843257153,
+            "mean_absolute": 0.19756983843257153,
+            "rms": 0.21364575232561164
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.18684285119434207,
+            "mean_absolute": 0.34136262742595136,
+            "rms": 2.266612697292468
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.2022845099272672,
+            "mean_absolute": 0.2022845099272672,
+            "rms": 0.3411485556682066
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.015441658732925134,
+            "mean_absolute": 0.14090686875806568,
+            "rms": 2.219786935124907
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -8.369749084672116e-05,
+            "mean_absolute": 0.001539564562987177,
+            "rms": 0.0019698081963254463
+          },
+          "fraction_increased": 0.7743377685546875,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.2256622314453125,
+          "at_zero": 0.2256622314453125,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.009599821096881336,
+          "net_to_path_ratio": 0.31153759883929,
+          "outward_momentum_at_boundary": 0.2256622314453125
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": 6.648490107233611e-05,
+            "mean_absolute": 0.0012353476414560466,
+            "rms": 0.0017979576495225434
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.1413827960300861,
+            "mean_absolute": 0.1413827960300861,
+            "rms": 0.21956009446922867
+          },
+          "fraction_path_length": {
+            "mean_signed": 1.0932821764983052,
+            "mean_absolute": 1.0932821764983052,
+            "rms": 1.144955502549289
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.9710932741490979,
+            "mean_absolute": 1.121422184689436,
+            "rms": 3.570536185120961
+          },
+          "radius_fraction_component": {
+            "mean_signed": 1.0237042061125976,
+            "mean_absolute": 1.0237042061125976,
+            "rms": 3.0152434312484284
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.05261093196349975,
+            "mean_absolute": 0.10482260726530512,
+            "rms": 1.9004586664487817
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -0.00016487201707324922,
+            "mean_absolute": 0.001467574385565586,
+            "rms": 0.0019206761074749112
+          },
+          "fraction_increased": 0.759918212890625,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.240081787109375,
+          "at_zero": 0.240081787109375,
+          "at_one": 0.000244140625,
+          "effective_fraction_lr": 0.009565692219303716,
+          "net_to_path_ratio": 0.12931958379027436,
+          "outward_momentum_at_boundary": 0.240325927734375
+        }
+      },
+      {
+        "fraction_lr_multiplier": 32.0,
+        "initial_fraction": 0.0,
+        "tau": 0.001,
+        "cst_lr_multiplier": 32.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 0.00022633878262614225,
+            "mean_absolute": 0.0012338500962935433,
+            "rms": 0.0017792814561497729
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.06146370906732876,
+            "mean_absolute": 0.06146370906732876,
+            "rms": 0.09021328854403353
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.19740829953218153,
+            "mean_absolute": 0.19740829953218153,
+            "rms": 0.21343427181881303
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.13856404059151828,
+            "mean_absolute": 0.640102426883459,
+            "rms": 3.976084443329033
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.20759507770526398,
+            "mean_absolute": 0.20759507770526398,
+            "rms": 0.37025925075994875
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.0690310371137457,
+            "mean_absolute": 0.43865863654173154,
+            "rms": 3.9232823990171735
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -8.050420650003842e-05,
+            "mean_absolute": 0.0015406932786900544,
+            "rms": 0.0019722268164039445
+          },
+          "fraction_increased": 0.7758026123046875,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.2241973876953125,
+          "at_zero": 0.2241973876953125,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.009599821096881336,
+          "net_to_path_ratio": 0.31135321672384364,
+          "outward_momentum_at_boundary": 0.2241973876953125
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": 7.700614993590127e-05,
+            "mean_absolute": 0.0012460628285478924,
+            "rms": 0.001812403180672057
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.1405265045337092,
+            "mean_absolute": 0.1405265045337092,
+            "rms": 0.21782521510572486
+          },
+          "fraction_path_length": {
+            "mean_signed": 1.0944249028394317,
+            "mean_absolute": 1.0944249028394317,
+            "rms": 1.1456098368004837
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.8583575695747641,
+            "mean_absolute": 1.3477858606847803,
+            "rms": 4.656805538608092
+          },
+          "radius_fraction_component": {
+            "mean_signed": 1.0049841687678054,
+            "mean_absolute": 1.0049841687678054,
+            "rms": 2.904372685691193
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.14662659919304133,
+            "mean_absolute": 0.3680519495228509,
+            "rms": 3.611003042010994
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -0.0001521919983256224,
+            "mean_absolute": 0.0014762793625737853,
+            "rms": 0.0019320489636395204
+          },
+          "fraction_increased": 0.76165771484375,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.23834228515625,
+          "at_zero": 0.23834228515625,
+          "at_one": 0.0002899169921875,
+          "effective_fraction_lr": 0.009565692219303716,
+          "net_to_path_ratio": 0.1284021445136346,
+          "outward_momentum_at_boundary": 0.2386322021484375
+        }
+      },
+      {
+        "fraction_lr_multiplier": 32.0,
+        "initial_fraction": 0.0,
+        "tau": 0.003,
+        "cst_lr_multiplier": 32.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 0.00022685291575936617,
+            "mean_absolute": 0.0012407431323306097,
+            "rms": 0.0017909697567198917
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.061716579699480086,
+            "mean_absolute": 0.061716579699480086,
+            "rms": 0.09020125382315201
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.19671127771616334,
+            "mean_absolute": 0.19671127771616334,
+            "rms": 0.21249768877860953
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.171854336404067,
+            "mean_absolute": 1.6187741626563366,
+            "rms": 7.159077679227156
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.22569038923575135,
+            "mean_absolute": 0.22569038923575135,
+            "rms": 0.4352112285350426
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.053836052831684356,
+            "mean_absolute": 1.4127691287176276,
+            "rms": 7.077690622076823
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -7.674773674603945e-05,
+            "mean_absolute": 0.0015443439930190894,
+            "rms": 0.0019799779791450996
+          },
+          "fraction_increased": 0.7796173095703125,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.2203826904296875,
+          "at_zero": 0.2203826904296875,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.009599821096881336,
+          "net_to_path_ratio": 0.31374194919587456,
+          "outward_momentum_at_boundary": 0.2203826904296875
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": 6.173802108685691e-05,
+            "mean_absolute": 0.0012303877568728466,
+            "rms": 0.0017893431661918026
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.14055295826861813,
+            "mean_absolute": 0.14055295826861813,
+            "rms": 0.21526725047640707
+          },
+          "fraction_path_length": {
+            "mean_signed": 1.094251445759447,
+            "mean_absolute": 1.094251445759447,
+            "rms": 1.1441446294631765
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.6364985632808384,
+            "mean_absolute": 2.0625866462560225,
+            "rms": 7.000526916058062
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.9739495876410729,
+            "mean_absolute": 0.9739495876410729,
+            "rms": 2.614379903410853
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.33745102436023444,
+            "mean_absolute": 1.1701084146725407,
+            "rms": 6.438268247054243
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -0.0001650836786242532,
+            "mean_absolute": 0.001457820119395613,
+            "rms": 0.0019090879763942437
+          },
+          "fraction_increased": 0.7646636962890625,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.2353363037109375,
+          "at_zero": 0.2353363037109375,
+          "at_one": 0.0001220703125,
+          "effective_fraction_lr": 0.009565692219303716,
+          "net_to_path_ratio": 0.1284466735806501,
+          "outward_momentum_at_boundary": 0.2354583740234375
+        }
+      },
+      {
+        "fraction_lr_multiplier": 32.0,
+        "initial_fraction": 0.0,
+        "tau": 0.01,
+        "cst_lr_multiplier": 32.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 0.0002522652340345486,
+            "mean_absolute": 0.0011888163063050652,
+            "rms": 0.0017462289630591728
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.06468780785651539,
+            "mean_absolute": 0.06468780785651539,
+            "rms": 0.09200943577371305
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.18777483562055045,
+            "mean_absolute": 0.18777483562055045,
+            "rms": 0.20341506424274736
+          },
+          "net_radius_delta": {
+            "mean_signed": 2.400400461152458,
+            "mean_absolute": 6.086273444883773,
+            "rms": 14.927642494467927
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.31067649444139533,
+            "mean_absolute": 0.31067649444139533,
+            "rms": 0.6480128015125259
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 2.0897239667110625,
+            "mean_absolute": 5.8528090163463276,
+            "rms": 14.763196503920527
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -2.5809673085220687e-05,
+            "mean_absolute": 0.0014668913915324151,
+            "rms": 0.0019255616615205095
+          },
+          "fraction_increased": 0.800201416015625,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.199798583984375,
+          "at_zero": 0.199798583984375,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.009599821096881336,
+          "net_to_path_ratio": 0.344496682117909,
+          "outward_momentum_at_boundary": 0.199798583984375
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": 7.687971294305081e-05,
+            "mean_absolute": 0.0012108734120824696,
+            "rms": 0.0017695421854204232
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.15565660732569625,
+            "mean_absolute": 0.15565660732569625,
+            "rms": 0.2314815514420768
+          },
+          "fraction_path_length": {
+            "mean_signed": 1.0687544978665529,
+            "mean_absolute": 1.0687544978665529,
+            "rms": 1.1125597442060546
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.9717827949698403,
+            "mean_absolute": 5.263329231334865,
+            "rms": 13.171451898044136
+          },
+          "radius_fraction_component": {
+            "mean_signed": 1.1856969559394201,
+            "mean_absolute": 1.1856969559394201,
+            "rms": 2.939658325085114
+          },
+          "radius_amplitude_component": {
+            "mean_signed": -0.21391416096957983,
+            "mean_absolute": 4.402550973067264,
+            "rms": 12.643078574390861
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -0.00013126193296265757,
+            "mean_absolute": 0.0014194670734642356,
+            "rms": 0.0018815195283613682
+          },
+          "fraction_increased": 0.7851409912109375,
+          "fraction_decreased": 0.0,
+          "fraction_unchanged": 0.2148590087890625,
+          "at_zero": 0.2148590087890625,
+          "at_one": 0.0001678466796875,
+          "effective_fraction_lr": 0.009565692219303716,
+          "net_to_path_ratio": 0.14564299625069918,
+          "outward_momentum_at_boundary": 0.21502685546875
+        }
+      }
+    ],
+    "scope": "Equal Atom counts per site. Means/RMS aggregate all Atoms; path statistics reduce every per-Atom update, full individual trajectories are not saved. Algebraic radius components do not identify causal training effects."
+  },
+  "all_dst_candidates_and_control": [
+    {
+      "stage": "long",
+      "kind": "dense",
+      "tau": 0.003,
+      "fraction": 0.0,
+      "amplitude_max": 32.0,
+      "seed": 17,
+      "label": "dense",
+      "sparse_peak_lr": null,
+      "development_ce": 3.3089816197752953,
+      "updates": 976,
+      "actual_adam_updates": 976,
+      "peak_allocated_bytes": 998937088,
+      "peak_reserved_bytes": 1224736768,
+      "median_update_ms": 21.81989699602127,
+      "setup_seconds": 0.9636793173849583,
+      "total_wall_seconds": 36.84930393937975,
+      "active_ffn_parameters": 8398848,
+      "stored_ffn_parameter_elements": 8398848,
+      "topology_events": []
+    },
+    {
+      "stage": "long",
+      "kind": "dst",
+      "tau": 0.003,
+      "fraction": 0.0,
+      "amplitude_max": 32.0,
+      "seed": 17,
+      "label": "dst-lr-0.0003",
+      "sparse_peak_lr": 0.0003,
+      "development_ce": 3.6000842079520226,
+      "updates": 976,
+      "actual_adam_updates": 974,
+      "peak_allocated_bytes": 991809536,
+      "peak_reserved_bytes": 1059061760,
+      "median_update_ms": 22.089733742177486,
+      "setup_seconds": 4.516216734424233,
+      "total_wall_seconds": 28.242278415709734,
+      "active_ffn_parameters": 272384,
+      "stored_ffn_parameter_elements": 8398848,
+      "topology_events": [
+        {
+          "step": 250,
+          "seconds": 0.0888021420687437,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 74,
+              "mask_sha256": "240f00b1b2a1ccb8e3aedc227fcbc38b2af1f79013ed98c986818d64aa71f989",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 42,
+              "mask_sha256": "0b8b25d902e398a24adb34733c0b9e643aa917a7ba800b76ec09c2c6ed9cf6a2",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 73,
+              "mask_sha256": "1bf5c275d6beba43ba3685d598882af44002f5767969c5374c0c3b05f9145d01",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 52,
+              "mask_sha256": "9928f30f73b322ac9d63b81c13eb416f91966ffe9b3b22597b39c687b941f8a2",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "ab32e8c2508919c388b83b9c12c284bd9e93a3631bbcf519abd03b6ee10c54bf",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "633185285595f82cefc842b2c850539b04a43a0f1a0c6cba9bcc72a1b5124fab",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 61,
+              "mask_sha256": "02a3b77fa13f7506b6ba28eb27eaf4b0f3199a89c655a60f260a56567b4611b4",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 58,
+              "mask_sha256": "2abbb4ab7dcc0069ad831a012e32bfb948a56d7578907aa26c11dfc6027ad64a",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        },
+        {
+          "step": 500,
+          "seconds": 0.03186393529176712,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 38,
+              "mask_sha256": "f5777224b8aafa1cf12c76c508ce66808a2961822fc20cac2b31506f82c27166",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 106,
+              "mask_sha256": "be1ef6f41b1067e4b3dd21e87c4a7d305ac7c298c22d1eb26c75e6219ee67a82",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 40,
+              "mask_sha256": "8efdc256fb27ad31285fb1b4dade19c2c5cae3aeab90371d407ea93d68967605",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 95,
+              "mask_sha256": "f83f55d135e2f563aeba13cdfcec4d07cd75e85fb28aa7290a259a221da1cbf5",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 28,
+              "mask_sha256": "a6838f7bf8d80a335d432d97673fd5cb2574a2e41a66dbdaca0d82c2e217c3d3",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 96,
+              "mask_sha256": "ab1edc5e75ff6841530b634db5c36f2b7f0ad69129f55c30f17c83427800b943",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 34,
+              "mask_sha256": "8013f66497e72fcf2db34fdd6c750de56ab0fc13f7e900fc5fb2d2deea2810fd",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 77,
+              "mask_sha256": "38a37fb06c2a5dfdb757a03cac11da17ba1c5eec1c84d98d1fe643eb7e92bed2",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        }
+      ]
+    },
+    {
+      "stage": "long",
+      "kind": "dst",
+      "tau": 0.003,
+      "fraction": 0.0,
+      "amplitude_max": 32.0,
+      "seed": 17,
+      "label": "dst-lr-0.001",
+      "sparse_peak_lr": 0.001,
+      "development_ce": 3.419745996594429,
+      "updates": 976,
+      "actual_adam_updates": 974,
+      "peak_allocated_bytes": 991809536,
+      "peak_reserved_bytes": 1059061760,
+      "median_update_ms": 22.240664344280958,
+      "setup_seconds": 0.9952666768804193,
+      "total_wall_seconds": 24.596996915526688,
+      "active_ffn_parameters": 272384,
+      "stored_ffn_parameter_elements": 8398848,
+      "topology_events": [
+        {
+          "step": 250,
+          "seconds": 0.07860377803444862,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 42,
+              "mask_sha256": "eb640583112cf3467cc2a59c6f37775e5edf45716da3abdf637374159d31aba2",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 54,
+              "mask_sha256": "cdc1ddec804eaf384509f334399e8a9d961f5e2dd2a0ef6b60b3ddeaea2f6462",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 62,
+              "mask_sha256": "f7be1f3260e4eaccbe3c98f646889a5869fbd69384849f2ea5a091b234a55211",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 50,
+              "mask_sha256": "414695d4459ba4b47c40671b52606603c37288114a4493424ac4deea56d4a821",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 62,
+              "mask_sha256": "91eef6ddd21bb8a020bf495b04c11896f2f622c85f638bc2e7c9f0d368c34304",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 49,
+              "mask_sha256": "a72319f79edd7309d3cc54a1c6f5ba57ec27b9aff20dfa8346b0fd1a783d8878",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "af82c88285e9914f6a335a4b51fdfd7babd65140fba5a385e365db2989497b22",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "fc902da88b2df70064101226c2ac214d547397aa1683074b45f4f189fb3b9e49",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        },
+        {
+          "step": 500,
+          "seconds": 0.032199361361563206,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 19,
+              "mask_sha256": "0d25125825779ce455745d16a5c26c2c3b51ec55afaf773bf9c3129a5d3bdc32",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 23,
+              "mask_sha256": "8b4556314887a3dfb98c7ce59f4cba139fd20c56472177ae97887fee967307c4",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 38,
+              "mask_sha256": "af12f3c55674e5f1928aaf924177d47a4a6905ed2d03677a173a736aed791c23",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 36,
+              "mask_sha256": "9c543ee52dfa295204519e38e020db7c898531957452fd32d4197dcaf65144ed",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 25,
+              "mask_sha256": "708436eaf6627d44999609642efff30df7583d95511694f6c91684452ce18f3b",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 33,
+              "mask_sha256": "f1b6d35a3bf41b7da3f97b252753c992e9eed28414cd32ebaf3d573909078bf8",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 21,
+              "mask_sha256": "fdb6d8b7210d4c53dc4c5e87ebb5d6742052d6c8b7c42c90dfcc4dcc92739249",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 25,
+              "mask_sha256": "ab73333a18c3ae612fdcc5847f8ffabda2925ddb1c61f3b7e4fc182508d34242",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        }
+      ]
+    },
+    {
+      "stage": "long",
+      "kind": "dst",
+      "tau": 0.003,
+      "fraction": 0.0,
+      "amplitude_max": 32.0,
+      "seed": 17,
+      "label": "dst-lr-0.003",
+      "sparse_peak_lr": 0.003,
+      "development_ce": 3.350666970014572,
+      "updates": 976,
+      "actual_adam_updates": 974,
+      "peak_allocated_bytes": 991809536,
+      "peak_reserved_bytes": 1059061760,
+      "median_update_ms": 22.195477969944477,
+      "setup_seconds": 1.0128624495118856,
+      "total_wall_seconds": 24.601597431115806,
+      "active_ffn_parameters": 272384,
+      "stored_ffn_parameter_elements": 8398848,
+      "topology_events": [
+        {
+          "step": 250,
+          "seconds": 0.0775079121813178,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 69,
+              "mask_sha256": "8583b86aca32851638ab694e7804b31f079a57ca117e48bccca1b0e7d0767501",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 50,
+              "mask_sha256": "f7941682c1564c124c85309d2b7d9440d028af7c41cc9518d034e59c6508015f",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 65,
+              "mask_sha256": "fce3aed4b34dd1b48ca57be998369643ce93eac7d3c1b74b3f758e790892c41f",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 47,
+              "mask_sha256": "d3ef0093d5e5b6d312a7674738143ba1d48d09c29b93ccdfd8141bdf023d0b5a",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "9d97a89f8a3b95a42b243131a997c5a321928c5164ed249bdfa358d61c3fbd45",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 49,
+              "mask_sha256": "d9233ba15448950ce544350c4d25626482b71651fcb4e9c3eb619f8b1e9b9337",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 72,
+              "mask_sha256": "f6265e1c722eb0187840380258f47a538b9e8ac3c28cf4841b78c428c49c83bf",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 56,
+              "mask_sha256": "9c56b26bd1efd11db65510ac34624fc2bed488ed210d8b38e8b6d9cc8d35de64",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        },
+        {
+          "step": 500,
+          "seconds": 0.031566583551466465,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 12,
+              "mask_sha256": "8ccf776e7d95204ae48a90bd91cad39df942e44ce55d8622982568033c2f2328",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 12,
+              "mask_sha256": "c0283789f365a37e6c86b4fd42b7607ced327db15239e5aa6b8fcfaa4c48a9ea",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 15,
+              "mask_sha256": "f999ae216e4dc16c057e383e25e5cb42af059f368486110409836617219f1a93",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 7,
+              "mask_sha256": "a63d140ec8cb8eb9cef1bb4e529aac3d2f52668b89d55925513964883eb758cb",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 22,
+              "mask_sha256": "3272ac658f31884f399461820ae9e8611877aeccaf07289ee021f64f2555332d",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 10,
+              "mask_sha256": "aba021139a48bb00b9e6dd5c683ed4f2be434e8fb9c166112ca5a7671fa5faae",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 24,
+              "mask_sha256": "de9e64afba68fe0af463b470c868172959e41344bd7fa7caf2be1dd51e0e20c6",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 9,
+              "mask_sha256": "246ceec82461b287dfc6c2286a31860cb983a5f07b47d8ad8c5688dae8dbaa87",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        }
+      ]
+    },
+    {
+      "stage": "long",
+      "kind": "dst",
+      "tau": 0.003,
+      "fraction": 0.0,
+      "amplitude_max": 32.0,
+      "seed": 17,
+      "label": "dst-lr-0.01",
+      "sparse_peak_lr": 0.01,
+      "development_ce": 3.3533385396003723,
+      "updates": 976,
+      "actual_adam_updates": 974,
+      "peak_allocated_bytes": 991809536,
+      "peak_reserved_bytes": 1059061760,
+      "median_update_ms": 22.406537551432848,
+      "setup_seconds": 1.0131194088608027,
+      "total_wall_seconds": 24.908379984088242,
+      "active_ffn_parameters": 272384,
+      "stored_ffn_parameter_elements": 8398848,
+      "topology_events": [
+        {
+          "step": 250,
+          "seconds": 0.07843513414263725,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 51,
+              "mask_sha256": "4a2f634d095c3f31357802e6f0240dff36ea452684c20ce4f97dce1424b67c1c",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 60,
+              "mask_sha256": "0f9f93b8350595a8d72d097c8329bf9250c3b14a1c87b8ba3a5af601c249238e",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 53,
+              "mask_sha256": "69ed3ca38f3c19f37142e9bb380f5a78c9e6a2e206a12862154602a0fc867f2d",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 50,
+              "mask_sha256": "ae914d793ff9a4567a847afd0f406289efe768824bc662c4350344ca845e5997",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 66,
+              "mask_sha256": "bda5b90324479ad76e1445821f277c565d636cd082b0281de06dfca4ba463f05",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 43,
+              "mask_sha256": "a0df65f89c78ca76ae5ed9cd1be27dd8d33dd4b072dc2ae1db260180975ec991",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 66,
+              "mask_sha256": "5336e7019d8646f3aac33c6924ef7d1f888ebb1d76ff1989820f0b1582ccbd65",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.22163038296562323,
+              "active_slots": 32768,
+              "pruned": 7262,
+              "grown": 7262,
+              "immediate_regrowth": 38,
+              "mask_sha256": "a4f79b6aa687158f9bd8de20e1debb78c1b891271ab63c3fd67edd6c583885b6",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        },
+        {
+          "step": 500,
+          "seconds": 0.03223937004804611,
+          "topology": {
+            "blocks.0.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 7,
+              "mask_sha256": "a991eab4d2a42a7121d5a9711eff03b9f0766fe4bd4cd68704248cf6c7518fac",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.0.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 6,
+              "mask_sha256": "42d91e2ed7feddfc074beed11fbf1a1e5150d3728dd3eac1f5a16fd4a9aab1b6",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 8,
+              "mask_sha256": "feb69780b81563ab5dd65aca11720b78a1696048d946f1bc55061ee144ef8b9e",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.1.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 6,
+              "mask_sha256": "58faa0b057fd1e121cdeabfd9ad5c57ce4892de0de7dfb229d4644fab46b94da",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 9,
+              "mask_sha256": "75b7f7f2c8255cdfd64661b1f94cd4ac0a0faef79e87a9dfdedc091bb489a3c7",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.2.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 5,
+              "mask_sha256": "7c36019e57d0513096761c3d662b26b644f1d3e340cbd91fb08e0163b038b5fe",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.up.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 10,
+              "mask_sha256": "7b79103c6bdb4a5bb9560e44e230072cc7cb856df270e843674b6d0d1d763edf",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            },
+            "blocks.3.ffn.down.map": {
+              "drop_fraction": 0.06841215685069131,
+              "active_slots": 32768,
+              "pruned": 2241,
+              "grown": 2241,
+              "immediate_regrowth": 7,
+              "mask_sha256": "4e013cc40a343146f5a5e4e236102413af7e30a41084baff9de86c662949c8f3",
+              "checks": {
+                "row_counts": true,
+                "global_count": true,
+                "inactive_zero": true,
+                "grown_zero": true,
+                "reset_moments": true,
+                "survivors_preserved": true,
+                "clock_unchanged": true
+              }
+            }
+          },
+          "gradient_norm_before_clip": null
+        }
+      ]
+    }
+  ],
+  "retrieval_by_job": {
+    "ffn-zero-start-tau-6000ada-20261109-01": {
+      "state": "passed",
+      "archive_sha256": "2999fa8cc45676925e7e6a7cd707f9b3b450a176bd8be58921ed3f09b1d2baff",
+      "files_verified": 40,
+      "source_files_verified": 1902,
+      "checkpoints_verified_remotely": 15,
+      "audited_checkpoints": 10,
+      "observer_snapshots_reproduced": 8,
+      "training_processes_inactive": 7,
+      "audit_processes_inactive": 2,
+      "gpu_after": "NVIDIA RTX 6000 Ada Generation, 0 %, 39 MiB",
+      "excluded_cli_rejection": null
+    },
+    "ffn-dst-tinystories-6000ada-20261109-01": {
+      "state": "passed",
+      "archive_sha256": "c4b0f9b4a7d19f23fdcd4521f75f460b6d761b12d5ce6c173ac3a193efede6a5",
+      "files_verified": 34,
+      "source_files_verified": 1905,
+      "checkpoints_verified_remotely": 15,
+      "audited_checkpoints": 10,
+      "observer_snapshots_reproduced": 0,
+      "training_processes_inactive": 12,
+      "audit_processes_inactive": 0,
+      "gpu_after": "NVIDIA RTX 6000 Ada Generation, 0 %, 39 MiB",
+      "excluded_cli_rejection": null
+    }
+  },
+  "checkpoint_audits_by_job": {
+    "ffn-zero-start-tau-6000ada-20261109-01": {
+      "state": "passed",
+      "audit_source_sha256": "802abf6e2e1c3f8673cf680dd73170d9f044ebdfbe3fe28260b839dbf3114089",
+      "models": [
+        {
+          "stage": "long",
+          "kind": "dense",
+          "tau": 0.0003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "dense",
+          "development_ce": 3.3089816197752953,
+          "updates": 976,
+          "peak_allocated_bytes": 998937088,
+          "peak_reserved_bytes": 1224736768,
+          "checkpoint_sha256": "03ca60ecbcc45f52d293e15763912216a7b86989922d19ce0455c2e1398480bc",
+          "checkpoint_filename": "checkpoint.pt",
+          "milestone": false,
+          "reproduced_development_ce": 3.3089816197752953,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": []
+        },
+        {
+          "stage": "long",
+          "kind": "dense",
+          "tau": 0.0003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "dense",
+          "development_ce": 3.3089816197752953,
+          "updates": 256,
+          "peak_allocated_bytes": 998937088,
+          "peak_reserved_bytes": 1224736768,
+          "checkpoint_sha256": "d70376dfd103d47a58fbce683a2cd39149d922c7403e6bc2a38e1d7edcf0a2c3",
+          "checkpoint_filename": "checkpoint-262144-tokens.pt",
+          "milestone": true,
+          "reproduced_development_ce": 4.148382440209389,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": []
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.0003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.0003",
+          "development_ce": 3.3964227437973022,
+          "updates": 976,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1363148800,
+          "checkpoint_sha256": "5c411b32931bda613760ea3bd086781de9725f0f254acd96c95cb01b091ccb75",
+          "checkpoint_filename": "checkpoint.pt",
+          "milestone": false,
+          "reproduced_development_ce": 3.3964227437973022,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.9586004835758786e-06,
+                2.093251075585556e-06,
+                4.76837158203125e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.6927352408657725e-06,
+                1.305339566659569e-06,
+                2.86102294921875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.13855802666135705,
+              "mean_absolute": 0.13855802666135705,
+              "p90_absolute": 0.3621600300073624,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.758544921875
+            },
+            {
+              "mean_signed": 0.13822052232560025,
+              "mean_absolute": 0.13822052232560025,
+              "p90_absolute": 0.3802472025156021,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7474365234375
+            },
+            {
+              "mean_signed": 0.13514567091052426,
+              "mean_absolute": 0.13514567091052426,
+              "p90_absolute": 0.35322894752025613,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.759033203125
+            },
+            {
+              "mean_signed": 0.14293052030162642,
+              "mean_absolute": 0.14293052030162642,
+              "p90_absolute": 0.38725845515727997,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7572021484375
+            },
+            {
+              "mean_signed": 0.1372388616712538,
+              "mean_absolute": 0.1372388616712538,
+              "p90_absolute": 0.364710706472397,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7646484375
+            },
+            {
+              "mean_signed": 0.14599813562031497,
+              "mean_absolute": 0.14599813562031497,
+              "p90_absolute": 0.38927067518234254,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.763671875
+            },
+            {
+              "mean_signed": 0.14148649222560608,
+              "mean_absolute": 0.14148649222560608,
+              "p90_absolute": 0.36937607526779176,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7655029296875
+            },
+            {
+              "mean_signed": 0.151484138524406,
+              "mean_absolute": 0.151484138524406,
+              "p90_absolute": 0.4094389617443088,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7633056640625
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.0003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.0003",
+          "development_ce": 3.3964227437973022,
+          "updates": 256,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1363148800,
+          "checkpoint_sha256": "80a115a716d82946e5f37c0ba50fb446f75f8913c82b10520c35ce632453f30c",
+          "checkpoint_filename": "checkpoint-262144-tokens.pt",
+          "milestone": true,
+          "reproduced_development_ce": 4.272866785526276,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                9.671087410900725e-07,
+                1.5470715850618433e-06,
+                5.7220458984375e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                7.433638371523443e-07,
+                5.04159742398258e-07,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.06743318537755805,
+              "mean_absolute": 0.06743318537755805,
+              "p90_absolute": 0.16841328442096715,
+              "maximum_absolute": 0.39098408818244934,
+              "changed_fraction": 0.7850341796875
+            },
+            {
+              "mean_signed": 0.06266894499450404,
+              "mean_absolute": 0.06266894499450404,
+              "p90_absolute": 0.15868855565786363,
+              "maximum_absolute": 0.4148464500904083,
+              "changed_fraction": 0.7725830078125
+            },
+            {
+              "mean_signed": 0.06165190885381502,
+              "mean_absolute": 0.06165190885381502,
+              "p90_absolute": 0.15644766986370098,
+              "maximum_absolute": 0.44157981872558594,
+              "changed_fraction": 0.7725830078125
+            },
+            {
+              "mean_signed": 0.06123705540318197,
+              "mean_absolute": 0.06123705540318197,
+              "p90_absolute": 0.1540325269103051,
+              "maximum_absolute": 0.43971022963523865,
+              "changed_fraction": 0.7698974609375
+            },
+            {
+              "mean_signed": 0.05967308415675511,
+              "mean_absolute": 0.05967308415675511,
+              "p90_absolute": 0.1515013113617897,
+              "maximum_absolute": 0.3937215805053711,
+              "changed_fraction": 0.76904296875
+            },
+            {
+              "mean_signed": 0.06126609972554651,
+              "mean_absolute": 0.06126609972554651,
+              "p90_absolute": 0.1535006329417229,
+              "maximum_absolute": 0.38524845242500305,
+              "changed_fraction": 0.7730712890625
+            },
+            {
+              "mean_signed": 0.057974851594695065,
+              "mean_absolute": 0.057974851594695065,
+              "p90_absolute": 0.14690755009651188,
+              "maximum_absolute": 0.3690260350704193,
+              "changed_fraction": 0.7713623046875
+            },
+            {
+              "mean_signed": 0.06049833444074271,
+              "mean_absolute": 0.06049833444074271,
+              "p90_absolute": 0.1502730429172516,
+              "maximum_absolute": 0.38168126344680786,
+              "changed_fraction": 0.7811279296875
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.001,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.001",
+          "development_ce": 3.3986531272530556,
+          "updates": 976,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "455a4ea3a4c88ee0d1c08f0ce271e32a2deb3d4cbd9645e1527f4b2164ed5915",
+          "checkpoint_filename": "checkpoint.pt",
+          "milestone": false,
+          "reproduced_development_ce": 3.3986531272530556,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                2.0611222275590535e-06,
+                2.708421440011932e-06,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.950382511051174e-06,
+                1.1795199261754874e-06,
+                3.337860107421875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.13943610145819813,
+              "mean_absolute": 0.13943610145819813,
+              "p90_absolute": 0.36334036290645627,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.769287109375
+            },
+            {
+              "mean_signed": 0.13897797723913535,
+              "mean_absolute": 0.13897797723913535,
+              "p90_absolute": 0.3815209060907364,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7529296875
+            },
+            {
+              "mean_signed": 0.13411206838681752,
+              "mean_absolute": 0.13411206838681752,
+              "p90_absolute": 0.3481213122606278,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.76123046875
+            },
+            {
+              "mean_signed": 0.1413381415011874,
+              "mean_absolute": 0.1413381415011874,
+              "p90_absolute": 0.37831083536148075,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7509765625
+            },
+            {
+              "mean_signed": 0.135748798572079,
+              "mean_absolute": 0.135748798572079,
+              "p90_absolute": 0.35901734530925766,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7626953125
+            },
+            {
+              "mean_signed": 0.1444238848436725,
+              "mean_absolute": 0.1444238848436725,
+              "p90_absolute": 0.3890762746334076,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7528076171875
+            },
+            {
+              "mean_signed": 0.13994451321767687,
+              "mean_absolute": 0.13994451321767687,
+              "p90_absolute": 0.3634585410356524,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7669677734375
+            },
+            {
+              "mean_signed": 0.15023055105090694,
+              "mean_absolute": 0.15023055105090694,
+              "p90_absolute": 0.40069526731967925,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7763671875
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.001,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.001",
+          "development_ce": 3.3986531272530556,
+          "updates": 256,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "a02cedeb2cd42657dae845f60358beda3604bf7414db0811d42bfa2c9d5c1394",
+          "checkpoint_filename": "checkpoint-262144-tokens.pt",
+          "milestone": true,
+          "reproduced_development_ce": 4.2726360857486725,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.1096419316736217e-06,
+                2.4355438013046182e-06,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                9.805381118166423e-07,
+                5.442546715528351e-07,
+                2.86102294921875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.06763813994259081,
+              "mean_absolute": 0.06763813994259081,
+              "p90_absolute": 0.1680865213274956,
+              "maximum_absolute": 0.4162999391555786,
+              "changed_fraction": 0.7852783203125
+            },
+            {
+              "mean_signed": 0.06218713893382842,
+              "mean_absolute": 0.06218713893382842,
+              "p90_absolute": 0.1575471565127373,
+              "maximum_absolute": 0.3986278176307678,
+              "changed_fraction": 0.7716064453125
+            },
+            {
+              "mean_signed": 0.0617859021814927,
+              "mean_absolute": 0.0617859021814927,
+              "p90_absolute": 0.15647092312574387,
+              "maximum_absolute": 0.4017799198627472,
+              "changed_fraction": 0.7783203125
+            },
+            {
+              "mean_signed": 0.060661096522438465,
+              "mean_absolute": 0.060661096522438465,
+              "p90_absolute": 0.15488936454057706,
+              "maximum_absolute": 0.41941800713539124,
+              "changed_fraction": 0.7694091796875
+            },
+            {
+              "mean_signed": 0.05970694638505461,
+              "mean_absolute": 0.05970694638505461,
+              "p90_absolute": 0.15135785490274437,
+              "maximum_absolute": 0.39094972610473633,
+              "changed_fraction": 0.7713623046875
+            },
+            {
+              "mean_signed": 0.06109438839370804,
+              "mean_absolute": 0.06109438839370804,
+              "p90_absolute": 0.15410060584545135,
+              "maximum_absolute": 0.41050538420677185,
+              "changed_fraction": 0.7764892578125
+            },
+            {
+              "mean_signed": 0.05800327929233354,
+              "mean_absolute": 0.05800327929233354,
+              "p90_absolute": 0.14718896001577378,
+              "maximum_absolute": 0.36825284361839294,
+              "changed_fraction": 0.7728271484375
+            },
+            {
+              "mean_signed": 0.06063278088718349,
+              "mean_absolute": 0.06063278088718349,
+              "p90_absolute": 0.15039746910333635,
+              "maximum_absolute": 0.42555588483810425,
+              "changed_fraction": 0.7811279296875
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.003",
+          "development_ce": 3.3930482044816017,
+          "updates": 976,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "960ec19056410f75656b60cd88b6a7b4e35c7b8070679d9b1832e58ccf3a4492",
+          "checkpoint_filename": "checkpoint.pt",
+          "milestone": false,
+          "reproduced_development_ce": 3.3930482044816017,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.8017795802016678e-06,
+                2.323540189141937e-06,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.735986459916461e-06,
+                1.3593976890824422e-06,
+                2.86102294921875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.13824612174146203,
+              "mean_absolute": 0.13824612174146203,
+              "p90_absolute": 0.3694249510765077,
+              "maximum_absolute": 0.994253933429718,
+              "changed_fraction": 0.76123046875
+            },
+            {
+              "mean_signed": 0.14012726097243072,
+              "mean_absolute": 0.14012726097243072,
+              "p90_absolute": 0.3845694541931153,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7532958984375
+            },
+            {
+              "mean_signed": 0.13473210918575798,
+              "mean_absolute": 0.13473210918575798,
+              "p90_absolute": 0.34652091562747955,
+              "maximum_absolute": 0.9604018926620483,
+              "changed_fraction": 0.7711181640625
+            },
+            {
+              "mean_signed": 0.13881800657981208,
+              "mean_absolute": 0.13881800657981208,
+              "p90_absolute": 0.36750703155994435,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7640380859375
+            },
+            {
+              "mean_signed": 0.1355790704780706,
+              "mean_absolute": 0.1355790704780706,
+              "p90_absolute": 0.36004003286361697,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.770263671875
+            },
+            {
+              "mean_signed": 0.1423348404727286,
+              "mean_absolute": 0.1423348404727286,
+              "p90_absolute": 0.3759730249643327,
+              "maximum_absolute": 0.9887703657150269,
+              "changed_fraction": 0.7601318359375
+            },
+            {
+              "mean_signed": 0.14336331424091636,
+              "mean_absolute": 0.14336331424091636,
+              "p90_absolute": 0.37620188593864445,
+              "maximum_absolute": 0.9732547998428345,
+              "changed_fraction": 0.767822265625
+            },
+            {
+              "mean_signed": 0.1512229424777667,
+              "mean_absolute": 0.1512229424777667,
+              "p90_absolute": 0.4050985932350159,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7694091796875
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.003,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.003",
+          "development_ce": 3.3930482044816017,
+          "updates": 256,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "53dc42566067fa7a9e429a13cf99048b6b8cb90b8027985db7314373322c1587",
+          "checkpoint_filename": "checkpoint-262144-tokens.pt",
+          "milestone": true,
+          "reproduced_development_ce": 4.27371221780777,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                9.952486568209906e-07,
+                1.5475851959934062e-06,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.0073644749475363e-06,
+                6.340178356767368e-07,
+                2.86102294921875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.06769794865242704,
+              "mean_absolute": 0.06769794865242704,
+              "p90_absolute": 0.16845777183771135,
+              "maximum_absolute": 0.4014934301376343,
+              "changed_fraction": 0.7874755859375
+            },
+            {
+              "mean_signed": 0.06383152836051303,
+              "mean_absolute": 0.06383152836051303,
+              "p90_absolute": 0.16016537249088297,
+              "maximum_absolute": 0.43643268942832947,
+              "changed_fraction": 0.778076171875
+            },
+            {
+              "mean_signed": 0.0618201414440685,
+              "mean_absolute": 0.0618201414440685,
+              "p90_absolute": 0.15591920763254177,
+              "maximum_absolute": 0.3878640830516815,
+              "changed_fraction": 0.778076171875
+            },
+            {
+              "mean_signed": 0.0610497653246132,
+              "mean_absolute": 0.0610497653246132,
+              "p90_absolute": 0.15425422936677935,
+              "maximum_absolute": 0.3930518925189972,
+              "changed_fraction": 0.781494140625
+            },
+            {
+              "mean_signed": 0.05933118015168444,
+              "mean_absolute": 0.05933118015168444,
+              "p90_absolute": 0.15147158354520798,
+              "maximum_absolute": 0.40591204166412354,
+              "changed_fraction": 0.7667236328125
+            },
+            {
+              "mean_signed": 0.06149154996776213,
+              "mean_absolute": 0.06149154996776213,
+              "p90_absolute": 0.1534689858555794,
+              "maximum_absolute": 0.38370341062545776,
+              "changed_fraction": 0.779296875
+            },
+            {
+              "mean_signed": 0.058340128022161514,
+              "mean_absolute": 0.058340128022161514,
+              "p90_absolute": 0.14776154905557634,
+              "maximum_absolute": 0.36590585112571716,
+              "changed_fraction": 0.7755126953125
+            },
+            {
+              "mean_signed": 0.060170395672610844,
+              "mean_absolute": 0.060170395672610844,
+              "p90_absolute": 0.14890049993991852,
+              "maximum_absolute": 0.38245442509651184,
+              "changed_fraction": 0.790283203125
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.01,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.01",
+          "development_ce": 3.395446814596653,
+          "updates": 976,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "81fc71ada36c322eefff03910f2192cf1eb674cae7c5b7a5b8c663c07f8668d4",
+          "checkpoint_filename": "checkpoint.pt",
+          "milestone": false,
+          "reproduced_development_ce": 3.395446814596653,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.7684393838202084e-06,
+                2.296033089432825e-06,
+                4.76837158203125e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                2.038321578190505e-06,
+                1.2743026345241049e-06,
+                2.86102294921875e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.14956129711840144,
+              "mean_absolute": 0.14956129711840144,
+              "p90_absolute": 0.3864680618047717,
+              "maximum_absolute": 0.985478937625885,
+              "changed_fraction": 0.7850341796875
+            },
+            {
+              "mean_signed": 0.16560889894509626,
+              "mean_absolute": 0.16560889894509626,
+              "p90_absolute": 0.45217444300651566,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7763671875
+            },
+            {
+              "mean_signed": 0.14445153526912607,
+              "mean_absolute": 0.14445153526912607,
+              "p90_absolute": 0.3759414106607437,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7823486328125
+            },
+            {
+              "mean_signed": 0.16186254100740594,
+              "mean_absolute": 0.16186254100740594,
+              "p90_absolute": 0.41963090300560013,
+              "maximum_absolute": 0.9989932179450989,
+              "changed_fraction": 0.7916259765625
+            },
+            {
+              "mean_signed": 0.1475342194928912,
+              "mean_absolute": 0.1475342194928912,
+              "p90_absolute": 0.38075078725814826,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.779052734375
+            },
+            {
+              "mean_signed": 0.16447287418814463,
+              "mean_absolute": 0.16447287418814463,
+              "p90_absolute": 0.4326650708913806,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7884521484375
+            },
+            {
+              "mean_signed": 0.14576148275743867,
+              "mean_absolute": 0.14576148275743867,
+              "p90_absolute": 0.3754897952079773,
+              "maximum_absolute": 0.9952264428138733,
+              "changed_fraction": 0.7843017578125
+            },
+            {
+              "mean_signed": 0.16600000982706567,
+              "mean_absolute": 0.16600000982706567,
+              "p90_absolute": 0.42918571531772626,
+              "maximum_absolute": 1.0,
+              "changed_fraction": 0.7939453125
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        },
+        {
+          "stage": "long",
+          "kind": "cst",
+          "tau": 0.01,
+          "fraction": 0.0,
+          "tau_comparison": true,
+          "amplitude_max": 32.0,
+          "linear_backend": "levels_wide_amplitude",
+          "initialization_mode": "moments",
+          "fraction_lr_multiplier": 32.0,
+          "cst_lr_multiplier": 32.0,
+          "seed": 17,
+          "label": "tau-0.01",
+          "development_ce": 3.395446814596653,
+          "updates": 256,
+          "peak_allocated_bytes": 1022916096,
+          "peak_reserved_bytes": 1365245952,
+          "checkpoint_sha256": "2933825815d24c27dbb8a6ccd03d7a2660d754286a30492505891fec8abe5b68",
+          "checkpoint_filename": "checkpoint-262144-tokens.pt",
+          "milestone": true,
+          "reproduced_development_ce": 4.28745760768652,
+          "ce_absolute_difference": 0.0,
+          "optimizer_states_checked": 52,
+          "linear_oracles": [
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.2280037755552087e-06,
+                2.122229004086762e-06,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            },
+            {
+              "rows": 7,
+              "noncontiguous_input": true,
+              "max_abs_y_dx_dp": [
+                1.0393548564024968e-06,
+                6.180877114569938e-07,
+                3.814697265625e-06
+              ],
+              "atol": 0.0001,
+              "rtol": 0.004,
+              "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+            }
+          ],
+          "fraction_changes": [
+            {
+              "mean_signed": 0.06955501177495116,
+              "mean_absolute": 0.06955501177495116,
+              "p90_absolute": 0.16804660260677345,
+              "maximum_absolute": 0.4141051471233368,
+              "changed_fraction": 0.806640625
+            },
+            {
+              "mean_signed": 0.06889702522284523,
+              "mean_absolute": 0.06889702522284523,
+              "p90_absolute": 0.16453483253717424,
+              "maximum_absolute": 0.3912631869316101,
+              "changed_fraction": 0.812255859375
+            },
+            {
+              "mean_signed": 0.06342296742534087,
+              "mean_absolute": 0.06342296742534087,
+              "p90_absolute": 0.1559699282050133,
+              "maximum_absolute": 0.3843880593776703,
+              "changed_fraction": 0.7869873046875
+            },
+            {
+              "mean_signed": 0.06572101472986316,
+              "mean_absolute": 0.06572101472986316,
+              "p90_absolute": 0.16023096144199375,
+              "maximum_absolute": 0.3535569906234741,
+              "changed_fraction": 0.7984619140625
+            },
+            {
+              "mean_signed": 0.06183964551275506,
+              "mean_absolute": 0.06183964551275506,
+              "p90_absolute": 0.15396321862936022,
+              "maximum_absolute": 0.35800981521606445,
+              "changed_fraction": 0.785888671875
+            },
+            {
+              "mean_signed": 0.06523982375644719,
+              "mean_absolute": 0.06523982375644719,
+              "p90_absolute": 0.15708495527505886,
+              "maximum_absolute": 0.4093639850616455,
+              "changed_fraction": 0.8109130859375
+            },
+            {
+              "mean_signed": 0.05974069351904497,
+              "mean_absolute": 0.05974069351904497,
+              "p90_absolute": 0.1486575171351433,
+              "maximum_absolute": 0.3740556538105011,
+              "changed_fraction": 0.7900390625
+            },
+            {
+              "mean_signed": 0.06308628091087541,
+              "mean_absolute": 0.06308628091087541,
+              "p90_absolute": 0.14993580579757693,
+              "maximum_absolute": 0.37728673219680786,
+              "changed_fraction": 0.8104248046875
+            }
+          ],
+          "observer_net_statistics_reproduced": true
+        }
+      ],
+      "confirmation_evaluated": false,
+      "torch": "2.9.1+cu128",
+      "gpu": "NVIDIA RTX 6000 Ada Generation",
+      "excluded_cli_rejection": null
+    },
+    "ffn-dst-tinystories-6000ada-20261109-01": {
+      "state": "passed",
+      "models": [
+        {
+          "step": 256,
+          "actual_adam_updates": 256,
+          "checkpoint_sha256": "a897b9017801711a07e4e82364e35049f9a01f2e681d1ab3004bd02a34f28617",
+          "expected_ce": 4.148382440209389,
+          "reproduced_ce": 4.148382440209389,
+          "absolute_difference": 0.0,
+          "masks": {},
+          "oracles": [],
+          "label": "dense",
+          "kind": "dense",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 976,
+          "actual_adam_updates": 976,
+          "checkpoint_sha256": "7b02a49ee24275af873779c3981615e574c66c7a0a78f521a8fe33a1775a90f1",
+          "expected_ce": 3.3089816197752953,
+          "reproduced_ce": 3.3089816197752953,
+          "absolute_difference": 0.0,
+          "masks": {},
+          "oracles": [],
+          "label": "dense",
+          "kind": "dense",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 256,
+          "actual_adam_updates": 255,
+          "checkpoint_sha256": "4c9801934fe4879cbf1a54c7061049a0ecb6eb99cf9e9e941803753e78dfde3d",
+          "expected_ce": 4.532768204808235,
+          "reproduced_ce": 4.532768204808235,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "240f00b1b2a1ccb8e3aedc227fcbc38b2af1f79013ed98c986818d64aa71f989"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "0b8b25d902e398a24adb34733c0b9e643aa917a7ba800b76ec09c2c6ed9cf6a2"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "1bf5c275d6beba43ba3685d598882af44002f5767969c5374c0c3b05f9145d01"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "9928f30f73b322ac9d63b81c13eb416f91966ffe9b3b22597b39c687b941f8a2"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "ab32e8c2508919c388b83b9c12c284bd9e93a3631bbcf519abd03b6ee10c54bf"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "633185285595f82cefc842b2c850539b04a43a0f1a0c6cba9bcc72a1b5124fab"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "02a3b77fa13f7506b6ba28eb27eaf4b0f3199a89c655a60f260a56567b4611b4"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "2abbb4ab7dcc0069ad831a012e32bfb948a56d7578907aa26c11dfc6027ad64a"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.936226339844694e-07,
+                5.331788561768747e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                1.3656559583186123e-07,
+                1.3722481861933034e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.0003",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 976,
+          "actual_adam_updates": 974,
+          "checkpoint_sha256": "64eed0b5a6613e418e7aff3fd8896b55ee4978ca85e77e29df3138d2cfd19a5f",
+          "expected_ce": 3.6000842079520226,
+          "reproduced_ce": 3.6000842079520226,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "f5777224b8aafa1cf12c76c508ce66808a2961822fc20cac2b31506f82c27166"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "be1ef6f41b1067e4b3dd21e87c4a7d305ac7c298c22d1eb26c75e6219ee67a82"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "8efdc256fb27ad31285fb1b4dade19c2c5cae3aeab90371d407ea93d68967605"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "f83f55d135e2f563aeba13cdfcec4d07cd75e85fb28aa7290a259a221da1cbf5"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "a6838f7bf8d80a335d432d97673fd5cb2574a2e41a66dbdaca0d82c2e217c3d3"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "ab1edc5e75ff6841530b634db5c36f2b7f0ad69129f55c30f17c83427800b943"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "8013f66497e72fcf2db34fdd6c750de56ab0fc13f7e900fc5fb2d2deea2810fd"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "38a37fb06c2a5dfdb757a03cac11da17ba1c5eec1c84d98d1fe643eb7e92bed2"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.585712879366042e-07,
+                6.471412756781092e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                1.4547723825586445e-07,
+                1.16080150824871e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.0003",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 256,
+          "actual_adam_updates": 255,
+          "checkpoint_sha256": "d2c51c465bdde11308bd71ebb49122afd387beb7d2be7c36fef852e423ed6a92",
+          "expected_ce": 4.390632800757885,
+          "reproduced_ce": 4.390632800757885,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "eb640583112cf3467cc2a59c6f37775e5edf45716da3abdf637374159d31aba2"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "cdc1ddec804eaf384509f334399e8a9d961f5e2dd2a0ef6b60b3ddeaea2f6462"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "f7be1f3260e4eaccbe3c98f646889a5869fbd69384849f2ea5a091b234a55211"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "414695d4459ba4b47c40671b52606603c37288114a4493424ac4deea56d4a821"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "91eef6ddd21bb8a020bf495b04c11896f2f622c85f638bc2e7c9f0d368c34304"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "a72319f79edd7309d3cc54a1c6f5ba57ec27b9aff20dfa8346b0fd1a783d8878"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "af82c88285e9914f6a335a4b51fdfd7babd65140fba5a385e365db2989497b22"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "fc902da88b2df70064101226c2ac214d547397aa1683074b45f4f189fb3b9e49"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.942262717908761e-07,
+                6.060705537436206e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                1.826436728524783e-07,
+                1.1005646888273546e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.001",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 976,
+          "actual_adam_updates": 974,
+          "checkpoint_sha256": "8e5b10c726790d9f40741247bec6bf8158f98dc97b0c2c81d3614e7137df8654",
+          "expected_ce": 3.419745996594429,
+          "reproduced_ce": 3.419745996594429,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "0d25125825779ce455745d16a5c26c2c3b51ec55afaf773bf9c3129a5d3bdc32"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "8b4556314887a3dfb98c7ce59f4cba139fd20c56472177ae97887fee967307c4"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "af12f3c55674e5f1928aaf924177d47a4a6905ed2d03677a173a736aed791c23"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "9c543ee52dfa295204519e38e020db7c898531957452fd32d4197dcaf65144ed"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "708436eaf6627d44999609642efff30df7583d95511694f6c91684452ce18f3b"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "f1b6d35a3bf41b7da3f97b252753c992e9eed28414cd32ebaf3d573909078bf8"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "fdb6d8b7210d4c53dc4c5e87ebb5d6742052d6c8b7c42c90dfcc4dcc92739249"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "ab73333a18c3ae612fdcc5847f8ffabda2925ddb1c61f3b7e4fc182508d34242"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.820216273846654e-07,
+                6.685156757058053e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.922393864679407e-07,
+                2.0578995979514403e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.001",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 256,
+          "actual_adam_updates": 255,
+          "checkpoint_sha256": "29c9f75937924d8cc510e8abe860acf13ce800d3f2c2fd67fd399fb5742239e0",
+          "expected_ce": 4.24730059504509,
+          "reproduced_ce": 4.24730059504509,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "8583b86aca32851638ab694e7804b31f079a57ca117e48bccca1b0e7d0767501"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "f7941682c1564c124c85309d2b7d9440d028af7c41cc9518d034e59c6508015f"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "fce3aed4b34dd1b48ca57be998369643ce93eac7d3c1b74b3f758e790892c41f"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "d3ef0093d5e5b6d312a7674738143ba1d48d09c29b93ccdfd8141bdf023d0b5a"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "9d97a89f8a3b95a42b243131a997c5a321928c5164ed249bdfa358d61c3fbd45"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "d9233ba15448950ce544350c4d25626482b71651fcb4e9c3eb619f8b1e9b9337"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "f6265e1c722eb0187840380258f47a538b9e8ac3c28cf4841b78c428c49c83bf"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "9c56b26bd1efd11db65510ac34624fc2bed488ed210d8b38e8b6d9cc8d35de64"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.7446866179836604e-07,
+                6.197343518365983e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.3178058228268128e-07,
+                1.3806931797866184e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.003",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 976,
+          "actual_adam_updates": 974,
+          "checkpoint_sha256": "a1a120313cd4beef1ca20127cec802bcceaaf36c521cee2dbdd4d55f4256d82c",
+          "expected_ce": 3.350666970014572,
+          "reproduced_ce": 3.350666970014572,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "8ccf776e7d95204ae48a90bd91cad39df942e44ce55d8622982568033c2f2328"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "c0283789f365a37e6c86b4fd42b7607ced327db15239e5aa6b8fcfaa4c48a9ea"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "f999ae216e4dc16c057e383e25e5cb42af059f368486110409836617219f1a93"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "a63d140ec8cb8eb9cef1bb4e529aac3d2f52668b89d55925513964883eb758cb"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "3272ac658f31884f399461820ae9e8611877aeccaf07289ee021f64f2555332d"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "aba021139a48bb00b9e6dd5c683ed4f2be434e8fb9c166112ca5a7671fa5faae"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "de9e64afba68fe0af463b470c868172959e41344bd7fa7caf2be1dd51e0e20c6"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "246ceec82461b287dfc6c2286a31860cb983a5f07b47d8ad8c5688dae8dbaa87"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                3.0927853833517815e-07,
+                9.295377605411659e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                3.627614608703311e-07,
+                2.1572512132195243e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.003",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 256,
+          "actual_adam_updates": 255,
+          "checkpoint_sha256": "6f5f3bb586d6cef4e9dc4f7a12ae54819cdaca2ab2d6f1d7a5d8e30b3e60aec6",
+          "expected_ce": 4.194479733705521,
+          "reproduced_ce": 4.194479733705521,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "4a2f634d095c3f31357802e6f0240dff36ea452684c20ce4f97dce1424b67c1c"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "0f9f93b8350595a8d72d097c8329bf9250c3b14a1c87b8ba3a5af601c249238e"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "69ed3ca38f3c19f37142e9bb380f5a78c9e6a2e206a12862154602a0fc867f2d"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "ae914d793ff9a4567a847afd0f406289efe768824bc662c4350344ca845e5997"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "bda5b90324479ad76e1445821f277c565d636cd082b0281de06dfca4ba463f05"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "a0df65f89c78ca76ae5ed9cd1be27dd8d33dd4b072dc2ae1db260180975ec991"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "5336e7019d8646f3aac33c6924ef7d1f888ebb1d76ff1989820f0b1582ccbd65"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "a4f79b6aa687158f9bd8de20e1debb78c1b891271ab63c3fd67edd6c583885b6"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                2.9707262871880857e-07,
+                9.905438087542962e-07,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                4.961195072539226e-07,
+                2.1963129293034456e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.01",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        },
+        {
+          "step": 976,
+          "actual_adam_updates": 974,
+          "checkpoint_sha256": "0d917916815ca1ec17191cb8a624fa40784869081ebe2477c9926d55fa1a4d07",
+          "expected_ce": 3.3533385396003723,
+          "reproduced_ce": 3.3533385396003723,
+          "absolute_difference": 0.0,
+          "masks": {
+            "blocks.0.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "a991eab4d2a42a7121d5a9711eff03b9f0766fe4bd4cd68704248cf6c7518fac"
+            },
+            "blocks.0.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "42d91e2ed7feddfc074beed11fbf1a1e5150d3728dd3eac1f5a16fd4a9aab1b6"
+            },
+            "blocks.1.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "feb69780b81563ab5dd65aca11720b78a1696048d946f1bc55061ee144ef8b9e"
+            },
+            "blocks.1.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "58faa0b057fd1e121cdeabfd9ad5c57ce4892de0de7dfb229d4644fab46b94da"
+            },
+            "blocks.2.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "75b7f7f2c8255cdfd64661b1f94cd4ac0a0faef79e87a9dfdedc091bb489a3c7"
+            },
+            "blocks.2.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "7c36019e57d0513096761c3d662b26b644f1d3e340cbd91fb08e0163b038b5fe"
+            },
+            "blocks.3.ffn.up.map": {
+              "active_slots": 32768,
+              "row_min": 16,
+              "row_max": 16,
+              "mask_sha256": "7b79103c6bdb4a5bb9560e44e230072cc7cb856df270e843674b6d0d1d763edf"
+            },
+            "blocks.3.ffn.down.map": {
+              "active_slots": 32768,
+              "row_min": 64,
+              "row_max": 64,
+              "mask_sha256": "4e013cc40a343146f5a5e4e236102413af7e30a41084baff9de86c662949c8f3"
+            }
+          },
+          "oracles": [
+            {
+              "max_abs_y_dx_raw_dw": [
+                8.24286237044447e-07,
+                1.5144821494672556e-06,
+                1.421355214858977e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            },
+            {
+              "max_abs_y_dx_raw_dw": [
+                8.243429214793707e-07,
+                7.248133244708299e-07,
+                1.941417309581084e-06
+              ],
+              "active_dw_checked": true,
+              "rows": 7,
+              "noncontiguous": true,
+              "atol": 0.0001,
+              "rtol": 0.004
+            }
+          ],
+          "label": "dst-lr-0.01",
+          "kind": "dst",
+          "ce_absolute_difference": 0.0
+        }
+      ],
+      "scope": "Aggregation of original five per-model audit files, included separately; no execution receipt rewriting"
+    }
+  },
+  "assets_sha256": {
+    "adam-fraction-updates.png": "68584cc2af79bb9f12e957547e3a180cd7718c2df67f3623588eff1001deae0c",
+    "dst-lr-curves.png": "003daa18c68850412e5ffe197de221ab6c3d154198aaf0adb782c779ab5b3966",
+    "fraction-movement.png": "dcab723ae6ef4e1a66257a9f8c44e3ebd129b1892f51e507edc987f5c8634b6f",
+    "long-activation-rms.png": "019f56b24e5247561047474e938c9dd0ff91d35079770058d78c0b31ef4968fd",
+    "long-amplitude-radius.png": "e7f0012cf34eeae7996da19e45990673ec2bbbb59d0bfabfb7a5a79a02799cdd",
+    "long-amplitude-radius_fraction.png": "3648734dc78dd909abb869010256a721a6b385bb9da68602e0d4d6e4c8bbcf76",
+    "long-development-tail.png": "2eb2c2be8f4ab3ec2c07a9f35ecb699ac7377ecc8b570bb3be1ea79afc1cfb18",
+    "long-field-gradients.png": "7bed289a85318dfca7e01c7bb81793ef97966532136da1b57ab5f9ac6957b931",
+    "long-fraction_change-layers.png": "4adf3a4b7164eb4549b98fa31562f2e409d75c74636b8eaf3a967270562b8e5e",
+    "long-learning-curves.png": "3b04a5b263be7eae242eceb1409f450491f743763050af99c3516bb316cde03d",
+    "long-radius-layers.png": "50f6a66a9c6488c1fe9d00f72ab14d5043bab0a1243612077f014eef4aa70fd1",
+    "long-radius_fraction-layers.png": "a1f52231087895a7788c1e0dff3ed2681adfc2a9e5854f7c9c80af531dee641f",
+    "radius-update-components.png": "84d4ed04144c09b8f7e0d39d1d5fd4c8228a951c9c40b38ab09f409ef192de4d"
+  }
+}

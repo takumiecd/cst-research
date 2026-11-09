@@ -28,6 +28,8 @@ off-device recovery. The [radius-envelope implementation](https://github.com/tak
 now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
 RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109-results.md) completed all15 runs and trained audits. At976updates/three seeds, DEV CE was3.2992 Dense,3.4061 tau.003 and3.4157 tau.01. Fractions learn; width512 still has a loss/speed gap and no peak-memory advantage.
 The public API uses radius_fraction_init / radius_fraction without q aliases.
+The [zero-start tau sweep with a matched DST reference](docs/ffn-zero-start-tau-dst-20261109-results.md) is complete: tau.0003/.001/.003/.01 gave DEV CE3.3964/3.3987/3.3930/3.3954; tuned RigL-style DST3.3507,Dense3.3090 (976steps,seed17). Smaller tau did not close the gap. Learning-curve comparisons now include a verified DST reference; all four DST LR candidates are retained.
+
 A [matched initial fraction0/.5 comparison at common CST LR32×](docs/ffn-fraction-zero-start-20261109-results.md) gave DEV CE3.3930/3.4328 versus Dense3.3090 at976updates/seed17. Zero start learns(mean fraction0→.1406) and improves this pilot; mean radius remains smaller. No RMS calibration or default adoption.
 
 An [all-CST-field LR extension to16/32/64/128×](docs/ffn-all-fields-lr-20261109-results.md) completed at initial fraction=.5: DEV CE3.4864/3.4328/3.4696/3.5136 versus Dense3.3090 (976updates,seed17).32× was best in this pilot; higher rates increased fraction motion and endpoint occupancy. The128× CLI rejection and separate source-qualified recovery are preserved.

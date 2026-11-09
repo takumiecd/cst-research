@@ -4,7 +4,7 @@ import hashlib
 import json
 
 
-def load_inputs(root, recovery=None):
+def load_inputs(root, recovery=None, dst_run=None):
     rows, directories = [], {}
     for index, job in enumerate([root] + ([recovery] if recovery else [])):
         integrity = json.loads((job / "retrieval-integrity.json").read_text())
@@ -33,4 +33,64 @@ def load_inputs(root, recovery=None):
                 }
             )
             directories[public_label] = data / label
+    if dst_run is not None:
+        base = root / "retrieved"
+        data = dst_run / "retrieved"
+        assert (
+            json.loads((dst_run / "retrieval-integrity.json").read_text())["state"]
+            == "passed"
+        )
+        reference = json.loads((data / "receipt.json").read_text())
+        primary = json.loads((base / "receipt.json").read_text())
+        assert reference["status"] == "passed" and reference["source_unchanged"]
+        assert all(primary[k] == reference[k] for k in ("gpu", "torch", "cuda"))
+        assert (
+            primary["protocol"]["data_manifest_sha256"]
+            == reference["protocol"]["data_manifest_sha256"]
+        )
+        a = json.loads((base / "qualification/qualification.json").read_text())
+        b = json.loads((data / "qualification/qualification.json").read_text())
+        assert all(
+            a["source_sha256"][n] == b["source_sha256"][n]
+            for n in ("ffn_model.py", "ffn_contract.py", "ffn_run.py")
+        )
+        selected = min(
+            (r for r in reference["results"] if r["kind"] == "dst"),
+            key=lambda r: (r["development_ce"], r["sparse_peak_lr"]),
+        )
+        assert selected["label"] == reference["selection"]["label"]
+        original = selected["label"]
+        selected = {
+            **selected,
+            "label": "dst-" + original,
+            "origin_label": original,
+            "origin_job": dst_run.name,
+            "development_selected": True,
+        }
+        exemplar = next(r for r in rows if r["kind"] == "cst")
+        assert (
+            selected["seed"] == exemplar["seed"]
+            and selected["updates"] == exemplar["updates"]
+        )
+        left = json.loads((directories[exemplar["label"]] / "summary.json").read_text())
+        right = json.loads((data / original / "summary.json").read_text())
+        assert all(
+            left["config"][n] == right["config"][n]
+            for n in (
+                "width",
+                "layers",
+                "heads",
+                "context",
+                "vocabulary",
+                "expansion",
+                "attention_kind",
+                "feature_order",
+            )
+        )
+        assert (
+            right["active_ffn_scalar_slots_including_bias"]
+            == left["actual_ffn_parameters"]
+        )
+        rows.append(selected)
+        directories[selected["label"]] = data / original
     return rows, directories
