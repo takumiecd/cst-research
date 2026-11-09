@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/audit_lm_updates.py and scripts/screen_lm_updates.py",
+  "id": "lm-update-interaction-20261109",
+  "title": "Task update direction, finite-step interaction and bounded field-rate continuation",
+  "status": "PLANNED",
+  "status_note": "Owner-authorized stage A36restored one-step diagnostics and stage B10fixed512-update continuations; implementation prepared, no GPU result yet.",
+  "protocol_source_path": "docs/lm-update-interaction-20261109.md",
+  "protocol": {
+    "objective": "Original TinyStories task labels; diagnose useful update direction and inter-layer interference; no Dense teacher",
+    "stage_a_arms": [
+      "dense",
+      "cst-up",
+      "cst-two_blocks",
+      "cst-scattered_mixed",
+      "cst-all",
+      "dst-all"
+    ],
+    "checkpoint_steps": [
+      976,
+      4882
+    ],
+    "train_batch_offsets": [
+      0,
+      32,
+      64
+    ],
+    "tokens_per_probe": 1024,
+    "restored_step_records": 36,
+    "stage_b_start_step": 976,
+    "stage_b_end_step": 1488,
+    "field_order": [
+      "amplitude",
+      "radius_fraction",
+      "output_center",
+      "input_center"
+    ],
+    "field_multiplier_candidates": [
+      [
+        32,
+        32,
+        32,
+        32
+      ],
+      [
+        8,
+        8,
+        8,
+        8
+      ],
+      [
+        16,
+        16,
+        16,
+        16
+      ],
+      [
+        64,
+        64,
+        64,
+        64
+      ],
+      [
+        8,
+        32,
+        32,
+        32
+      ],
+      [
+        32,
+        8,
+        8,
+        8
+      ],
+      [
+        32,
+        8,
+        32,
+        32
+      ],
+      [
+        32,
+        32,
+        8,
+        8
+      ]
+    ],
+    "controls": [
+      "Dense",
+      "matched dense-storage DST"
+    ],
+    "checkpoints_unchanged": true,
+    "confirmation_evaluated": false,
+    "selection": "Exploratory DEV screening, all candidates retained; no optimum/equivalence/causal long-term claim",
+    "limits": "Same one-seed state, short continuation; instrumented timing not benchmark; no public-default adoption",
+    "validation": [
+      "Known-answer descent/finite-endpoint/field-locality tests",
+      "Fresh68operator regression",
+      "Exact hooked/unhooked and serialized update replay",
+      "Original control DEV CE/top1 at1200/1400 exact",
+      "Every final map independent native derivative oracle and final checkpoint/moment/counter/CE audit",
+      "Persistent NFS and hash-verified compact retrieval"
+    ]
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-update-interaction-4090-20261109-01"
+  },
+  "execution": {
+    "state": "not_started",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false
+  }
+}
