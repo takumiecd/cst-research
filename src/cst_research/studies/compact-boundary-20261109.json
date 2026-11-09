@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "compact-boundary-20261109",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/inspect_compact_boundaries.py",
+  "title": "CPU Triweight support and normalization boundary analysis",
+  "status": "PLANNED",
+  "status_note": "Frozen-design CPU axis-factor diagnostic; no model, optimizer, GPU or production implementation change.",
+  "protocol_source_path": "docs/compact-boundary-20261109.md",
+  "protocol": {
+    "fixtures": 24,
+    "records": 240,
+    "finite_displacements": 1920,
+    "device": "CPU",
+    "primary_dtype": "FP64",
+    "secondary_dtype": "FP32",
+    "normalization_floor": 1e-06,
+    "profiles": [
+      "triweight-point",
+      "triweight-l2",
+      "triweight-cell-control",
+      "gaussian-cell-control",
+      "biweight-point",
+      "wendland-c2-point"
+    ],
+    "training_updates": 0,
+    "confirmation_evaluated": false,
+    "production_kernel_changes": false,
+    "speed_measurement": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "compact-boundary-cpu-20261109-01"
+  }
+}
