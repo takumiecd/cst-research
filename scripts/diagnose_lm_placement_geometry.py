@@ -63,6 +63,9 @@ def main():
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=False)
     receipt = json.loads((a.run / "receipt.json").read_text())
+    manifest = json.loads((a.run / "manifest.json").read_text())
+    feature_analysis = json.loads((a.run / "analysis/analysis.json").read_text())
+    assert feature_analysis["state"] == "passed"
     assert receipt["state"] == "passed" and receipt["source_unchanged"]
     assert json.loads((a.run / "audit/audit.json").read_text())["state"] == "passed"
     torch.set_num_threads(4)
@@ -81,13 +84,26 @@ def main():
             continue
         m = model_for(arm)
         summary = json.loads((a.run / arm / "summary.json").read_text())
+        assert (
+            sha(a.run / arm / "summary.json")
+            == manifest["files"][f"{arm}/summary.json"]
+        )
         path = a.run / arm / f"checkpoint-{STEPS}.pt"
         assert sha(path) == summary["checkpoints"][path.name]
         saved = torch.load(path, map_location="cpu", weights_only=False)
         m.load_state_dict(saved["model"])
         expected = summary["final_parameters_sha256"]
         assert parameter_digest(m) == expected
-        context = torch.load(a.run / arm / f"signals-{STEPS}.pt", weights_only=True)
+        context_path = a.run / arm / f"signals-{STEPS}.pt"
+        assert (
+            sha(context_path)
+            == feature_analysis["tensor_hashes"][f"{arm}/signals-{STEPS}.pt"]
+        )
+        context = torch.load(context_path, weights_only=True)
+        assert (
+            sha(a.run / arm / f"signals-{STEPS}.json")
+            == manifest["files"][f"{arm}/signals-{STEPS}.json"]
+        )
         probe = json.loads((a.run / arm / f"signals-{STEPS}.json").read_text())[
             "records"
         ][0]
