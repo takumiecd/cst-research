@@ -34,6 +34,25 @@ def clone_state(model):
     return {n: x.detach().clone() for n, x in model.named_parameters()}
 
 
+def validate_regular_buffers(model, before, raw_gradients):
+    """DST's declared nonpersistent gradient scratch changes; masks must not."""
+    from cst_research.experiments.ffn_dst import MaskedLinear
+    from cst_research.experiments.ffn_radius_fraction_qualification import assert_nested
+
+    scratch = {}
+    for name, module in model.named_modules():
+        if isinstance(module, MaskedLinear):
+            assert "dense_gradient" in module._non_persistent_buffers_set
+            scratch[name + ".dense_gradient"] = raw_gradients[name + ".weight"]
+    current = dict(model.named_buffers())
+    assert_nested(
+        {n: b for n, b in current.items() if n not in scratch},
+        {n: b for n, b in before.items() if n not in scratch},
+    )
+    for name, gradient in scratch.items():
+        assert_nested(current[name], gradient)
+
+
 def partition(model):
     groups = {f"{i}.{d}": [] for i in range(len(model.blocks)) for d in ("up", "down")}
     groups["remainder"] = []
@@ -152,9 +171,9 @@ def diagnose(model, optimizer, batches, step, *, replay_check=False):
     norm = finish(model, optimizer, step)
     new = clone_state(model)
     new_optimizer = copy.deepcopy(optimizer.state_dict())
-    # Regular DST steps must not change buffers/masks; endpoints partition Parameters.
+    # Persistent masks stay fixed; declared DST scratch retains its raw gradient.
     params = dict(model.named_parameters())
-    assert_nested(dict(model.named_buffers()), buffers)
+    validate_regular_buffers(model, buffers, raw)
     result = {"before_ce": before, "gradient_norm_before_clip": norm, "maps": {}}
     for name, layer in projections(model).items():
         deltas, gradients = [], []
@@ -267,6 +286,9 @@ def diagnose(model, optimizer, batches, step, *, replay_check=False):
             result["instrumented_step_equals_unhooked_step"] = True
     finally:
         endpoint(model, old, new, [])
+        with torch.no_grad():
+            for name, buffer in model.named_buffers():
+                buffer.copy_(buffers[name])
         optimizer.load_state_dict(old_optimizer)
         optimizer.zero_grad(set_to_none=True)
         torch.set_rng_state(cpu_rng)

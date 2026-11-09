@@ -78,3 +78,20 @@ class UpdateAuditTests(unittest.TestCase):
         expected[:, 1] += 10
         self.assertTrue(torch.equal(m.atoms.p, expected))
         self.assertTrue(torch.equal(m.bias, old["bias"]))
+
+    def test_dst_scratch_is_validated_against_raw_gradient_but_mask_is_immutable(self):
+        import torch
+        from torch import nn
+        from cst_research.experiments.ffn_dst import MaskedLinear
+
+        model = nn.Module()
+        model.map = MaskedLinear(torch.ones(2, 4), 4, torch.Generator().manual_seed(7))
+        before = {n: b.clone() for n, b in model.named_buffers()}
+        raw = {"map.weight": torch.arange(8.0).reshape(2, 4)}
+        model.map.weight.grad = raw["map.weight"].clone()
+        model.map.prepare_gradient()
+        self.audit.validate_regular_buffers(model, before, raw)
+        with torch.no_grad():
+            model.map.mask.logical_not_()
+        with self.assertRaises(AssertionError):
+            self.audit.validate_regular_buffers(model, before, raw)
