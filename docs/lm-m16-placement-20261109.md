@@ -67,3 +67,34 @@ feature diversity and cotangent transport diverge. A good hybrid supports a
 layout-dependent interaction; observation alone cannot establish that Dense
 causally repairs CST or distinguish all optimization/capacity explanations.
 No speculative improvements or additional sweeps are authorized by this protocol.
+
+## Post-failure numerical admission amendment
+
+Job01 completed Dense, DST-pair12 and all4882 pair12 training updates. The original
+terminal pair12 componentwise gate failed at one down-map radius_fraction gradient
+(1/32768 raw entries): native -5.71988e-5 versus FP64 factors -1.74586e-4,
+absolute difference1.17387e-4. The complete radius-field relative L2 error is
+1.54e-5; Y/dX max errors are about1.2e-6. The offending radius is.5079038,
+with centers501.9923/1916.0001. Native/reference physical rows are identical,
+and the one-Atom physical calculation reproduces the difference before applying
+the envelope chain. The numerical error is in the FP32 physical computation,
+not stale envelope decoding or the fraction chain. Original job/source/results
+remain unmodified and its failure is not relabeled as original-gate passage.
+
+Before any remaining placement results, add an independent64-point Gauss-Legendre
+integral witness and a separate numerical admission: for Y, dX and each raw field,
+require both max absolute error<=3e-4 and relative L2<=1e-4 against full-A FP64
+factors. The absolute bound matches the existing independent primitive test;
+the relative bound is stricter than that primitive's3e-4, and now applies per
+field rather than pooling all raw columns. This is explicitly a post hoc gate
+amendment, not independent prespecification. The old componentwise failures
+continue to be counted. Apply this numerical check at two representative
+up/down maps of every completed CST arm, not only the triggering pair12 arm.
+
+No runtime, Parameter initialization, training code, update rule or data order is
+changed. Continue remaining eight arms from scratch under the same frozen
+training source. Reuse the three completed trajectories in a new evidence job,
+with hashed original JSON and checkpoint links; recover pair12 completion only
+after independent revalidation and optimizer-clock checks. Audit all final
+checkpoints and reproduce final DEV. This is an exploratory placement analysis,
+not mathematical-default adoption. No stricter original-gate claim is made.
