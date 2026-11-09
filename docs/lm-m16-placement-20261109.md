@@ -126,3 +126,19 @@ saved moments, not replayed/actual next updates or a change to the optimizer.
 Also report outward retained-moment pressure at fraction boundaries. Thresholds
 are exploratory descriptive bins. No model, optimizer or GPU training state is
 modified; apply the same analysis to all checkpoints and retain the exact scripts.
+
+## Post-hoc task branch-dependence evaluation
+
+Before seeing any ablation result, evaluate the final checkpoint of every arm
+with one whole FFN residual branch set to zero at a time (four interventions),
+using the same DEV8192 targets and fixed trained Parameters. Record CE/top1 and
+changes from the reproduced baseline. Remove the hook and require exact baseline
+restoration plus unchanged Parameter/buffer/RNG bytes. This evaluates task
+reliance on that trained branch; it does not fit a Dense teacher or execute a
+training/optimizer update. DD,CC,DC,CD describe the up/down types (S for DST).
+These are strong out-of-distribution interventions on interdependent learned
+networks. Their loss increases are not additive contributions, Shapley values or
+proof of the mechanism causing the original training gap. Apply uniformly to all
+11 arms, record every result and keep this post hoc evaluation separate from the
+original learning/measurement protocol. Execute only after training/state audit,
+on the same reserved4090, with no additional GPU allocation.
