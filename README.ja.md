@@ -19,6 +19,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
+[同数・同役割M16配置比較](docs/lm-m16-placement-20261109-results.ja.md)を全11条件・各5Mトークンまで完了。CST4層/up2/down2のDEV CEは2.5743〜2.6061（Dense2.5671、全8FFN層CST2.7022）。枝を外すタスク評価で残したDenseへの依存増大を確認し、保存タスクVJPとFP64参照で、狭い半径・格子点近傍のactive Atomの座標/半径勾配が小さくなる一方、振幅学習は続く機構を捉えました。唯一の原因や解決策の採用を示すものではありません。元の数値gate失敗と明示した事後の受入基準、source/hash境界、英語/日本語の結果を報告に保存しました。
+
 [Connected M16の短期LM比較](docs/lm-connected-short-20261109-results.ja.md)を完了。学習後の半径更新cosineは0.158～0.236から0.990～0.994へ改善しましたが、976更新のDEV CEは3.3942→3.3883にとどまりました（Dense3.3090、DST3.3590）。今回の座標更新は旧方式でも高一致です。読み取り専用32probeでは1M targets後のM16ブロック出力RMSはDenseの0.99～1.11倍で、過去のM8・5Mでの増大とはhorizonが異なります。両CSTのraw初期値一致、GPU83件、厳密な再開、checkpoint監査、source/result照合を確認。公開既定値や、Denseによる因果的補償の主張は採用していません。この比較は記録したcheckoutの組で再現し、既存`ffn` extraのoperator固定は過去の実験用のままです。
 
 [検証済み5M-token置換箇所数比較](docs/ffn-site-count-20261109-results.ja.md)を完了。このseedでは中央1/2ブロックの上下CSTはDenseに近く、全8写像で差が増えました。11条件・33checkpoint・学習済み96写像oracle・ローカル証拠回収すべて成功。[分散配置とFFN内連続の比較・信号診断](docs/lm-composition-20261109-results.ja.md)も完了。全17タスクモデル・51checkpointを監査し、読み取り専用TRAIN probe102回も保全しました。同数でも配置で性能が変わり、残差出力増大とcotangent低下だけでは勾配消失とは判断できません。

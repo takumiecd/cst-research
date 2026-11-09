@@ -166,3 +166,5 @@ samples only in ignored evidence; public notes contain derived summaries.
 No new training or improvement condition is added. Small gradients or Adam
 attenuation alone do not prove that unfreezing those degrees of freedom will
 close the task-quality gap.
+
+[Completed results and verified figures](lm-m16-placement-20261109-results.md).
