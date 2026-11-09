@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-fraction-zero-start-20261109",
   "title": "Initial fraction0 versus.5 with all CST fields at32x",
-  "status": "PLANNED",
-  "status_note": "User authorized initialfraction0 with common32x CST field LR. Fresh fraction.5 and Dense controls, same seed/data/budget. No RMS calibration.",
+  "status": "RUNNING",
+  "status_note": "Both0/.5 configurations passed fresh GPU qualification including exact serialized next step. Dense completed; fraction0 training running, fraction.5 pending. Common32x,no RMS calibration.",
   "protocol_source_path": "docs/ffn-fraction-zero-start-20261109.md",
   "protocol": {
     "width": 512,
@@ -32,5 +32,19 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "ffn-fraction-zero-start-6000ada-20261109-01"
+  },
+  "execution": {
+    "job_id": "ffn-fraction-zero-start-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "46a1d70072ca739ede5f70b86c97e1dd54c6e88a",
+    "source_archive_sha256": "fbf662b6ca8ef9125784a8cf39f14277e619a6467b8ad27e5fb4e16be58b6230",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false,
+    "qualification_sha256": "55bd09b1ffa775d77e59e86b3561da616c3def8da99dcf226a0518443a29182d",
+    "initial_cst_parameter_sha256_by_fraction": {
+      "0.0": "479bb6666233e250a4c748ce649d3869f0265b081271b5bcc12d52d0806fdc70",
+      "0.5": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634"
+    }
   }
 }

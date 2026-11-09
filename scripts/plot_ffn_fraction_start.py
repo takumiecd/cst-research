@@ -38,6 +38,10 @@ def main():
             return (
                 "Dense (recovery)" if row["label"].startswith("recovery-") else "Dense"
             )
+        if row.get("fraction_start_comparison"):
+            return (
+                f"fraction init{row['fraction']:g}, CST LR{row['cst_lr_multiplier']:g}x"
+            )
         if "cst_lr_multiplier" in row:
             return f"all CST fields LR{row['cst_lr_multiplier']:g}x"
         if "fraction_lr_multiplier" in row:
@@ -51,6 +55,8 @@ def main():
     colors["Dense"] = "#222222"
     colors["Dense (recovery)"] = "#777777"
     colors["cap1 bridge: tau=.003, f0=0"] = "#999999"
+    colors["fraction init0, CST LR32x"] = "#1f77b4"
+    colors["fraction init0.5, CST LR32x"] = "#ff7f0e"
     for rate, color in zip(
         (16, 32, 64, 128), ("#1f77b4", "#ff7f0e", "#d62728", "#9467bd")
     ):
@@ -105,7 +111,9 @@ def main():
                 ax.grid(alpha=0.2)
         axes[0, 1].legend(fontsize=8, ncol=2)
         fig.suptitle(
-            "All CST field LR comparison, seed17 only"
+            "Initial fraction0 versus.5, common CST LR32x, seed17 only"
+            if any(r.get("fraction_start_comparison") for r in rows)
+            else "All CST field LR comparison, seed17 only"
             if any("cst_lr_multiplier" in r for r in rows)
             else "Direct fraction LR comparison, seed17 only"
             if any("fraction_lr_multiplier" in r for r in rows)
@@ -304,7 +312,9 @@ def main():
             {
                 "runs": table,
                 "scope": (
-                    "One development seed, fixed all-CST-field LR family; no optimality or convergence claim"
+                    "One development seed, initial fraction0/.5 at common32x; no optimality or convergence claim"
+                    if any(r.get("fraction_start_comparison") for r in rows)
+                    else "One development seed, fixed all-CST-field LR family; no optimality or convergence claim"
                     if any("cst_lr_multiplier" in r for r in rows)
                     else "One development seed, fixed fraction LR family; no optimality or convergence claim"
                     if any("fraction_lr_multiplier" in r for r in rows)
