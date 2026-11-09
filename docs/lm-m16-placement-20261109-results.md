@@ -27,7 +27,7 @@ The eight primary layouts have CST4/up2/down2 and4,335,616 active FFN scalars. D
 
 Best matched layout pair12 is0.007183 CE above Dense, with26 fewer correct tokens (0.317 percentage points). All eight matched CST placements span0.031828 CE. Distributed up-even/down-even differ by0.022262 despite equal count and roles. Down-even has no fully Dense FFN block yet reaches2.583851: an intact Dense block is not necessary in this pilot. Four consecutive CST maps in central blocks also work well; consecutive CST depth alone does not explain degradation.
 
-Late TRAIN CE, averaged over the same46 logged updates from4000 onward, is Dense2.8354 versus all-CST2.9604 (gap0.1250); DEV gap is0.135084. The fixed-budget deficit is present in training fit as well as development. Curves keep falling. One seed and one small DEV split do not establish equivalence, convergence or a universal best placement.
+Late TRAIN CE, averaged over the same 46 logged updates from update 4000 onward, is Dense2.8354 versus all-CST2.9604 (gap0.1250); DEV gap is0.135084. The fixed-budget deficit is present in training fit as well as development. Curves keep falling. One seed and one small DEV split do not establish equivalence, convergence or a universal best placement.
 
 ![All placements](assets/lm-m16-placement-20261109/placement.png)
 ![Focused learning curves](assets/lm-m16-placement-20261109/learning.png)
@@ -48,13 +48,13 @@ Zeroing one trained FFN residual branch at evaluation increases task DEV CE by:
 
 In pair12, removing the final Dense branch costs0.5251 CE versus0.2025 in the Dense control. The two middle CST branches cost0.0792/0.0322 versus0.1404/0.1632 at the corresponding Dense-control branches. Other paired layouts similarly move dependence toward retained Dense branches. DST-pair12 also increases final-Dense dependence (0.3921), so this redistribution is not unique to CST. CST is not universally bypassed: replacing the first block's FFN with CST can still leave a large ablation cost.
 
-These44 interventions prove conditional dependence of the learned networks, not additive work fractions, optimal models, or the exact transformation Dense performs. Zeroing is a strong distribution shift. They support the user's compensation intuition without proving that Dense explicitly rescales or inverts CST outputs.
+These 44 interventions prove conditional dependence of the learned networks, not additive work fractions, optimal models, or the exact transformation Dense performs. Zeroing is a strong distribution shift. They support the user's compensation intuition without proving that Dense explicitly rescales or inverts CST outputs.
 
 ![Conditional task dependence](assets/lm-m16-placement-20261109/branch-dependence.png)
 
 ## The Atom-level learning bottleneck
 
-Active means |amplitude|>=.01. At4882:
+Active means |amplitude|>=.01. At update 4882:
 
 | Arm | Active atoms | Amplitude RMS | r<0.6 % | Both centers within0.01 of grid % | Fraction exactly0 % | Adam scale<eps: amp/q/out/in % |
 |---|---:|---:|---:|---:|---:|---|
@@ -70,7 +70,7 @@ Fraction is not simply stuck at its lower boundary: only11.45% of all-CST active
 
 ![Saved moment/geometry trajectories](assets/lm-m16-placement-20261109/atom-dynamics.png)
 
-We recomputed local VJPs at all40 final CST maps using the original saved TRAIN input and cotangent. Every field's RMS reproduced the full-model probe. Current unclipped task gradients and historical clipped-training Adam scales are distinct measurements. For output-center gradients, with sharp meaning radius<.6, near-grid distance<.01 and far distance>.1:
+We recomputed local VJPs at all 40 final CST maps using the original saved TRAIN input and cotangent. Every field's RMS reproduced the full-model probe. Current unclipped task gradients and historical clipped-training Adam scales are distinct measurements. For output-center gradients, with sharp meaning radius<.6, near-grid distance<.01 and far distance>.1:
 
 | Arm | Sharp, center near grid: task abs(g_mu)<eps % | Sharp, center far: % | Nonsharp: % |
 |---|---:|---:|---:|
@@ -104,7 +104,7 @@ Adam uses \(\Delta\theta\simeq-\eta\hat m/(\sqrt{\hat v}+\epsilon)\). A small tr
 
 ## What this does and does not explain
 
-At1M, all-CST block-output RMS ratios to Dense are0.994/1.096/1.109/1.070, already with a0.079309 CE gap. At5M the ratios grow to1.883/2.148/2.132/2.077, with output-cotangent ratios0.676/0.587/0.551/0.506. Pair12 stays near0.903/0.977/0.862/0.952 output ratios. Removing each token's feature mean does not remove the growth; all-CST feature-mean energy is only about0.14–0.17%. Thus late scale growth is real but cannot explain the earlier onset of the quality gap by itself.
+At 1M, all-CST block-output RMS ratios to Dense are0.994/1.096/1.109/1.070, already with a0.079309 CE gap. At 5M the ratios grow to1.883/2.148/2.132/2.077, with output-cotangent ratios0.676/0.587/0.551/0.506. Pair12 stays near0.903/0.977/0.862/0.952 output ratios. Removing each token's feature mean does not remove the growth; all-CST feature-mean energy is only about0.14–0.17%. Thus late scale growth is real but cannot explain the earlier onset of the quality gap by itself.
 
 There is no uniform signal/gradient zero-collapse. No clear block-feature-rank collapse or large global low-frequency concentration is established. CKA, raw cosine, spectrum and rank are descriptive feature statistics, not a Dense teacher target. Up-even/down-even have similar aggregate geometry attenuation and amplitude RMS yet different task loss, so no single scalar geometry/scale statistic explains placement quality.
 
@@ -131,7 +131,7 @@ The supported picture is that sharply localized CST atoms can become difficult t
 
 Synchronized complete updates include four forward/backward microbatches, clipping and optimizer; input preparation, DEV, saving and probes are excluded. First10 updates are excluded. Allocated peaks are measured within steps; reserved peaks retain observer allocation history. No Graph is used. DST includes topology steps and uses dense storage. These small-LM measurements do not demonstrate a speed advantage or large-width memory scaling: Dense is faster, and all-CST total allocated memory is not smaller here.
 
-Actual GPU native84 tests, eleven serialized exact-next-update/observer-invariance qualifications,33 milestone/state-clock audits and final DEV reproductions passed. CPU232 passed/61 optional skipped; targeted mathematical/control tests and CLI import checks passed. All optimizer moments are finite FP32.18 full-A operator cases supply108 tensor/per-field numerical checks;40 saved-task VJPs reproduce original field RMS, and44 ablations restore baseline/Parameters/buffers/RNG exactly.
+Validation passed: 84 native GPU tests, exact serialized next-update and observer invariance for all 11 arms, audits of 33 milestone checkpoints and optimizer clocks, and reproduction of final DEV scores. CPU validation: 232 passed and 61 optional tests skipped; targeted mathematical/control tests and CLI import checks also passed. All optimizer moments are finite FP32. The 18 full-A operator cases supply 108 tensor/per-field numerical checks; 40 saved-task VJPs reproduce the original field RMS, and 44 ablations restore baseline scores, Parameters, buffers and RNG exactly.
 
 The original pair12 terminal elementwise gate failed and remains failed in preserved evidence. The numerical admission was explicitly amended after that result to maxabs<=3e-4 AND relative L2<=1e-4 separately for Y,dX and each raw field, with an independent integral witness. Across all endpoint cases,23 old component-gate failures remain counted; maxabs is2.03359e-4 and max field-relative L2 is2.36585e-5. Do not call this passage of the original prespecified gate. Runtime, initialization, optimizer and training code were unchanged; completed trajectories were recovered by hashes and state checks.
 
@@ -142,7 +142,7 @@ The original pair12 terminal elementwise gate failed and remains failed in prese
 - Original job: `lm-m16-placement-4090-20261109-01`; preserved failed compact: `1936947217cb3315686dbc370e1b8dbc83fb62bce58a1d6788f2adf2b81987e2`.
 - Continuation: `lm-m16-placement-4090-20261110-02`; source archive: `edd3879b04470cbe9c6afe822198e892086cedee01b2a9b0dcf81204e81164bc`.
 - Final compact: `001de63634e4fae1eecdcf65d1ede414f4099b4191dde30c545a86fb3d1eaed8`; analysis: `9569798604332ba14e3b3cdb7414961797ebe6815d2ed52795bfb89d34092fef`; geometry: `7e641a014358e6c1c64c1923a8d4af79db34a4243224c7fa1d6883f7f5454110`.
-- Verified110 main payloads,2140 source files,12 post-analysis payloads,6 geometry payloads. Checkpoints and retained tensors stay on NFS; verified compact archives are retained in ignored evidence. Raw logs, tensors and datasets are not committed. The public JSON is a derived subset; the full1056-site records/120 moment records and raw witnesses remain in external evidence.
+- Verified 110 main payloads, 2,140 source files, 12 post-analysis payloads and 6 geometry payloads. Checkpoints and retained tensors stay on NFS; verified compact archives are retained in ignored evidence. Raw logs, tensors and datasets are not committed. The public JSON is a derived subset; the full 1,056 layer records and 120 moment records and raw witnesses remain in external evidence.
 
 
 The exact execution drivers/protocols/source archives are retained under those evidence locators. The original driver intentionally ends with a recorded gate failure; do not rewrite it as a successful run. The continuation verifies byte-identical training modules and runtime and reuses verified completed trajectories. Historical `ffn` extra remains pinned to its old operator: use the recorded checkout pair for this trial. With verified exports and the matching analysis checkout, reproduce figures offline as follows (choose new output directories):
