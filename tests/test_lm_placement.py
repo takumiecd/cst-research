@@ -53,6 +53,27 @@ class PlacementTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             analysis.cka(x, x[:2])
 
+        # A toroidal low-frequency mode and Nyquist mode distinguish smoothness
+        # from matrix rank; feature rotation can change these order-sensitive metrics.
+        position = torch.arange(32, dtype=torch.float64)
+        low = torch.sin(2 * torch.pi * position / 32)[None, :] * torch.tensor(
+            [[-1.0], [1.0]]
+        )
+        high = ((-1.0) ** position)[None, :] * torch.tensor([[-1.0], [1.0]])
+        self.assertAlmostEqual(
+            analysis.spatial_statistics(low)["low_frequency_share"], 1.0
+        )
+        self.assertAlmostEqual(
+            analysis.spatial_statistics(low)["lag_cosines"]["1"],
+            float(torch.cos(torch.tensor(2 * torch.pi / 32, dtype=torch.float64))),
+        )
+        self.assertAlmostEqual(
+            analysis.spatial_statistics(high)["high_frequency_share"], 1.0
+        )
+        self.assertAlmostEqual(
+            analysis.spatial_statistics(high)["lag_cosines"]["1"], -1.0
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

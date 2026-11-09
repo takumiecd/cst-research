@@ -44,6 +44,38 @@ def spectrum(x):
     }
 
 
+def spatial_statistics(value):
+    """Order-sensitive feature geometry after token and feature centering."""
+    x = value.reshape(-1, value.shape[-1]).double()
+    x = x - x.mean(0, keepdim=True)
+    x = x - x.mean(1, keepdim=True)
+    energy = x.square().sum()
+    if energy <= 0:
+        return {
+            "lag_cosines": {},
+            "low_frequency_share": None,
+            "high_frequency_share": None,
+            "normalized_spectral_centroid": None,
+        }
+    lags = {
+        str(k): float((x * x.roll(k, dims=-1)).sum() / energy) for k in (1, 2, 4, 8, 16)
+    }
+    power = torch.fft.rfft(x, norm="ortho").abs().square().sum(0)
+    weights = torch.full_like(power, 2.0)
+    weights[0] = 1.0
+    if x.shape[-1] % 2 == 0:
+        weights[-1] = 1.0
+    power *= weights
+    total = power.sum()
+    frequency = torch.arange(len(power), dtype=torch.float64) / (x.shape[-1] / 2)
+    return {
+        "lag_cosines": lags,
+        "low_frequency_share": float(power[1 : x.shape[-1] // 16 + 1].sum() / total),
+        "high_frequency_share": float(power[x.shape[-1] // 4 + 1 :].sum() / total),
+        "normalized_spectral_centroid": float((power * frequency).sum() / total),
+    }
+
+
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
@@ -74,6 +106,7 @@ def main():
                     metrics[key] = {
                         "cosine_to_dense": cosine(value, base[site][key]),
                         "cka_to_dense": cka(value, base[site][key]),
+                        "spatial": spatial_statistics(value),
                     }
                     if key in ("x", "y"):
                         metrics[key]["spectrum"] = spectrum(value)

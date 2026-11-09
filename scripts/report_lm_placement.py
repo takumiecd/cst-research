@@ -308,6 +308,42 @@ def main():
         )
     fig.tight_layout()
     save(fig, a.output, "representations")
+    fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+    for ax, field, metric, title in zip(
+        axes.flat,
+        ("y", "y", "dy", "dy"),
+        ("lag1", "low_frequency_share", "lag1", "high_frequency_share"),
+        (
+            "Block output: adjacent-feature cosine",
+            "Block output: low-frequency energy share",
+            "Block cotangent: adjacent-feature cosine",
+            "Block cotangent: high-frequency energy share",
+        ),
+    ):
+        values = []
+        for arm in arms:
+            row = []
+            for site in blocks:
+                spatial = index[(arm, site, final)][field]["spatial"]
+                row.append(
+                    spatial["lag_cosines"]["1"] if metric == "lag1" else spatial[metric]
+                )
+            values.append(row)
+        heat(
+            fig,
+            ax,
+            values,
+            arms,
+            blocks,
+            title,
+            limit=(-1, 1) if metric == "lag1" else (0, 1),
+            cmap="coolwarm" if metric == "lag1" else "viridis",
+        )
+    fig.suptitle(
+        "Post-hoc read-only feature-order analysis: token and row means removed; offset0"
+    )
+    fig.tight_layout()
+    save(fig, a.output, "feature-order")
     # Prespecified observations over time for each block, with unpooled context ranges.
     fig, axes = plt.subplots(2, 4, figsize=(18, 8), sharex=True)
     for arm in (

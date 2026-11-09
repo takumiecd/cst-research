@@ -98,3 +98,18 @@ with hashed original JSON and checkpoint links; recover pair12 completion only
 after independent revalidation and optimizer-clock checks. Audit all final
 checkpoints and reproduce final DEV. This is an exploratory placement analysis,
 not mathematical-default adoption. No stricter original-gate claim is made.
+
+## Post-hoc feature-order analysis (read-only)
+
+After observing pair12's endpoint and the reproduced all-CST976 probes, scalar
+RMS/feature-rank checks do not show a uniform collapse. Before evaluating the
+remaining layouts, extend only the analysis of already-retained offset0 tensors:
+remove each feature's token mean and each token's feature mean, then compute
+feature-axis toroidal lag1/2/4/8/16 cosines, low-frequency energy (modes1..N/16),
+high-frequency energy (modes>N/4), and spectral centroid normalized by Nyquist.
+Use double-precision rFFT with proper one-sided multiplicities. Apply identically
+to x,y,dx,dy for every retained site/time/arm. These metrics are basis/order
+sensitive, whereas CKA/rank are rotation invariant. They test a possible
+coordinate-geometry bias; neither smoothness nor high/low rank is inherently
+good or bad. This is a post hoc descriptive extension, not a new training arm,
+Dense teacher, causal intervention, or change to the frozen runtime/trajectory.
