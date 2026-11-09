@@ -22,13 +22,7 @@ private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
-The [2026-11-08 worktree cleanup](docs/worktree-cleanup-20261108.md) preserved
-all retired checkout payloads and Git history with independently verified
-off-device recovery. The [radius-envelope implementation](https://github.com/takumiecd/torchcst/pull/156)
-now supports configurable tau and a loss-trained per-Atom `radius_fraction`. CPU/operator and
-RTX6000 Ada checks passed. The [source-qualified TinyStories FFN tau study](docs/ffn-radius-fraction-tau-20261109-results.md) completed all15 runs and trained audits. At976updates/three seeds, DEV CE was3.2992 Dense,3.4061 tau.003 and3.4157 tau.01. Fractions learn; width512 still has a loss/speed gap and no peak-memory advantage.
-The public API uses radius_fraction_init / radius_fraction without q aliases.
-The [fixed20M-token Dense/DST/CST comparison on RTX4090](docs/ffn-long-horizon-20261109.md) is running after fresh GPU qualification. CST uses initialfraction0/tau.003/common32x; DST uses the previous DEV-selected sparse LR.003. Both restart from initialization; no new tuning or confirmation. Long-run results are pending.
+The [20M-token RTX4090 comparison](docs/ffn-long-horizon-20261109.md) finished training, but its container-home evidence disappeared on a Hub stop before verified local retrieval. It is not scientifically admitted or a completed accuracy result. A [fresh1/2/4/8-map composition study](docs/ffn-site-count-20261109.md) is being prepared with persistent NFS storage and matched Dense/DST controls.
 
 The [zero-start tau sweep with a matched DST reference](docs/ffn-zero-start-tau-dst-20261109-results.md) is complete: tau.0003/.001/.003/.01 gave DEV CE3.3964/3.3987/3.3930/3.3954; tuned RigL-style DST3.3507,Dense3.3090 (976steps,seed17). Smaller tau did not close the gap. Learning-curve comparisons now include a verified DST reference; all four DST LR candidates are retained.
 

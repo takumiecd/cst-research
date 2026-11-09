@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-long-horizon-20261109",
   "title": "Fixed 20M-token TinyStories FFN Dense, DST and CST comparison on RTX 4090",
-  "status": "RUNNING",
-  "status_note": "RTX4090 identity confirmed; fresh68 operator tests, exact CST model and long-DST branch qualifications passed; sequential Dense/DST/CST20M training running. No scientific admission yet.",
+  "status": "STOPPED",
+  "status_note": "All3 training arms reached20M; controller reported trained audits passed and supplementary accuracy entered. Before verified local retrieval, Hub stopped and container-home evidence path disappeared. Only captured status metrics/source remain locally; no completed scientific admission or accuracy claim.",
   "protocol_source_path": "docs/ffn-long-horizon-20261109.md",
   "protocol": {
     "architecture": {
@@ -167,7 +167,7 @@
     "relative_path": "ffn-long-horizon-4090-20261109-01"
   },
   "execution": {
-    "state": "running",
+    "state": "execution_finished_evidence_retrieval_incomplete",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
     "public_default_adopted": false,
@@ -176,6 +176,16 @@
     "gpu": "NVIDIA GeForce RTX 4090",
     "torch": "2.9.1+cu128",
     "cuda": "12.8",
-    "fresh_operator_tests_passed": 68
+    "fresh_operator_tests_passed": 68,
+    "gpu_restarted_same_profile": true,
+    "remote_artifacts_found_after_restart": false,
+    "independently_verified_retrieval": false,
+    "captured_rounded_final_dev_ce": {
+      "dense": 2.053256,
+      "dst": 2.236804,
+      "cst": 2.301205
+    },
+    "capture_precision": "six decimal digits from status output; not full raw summaries",
+    "recovery_note": "New selective11-arm5M comparison uses fresh all8 controls on persistent NFS, not borrowed evidence"
   }
 }

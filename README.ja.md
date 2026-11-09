@@ -19,15 +19,7 @@ CSTをニューラルネットワークで使えるようにするための研�
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
-[2026-11-08のworktree整理](docs/worktree-cleanup-20261108.ja.md)では、古いcheckoutの
-全payloadとGit履歴を別デバイスへ保全し、独立した復元検証を済ませました。
-torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)を実装し、tauの調整と
-各Atomの`radius_fraction`の学習に対応しました。CPU・演算とRTX6000 Adaでの検査は成功しました。
-[sourceを固定したTinyStories FFNのtau探索](docs/ffn-radius-fraction-tau-20261109-results.ja.md)は、
-全15本と学習後監査を完了しました。976更新・3seedでDEV CEはDense3.2992、tau.003が3.4061、
-tau.01が3.4157。fractionは学習しますが、幅512では損失・速度の差が残り、ピークメモリの優位もありません。
-公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
-[RTX4090での固定20M-token Dense・DST・CST比較](docs/ffn-long-horizon-20261109.ja.md)を、実機で再検査したうえで実行中です。CSTは初期fraction0・tau.003・共通32倍、DSTは以前DEVで選んだ疎LR.003。すべて新規初期化し、追加調整・confirmation評価はしません。長期の結果は未確定です。
+[RTX4090の20M-token比較](docs/ffn-long-horizon-20261109.ja.md)は学習終了を確認しましたが、検証済みローカル回収前のHub停止でcontainer-homeの証拠が見つからなくなりました。科学的検証完了・正答率の完了結果とは扱いません。永続NFS保存とDense/DST対照を用いる[1/2/4/8写像の新規比較](docs/ffn-site-count-20261109.ja.md)を準備しています。
 
 [0スタートのtau探索と同条件DST対照](docs/ffn-zero-start-tau-dst-20261109-results.ja.md)も完了。tau.0003/.001/.003/.01のDEV CEは3.3964/3.3987/3.3930/3.3954、LR調整したRigL-style DST3.3507、Dense3.3090(976step・seed17)。小tauでは差は埋まりませんでした。学習曲線の比較には検証済みDSTを含め、DSTの全4LR候補も残します。
 

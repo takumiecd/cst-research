@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_selective_run",
+  "id": "ffn-site-count-20261109",
+  "title": "Selective1/2/4/8-map FFN composition diagnostics with matched DST controls",
+  "status": "PLANNED",
+  "status_note": "Implementation and CPU checks in preparation; exact GPU qualification, execution and retrieval not yet performed. No mechanism conclusion.",
+  "protocol_source_path": "docs/ffn-site-count-20261109.md",
+  "protocol": {
+    "network_depth_blocks": 4,
+    "width": 512,
+    "context": 128,
+    "heads": 8,
+    "expansion": 4,
+    "seed": 17,
+    "tokens": 5000000,
+    "actual_tokens": 4999168,
+    "steps": 4882,
+    "schedule_tokens": 20000000,
+    "dst_topology_tokens": 20000000,
+    "milestone_steps": [
+      256,
+      976,
+      4882
+    ],
+    "selected_sites_zero_based": {
+      "up": [
+        "1.up"
+      ],
+      "down": [
+        "1.down"
+      ],
+      "block": [
+        "1.up",
+        "1.down"
+      ],
+      "two_blocks": [
+        "1.up",
+        "1.down",
+        "2.up",
+        "2.down"
+      ],
+      "all": [
+        "0.up",
+        "0.down",
+        "1.up",
+        "1.down",
+        "2.up",
+        "2.down",
+        "3.up",
+        "3.down"
+      ]
+    },
+    "arms": "fresh Dense plus CST and matched-slot DST at each of5 site sets,11 runs",
+    "cst": {
+      "atoms_per_selected_map": 8192,
+      "tau": 0.003,
+      "initial_fraction": 0.0,
+      "amplitude_max": 32.0,
+      "all_field_lr_multiplier": 32.0,
+      "radius_limits": [
+        0.5,
+        50.0
+      ],
+      "initialization": "same public moments; no RMS calibration"
+    },
+    "dst": {
+      "active_slots_per_selected_map": 32768,
+      "sparse_peak_lr": 0.003,
+      "ordinary_peak_lr": 0.0003,
+      "topology_events_before_step4882": [
+        250,
+        500,
+        750,
+        1000,
+        1250,
+        1500,
+        1750,
+        2000,
+        2250,
+        2500,
+        2750,
+        3000,
+        3250,
+        3500,
+        3750,
+        4000,
+        4250,
+        4500,
+        4750
+      ],
+      "final_adam_updates": 4863
+    },
+    "ordinary_peak_lr": 0.0003,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "diagnostics": [
+      "Fixed TRAIN prefix input/output RMS and output cotangent RMS at all4 blocks and8 FFN projections",
+      "Raw FFN parameter gradients; per-Atom field gradients, amplitude/radius/fraction distribution",
+      "Realized one-step linear projection action changes on fixed7 Gaussian inputs, plus wrapped per-field coordinate changes",
+      "Preclip global norm, actual optimizer clocks and field learning rates",
+      "TRAIN CE, DEV CE/perplexity/top1 on same8192 targets"
+    ],
+    "validation": [
+      "all8 selective factory state bit-equals historical full CST/DST models",
+      "unreplaced ordinary initial Parameters exact Dense match, RNG unchanged",
+      "matched active FFN scalar budgets within each CST/DST pair",
+      "initial/trained independent encoded-row FP64 map oracles",
+      "serialized regular/topology updates exact; instrumentation has no update effect",
+      "all33 milestone checkpoint CE/top1/counter/moment audits and hash-verified retrieval"
+    ],
+    "timing": "synchronized uninstrumented steps after10; actual-action probes excluded; setup/total separately, no paired speed claim against historical job",
+    "no_new_hpo": true,
+    "confirmation_evaluated": false,
+    "limitations": [
+      "changing replacement count also changes total compression budget; pair CST and DST at each site set",
+      "network depth fixed; number and placement of replaced maps changes",
+      "central sites do not establish position-independent depth law",
+      "single seed/5M DEV diagnosis cannot prove optimization versus representational impossibility"
+    ],
+    "evidence_storage": "Persistent NFS plus periodic verified local compact retrieval; old20M container-home artifacts disappeared on server stop, so oldall8 prefixes are not borrowed"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-site-count-4090-20261109-01"
+  },
+  "execution": {
+    "state": "not_started",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false
+  }
+}

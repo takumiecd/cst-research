@@ -70,3 +70,16 @@ Report cumulative measured training time separately from elapsed wall time:
 ordinary Dense/CST save checkpoints every200 steps, DST saves only milestones,
 and CST also has geometry observers. These overheads make wall curves diagnostic,
 not a controlled sparse arithmetic comparison.
+
+## Execution and retrieval incident
+
+The controller reported all3 training arms finished20M tokens and trained audits
+passed; supplementary top1 evaluation had entered. Captured status outputs showed
+rounded final DEV CE Dense2.053256, DST2.236804, CST2.301205. Before verified local
+compact retrieval, the Hub stopped. Restarting the same4090 profile found no
+original container-home job directory. Source archives/protocols remain local,
+but detailed curves/checkpoints/accuracy evidence were not independently retrieved.
+Status is STOPPED for incomplete evidence admission, not a failed-quality retry.
+The known rounded values are status observations only. Do not infer top1 results
+or claim completed verification. Fresh controls in the site-count study use
+persistent NFS and periodic compact recovery; no old prefix is silently borrowed.
