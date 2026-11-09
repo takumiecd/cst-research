@@ -10,14 +10,15 @@ Dense, later roughly2x, cotangents roughly0.5–0.7x on the original TRAIN prefi
 These observations alone do not identify a cause or prove gradient death.
 
 At initial,976 and4882 steps, evaluate the original128-target TRAIN probe; at the
-final state add512 fixed TRAIN targets at offsets0/4096/8192/12288. Record all
+final state evaluate four separate128-row TRAIN contexts at offsets0/4096/8192/12288
+(512 targets total); never exceed the qualified R<=256 native row contract. Record all
 blocks,norms,QKV,O,FFN up/down and residual FFN: input/output distributions and
 input/output cotangents. Statistics include mean,std,RMS,max,exact/relative zero
 fractions,absolute quantiles from at most8192 sampled values. Covariance
 participation/stable ranks use at most128 centered token rows and are not full
 weight rank or representational-capacity bounds. Record explicit causal attention
 logit dispersion,entropy/available-key entropy,max probabilities and Q/K/V RMS;
-native SDPA forward remains unchanged. There are51 model states and68 probes.
+native SDPA forward remains unchanged. There are51 model states and102 probes.
 
 All learning checkpoints and task labels are unchanged. Require completed,
 audited source cohorts,matching GPU/runtime/data,checkpoint hashes,unchanged
@@ -45,3 +46,9 @@ not an explanation already established. This FFN-cohort observer is not that
 new attention-role training experiment.
 
 Evidence:CST_RESEARCH_EVIDENCE_ROOT/lm-signal-diagnostics-4090-20261109-01.
+
+The current radius-envelope physical native adapter is explicitly qualified for
+width512 expansion4 rectangles and1..256 rows. Square attention maps require a
+separate backend qualification before a current-envelope role trial; do not relax
+that shape gate based on FFN evidence. The supplementary TRAIN contexts are
+separate128-row calls and stay within the existing contract.

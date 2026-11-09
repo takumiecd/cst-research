@@ -182,6 +182,15 @@ def probe(model, x, y):
         model.zero_grad(set_to_none=True)
 
 
+def probe_scopes(step):
+    """Keep every native call inside the frozen R<=256 row contract."""
+    return [("original128", [0])] + (
+        [(f"additional128_offset{offset}", [offset]) for offset in (4096, 8192, 12288)]
+        if step == 4882
+        else []
+    )
+
+
 def main():
     from cst_research.experiments.ffn_contract import ModelConfig
     from cst_research.experiments.ffn_model import configure_native
@@ -265,11 +274,7 @@ def main():
                     before = digest_parameters(model)
                     cpu_rng = torch.get_rng_state().clone()
                     cuda_rng = torch.cuda.get_rng_state().clone()
-                    scopes = [("original128", [0])] + (
-                        [("additional512", [0, 4096, 8192, 12288])]
-                        if step == 4882
-                        else []
-                    )
+                    scopes = probe_scopes(step)
                     for label, starts in scopes:
                         x, y = token_batch(data["train"], starts, 128, "cuda")
                         observed = probe(model, x, y)

@@ -109,3 +109,12 @@ class SignalAuditTests(unittest.TestCase):
         self.assertEqual(digest, self.audit.digest_parameters(m))
         self.assertTrue(torch.equal(rng, torch.get_rng_state()))
         self.assertTrue(all(p.grad is None for p in m.parameters()))
+
+    def test_probe_calls_respect_the_qualified_native_row_limit(self):
+        scopes = [v for step in (0, 976, 4882) for v in self.audit.probe_scopes(step)]
+        self.assertEqual(len(scopes), 6)
+        self.assertTrue(all(len(starts) * 128 <= 256 for _, starts in scopes))
+        self.assertEqual(
+            [starts[0] for _, starts in self.audit.probe_scopes(4882)],
+            [0, 4096, 8192, 12288],
+        )

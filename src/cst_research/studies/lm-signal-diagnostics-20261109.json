@@ -22,8 +22,8 @@
       4882
     ],
     "model_states": 51,
-    "probe_records": 68,
-    "data": "TRAIN prefix128 targets at each state, plus fixed512 TRAIN targets at final; no DEV/confirmation selection",
+    "probe_records": 102,
+    "data": "TRAIN prefix128 targets at each state; final four separate128-row calls at offsets0/4096/8192/12288 (512targets total), within qualified R<=256; no DEV/confirmation selection",
     "measurements": [
       "input/output mean,std,RMS,max,exact/relative near-zero fractions,sampled absolute quantiles",
       "input/output activation cotangent statistics at every block,norm,QKV,O,FFN up/down and residual FFN",
