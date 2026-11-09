@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.lm_placement_run",
   "id": "lm-m16-placement-20261109",
   "title": "Connected M16 matched-count FFN placement and task signal analysis",
-  "status": "PLANNED",
-  "status_note": "Protocol fixed before execution; eight matched-count placements and three context controls.",
+  "status": "RUNNING",
+  "status_note": "Frozen job launched on the reserved RTX4090. Native84 gates and consumer3 gates passed; exact next-update qualification and all training/audits remain in progress.",
   "protocol_source_path": "docs/lm-m16-placement-20261109.md",
   "protocol": {
     "primary_family": "six two-block pairs plus up-even/down-even; CST4 up2/down2",
@@ -38,5 +38,15 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-m16-placement-4090-20261109-01"
+  },
+  "execution": {
+    "job": "lm-m16-placement-4090-20261109-01",
+    "consumer_commit": "8adc651324468915c413a8dba44fb1d593cb9a42",
+    "analysis_commit": "ad28e61",
+    "consumer_pull_request": "https://github.com/takumiecd/cst-research/pull/37",
+    "native_tests_passed": 84,
+    "source_archive_sha256": "8e18fba8f1e9cad5c10d516a6dde523bdb6722eeb015e1eab60cddc285d31889",
+    "runtime_reused_from": "lm-connected-short-4090-20261109-03, all archived src files hash equal",
+    "public_default_adopted": false
   }
 }
