@@ -6,7 +6,7 @@
   "runner_entrypoint": "cst_research.experiments.lm_connected_run",
   "id": "lm-connected-short-20261109",
   "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
-  "status": "PREPARED",
+  "status": "PLANNED",
   "status_note": "Protocol fixed; execution and retrieval pending.",
   "protocol_source_path": "docs/lm-connected-short-20261109.md",
   "protocol": {
