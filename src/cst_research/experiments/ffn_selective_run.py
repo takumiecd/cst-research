@@ -91,7 +91,8 @@ def development(model, tokens):
 
 
 def cst_oracle(layer):
-    op = layer.execution_declaration()
+    cpu = copy.deepcopy(layer).cpu()
+    op = cpu.execution_declaration()
     ref = CSTLinear(
         *op.charts,
         atoms=1,
@@ -102,7 +103,6 @@ def cst_oracle(layer):
             coordinates=kernels.physical(radius_init=(0.5, 50.0), radius_floor=0.5),
         ),
     )
-    cpu = copy.deepcopy(layer).cpu()
     p = cpu.atoms.p
     vi, uo = ref.operator.factors(from_state(cpu.kernel, p).double())
     gen = torch.Generator().manual_seed(657)
