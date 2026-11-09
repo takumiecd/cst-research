@@ -5,8 +5,8 @@
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
   "id": "lm-geometry-epsilon-capacity-20261110",
   "title": "All-FFN CST capacity versus Adam epsilon pilot",
-  "status": "PLANNED",
-  "status_note": "Prepared fixed short pilot; no new GPU result yet.",
+  "status": "RUNNING",
+  "status_note": "Durable RTX3090 job1523 launched; identity verified. Native correctness and qualification gates precede training. No new learning result yet.",
   "runner_entrypoint": "cst_research.experiments.lm_geometry_trial_run",
   "protocol_source_path": "docs/lm-geometry-epsilon-capacity-20261110.md",
   "evidence": {
@@ -28,5 +28,22 @@
       1e-10
     ],
     "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "execution": {
+    "job": "lm-geometry-epsilon-capacity-3090-20261110-01",
+    "consumer_commit": "76e80b6816269f63b02ff85ad262746f14754726",
+    "consumer_pull_request": "https://github.com/takumiecd/cst-research/pull/38",
+    "source_archive_sha256": "e0342a39b6367a899a528b85a0d69d8995a772a99c6f4b54571060bb20f920d6",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "memory_bytes": 25307578368,
+    "compute_capability": [
+      8,
+      6
+    ],
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "public_default_adopted": false,
+    "local_CPU_passed": 234,
+    "local_optional_skipped": 61
   }
 }

@@ -2,7 +2,9 @@
 
 English (canonical) | [日本語](lm-geometry-epsilon-capacity-20261110.ja.md)
 
-Status: prepared, not a learning result. This pilot tests two possible contributors
+Status: durable RTX3090 job launched, not a learning result. Frozen consumer
+`76e80b6816269f63b02ff85ad262746f14754726`; [draft PR38](https://github.com/takumiecd/cst-research/pull/38).
+CPU:234 passed/61 optional skips. Actual GPU correctness/qualification precede learning. This pilot tests two possible contributors
 to all-FFN CST degradation: capacity and epsilon attenuation of small geometry
 moments. It does not presume a remedy or a unique cause. M8 already exhibited a
 quality gap; that does not exclude an additional M16 effect.
