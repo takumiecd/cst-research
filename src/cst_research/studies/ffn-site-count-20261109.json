@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_selective_run",
   "id": "ffn-site-count-20261109",
   "title": "Selective1/2/4/8-map FFN composition diagnostics with matched DST controls",
-  "status": "RUNNING",
-  "status_note": "Fresh68 operator tests and11 selective model qualifications passed on4090; first immutable compact was retrieved and all10 files/1936 source identities verified. Dense5M and subsequent selected-site training/audits are running; no mechanism result admitted.",
+  "status": "COMPLETED",
+  "status_note": "All11 fixed5M arms trained,audited33checkpoints,reproducedCE/top1,passed96trained map oracles;final76compact files/1936source hashes verified locally. Single/middle1-2block replacement close toDense;all8 largergap. OneDEVseed,no causal/equivalence claim.",
   "protocol_source_path": "docs/ffn-site-count-20261109.md",
   "protocol": {
     "network_depth_blocks": 4,
@@ -127,7 +127,7 @@
     "relative_path": "ffn-site-count-4090-20261109-01"
   },
   "execution": {
-    "state": "running",
+    "state": "completed_verified",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
     "public_default_adopted": false,
@@ -139,6 +139,13 @@
     "persistent_storage_fstype": "nfs4",
     "gpu": "NVIDIA GeForce RTX 4090",
     "torch": "2.9.1+cu128",
-    "cuda": "12.8"
+    "cuda": "12.8",
+    "results_source_path": "docs/ffn-site-count-20261109-results.md",
+    "final_compact_sha256": "3a5d6844ca1e8cd47760a64e1b7dcdfb40f9efb5a2eb2ffdabebee02bc0e7518",
+    "files_verified": 76,
+    "source_files_verified": 1936,
+    "audited_checkpoints": 33,
+    "trained_map_oracles": 96,
+    "verified_progressive_snapshots": 13
   }
 }

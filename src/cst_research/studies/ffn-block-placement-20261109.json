@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_selective_run",
   "id": "ffn-block-placement-20261109",
   "title": "Task-trained distributed single CST maps versus paired FFN CST maps",
-  "status": "PLANNED",
-  "status_note": "Owner replaced the Dense-teacher proposal with task-only composition analysis. Six distributed-map arms prepared, queued after the immutable site-count cohort; GPU execution not started.",
+  "status": "RUNNING",
+  "status_note": "Parent11arm study completed verified retrieval; core/training AST/operator bytes/runtime gates passed; fresh6arm qualification passed and distributed-map task training started. No result admitted yet.",
   "protocol_source_path": "docs/ffn-block-placement-20261109.md",
   "protocol": {
     "network_depth_blocks": 4,
@@ -128,9 +128,14 @@
     "relative_path": "ffn-block-placement-4090-20261109-01"
   },
   "execution": {
-    "state": "not_started",
+    "state": "running",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "consumer_commit": "dc0dca16e6589de50368d2ea32626f92579fff4d",
+    "source_archive_sha256": "1d78e7f960c4084418e16efac0ae39bb9bd2ce5f3f63d29a8551dd3648af6bc4",
+    "qualified_arms": 6,
+    "parent_audited_arms": 11,
+    "first_local_snapshot_sha256": "770039e8c898330b1fd566151f169e4f0a46604b321e4de90aa78ca0028ae8ee"
   }
 }
