@@ -81,6 +81,7 @@ def main():
     p.add_argument("--run", type=Path, required=True)
     p.add_argument("--analysis", type=Path, required=True)
     p.add_argument("--atom-state", type=Path, required=True)
+    p.add_argument("--ablation", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=False)
@@ -95,6 +96,11 @@ def main():
     assert audit["state"] == "passed"
     analysis = read(a.analysis)
     atoms = read(a.atom_state)
+    ablation = read(a.ablation)
+    assert (
+        ablation["state"] == "passed"
+        and ablation["source_commits"] == analysis["source_commits"]
+    )
     assert (
         atoms["state"] == "passed"
         and atoms["source_commits"] == analysis["source_commits"]
@@ -329,6 +335,64 @@ def main():
         )
     fig.tight_layout()
     save(fig, a.output, "representations")
+    fig, axes = plt.subplots(1, 3, figsize=(18, 7))
+    for ax, field, key, title in zip(
+        axes,
+        ("y", "y", "dy"),
+        ("row_centered_rms", "feature_dc_energy_share", "row_centered_rms"),
+        (
+            "Block row-centered output RMS / Dense",
+            "Block output feature-mean energy share",
+            "Block row-centered cotangent RMS / Dense",
+        ),
+    ):
+        values = []
+        for arm in arms:
+            row = []
+            for site in blocks:
+                value = index[(arm, site, final)][field]["mean_components"][key]
+                if key == "row_centered_rms":
+                    value /= index[("dense", site, final)][field]["mean_components"][
+                        key
+                    ]
+                row.append(value)
+            values.append(row)
+        heat(
+            fig,
+            ax,
+            values,
+            arms,
+            blocks,
+            title,
+            limit=(-1.5, 1.5) if key == "row_centered_rms" else (0, 1),
+            cmap="coolwarm" if key == "row_centered_rms" else "viridis",
+            log=key == "row_centered_rms",
+        )
+    fig.suptitle(
+        "Offset0: separate the feature-constant component removed by LayerNorm"
+    )
+    fig.tight_layout()
+    save(fig, a.output, "centered-signals")
+    fig, ax = plt.subplots(figsize=(9, 7))
+    values = [
+        [row["delta_ce"] for row in ablation["arms"][arm]["zeroed_ffn_branches"]]
+        for arm in arms
+    ]
+    heat(
+        fig,
+        ax,
+        values,
+        arms,
+        blocks,
+        "Task DEV CE increase when one trained FFN branch is zeroed",
+        cmap="magma",
+    )
+    ax.set_xlabel("Zeroed FFN branch; all other trained weights fixed")
+    fig.suptitle(
+        "Post-hoc conditional dependence; no training updates, non-additive interventions"
+    )
+    fig.tight_layout()
+    save(fig, a.output, "branch-dependence")
     fig, axes = plt.subplots(2, 2, figsize=(14, 12))
     for ax, field, metric, title in zip(
         axes.flat,
@@ -487,6 +551,8 @@ def main():
                 "endpoints": analysis["endpoints"],
                 "primary_family": PRIMARY,
                 "signal_records": analysis["records"],
+                "atom_records": atoms["records"],
+                "branch_dependence": ablation["arms"],
             },
             indent=2,
         )
