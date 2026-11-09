@@ -6,8 +6,8 @@
   "runner_entrypoint": "scripts/audit_lm_updates.py and scripts/screen_lm_updates.py",
   "id": "lm-update-interaction-20261109",
   "title": "Task update direction, finite-step interaction and bounded field-rate continuation",
-  "status": "RUNNING",
-  "status_note": "Fresh native68gate and30CST/Dense diagnostic records passed on attempt01; DST nonpersistent scratch check corrected in separate immutable attempt02. Prior30records must reproduce exactly; no continuation training completed yet.",
+  "status": "COMPLETED",
+  "status_note": "36 task-update behavior diagnostics completed and locally verified. Owner clarified analysis-only purpose; no further optimization or recipe adoption. Ten short LR continuations had already finished before correction and are retained separately, not used to recommend a setting.",
   "protocol_source_path": "docs/lm-update-interaction-20261109.md",
   "protocol": {
     "objective": "Original TinyStories task labels; diagnose useful update direction and inter-layer interference; no Dense teacher",
@@ -107,16 +107,30 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-update-interaction-4090-20261109-02"
+    "relative_path": "lm-update-interaction-4090-20261109-03"
   },
   "execution": {
-    "state": "running",
-    "consumer_commit": "c448ec58da06e7ffdb89c83467d0ef6759f9380d",
+    "state": "completed_behavior_analysis",
+    "consumer_commit": "5c6f09b69dd06d2fec2a81ca528eb4c10c231071",
     "runtime_import_consumer_commit": "7b89c7db7105b4212fa9aee3efbc2870f1b848e3",
-    "source_archive_sha256": "f4f5fe9b82c713df29fe1fb1046db46ee200ba99228893a94de7937a4b75f841",
+    "source_archive_sha256": "d3c0e18ba9f6db3d95a3bfdc3ba06097875e2ab6140289df17c4a175a7242c8f",
     "previous_attempt": "lm-update-interaction-4090-20261109-01",
-    "measurement_fix": "Declared DST nonpersistent dense_gradient is checked against unmasked task gradient; all persistent buffers remain exact; all buffers restored. No numerical tolerance relaxation.",
+    "measurement_fix": "Exact named DST scratch validation/restoration and deep-copy optimizer snapshots on every load. Original clocks, moments and RNG restored; no native tolerance change.",
     "confirmation_evaluated": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "previous_attempts": [
+      "lm-update-interaction-4090-20261109-01",
+      "lm-update-interaction-4090-20261109-02"
+    ],
+    "diagnostic_records": 36,
+    "previous36functional_records_reproduced_exactly": true,
+    "restored_original_clocks_verified": true,
+    "final_compact_sha256": "fe7362f066073d748c0a3c1d1fcad6fd4fe5ac05e5af40e0878e8af2d4e91f46",
+    "final_compact_files_verified": 30,
+    "source_identities_verified": 1976,
+    "results_path": "docs/lm-task-update-behavior-20261109-results.json",
+    "owner_analysis_only": true,
+    "optimization_conditions_already_completed": 10,
+    "optimization_recipe_selected_or_adopted": false
   }
 }

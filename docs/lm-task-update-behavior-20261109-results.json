@@ -1,0 +1,683 @@
+{
+  "scope": "Analysis of observed CST task-update behavior only; one seed,36 restored TRAIN probes; no optimizer/default recommendation",
+  "protocol": {
+    "job_id": "lm-update-interaction-4090-20261109-03",
+    "source_commits": {
+      "torchcst": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+      "cst-research": "5c6f09b69dd06d2fec2a81ca528eb4c10c231071"
+    },
+    "runtime_import_consumer_commit": "7b89c7db7105b4212fa9aee3efbc2870f1b848e3",
+    "source_archive_sha256": "d3c0e18ba9f6db3d95a3bfdc3ba06097875e2ab6140289df17c4a175a7242c8f",
+    "driver_sha256": "90e9bc458bf70fa5b74083de3704413e19aaaa12fa8bfd9b1d75974915fb194a",
+    "evaluator_sha256": "9ca99205ad5a1d98f3f5102aeccc1f952b91b47d052391f2a78892b8e2dd1374",
+    "screen_sha256": "4dd75848d5e466ba197d56fe093f75fdc7009386fff860bbf80a989394651a78",
+    "scope": "36 restored task-update diagnostics followed by10fixed512-update field-rate continuations; no teacher or confirmation",
+    "recovery_reason": "Isolation correction: deepcopy optimizer state on every load to prevent CPU clock/same-device moment aliasing. All36functional measurements must match previous attempt exactly; restored clocks explicitly checked. Previous Dense screen failed clock gate before checkpoint admission; no tolerance or candidate change."
+  },
+  "compact_sha256": "fe7362f066073d748c0a3c1d1fcad6fd4fe5ac05e5af40e0878e8af2d4e91f46",
+  "source_files_verified": 1976,
+  "files_verified": 30,
+  "diagnostic_records": 36,
+  "diagnostic": {
+    "dense": {
+      "976": {
+        "mean_all_parameter_gain": 0.09399535258611043,
+        "mean_ffn_gain": 0.037931740283966064,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0009982387224833171,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.09320222721987587,
+            "predicted_loss_reduction": 0.0076153751416539,
+            "relative_output_delta": 0.006860066945495308
+          },
+          "0.down": {
+            "descent_cosine": 0.08036020550570583,
+            "predicted_loss_reduction": 0.008820768307270598,
+            "relative_output_delta": 0.01157385300577495
+          },
+          "1.up": {
+            "descent_cosine": 0.06343067583240865,
+            "predicted_loss_reduction": 0.003358368159222566,
+            "relative_output_delta": 0.007575250943018494
+          },
+          "1.down": {
+            "descent_cosine": 0.11160739057242298,
+            "predicted_loss_reduction": 0.0046738325672734836,
+            "relative_output_delta": 0.010583521521113602
+          },
+          "2.up": {
+            "descent_cosine": 0.0721166971234564,
+            "predicted_loss_reduction": 0.0027249129943313446,
+            "relative_output_delta": 0.0062739093860599
+          },
+          "2.down": {
+            "descent_cosine": 0.11957136928240107,
+            "predicted_loss_reduction": 0.004378279770134224,
+            "relative_output_delta": 0.009956293883017466
+          },
+          "3.up": {
+            "descent_cosine": 0.08247528070869804,
+            "predicted_loss_reduction": 0.0030936321969971896,
+            "relative_output_delta": 0.006459870127858289
+          },
+          "3.down": {
+            "descent_cosine": 0.10240564858452698,
+            "predicted_loss_reduction": 0.004543506771356855,
+            "relative_output_delta": 0.008881625109569734
+          }
+        },
+        "mean_field_only_gain": {}
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.10147045056025188,
+        "mean_ffn_gain": 0.04212939739227295,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0005283753077189127,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.08536235896734778,
+            "predicted_loss_reduction": 0.00842704756951579,
+            "relative_output_delta": 0.004134227361579844
+          },
+          "0.down": {
+            "descent_cosine": 0.12257223834967329,
+            "predicted_loss_reduction": 0.008092846585309338,
+            "relative_output_delta": 0.004677295941836701
+          },
+          "1.up": {
+            "descent_cosine": 0.06625083720971171,
+            "predicted_loss_reduction": 0.0037687474418126084,
+            "relative_output_delta": 0.002951231094790282
+          },
+          "1.down": {
+            "descent_cosine": 0.20954131975619683,
+            "predicted_loss_reduction": 0.004176426825634686,
+            "relative_output_delta": 0.0038808920087589267
+          },
+          "2.up": {
+            "descent_cosine": 0.0819300773717956,
+            "predicted_loss_reduction": 0.003900664079899189,
+            "relative_output_delta": 0.002513686107238062
+          },
+          "2.down": {
+            "descent_cosine": 0.18968757417343848,
+            "predicted_loss_reduction": 0.004356669509078859,
+            "relative_output_delta": 0.003527393409309887
+          },
+          "3.up": {
+            "descent_cosine": 0.09441743663998609,
+            "predicted_loss_reduction": 0.0048518627745771006,
+            "relative_output_delta": 0.002616968072679677
+          },
+          "3.down": {
+            "descent_cosine": 0.14395431736479286,
+            "predicted_loss_reduction": 0.005251312465155787,
+            "relative_output_delta": 0.0035728526254573544
+          }
+        },
+        "mean_field_only_gain": {}
+      }
+    },
+    "cst-up": {
+      "976": {
+        "mean_all_parameter_gain": 0.09398229916890462,
+        "mean_ffn_gain": 0.0383188525835673,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0011782248814900715,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.08789688000223549,
+            "predicted_loss_reduction": 0.008138176617333506,
+            "relative_output_delta": 0.007370022857938308
+          },
+          "0.down": {
+            "descent_cosine": 0.08087408955964139,
+            "predicted_loss_reduction": 0.009946936017692068,
+            "relative_output_delta": 0.011722697314951014
+          },
+          "1.up": {
+            "descent_cosine": 0.019562215807835855,
+            "predicted_loss_reduction": 0.0010990811557043516,
+            "relative_output_delta": 0.008144850808020297
+          },
+          "1.down": {
+            "descent_cosine": 0.09785571473404768,
+            "predicted_loss_reduction": 0.004530644073107743,
+            "relative_output_delta": 0.011321115949040261
+          },
+          "2.up": {
+            "descent_cosine": 0.06927052862450093,
+            "predicted_loss_reduction": 0.0029827426026249487,
+            "relative_output_delta": 0.006453308071011794
+          },
+          "2.down": {
+            "descent_cosine": 0.11875029231726279,
+            "predicted_loss_reduction": 0.004666817168646978,
+            "relative_output_delta": 0.009924014266135418
+          },
+          "3.up": {
+            "descent_cosine": 0.0847657972632176,
+            "predicted_loss_reduction": 0.0034062053885077145,
+            "relative_output_delta": 0.006369321265917972
+          },
+          "3.down": {
+            "descent_cosine": 0.1064184744882648,
+            "predicted_loss_reduction": 0.005092756658472361,
+            "relative_output_delta": 0.009057207842781733
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.0007308324178059896,
+          "radius_fraction": 0.00014807780583699545,
+          "output_center": 9.693702061971028e-05,
+          "input_center": 0.0001154939333597819
+        }
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.09734294811884563,
+        "mean_ffn_gain": 0.03911735614140829,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0004888375600179037,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.08293846143336248,
+            "predicted_loss_reduction": 0.007793726087340847,
+            "relative_output_delta": 0.0038613766651845387
+          },
+          "0.down": {
+            "descent_cosine": 0.1211313210698448,
+            "predicted_loss_reduction": 0.008174797363726375,
+            "relative_output_delta": 0.0044924670913634585
+          },
+          "1.up": {
+            "descent_cosine": 0.008598412252883205,
+            "predicted_loss_reduction": 0.000805104060218588,
+            "relative_output_delta": 0.00817510248177959
+          },
+          "1.down": {
+            "descent_cosine": 0.14866753285973938,
+            "predicted_loss_reduction": 0.0030020524926921573,
+            "relative_output_delta": 0.0043284491614457654
+          },
+          "2.up": {
+            "descent_cosine": 0.07738382649230374,
+            "predicted_loss_reduction": 0.004221298912390752,
+            "relative_output_delta": 0.002656530724461096
+          },
+          "2.down": {
+            "descent_cosine": 0.18615103521572332,
+            "predicted_loss_reduction": 0.005116078462115921,
+            "relative_output_delta": 0.0038196556233624206
+          },
+          "3.up": {
+            "descent_cosine": 0.09370233814124634,
+            "predicted_loss_reduction": 0.004822754084282531,
+            "relative_output_delta": 0.002610482382244109
+          },
+          "3.down": {
+            "descent_cosine": 0.15556986104862444,
+            "predicted_loss_reduction": 0.005829907264404878,
+            "relative_output_delta": 0.0034721114412519815
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.0004773537317911784,
+          "radius_fraction": 0.00018356243769327799,
+          "output_center": 6.612141927083333e-05,
+          "input_center": 6.975730260213216e-05
+        },
+        "mean_field_unchanged_fraction": {
+          "amplitude": 0.0,
+          "radius_fraction": 0.241455078125,
+          "output_center": 0.06880696614583333,
+          "input_center": 0.02001953125
+        }
+      }
+    },
+    "cst-two_blocks": {
+      "976": {
+        "mean_all_parameter_gain": 0.09231064716974895,
+        "mean_ffn_gain": 0.03326882918675741,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0007896820704142252,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.08730895420042317,
+            "predicted_loss_reduction": 0.00770763844949912,
+            "relative_output_delta": 0.006907217448551518
+          },
+          "0.down": {
+            "descent_cosine": 0.08520236959516903,
+            "predicted_loss_reduction": 0.010484064933882263,
+            "relative_output_delta": 0.011264670220610826
+          },
+          "1.up": {
+            "descent_cosine": 0.01812563085114692,
+            "predicted_loss_reduction": 0.0011398453261149885,
+            "relative_output_delta": 0.010580091540808613
+          },
+          "1.down": {
+            "descent_cosine": 0.03237948218106948,
+            "predicted_loss_reduction": 0.0013368895631784951,
+            "relative_output_delta": 0.009937269827453958
+          },
+          "2.up": {
+            "descent_cosine": 0.017076025596059217,
+            "predicted_loss_reduction": 0.0009708905207575146,
+            "relative_output_delta": 0.013718992455065795
+          },
+          "2.down": {
+            "descent_cosine": 0.02899264736478054,
+            "predicted_loss_reduction": 0.0011218013016753234,
+            "relative_output_delta": 0.013223555091713616
+          },
+          "3.up": {
+            "descent_cosine": 0.08814449765250842,
+            "predicted_loss_reduction": 0.004275584743401902,
+            "relative_output_delta": 0.005794056645715866
+          },
+          "3.down": {
+            "descent_cosine": 0.10682980939536248,
+            "predicted_loss_reduction": 0.00741496627683334,
+            "relative_output_delta": 0.008526611405073443
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.003107607364654541,
+          "radius_fraction": 0.000631709893544515,
+          "output_center": 0.00036776065826416016,
+          "input_center": 0.0004073778788248698
+        }
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.09504242738087972,
+        "mean_ffn_gain": 0.03573644161224365,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0005764961242675781,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.09531081662865241,
+            "predicted_loss_reduction": 0.009327041874995902,
+            "relative_output_delta": 0.003621455167652792
+          },
+          "0.down": {
+            "descent_cosine": 0.14522285090847473,
+            "predicted_loss_reduction": 0.009447820387304287,
+            "relative_output_delta": 0.004338135120728689
+          },
+          "1.up": {
+            "descent_cosine": 0.010210529786423521,
+            "predicted_loss_reduction": 0.00071656788980059,
+            "relative_output_delta": 0.009547230329934573
+          },
+          "1.down": {
+            "descent_cosine": 0.01883594559071935,
+            "predicted_loss_reduction": 0.0006585044523126001,
+            "relative_output_delta": 0.006492983059403661
+          },
+          "2.up": {
+            "descent_cosine": 0.009338497439762108,
+            "predicted_loss_reduction": 0.0005385453062292355,
+            "relative_output_delta": 0.011732745101639989
+          },
+          "2.down": {
+            "descent_cosine": 0.015753181785221882,
+            "predicted_loss_reduction": 0.0005174327341093926,
+            "relative_output_delta": 0.008702593748641718
+          },
+          "3.up": {
+            "descent_cosine": 0.09700857985593499,
+            "predicted_loss_reduction": 0.0067624374997008385,
+            "relative_output_delta": 0.00256750726773429
+          },
+          "3.down": {
+            "descent_cosine": 0.14522009536158595,
+            "predicted_loss_reduction": 0.008659782466302937,
+            "relative_output_delta": 0.003745543822225674
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.0015641252199808757,
+          "radius_fraction": 0.0005184213320414225,
+          "output_center": 0.00015644232432047525,
+          "input_center": 0.0001519322395324707
+        },
+        "mean_field_unchanged_fraction": {
+          "amplitude": 0.0,
+          "radius_fraction": 0.17059326171875,
+          "output_center": 0.038584391276041664,
+          "input_center": 0.036885579427083336
+        }
+      }
+    },
+    "cst-scattered_mixed": {
+      "976": {
+        "mean_all_parameter_gain": 0.09315905968348186,
+        "mean_ffn_gain": 0.033178508281707764,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0007697542508443197,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.018781600553772464,
+            "predicted_loss_reduction": 0.0030623873928719634,
+            "relative_output_delta": 0.010352018648513995
+          },
+          "0.down": {
+            "descent_cosine": 0.07959057790605988,
+            "predicted_loss_reduction": 0.011793625301086338,
+            "relative_output_delta": 0.015213900412176073
+          },
+          "1.up": {
+            "descent_cosine": 0.0636602269318841,
+            "predicted_loss_reduction": 0.005097089221190059,
+            "relative_output_delta": 0.007655123532441167
+          },
+          "1.down": {
+            "descent_cosine": 0.0394212352912401,
+            "predicted_loss_reduction": 0.0018866598412024954,
+            "relative_output_delta": 0.00910847984515739
+          },
+          "2.up": {
+            "descent_cosine": 0.02267290687664661,
+            "predicted_loss_reduction": 0.0013788776876950768,
+            "relative_output_delta": 0.008857170154349519
+          },
+          "2.down": {
+            "descent_cosine": 0.09388020449457961,
+            "predicted_loss_reduction": 0.006141272645269172,
+            "relative_output_delta": 0.011338555146801934
+          },
+          "3.up": {
+            "descent_cosine": 0.06887376551281249,
+            "predicted_loss_reduction": 0.0034050168163197226,
+            "relative_output_delta": 0.007529417648608223
+          },
+          "3.down": {
+            "descent_cosine": 0.038694369117470824,
+            "predicted_loss_reduction": 0.0014699763840084175,
+            "relative_output_delta": 0.009426482254363636
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.004892607529958089,
+          "radius_fraction": 0.0013219316800435383,
+          "output_center": 0.0007459521293640137,
+          "input_center": 0.0007505218187967936
+        }
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.09417237838109334,
+        "mean_ffn_gain": 0.03314016262690226,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0005766550699869791,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.01581399018652699,
+            "predicted_loss_reduction": 0.0024500828386074154,
+            "relative_output_delta": 0.006251583402053594
+          },
+          "0.down": {
+            "descent_cosine": 0.08398252587442571,
+            "predicted_loss_reduction": 0.009496859710542914,
+            "relative_output_delta": 0.007722773025990102
+          },
+          "1.up": {
+            "descent_cosine": 0.06714883658736563,
+            "predicted_loss_reduction": 0.005904688407671777,
+            "relative_output_delta": 0.003451723944113685
+          },
+          "1.down": {
+            "descent_cosine": 0.021110515054519396,
+            "predicted_loss_reduction": 0.0014637969226502477,
+            "relative_output_delta": 0.0080574144541264
+          },
+          "2.up": {
+            "descent_cosine": 0.010050833361158461,
+            "predicted_loss_reduction": 0.0012711644900752753,
+            "relative_output_delta": 0.009098385708292814
+          },
+          "2.down": {
+            "descent_cosine": 0.11420750946925128,
+            "predicted_loss_reduction": 0.004751571460002177,
+            "relative_output_delta": 0.005064306863974838
+          },
+          "3.up": {
+            "descent_cosine": 0.10183471588559705,
+            "predicted_loss_reduction": 0.0069706509914115615,
+            "relative_output_delta": 0.003202936324998069
+          },
+          "3.down": {
+            "descent_cosine": 0.023218149424753174,
+            "predicted_loss_reduction": 0.0016639140100939158,
+            "relative_output_delta": 0.00621834229352053
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.003717343012491862,
+          "radius_fraction": 0.0017606218655904133,
+          "output_center": 0.0006605982780456543,
+          "input_center": 0.0006252725919087728
+        },
+        "mean_field_unchanged_fraction": {
+          "amplitude": 0.0,
+          "radius_fraction": 0.25628662109375,
+          "output_center": 0.040944417317708336,
+          "input_center": 0.041341145833333336
+        }
+      }
+    },
+    "cst-all": {
+      "976": {
+        "mean_all_parameter_gain": 0.08927820126215617,
+        "mean_ffn_gain": 0.021831472714742024,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.000544428825378418,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.018055861072291433,
+            "predicted_loss_reduction": 0.004794908453163483,
+            "relative_output_delta": 0.01295661886308274
+          },
+          "0.down": {
+            "descent_cosine": 0.03548938719186756,
+            "predicted_loss_reduction": 0.004527267677799062,
+            "relative_output_delta": 0.010864989711898268
+          },
+          "1.up": {
+            "descent_cosine": 0.01842620739430713,
+            "predicted_loss_reduction": 0.0026099528919560876,
+            "relative_output_delta": 0.01252730234205699
+          },
+          "1.down": {
+            "descent_cosine": 0.03605005404532832,
+            "predicted_loss_reduction": 0.002672918332106578,
+            "relative_output_delta": 0.010337766898582743
+          },
+          "2.up": {
+            "descent_cosine": 0.019828692767220258,
+            "predicted_loss_reduction": 0.0020307260683214445,
+            "relative_output_delta": 0.011767543157287938
+          },
+          "2.down": {
+            "descent_cosine": 0.03703955974185027,
+            "predicted_loss_reduction": 0.0022379059724636045,
+            "relative_output_delta": 0.01071256578388581
+          },
+          "3.up": {
+            "descent_cosine": 0.020044958560247916,
+            "predicted_loss_reduction": 0.001794493412728879,
+            "relative_output_delta": 0.01188237698643677
+          },
+          "3.down": {
+            "descent_cosine": 0.03934135637768056,
+            "predicted_loss_reduction": 0.0018786463980105578,
+            "relative_output_delta": 0.009479734668314544
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.013227562109629313,
+          "radius_fraction": 0.004187385241190593,
+          "output_center": 0.0023885369300842285,
+          "input_center": 0.0022989908854166665
+        }
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.08341650168100993,
+        "mean_ffn_gain": 0.017170369625091553,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.00036070744196573895,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.012739965133626519,
+            "predicted_loss_reduction": 0.0034324055640618154,
+            "relative_output_delta": 0.008440086080417637
+          },
+          "0.down": {
+            "descent_cosine": 0.021891868481367396,
+            "predicted_loss_reduction": 0.0028383617273338223,
+            "relative_output_delta": 0.007359440158981707
+          },
+          "1.up": {
+            "descent_cosine": 0.011125882241035718,
+            "predicted_loss_reduction": 0.001957172616467385,
+            "relative_output_delta": 0.011089804816867504
+          },
+          "1.down": {
+            "descent_cosine": 0.027695682009144462,
+            "predicted_loss_reduction": 0.0016026414190281953,
+            "relative_output_delta": 0.005974672154332554
+          },
+          "2.up": {
+            "descent_cosine": 0.010341442278971819,
+            "predicted_loss_reduction": 0.0019594897592094666,
+            "relative_output_delta": 0.01430540093587974
+          },
+          "2.down": {
+            "descent_cosine": 0.02030061438497192,
+            "predicted_loss_reduction": 0.0014710304844294704,
+            "relative_output_delta": 0.008843494997545017
+          },
+          "3.up": {
+            "descent_cosine": 0.013835844004243467,
+            "predicted_loss_reduction": 0.00225308075058308,
+            "relative_output_delta": 0.01039511003602279
+          },
+          "3.down": {
+            "descent_cosine": 0.02698852770575467,
+            "predicted_loss_reduction": 0.002192043127132945,
+            "relative_output_delta": 0.00913909607847366
+          }
+        },
+        "mean_field_only_gain": {
+          "amplitude": 0.009509841601053873,
+          "radius_fraction": 0.004144648710886638,
+          "output_center": 0.0019228259722391765,
+          "input_center": 0.001762410004933675
+        },
+        "mean_field_unchanged_fraction": {
+          "amplitude": 5.086263020833333e-06,
+          "radius_fraction": 0.2514495849609375,
+          "output_center": 0.038798014322916664,
+          "input_center": 0.041046142578125
+        }
+      }
+    },
+    "dst-all": {
+      "976": {
+        "mean_all_parameter_gain": 0.08984760443369548,
+        "mean_ffn_gain": 0.0250740647315979,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0006623466809590658,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.047425356721134855,
+            "predicted_loss_reduction": 0.004344779575733323,
+            "relative_output_delta": 0.004734972252955821
+          },
+          "0.down": {
+            "descent_cosine": 0.06485311625654833,
+            "predicted_loss_reduction": 0.0059625504676147495,
+            "relative_output_delta": 0.008530528523790722
+          },
+          "1.up": {
+            "descent_cosine": 0.047213933599091464,
+            "predicted_loss_reduction": 0.002430900872727092,
+            "relative_output_delta": 0.00482462824478366
+          },
+          "1.down": {
+            "descent_cosine": 0.06793620671516405,
+            "predicted_loss_reduction": 0.0036497718272492743,
+            "relative_output_delta": 0.00860638671988944
+          },
+          "2.up": {
+            "descent_cosine": 0.04842023599865624,
+            "predicted_loss_reduction": 0.0019088334531414456,
+            "relative_output_delta": 0.004872851287915145
+          },
+          "2.down": {
+            "descent_cosine": 0.06807428688134272,
+            "predicted_loss_reduction": 0.0031894495978240234,
+            "relative_output_delta": 0.008729714600627823
+          },
+          "3.up": {
+            "descent_cosine": 0.0474808447963043,
+            "predicted_loss_reduction": 0.0017650871157876894,
+            "relative_output_delta": 0.005234350967726704
+          },
+          "3.down": {
+            "descent_cosine": 0.06721050659238047,
+            "predicted_loss_reduction": 0.0026690446526672824,
+            "relative_output_delta": 0.00805740532347663
+          }
+        },
+        "mean_field_only_gain": {}
+      },
+      "4882": {
+        "mean_all_parameter_gain": 0.08839231729507446,
+        "mean_ffn_gain": 0.023684600989023846,
+        "mean_ffn_joint_minus_sum_individual_gain": -0.0005353291829427084,
+        "map_statistics": {
+          "0.up": {
+            "descent_cosine": 0.04838720536270713,
+            "predicted_loss_reduction": 0.0040580916075339596,
+            "relative_output_delta": 0.0026905570801677996
+          },
+          "0.down": {
+            "descent_cosine": 0.06032707546814157,
+            "predicted_loss_reduction": 0.004347515020852279,
+            "relative_output_delta": 0.004443240727720157
+          },
+          "1.up": {
+            "descent_cosine": 0.04773142883950263,
+            "predicted_loss_reduction": 0.002324351676018815,
+            "relative_output_delta": 0.002680585031886874
+          },
+          "1.down": {
+            "descent_cosine": 0.07277653921802373,
+            "predicted_loss_reduction": 0.0026157623337365703,
+            "relative_output_delta": 0.003926602792716075
+          },
+          "2.up": {
+            "descent_cosine": 0.048742582264301594,
+            "predicted_loss_reduction": 0.001978200420710486,
+            "relative_output_delta": 0.0026005116566396543
+          },
+          "2.down": {
+            "descent_cosine": 0.0699569261832118,
+            "predicted_loss_reduction": 0.0025701194069114204,
+            "relative_output_delta": 0.004171569017248027
+          },
+          "3.up": {
+            "descent_cosine": 0.0516576607427472,
+            "predicted_loss_reduction": 0.00288453905560202,
+            "relative_output_delta": 0.003467894431395845
+          },
+          "3.down": {
+            "descent_cosine": 0.07136011005964532,
+            "predicted_loss_reduction": 0.003635264591889623,
+            "relative_output_delta": 0.004479102467903766
+          }
+        },
+        "mean_field_only_gain": {}
+      }
+    }
+  },
+  "previous36functional_records_reproduced_exactly": true,
+  "optimization_screen_scope": "Ten short continuations had already completed when owner clarified analysis-only intent. Preserved separately; omitted from behavior analysis and no recipe selected/adopted.",
+  "plotter_sha256": "4688bb9de6c8b3eaa02490cfb6abb7fe3dde3d2f6fa9b20eb35721811d209509",
+  "figures": {
+    "update-alignment.png": "f0fd3046d2b335433298bded63c4b87bdf88c847816be74796878aa68222c956",
+    "update-field-behavior.png": "57ee416636db99614fcf8dc873fb62c066f9e269cf068cb2564f01601b502800",
+    "update-task-gains.png": "7012fff5d733b7a7a05d1bf5fa82913efb803c69ee700fa6c50fd219f0f8ca9c"
+  }
+}

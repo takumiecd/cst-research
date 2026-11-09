@@ -40,3 +40,7 @@ DEV CE/top1・最終checkpoint・moment/counter監査・geometry・全CST写像�
 保全。否定的・結論不明の結果も残し、公開runtime/既定値は変更しません。
 
 証拠:CST_RESEARCH_EVIDENCE_ROOT/lm-update-interaction-4090-20261109-01。
+
+## 実行後のユーザーによる目的の明確化
+
+目的は改善探索ではなくCSTの挙動の分析であると明確化されました。訂正時の確認では、限定10条件のLR比較は既に終了していました。raw結果は別途保全し、recipeの選択・採用や追加の最適化実験はしません。[挙動分析レポート](lm-task-update-behavior-20261109-results.ja.md)では36組の復元型タスク更新probeと既存信号の証拠を分析します。上のStage B計画は実行履歴として保持します。

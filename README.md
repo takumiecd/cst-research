@@ -39,6 +39,8 @@ measured21–22% envelope overhead over the physical core at width512/256 rows;
 this is a bounded operator result, not LM throughput or an advantage over Dense.
 An [explicit prepared-map candidate](https://github.com/takumiecd/torchcst/pull/157) reduced the old envelope step by about3–4% in one paired pilot; it is not a public default. The optional `ffn` install now pins the operator used by the new study.
 
+The [task-update behavior analysis](docs/lm-task-update-behavior-20261109-results.md) adds36 restored TRAIN probes: useful update alignment differs even at a singleton CST map, while immediate finite-step layer interference is not unusually large on the sampled states. This is descriptive analysis; no optimizer/kernel/default recommendation is adopted.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to

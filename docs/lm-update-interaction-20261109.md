@@ -53,3 +53,7 @@ preserve partial results instead of changing source or tolerances. Negative and
 inconclusive findings remain in the report. No public runtime/default changes.
 
 Evidence:CST_RESEARCH_EVIDENCE_ROOT/lm-update-interaction-4090-20261109-01.
+
+## Owner scope correction after execution
+
+The owner clarified that the objective is analysis of CST behavior, not an improvement search. At the correction check the bounded ten-condition LR screen had already finished. Preserve those raw outcomes separately; do not select/adopt a recipe or launch more optimization. The [behavior report](lm-task-update-behavior-20261109-results.md) analyzes the36 restored task-update probes and existing signal evidence. The original stage-B plan above remains as execution history.

@@ -44,31 +44,22 @@ def main():
     assert receipt["state"] == "passed" and receipt["source_unchanged"]
     assert receipt["previous30records_reproduced_exactly"]
     diagnostic = read(data / "diagnostic/summary.json")
-    screen = read(data / "screen/summary.json")
-    assert diagnostic["state"] == screen["state"] == "passed"
-    assert len(diagnostic["records"]) == 36 and len(screen["results"]) == 10
+    assert diagnostic["state"] == "passed"
+    assert len(diagnostic["records"]) == 36
     assert all(v["model_optimizer_rng_restored"] for v in diagnostic["records"])
+    assert all(
+        v["optimizer_clock_after_restore"]
+        == [
+            v["checkpoint_step"]
+            - (v["checkpoint_step"] // 250 if v["arm"] == "dst-all" else 0)
+        ]
+        for v in diagnostic["records"]
+    )
     assert all(
         v["instrumented_step_equals_unhooked_step"]
         for v in diagnostic["records"]
         if v["batch_offset_steps"] == 0
     )
-    for row in screen["results"]:
-        assert (
-            row["state"] == "passed"
-            and row["optimizer_audit_passed"]
-            and row["serialized_update_exact"]
-        )
-        assert (
-            row["final_checkpoint_sha256"]
-            == manifest["checkpoints"][
-                "screen/" + row["label"] + "/checkpoint-1523712-tokens.pt"
-            ]
-        )
-        assert [v["step"] for v in row["development"]] == [1200, 1400, 1488]
-        assert all(
-            o["atol"] == 1e-4 and o["rtol"] == 4e-3 for o in row["oracles"].values()
-        )
     rows = diagnostic["records"]
     arms = diagnostic["arms"]
     out = args.output
@@ -162,7 +153,14 @@ def main():
             [metrics[arm]["4882"]["map_statistics"][site][metric] for site in sites]
             for arm in arms
         ]
-        im = ax.imshow(matrix, aspect="auto", cmap="viridis", vmin=0)
+        extent = float(np.max(np.abs(matrix)))
+        im = ax.imshow(
+            matrix,
+            aspect="auto",
+            cmap="coolwarm" if metric == "descent_cosine" else "viridis",
+            vmin=-extent if metric == "descent_cosine" else 0,
+            vmax=extent,
+        )
         ax.set_yticks(range(len(arms)), arms)
         ax.set_xticks(range(len(sites)), sites, rotation=30)
         ax.set_title(title)
@@ -171,100 +169,46 @@ def main():
         "Checkpoint4882; per-map mean of three TRAIN batches; different models have different task states"
     )
     save(fig, "update-alignment")
-    conditions = screen["results"]
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5), layout="constrained")
-    for row in conditions:
-        points = [{"step": 976, **row["baseline_development"]}, *row["development"]]
-        style = (
-            {"color": "#222222", "linewidth": 2.3}
-            if row["label"] == "dense-control"
-            else {"color": "#2ca02c", "linewidth": 2.3}
-            if row["label"] == "dst-control"
-            else {}
+    fields = ("amplitude", "radius_fraction", "output_center", "input_center")
+    cst_arms = [arm for arm in arms if arm.startswith("cst-")]
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5), layout="constrained")
+    for arm in cst_arms:
+        points = [v for v in rows if v["arm"] == arm and v["checkpoint_step"] == 4882]
+        unchanged = {
+            field: float(
+                np.mean(
+                    [
+                        z["unchanged_fraction"]
+                        for point in points
+                        for z in point["fields"][field]["parameters"].values()
+                    ]
+                )
+            )
+            for field in fields
+        }
+        metrics[arm]["4882"]["mean_field_unchanged_fraction"] = unchanged
+        axes[0].plot(
+            fields,
+            [metrics[arm]["4882"]["mean_field_only_gain"][field] for field in fields],
+            marker="o",
+            label=arm,
         )
-        for ax, field, scale in (
-            (axes[0], "ce", 1),
-            (axes[1], "next_token_top1_accuracy", 100),
-        ):
-            ax.plot(
-                [v["step"] * 1024 / 1e6 for v in points],
-                [v[field] * scale for v in points],
-                marker="o",
-                label=row["label"],
-                **style,
-            )
-    axes[0].set_ylabel("DEV cross entropy")
-    axes[1].set_ylabel("DEV next-token top1 (%)")
+        axes[1].plot(
+            fields, [unchanged[field] * 100 for field in fields], marker="o", label=arm
+        )
+    axes[0].set_ylabel("Same-batch CE reduction: only this field updated")
+    axes[1].set_ylabel("Unchanged entries in the realized update (%)")
     for ax in axes:
-        ax.set_xlabel("Total training tokens (millions)")
+        ax.tick_params(axis="x", rotation=20)
         ax.grid(alpha=0.2)
-    axes[0].legend(fontsize=7)
+    axes[0].legend(fontsize=8)
     fig.suptitle(
-        "Same-state512-update continuation screen; original20M horizons; all candidates retained"
+        "Field-only endpoints; CST selected map counts 1/4/4/8; mean of three TRAIN updates at step4882"
     )
-    save(fig, "continuation-dev-curves")
-    fig, ax = plt.subplots(figsize=(10, 5), layout="constrained")
-    reference = next(v for v in conditions if v["label"] == "cst-control32")[
-        "development"
-    ][-1]["ce"]
-    labels = [v["label"] for v in conditions]
-    ax.barh(
-        labels,
-        [v["development"][-1]["ce"] - reference for v in conditions],
-        color=[
-            "#222222"
-            if x.startswith("dense")
-            else "#2ca02c"
-            if x.startswith("dst")
-            else "#377eb8"
-            for x in labels
-        ],
-    )
-    ax.axvline(0, color="black", linewidth=0.8)
-    ax.set_xlabel("Final DEV CE minus CST control32; lower is better")
-    ax.grid(axis="x", alpha=0.2)
-    fig.suptitle("Exploratory single-state screening; no independent confirmation")
-    save(fig, "continuation-final-gaps")
-    fig, axes = plt.subplots(1, 2, figsize=(13, 4), layout="constrained")
-    for row in conditions:
-        if not row["geometry"]:
-            continue
-        for ax, field in zip(axes, ("radius", "radius_fraction")):
-            ax.plot(
-                [v["step"] * 1024 / 1e6 for v in row["geometry"]],
-                [
-                    np.mean(
-                        [site["all"][field]["mean"] for site in v["layers"].values()]
-                    )
-                    for v in row["geometry"]
-                ],
-                marker="o",
-                label=row["label"],
-            )
-            ax.set(
-                xlabel="Total training tokens (millions)",
-                ylabel="Selected-map mean " + field,
-            )
-            ax.grid(alpha=0.2)
-    axes[0].legend(fontsize=7)
-    fig.suptitle("Geometry under the current amplitudes; CST only")
-    save(fig, "continuation-geometry")
-    result = {
-        "scope": "One-seed restored-state task update diagnosis and512-update DEV screening, no teacher/confirmation/default adoption",
-        "protocol": receipt["protocol"],
-        "compact_sha256": last["sha256"],
-        "source_files_verified": len(manifest["source_files"]),
-        "files_verified": len(manifest["files"]),
-        "previous30records_reproduced_exactly": True,
-        "diagnostic": metrics,
-        "continuations": conditions,
-        "plotter_sha256": sha(Path(__file__)),
-        "figures": {p.name: sha(p) for p in sorted(out.glob("*.png"))},
-    }
-    # Public provenance uses external evidence locators, never private host paths.
-    result["protocol"] = {
+    save(fig, "update-field-behavior")
+    protocol = {
         k: v
-        for k, v in result["protocol"].items()
+        for k, v in receipt["protocol"].items()
         if k
         not in (
             "remote",
@@ -274,15 +218,28 @@ def main():
             "python",
         )
     }
-    (out / "update-interaction-results.json").write_text(
-        json.dumps(result, indent=2) + "\n"
-    )
+    result = {
+        "scope": "Analysis of observed CST task-update behavior only; one seed,36 restored TRAIN probes; no optimizer/default recommendation",
+        "protocol": protocol,
+        "compact_sha256": last["sha256"],
+        "source_files_verified": len(manifest["source_files"]),
+        "files_verified": len(manifest["files"]),
+        "diagnostic_records": 36,
+        "diagnostic": metrics,
+        "previous36functional_records_reproduced_exactly": receipt[
+            "previous36functional_records_reproduced_exactly"
+        ],
+        "optimization_screen_scope": "Ten short continuations had already completed when owner clarified analysis-only intent. Preserved separately; omitted from behavior analysis and no recipe selected/adopted.",
+        "plotter_sha256": sha(Path(__file__)),
+        "figures": {p.name: sha(p) for p in sorted(out.glob("*.png"))},
+    }
+    (out / "behavior-results.json").write_text(json.dumps(result, indent=2) + "\n")
     print(
         json.dumps(
             {
-                "conditions": len(conditions),
                 "diagnostic_records": len(rows),
                 "figures": len(result["figures"]),
+                "scope": "analysis only",
             }
         )
     )

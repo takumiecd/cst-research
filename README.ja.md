@@ -37,6 +37,8 @@ CSTをニューラルネットワークで使えるようにするための研�
 [定数を準備する明示候補](https://github.com/takumiecd/torchcst/pull/157)は、同条件の1ジョブで旧写像より
 約3〜4%短縮しました。公開デフォルトには採用していません。任意の`ffn`インストールも新実験のoperatorへ固定しました。
 
+[タスク更新の癖の分析](docs/lm-task-update-behavior-20261109-results.ja.md)では36組の復元型TRAIN probeを追加。単独CST写像にも有効な更新方向の一致度の差があり、今回の状態では即時の有限step層間干渉だけが極端に大きくありません。挙動の記述であり、optimizer/kernel/既定値の推奨・採用はしません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
