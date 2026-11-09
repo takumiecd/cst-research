@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/analyze_lm_tangent_history.py",
+  "id": "lm-tangent-history-20261109",
+  "title": "Analysis-only local tangent, Adam history and finite-response attribution",
+  "status": "PLANNED",
+  "status_note": "Prepared analysis-only protocol and tools; no training continuation or improvement selection. GPU result not yet available.",
+  "protocol_source_path": "docs/lm-tangent-history-20261109.md",
+  "protocol": {
+    "objective": "Separate numerically resolved local Atom geometry, Adam first/second-moment history and finite-response effects. Original task gradients only.",
+    "checkpoint_step": 4882,
+    "model_sites": {
+      "dense": [
+        "1.up",
+        "1.down"
+      ],
+      "dst-all": [
+        "1.up",
+        "1.down"
+      ],
+      "cst-up": [
+        "1.up"
+      ],
+      "cst-all": [
+        "1.up",
+        "1.down"
+      ]
+    },
+    "batch_offsets": [
+      0,
+      32,
+      64
+    ],
+    "tokens_per_batch": 1024,
+    "records": 21,
+    "projection_batch_offset": 0,
+    "history_factorial": [
+      "historical_m_historical_v",
+      "current_g_historical_v",
+      "historical_m_current_g2",
+      "current_g_current_g2",
+      "current_gradient"
+    ],
+    "linearization_epsilons": [
+      1.0,
+      0.1,
+      0.01
+    ],
+    "cgls_max_iterations": 256,
+    "cgls_normal_residual_target": 0.0001,
+    "numerical_column_cutoff": 1e-10,
+    "svd_relative_singular_cutoff": 1e-07,
+    "native_consistency_relative_L2": 0.005,
+    "native_finite_delta_relative_L2": 0.01,
+    "training_updates": 0,
+    "improvement_experiments": false,
+    "learning_rate_or_kernel_changes": false,
+    "confirmation_evaluated": false,
+    "limitations": [
+      "One checkpoint/seed; native/current learned states only",
+      "Unconstrained tangent ignores one-sided bounds",
+      "Nonconverged projection is not a structural ceiling",
+      "Analysis uses task gradients, not Dense weight/output reconstruction"
+    ]
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-tangent-history-4090-20261109-01"
+  },
+  "execution": {
+    "state": "not_started",
+    "training_updates": 0,
+    "improvement_experiments": false,
+    "public_default_adopted": false
+  }
+}
