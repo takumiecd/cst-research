@@ -27,6 +27,8 @@ torchcstに[半径の包絡線](https://github.com/takumiecd/torchcst/pull/156)�
 全15本と学習後監査を完了しました。976更新・3seedでDEV CEはDense3.2992、tau.003が3.4061、
 tau.01が3.4157。fractionは学習しますが、幅512では損失・速度の差が残り、ピークメモリの優位もありません。
 公開APIはradius_fraction_init / radius_fractionへ揃え、qの別名は置きません。
+[共通CST LR32倍で初期fraction0/.5を揃えた比較](docs/ffn-fraction-zero-start-20261109-results.ja.md)は976更新・seed17でDEV CE3.3930/3.4328、Dense3.3090でした。0スタートでも平均fractionは0→.1406へ学習し、この短期比較では改善。平均半径も小さい状態で、RMS校正・default採用はしていません。
+
 [全CST field LRを16/32/64/128倍へ拡張した比較](docs/ffn-all-fields-lr-20261109-results.ja.md)も完了。初期fraction=.5、976更新・seed17でDEV CEは3.4864/3.4328/3.4696/3.5136、Dense3.3090。今回の最良は32倍で、高LRほどfractionの変化と端点の割合が増えました。128倍のCLI拒否と別sourceでの復旧も保全しています。
 
 [初期fraction=.5固定のLR比較](docs/ffn-fraction-lr-20261109-results.ja.md)もRTX6000 Adaで完了。976更新・seed17でfraction LR1/4/16倍のDEV CEは3.5828/3.5594/3.4864、Denseは3.3090でした。平均がほぼ一定でも各Atomのfractionは動いており、この短期比較では高いLRで改善。RMS校正やdefault変更はしていません。

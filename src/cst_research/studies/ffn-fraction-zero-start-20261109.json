@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_run",
   "id": "ffn-fraction-zero-start-20261109",
   "title": "Initial fraction0 versus.5 with all CST fields at32x",
-  "status": "RUNNING",
-  "status_note": "Both0/.5 configurations passed fresh GPU qualification including exact serialized next step. Dense completed; fraction0 training running, fraction.5 pending. Common32x,no RMS calibration.",
+  "status": "COMPLETED",
+  "status_note": "All3 runs completed at976updates,6 final/prefix audits and4 observer net-change reproductions passed. DEV CE fraction0=3.393048,fraction.5=3.432772,Dense=3.308982. Common32x CST field rates; one seed,no RMS calibration/confirmation/default adoption.",
   "protocol_source_path": "docs/ffn-fraction-zero-start-20261109.md",
   "protocol": {
     "width": 512,
@@ -45,6 +45,14 @@
     "initial_cst_parameter_sha256_by_fraction": {
       "0.0": "479bb6666233e250a4c748ce649d3869f0265b081271b5bcc12d52d0806fdc70",
       "0.5": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634"
-    }
+    },
+    "compact_archive_sha256": "d06b94db5a6bf605542d272f341e136e18f958345a1076c2959ac9bb769ff746",
+    "compact_files_verified": 28,
+    "source_files_verified": 1885,
+    "checkpoints_hash_verified": 9,
+    "audited_checkpoints": 6,
+    "observer_snapshots_reproduced": 4,
+    "owned_processes_inactive": 7,
+    "results_source_path": "docs/ffn-fraction-zero-start-20261109-results.md"
   }
 }
