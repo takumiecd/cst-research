@@ -490,6 +490,7 @@ def main(argv=None):
         "scheduled_updates": updates,
         "learning_rate_horizon_updates": horizon_updates,
         "data_order_horizon_tokens": args.schedule_tokens,
+        "data_order_sha256": hashlib.sha256(order.tobytes()).hexdigest(),
         "milestone_checkpoint_sha256": {},
         "scheduled_tokens": updates * tokens_per_update,
         "completed_updates": 0,

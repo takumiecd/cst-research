@@ -66,6 +66,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--expected-long-models", type=int, default=9)
     parser.add_argument("--include-short", action="store_true")
+    parser.add_argument("--kinds", nargs="+", default=["dense", "cst"])
     parser.add_argument("--include-milestones", action="store_true")
     parser.add_argument("--allow-cli-rejection", action="store_true")
     args = parser.parse_args()
@@ -122,6 +123,8 @@ def main():
     save()
     jobs = []
     for row in receipt["results"]:
+        if row["kind"] not in args.kinds:
+            continue
         if row["stage"] != "long" and not args.include_short:
             continue
         directory = root / row["label"]

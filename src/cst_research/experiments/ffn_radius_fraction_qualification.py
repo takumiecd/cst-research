@@ -113,6 +113,11 @@ def main():
         help="Explicit tau/fraction/amplitude/backend configurations",
     )
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--expected-gpu",
+        choices=("NVIDIA RTX 6000 Ada Generation", "NVIDIA GeForce RTX 4090"),
+        default="NVIDIA RTX 6000 Ada Generation",
+    )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     assert sha(args.data / "manifest.json") == args.data_manifest_sha256
@@ -120,7 +125,7 @@ def main():
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    assert torch.cuda.get_device_name(0) == "NVIDIA RTX 6000 Ada Generation"
+    assert torch.cuda.get_device_name(0) == args.expected_gpu
     configs = (
         [config_for(tau, vocabulary=manifest["vocabulary"]) for tau in TAUS]
         if args.cases is None

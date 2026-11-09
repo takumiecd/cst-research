@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import io
 import json
 import math
@@ -18,11 +19,13 @@ from . import ffn_dst as dst
 from .ffn_contract import ModelConfig, learning_rate
 from .ffn_model import LanguageModel, parameter_digest
 from .ffn_run import evaluate, probe, sha, token_batch, verify_data
+from .ffn_training_plan import TrainingPlan
 
 RATES = (0.0003, 0.001, 0.003, 0.01)
 SOURCES = (
     "ffn_dst.py",
     "ffn_dst_run.py",
+    "ffn_training_plan.py",
     "ffn_model.py",
     "ffn_contract.py",
     "ffn_run.py",
@@ -89,16 +92,17 @@ def oracle(layer, seed):
     }
 
 
-def batch_step(m, o, x, y, k):
+def batch_step(m, o, x, y, k, topology_steps=976):
     o.zero_grad(set_to_none=True)
-    loss = m(x, y)[1]
+    _, loss = m(x, y)
     loss.backward()
-    event = dst.finish_step(m, o, k, 976)
+    event = dst.finish_step(m, o, k, topology_steps)
     assert math.isfinite(float(loss))
     return event
 
 
 def qualify(args, data):
+    plan = TrainingPlan(args.tokens, args.schedule_tokens, args.topology_tokens)
     target = args.output / "qualification.json"
     result = {
         "state": "running",
@@ -108,6 +112,7 @@ def qualify(args, data):
         "source_sha256": {n: sha(Path(__file__).parent / n) for n in SOURCES},
         "data_manifest_sha256": args.data_manifest_sha256,
         "models": [],
+        "training_plan": asdict(plan),
     }
 
     def save():
@@ -117,7 +122,7 @@ def qualify(args, data):
     x, y = token_batch(data["train"], [0, 128], 128, "cuda")
     try:
         dense = LanguageModel(config(), "dense", 17)
-        for lr in RATES:
+        for lr in (args.lr,) if args.lr is not None else RATES:
             m = dst.make_model(config(), 17)
             for n, p in m.named_parameters():
                 if ".ffn." not in n or not n.endswith("map.weight"):
@@ -133,8 +138,17 @@ def qualify(args, data):
                     oracle(m.blocks[0].ffn.down.map, 92),
                 ],
             }
-            batch_step(m, o, x, y, 1)
-            for k in (2, 250):
+            batch_step(m, o, x, y, 1, plan.topology_steps)
+            branches = sorted(
+                {
+                    2,
+                    *(plan.planned_events[:1]),
+                    *(plan.planned_events[-1:]),
+                    ((int(0.75 * plan.topology_steps) // 250) + 1) * 250,
+                }
+            )
+            row["resume_branch_steps"] = branches
+            for k in branches:
                 b = io.BytesIO()
                 torch.save({"m": m.state_dict(), "o": o.state_dict()}, b)
                 b.seek(0)
@@ -143,8 +157,14 @@ def qualify(args, data):
                 other.load_state_dict(saved["m"])
                 oo = dst.make_optimizer(other, lr)
                 oo.load_state_dict(saved["o"])
-                batch_step(m, o, x, y, k)
-                batch_step(other, oo, x, y, k)
+                event = batch_step(m, o, x, y, k, plan.topology_steps)
+                replay = batch_step(other, oo, x, y, k, plan.topology_steps)
+                assert (event["topology"] is not None) == dst.is_topology_step(
+                    k, plan.topology_steps
+                )
+                assert (replay["topology"] is not None) == (
+                    event["topology"] is not None
+                )
                 exact(m.state_dict(), other.state_dict())
                 exact(o.state_dict(), oo.state_dict())
                 dst.invariants(m, o)
@@ -170,8 +190,12 @@ def qualify(args, data):
 
 
 def train(args, data):
+    plan = TrainingPlan(args.tokens, args.schedule_tokens, args.topology_tokens)
     q = json.loads(args.qualification.read_text())
     assert q["state"] == "passed" and args.lr in RATES
+    assert q["training_plan"] == asdict(plan)
+    assert any(r["sparse_lr"] == args.lr for r in q["models"])
+    assert args.schedule_tokens + 1 <= len(data["train"])
     assert sha(args.qualification) == args.qualification_sha256
     assert q["data_manifest_sha256"] == args.data_manifest_sha256
     assert q["source_sha256"] == {n: sha(Path(__file__).parent / n) for n in SOURCES}
@@ -193,6 +217,10 @@ def train(args, data):
         "state": "running",
         "config": asdict(config()),
         "kind": "dst",
+        "training_plan": asdict(plan),
+        "scheduled_updates": plan.steps,
+        "scheduled_tokens": plan.steps * 1024,
+        "learning_rate_horizon_updates": plan.schedule_steps,
         "sparse_peak_lr": args.lr,
         "initial_parameter_sha256": digest,
         "initial_masks": initial_masks,
@@ -243,12 +271,15 @@ def train(args, data):
                 "data_manifest_sha256": args.data_manifest_sha256,
                 "kind": "dst",
                 "seed": 17,
+                "training_plan": asdict(plan),
+                "torch_rng_state": torch.get_rng_state(),
+                "cuda_rng_state": torch.cuda.get_rng_state(),
             },
             tmp,
         )
         tmp.replace(p)
         result["milestone_checkpoint_sha256"][p.name] = sha(p)
-        if step == 976:
+        if step == plan.steps:
             os.link(p, args.output / "checkpoint.pt")
             result["checkpoint_sha256"] = sha(p)
 
@@ -265,12 +296,19 @@ def train(args, data):
         )
         torch.cuda.empty_cache()
         result["setup_seconds"] = time.monotonic() - began
-        order = np.random.default_rng(17 + 888).permutation(20000000 // 128)
-        for step in range(1, 977):
+        order = np.random.default_rng(17 + 888).permutation(plan.schedule_tokens // 128)
+        result["data_order_sha256"] = hashlib.sha256(order.tobytes()).hexdigest()
+        for step in range(1, plan.steps + 1):
+            if time.monotonic() - began > args.max_wall_seconds:
+                raise TimeoutError(
+                    "frozen long-run wall budget reached; evidence preserved"
+                )
             m.train()
             o.zero_grad(set_to_none=True)
             for group in o.param_groups:
-                group["lr"] = learning_rate(step, 20000000 // 1024) * group["lr_scale"]
+                group["lr"] = (
+                    learning_rate(step, plan.schedule_steps) * group["lr_scale"]
+                )
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
             tick = time.monotonic()
@@ -280,10 +318,10 @@ def train(args, data):
                 x, y = token_batch(
                     data["train"], order[start : start + 2] * 128, 128, "cuda"
                 )
-                loss = m(x, y)[1]
+                _, loss = m(x, y)
                 (loss / 4).backward()
                 total += loss.detach()
-            event = dst.finish_step(m, o, step, 976)
+            event = dst.finish_step(m, o, step, plan.topology_steps)
             torch.cuda.synchronize()
             duration = time.monotonic() - tick
             value = float(total / 4)
@@ -306,7 +344,12 @@ def train(args, data):
                 )
             if step > 10:
                 result["timing_samples_seconds"].append(duration)
-            if step <= 5 or step % 20 == 0 or step in (250, 256, 500, 976):
+            if (
+                step <= 5
+                or step % 20 == 0
+                or step in plan.milestones
+                or event["topology"] is not None
+            ):
                 log(
                     {
                         "step": step,
@@ -319,7 +362,10 @@ def train(args, data):
                         "topology_step": event["topology"] is not None,
                     }
                 )
-            if step % 200 == 0 or step in (256, 976):
+            if step in (10, 100):
+                result["diagnostics"][str(step)] = probe(m, px, py)
+                torch.cuda.empty_cache()
+            if step % 200 == 0 or step in plan.milestones:
                 dev = evaluate(m, data["development"], 2)
                 result["latest_development"] = dev
                 log(
@@ -331,13 +377,13 @@ def train(args, data):
                     }
                 )
                 save()
-            if step in (256, 976):
+            if step in plan.milestones:
                 dst.invariants(m, o)
                 checkpoint(step)
                 save()
-        assert result["actual_adam_updates"] == 974 and [
+        assert result["actual_adam_updates"] == plan.adam_updates(plan.steps) and [
             r["step"] for r in result["topology_events"]
-        ] == [250, 500]
+        ] == list(plan.events)
         result["diagnostics"]["final"] = probe(m, px, py)
         result["final_masks"] = dst.invariants(m, o)
         result.update(
@@ -361,7 +407,15 @@ def audit(args, data):
     summary = json.loads((args.run / "summary.json").read_text())
     assert summary["state"] == "completed_execution_not_scientific_admission"
     records = []
-    for step in (256, 976):
+    plan = (
+        TrainingPlan(**summary["training_plan"])
+        if "training_plan" in summary
+        else TrainingPlan(
+            summary["scheduled_tokens"],
+            summary.get("data_order_horizon_tokens", 20000000),
+        )
+    )
+    for step in plan.milestones:
         p = args.run / f"checkpoint-{step * 1024}-tokens.pt"
         assert sha(p) == summary["milestone_checkpoint_sha256"][p.name]
         saved = torch.load(p, map_location="cpu", weights_only=False)
@@ -384,7 +438,10 @@ def audit(args, data):
             else dst.make_optimizer(m, saved["sparse_lr"])
         )
         o.load_state_dict(saved["optimizer"])
-        expected = step if dense else step - sum(k <= step for k in (250, 500))
+        expected = step if dense else plan.adam_updates(step)
+        assert saved["completed_tokens"] == step * 1024
+        if not dense:
+            assert saved["training_plan"] == asdict(plan)
         assert saved.get("actual_adam_updates", step) == expected
         for state in o.state.values():
             assert int(state["step"]) == expected
@@ -446,8 +503,17 @@ def main():
     p.add_argument("--qualification-sha256")
     p.add_argument("--lr", type=float, choices=RATES)
     p.add_argument("--run", type=Path)
+    p.add_argument("--tokens", type=int, default=999424)
+    p.add_argument("--schedule-tokens", type=int, default=20000000)
+    p.add_argument("--topology-tokens", type=int)
+    p.add_argument("--max-wall-seconds", type=float, default=7200)
+    p.add_argument(
+        "--expected-gpu",
+        choices=("NVIDIA RTX 6000 Ada Generation", "NVIDIA GeForce RTX 4090"),
+        default="NVIDIA RTX 6000 Ada Generation",
+    )
     args = p.parse_args()
-    assert torch.cuda.get_device_name(0) == "NVIDIA RTX 6000 Ada Generation"
+    assert torch.cuda.get_device_name(0) == args.expected_gpu
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
