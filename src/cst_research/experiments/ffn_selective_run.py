@@ -172,7 +172,9 @@ def qualify(args, data):
     save()
     x, y = token_batch(data["train"], [0, 128], 128, "cuda")
     try:
-        for arm in ARMS:
+        selected = tuple(args.arms) if args.arms else tuple(ARMS)
+        assert len(set(selected)) == len(selected)
+        for arm in selected:
             m = model_for(arm)
             opt = make_optimizer(m)
             digest = parameter_digest(m)
@@ -209,7 +211,9 @@ def qualify(args, data):
             print("QUALIFY PASS", arm, flush=True)
             del m, opt
             torch.cuda.empty_cache()
-        for key in SITE_SETS.keys() - {"all"}:
+        for key in SITE_SETS:
+            if not all(kind + "-" + key in result["models"] for kind in ("cst", "dst")):
+                continue
             assert (
                 result["models"]["cst-" + key]["active_ffn_scalars"]
                 == result["models"]["dst-" + key]["active_ffn_scalars"]
@@ -500,6 +504,12 @@ def main():
     p.add_argument("--data-manifest-sha256", required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--arm", choices=tuple(ARMS))
+    p.add_argument(
+        "--arms",
+        nargs="+",
+        choices=tuple(ARMS),
+        help="Explicit qualification family; bound in qualification receipt",
+    )
     p.add_argument("--qualification", type=Path)
     p.add_argument("--qualification-sha256")
     p.add_argument("--run", type=Path)

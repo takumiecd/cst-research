@@ -52,7 +52,7 @@ class SelectiveTests(unittest.TestCase):
         cfg = self.config()
         dense = LanguageModel(cfg, "dense")
         ordinary = dict(dense.named_parameters())
-        for key in ("up", "down", "block", "two_blocks"):
+        for key in SITE_SETS.keys() - {"all"}:
             sites = SITE_SETS[key]
             m = make_model(cfg, "cst", sites)
             d = make_model(cfg, "dst", sites)

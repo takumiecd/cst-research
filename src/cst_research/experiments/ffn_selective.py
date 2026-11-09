@@ -16,6 +16,9 @@ SITE_SETS = {
     "block": ("1.up", "1.down"),
     "two_blocks": ("1.up", "1.down", "2.up", "2.down"),
     "all": tuple(f"{i}.{d}" for i in range(4) for d in ("up", "down")),
+    "scattered_up": tuple(f"{i}.up" for i in range(4)),
+    "scattered_down": tuple(f"{i}.down" for i in range(4)),
+    "scattered_mixed": ("0.up", "1.down", "2.up", "3.down"),
 }
 
 
