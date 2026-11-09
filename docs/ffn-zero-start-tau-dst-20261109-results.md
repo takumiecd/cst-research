@@ -179,4 +179,3 @@ python scripts/plot_ffn_fraction_start.py --run "$CST_RESEARCH_EVIDENCE_ROOT/ffn
 python scripts/plot_ffn_fraction_lr.py --run "$CST_RESEARCH_EVIDENCE_ROOT/ffn-zero-start-tau-6000ada-20261109-01"
 python scripts/plot_ffn_dst_lr.py --run "$CST_RESEARCH_EVIDENCE_ROOT/ffn-dst-tinystories-6000ada-20261109-01" --output "$CST_RESEARCH_EVIDENCE_ROOT/ffn-zero-start-tau-6000ada-20261109-01/figures"
 ```
-
