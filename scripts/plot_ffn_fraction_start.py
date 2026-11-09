@@ -11,30 +11,33 @@ import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from ffn_lr_report_inputs import load_inputs
 
 
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--run", type=Path, required=True)
+    parser.add_argument("--recovery-run", type=Path)
     args = parser.parse_args()
     root = args.run.resolve()
     assert (
         json.loads((root / "retrieval-integrity.json").read_text())["state"] == "passed"
     )
-    data = root / "retrieved"
     read = lambda p: json.loads(p.read_text())
     lines = lambda p: [json.loads(x) for x in p.read_text().splitlines()]
-    receipt = read(data / "receipt.json")
-    assert receipt["status"] == "passed"
+    rows, directories = load_inputs(root, args.recovery_run)
     out = root / "figures"
     out.mkdir(exist_ok=True)
-    rows = receipt["results"]
-    summaries = {r["label"]: read(data / r["label"] / "summary.json") for r in rows}
-    curves = {r["label"]: lines(data / r["label"] / "curves.jsonl") for r in rows}
+    summaries = {
+        r["label"]: read(directories[r["label"]] / "summary.json") for r in rows
+    }
+    curves = {r["label"]: lines(directories[r["label"]] / "curves.jsonl") for r in rows}
 
     def name(row):
         if row["kind"] == "dense":
-            return "Dense"
+            return (
+                "Dense (recovery)" if row["label"].startswith("recovery-") else "Dense"
+            )
         if "cst_lr_multiplier" in row:
             return f"all CST fields LR{row['cst_lr_multiplier']:g}x"
         if "fraction_lr_multiplier" in row:
@@ -46,7 +49,12 @@ def main():
     names = list(dict.fromkeys(name(r) for r in rows))
     colors = {n: plt.get_cmap("tab10")(i) for i, n in enumerate(names)}
     colors["Dense"] = "#222222"
+    colors["Dense (recovery)"] = "#777777"
     colors["cap1 bridge: tau=.003, f0=0"] = "#999999"
+    for rate, color in zip(
+        (16, 32, 64, 128), ("#1f77b4", "#ff7f0e", "#d62728", "#9467bd")
+    ):
+        colors[f"all CST fields LR{rate}x"] = color
 
     def save(fig, stem):
         for ext in ("png", "svg"):
@@ -63,7 +71,12 @@ def main():
             hist = curves[row["label"]]
             train = [p for p in hist if "train_ce" in p]
             dev = [p for p in hist if "development" in p]
-            style = "--" if row["amplitude_max"] == 1 else "-"
+            style = (
+                "--"
+                if row["amplitude_max"] == 1
+                or (row["kind"] == "dense" and row["label"].startswith("recovery-"))
+                else "-"
+            )
             for ax, points, key, scale in [
                 (axes[0, 0], train, "step", 1),
                 (axes[0, 1], dev, "step", 1),
@@ -100,7 +113,9 @@ def main():
         )
         save(fig, f"{stage}-learning-curves")
         cst = [r for r in selected if r["kind"] == "cst"]
-        geo = {r["label"]: lines(data / r["label"] / "geometry.jsonl") for r in cst}
+        geo = {
+            r["label"]: lines(directories[r["label"]] / "geometry.jsonl") for r in cst
+        }
         sites = list(next(iter(geo.values()))[0]["layers"])
         for metric in ("radius", "radius_fraction", "fraction_change"):
             fig, axes = plt.subplots(4, 2, figsize=(12, 12), layout="constrained")
@@ -156,6 +171,15 @@ def main():
                             else np.nan
                         )
                     ax.plot(xs, ys, color=colors[name(row)], label=name(row), lw=1.3)
+                if not any(np.isfinite(line.get_ydata()).any() for line in ax.lines):
+                    ax.text(
+                        0.5,
+                        0.5,
+                        "No Atoms in this bin",
+                        ha="center",
+                        va="center",
+                        transform=ax.transAxes,
+                    )
                 b = geo[common[0]["label"]][0]["layers"][sites[0]]["bins"][i]
                 ax.set_title(f"{b['low']:g} <= |a| < {b['high']:g}")
                 ax.set_xlabel("Updates")
@@ -170,7 +194,7 @@ def main():
             save(fig, f"{stage}-amplitude-{metric}")
         fig, axes = plt.subplots(2, 2, figsize=(11, 7), layout="constrained")
         for row in cst:
-            entries = lines(data / row["label"] / "radius.jsonl")
+            entries = lines(directories[row["label"]] / "radius.jsonl")
             for k, ax in enumerate(axes.flat):
                 ax.plot(
                     [e["step"] for e in entries],
@@ -257,7 +281,7 @@ def main():
             "final_activation_rms": s["diagnostics"]["final"]["activation_rms"],
         }
         if row["kind"] == "cst":
-            hist = lines(data / row["label"] / "geometry.jsonl")
+            hist = lines(directories[row["label"]] / "geometry.jsonl")
             record["initial_radius_mean"] = statistics.mean(
                 v["all"]["radius"]["mean"] for v in hist[0]["layers"].values()
             )

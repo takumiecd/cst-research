@@ -9,25 +9,26 @@ import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from ffn_lr_report_inputs import load_inputs
 
 
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
+    p.add_argument("--recovery-run", type=Path)
     args = p.parse_args()
     root = args.run.resolve()
     assert (
         json.loads((root / "retrieval-integrity.json").read_text())["state"] == "passed"
     )
-    data = root / "retrieved"
-    receipt = json.loads((data / "receipt.json").read_text())
-    rows = [r for r in receipt["results"] if r["kind"] == "cst"]
+    all_rows, directories = load_inputs(root, args.recovery_run)
+    rows = [r for r in all_rows if r["kind"] == "cst"]
     out = root / "figures"
     out.mkdir(exist_ok=True)
     histories = {
         r["fraction_lr_multiplier"]: [
             json.loads(x)
-            for x in (data / r["label"] / "fraction-updates.jsonl")
+            for x in (directories[r["label"]] / "fraction-updates.jsonl")
             .read_text()
             .splitlines()
         ]
