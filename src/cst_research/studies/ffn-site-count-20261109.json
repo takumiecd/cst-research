@@ -6,8 +6,8 @@
   "runner_entrypoint": "cst_research.experiments.ffn_selective_run",
   "id": "ffn-site-count-20261109",
   "title": "Selective1/2/4/8-map FFN composition diagnostics with matched DST controls",
-  "status": "PLANNED",
-  "status_note": "Implementation and CPU checks in preparation; exact GPU qualification, execution and retrieval not yet performed. No mechanism conclusion.",
+  "status": "RUNNING",
+  "status_note": "Fresh68 operator tests and11 selective model qualifications passed on4090; first immutable compact was retrieved and all10 files/1936 source identities verified. Dense5M and subsequent selected-site training/audits are running; no mechanism result admitted.",
   "protocol_source_path": "docs/ffn-site-count-20261109.md",
   "protocol": {
     "network_depth_blocks": 4,
@@ -127,9 +127,18 @@
     "relative_path": "ffn-site-count-4090-20261109-01"
   },
   "execution": {
-    "state": "not_started",
+    "state": "running",
     "confirmation_evaluated": false,
     "rms_calibration_executed": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "consumer_commit": "7b89c7db7105b4212fa9aee3efbc2870f1b848e3",
+    "source_archive_sha256": "f5071a6cba6a4ffcff95242cd88a8db591c79b2e2fcd3757f2d5a9129247dba2",
+    "operator_tests_passed": 68,
+    "qualified_arms": 11,
+    "first_local_snapshot_sha256": "c5cd8b22346f68f6cca3a9c5a2a67646eea60ca8dce258502e56e1cd4bf8a739",
+    "persistent_storage_fstype": "nfs4",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8"
   }
 }
