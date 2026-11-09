@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "00aae6afaf3615da6bccd986c75c14cd7b2ca64b",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
+  "runner_entrypoint": "cst_research.experiments.lm_connected_run",
+  "id": "lm-connected-short-20261109",
+  "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
+  "status": "COMPLETED",
+  "status_note": "Four fresh976-update arms,12 finite-response observations,83 GPU tests, checkpoint audit and32 read-only signal probes complete. Verified retrieval/source hashes; boundary fidelity improves but the short-task quality gap remains. No confirmation or default adoption.",
+  "protocol_source_path": "docs/lm-connected-short-20261109.md",
+  "protocol": {
+    "arms": [
+      "dense",
+      "dst-all",
+      "legacy-m8",
+      "connected-m16"
+    ],
+    "seed": 17,
+    "width": 512,
+    "blocks": 4,
+    "replacements": "all eight FFN maps",
+    "atoms_per_map": 8192,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "initial_rows": "CST raw Parameter bytes exactly matched; no RMS recalibration",
+    "observed_steps": [
+      1,
+      256,
+      976
+    ],
+    "observed_sites": [
+      "1.up",
+      "1.down"
+    ],
+    "probe_rows": 32,
+    "fields": [
+      "amplitude",
+      "radius_fraction",
+      "output_center",
+      "input_center",
+      "all_fields"
+    ],
+    "epsilons": [
+      1,
+      0.1,
+      0.01
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "native_finite_reference_gate": {
+      "max_abs_or_relative_l2": [
+        0.0002,
+        0.01
+      ]
+    },
+    "confirmation_evaluated": false,
+    "post_hoc_signal_extension": {
+      "reason": "User asked whether the previously observed block-output growth also occurs in the new short trial. Fixed before signal execution, after learning endpoints were known.",
+      "steps": [
+        0,
+        976
+      ],
+      "train_token_offsets": [
+        0,
+        4096,
+        8192,
+        12288
+      ],
+      "tokens_per_context": 128,
+      "probes": 32,
+      "training_updates": 0,
+      "script": "scripts/observe_lm_connected_signals.py",
+      "observer_commit": "91802c48a148166a12a646fc03810e19a4a89c31",
+      "job": "lm-connected-signals-4090-20261109-01",
+      "archive_sha256": "2dea863d7439bd5f22b30e2aeacd4dff95c0b5259aa5042309eef2c6e09e61b7",
+      "scope": "four within-context ratios, not pooled; context ranges are not confidence intervals; no causal scale or compensation intervention"
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-connected-short-4090-20261109-03"
+  },
+  "execution": {
+    "job": "lm-connected-short-4090-20261109-03",
+    "operator_commit": "00aae6afaf3615da6bccd986c75c14cd7b2ca64b",
+    "consumer_commit": "4110c0df1452200ba2591861b3d90276f663107c",
+    "source_files": 2108,
+    "public_default_adopted": false,
+    "failed_attempt": "lm-connected-short-4090-20261109-01",
+    "native_tests_passed": 83,
+    "native_qualification": "fresh83 tests; ordered repeat, rectangular chain and legacy regressions",
+    "second_failed_attempt": "lm-connected-short-4090-20261109-02",
+    "ordered_executor": "cuda_connected_m16_ordered_envelope",
+    "training_complete": true,
+    "diagnostic_records_complete": 12,
+    "learning_compact_sha256": "e2e396767e3d1864edefee65c68560a0ae80977c6dad99ca9e52022a1a2502ab",
+    "verified_payloads": 26,
+    "verified_source_files": 2108,
+    "checkpoint_audit_passed": true,
+    "signal_probes": 32,
+    "signal_parameters_buffers_rng_unchanged": true,
+    "resource_state": "owned jobs complete; Hub left running"
+  },
+  "results_source_path": "docs/lm-connected-short-20261109-results.md"
+}
