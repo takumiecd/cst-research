@@ -16,7 +16,7 @@ import torch
 from .ffn_model import parameter_digest
 from .ffn_radius_fraction_qualification import assert_model_resume, assert_nested
 from .ffn_run import sha, token_batch, verify_data
-from .ffn_selective import active_ffn_scalars, projections
+from .ffn_selective import active_ffn_scalars, make_optimizer, projections
 from .ffn_selective_run import development
 from .lm_connected import (
     ARMS,
@@ -26,7 +26,6 @@ from .lm_connected import (
     SITES,
     STEPS,
     Observation,
-    make_optimizer,
     model_for,
     physical_reference,
     step,

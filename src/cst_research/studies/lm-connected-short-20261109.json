@@ -2,12 +2,12 @@
   "schema_version": 1,
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "1605fa8f0d0eaf57e7c1548968e1b6281daba031",
-  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/161",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
   "runner_entrypoint": "cst_research.experiments.lm_connected_run",
   "id": "lm-connected-short-20261109",
   "title": "Short TinyStories task learning and coordinate/radius finite-update fidelity",
   "status": "RUNNING",
-  "status_note": "Frozen source deployed to reserved RTX4090; admission/qualification before short learning. No results adopted.",
+  "status_note": "First attempt stopped before training because an imported optimizer symbol was not re-exported. Native78 tests passed. New immutable consumer retry prepared; no results yet.",
   "protocol_source_path": "docs/lm-connected-short-20261109.md",
   "protocol": {
     "arms": [
@@ -58,7 +58,7 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-connected-short-4090-20261109-01"
+    "relative_path": "lm-connected-short-4090-20261109-02"
   },
   "execution": {
     "job": "lm-connected-short-4090-20261109-01",
@@ -66,6 +66,8 @@
     "operator_commit": "1605fa8f0d0eaf57e7c1548968e1b6281daba031",
     "consumer_commit": "bf1a846f32604a724ee233af04e2955db768f2b9",
     "source_files": 2107,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "failed_attempt": "lm-connected-short-4090-20261109-01",
+    "native_tests_passed": 78
   }
 }

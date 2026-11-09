@@ -20,6 +20,11 @@ class ConnectedDiagnosticTests(unittest.TestCase):
         cls.m = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(cls.m)
 
+    def test_runner_import_is_gpu_free(self):
+        from cst_research.experiments import lm_connected_run
+
+        self.assertTrue(callable(lm_connected_run.make_optimizer))
+
     def test_wrapped_delta_and_exact_field_endpoint(self):
         old = torch.tensor([[0.3, 0.0, 127.9, 255.9]])
         new = torch.tensor([[0.4, 0.2, 0.1, 0.1]])
