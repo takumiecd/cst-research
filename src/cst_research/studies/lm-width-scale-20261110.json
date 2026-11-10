@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "lm-width-scale-20261110",
+  "title": "Fixed-c64 M8 FFN width and duration pilot",
+  "status": "PLANNED",
+  "status_note": "Owner authorized512/1024/2048 Dense/CST/DST and long learning; private cohort admission and GPU gates precede training. No quality result yet.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/tree/kernel/m8-lm-width",
+  "runner_entrypoint": "cst_research.experiments.lm_width_run",
+  "protocol_source_path": "docs/lm-width-scale-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-width-scale-4090-20261110-01"
+  },
+  "protocol": {
+    "widths": [
+      512,
+      1024,
+      2048
+    ],
+    "coefficient": 64,
+    "atoms_per_map": [
+      65536,
+      131072,
+      262144
+    ],
+    "dense_peak_lrs": [
+      0.0001,
+      0.0003,
+      0.001
+    ],
+    "dst_sparse_peak_lrs": [
+      0.0003,
+      0.001,
+      0.003,
+      0.01
+    ],
+    "dst_ordinary_peak_lr": 0.0003,
+    "cst_atom_lr_multiplier": 32,
+    "steps": [
+      976,
+      4882
+    ],
+    "training_targets": [
+      999424,
+      4999168
+    ],
+    "schedule_tokens": 20000000,
+    "topology_tokens": 20000000,
+    "selection": "minimum short DEV CE,tie smaller LR; selected controls and CST extended at every width",
+    "seed": 17,
+    "shuffle_seed": 905,
+    "matching": "CST A=DST Boolean mask-one count per Linear,no COO/CSR",
+    "confirmation_evaluated": false,
+    "formal_equivalence": false,
+    "resource": "one owner-reserved RTX4090 CC8.9; no new GPU allocation",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  }
+}
