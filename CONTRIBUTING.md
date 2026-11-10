@@ -39,8 +39,12 @@ migration, a rerun or adoption of its results.
 ## LM learning-curve controls
 
 At the owner's request,include Dense and a source-qualified DST reference in
-new LM learning-curve comparisons. Match data,model/ordinary initialization,
-training-token budget and active FFN scalar budget. Record the DST algorithm,
+new LM learning-curve comparisons. Match data,model/ordinary initialization and
+training-token budget. The owner's primary representation budget is CST Atom
+count equal to DST Boolean mask-one count per Linear. Report raw trainable
+scalar counts separately; retain earlier scalar-matched results as auxiliary
+comparisons under their original criterion. Keep DST's dense weights plus
+Boolean mask; do not convert it to COO/CSR for this comparison. Record the DST algorithm,
 mask/update rules and LR tuning; retain every candidate and label DEV selection.
 Use the plotting --dst-run input and its compatibility checks. Do not substitute
 HIGGS curves or incompatible task/source budgets. Radius/fraction diagnostics

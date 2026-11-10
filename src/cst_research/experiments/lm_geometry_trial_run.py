@@ -167,9 +167,19 @@ def signals(m, output, data, clock):
     )
 
 
-def train(arm, output, data, manifest_sha, qualification):
-    m = model_for(arm)
-    o = optimizer_for(m)
+def train(
+    arm,
+    output,
+    data,
+    manifest_sha,
+    qualification,
+    *,
+    model_builder=model_for,
+    optimizer_builder=optimizer_for,
+    declaration=None,
+):
+    m = model_builder(arm)
+    o = optimizer_builder(m)
     assert (
         parameter_digest(m) == qualification["arms"][arm]["initial_parameters_sha256"]
     )
@@ -187,7 +197,7 @@ def train(arm, output, data, manifest_sha, qualification):
         "effective_tokens_per_step": 1024,
         "seed": 17,
         "sites": m.ffn_selected_sites,
-        "arm_declaration": ARMS[arm],
+        "arm_declaration": ARMS[arm] if declaration is None else declaration,
         "group_eps": [g["eps"] for g in o.param_groups],
         "gpu": torch.cuda.get_device_name(),
         "active_ffn_scalars": active_ffn_scalars(m),
@@ -303,10 +313,18 @@ def train(arm, output, data, manifest_sha, qualification):
         write(output / "summary.json", result)
 
 
-def audit(root, output, data):
+def audit(
+    root,
+    output,
+    data,
+    *,
+    arm_names=ARMS,
+    model_builder=model_for,
+    optimizer_builder=optimizer_for,
+):
     report = {"state": "running", "arms": {}}
     plan = TrainingPlan(1000000, 20000000, 20000000)
-    for arm in ARMS:
+    for arm in arm_names:
         s = json.loads((root / arm / "summary.json").read_text())
         assert s["state"] == "completed" and s["completed_steps"] == STEPS
         records = []
@@ -314,9 +332,9 @@ def audit(root, output, data):
             path = root / arm / name
             assert sha(path) == h
             saved = torch.load(path, map_location="cpu", weights_only=False)
-            m = model_for(arm)
+            m = model_builder(arm)
             m.load_state_dict(saved["model"])
-            expected_eps = [g["eps"] for g in optimizer_for(m).param_groups]
+            expected_eps = [g["eps"] for g in optimizer_builder(m).param_groups]
             assert [
                 g["eps"] for g in saved["optimizer"]["param_groups"]
             ] == expected_eps
