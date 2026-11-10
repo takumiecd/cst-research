@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-m8-active-count-20261110",
   "title": "M8 capacity versus masked DST with active count equal to Atom count",
-  "status": "PLANNED",
-  "status_note": "Owner criterion nnz=A with dense-mask DST, no COO/CSR; one M8 arm and six DST LR trials prepared. Earlier4A criteria remain auxiliary.",
+  "status": "RUNNING",
+  "status_note": "Frozen sources launched on RTX3090, unchanged numeric gates. First attempt passed98 native tests then stopped before learning on appended live control log; relaunch uses verified immutable archive/source view. Dense-mask DST nnz=A; no COO/CSR.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "08e7da4ae832a30b8361d799e3dde91981baf42b",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/163",
@@ -11,7 +11,7 @@
   "protocol_source_path": "docs/lm-m8-active-count-20261110.md",
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-m8-active-count-3090-20261110-01"
+    "relative_path": "lm-m8-active-count-3090-20261110-02"
   },
   "protocol": {
     "primary_matching": "CST Atom count A equals DST mask-one count per Linear",
@@ -30,6 +30,13 @@
     "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
     "reference_job": "lm-geometry-epsilon-capacity-3090-20261110-02",
     "reference_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
-    "old4A_dst": "auxiliary only"
+    "old4A_dst": "auxiliary only",
+    "consumer_source_commit": "bb0e9319b9fce066aa22f7a1c227b3d1dd7e9abd",
+    "failed_control_gate_job": {
+      "id": "lm-m8-active-count-3090-20261110-01",
+      "compact_sha256": "65482939650b5845439020a79be52fef751bb5b30c31131d2615296cc492ce84",
+      "training_started": false,
+      "native_tests_passed": 98
+    }
   }
 }

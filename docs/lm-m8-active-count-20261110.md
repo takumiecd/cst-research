@@ -60,3 +60,12 @@ for plots. Learning curves show selected DST plus all LR candidates in a separat
 HPO overlay. One seed and short DEV selection support exploratory capacity
 comparisons, not sufficient-Atom, convergence, equivalence or unique-depth-cause
 claims. More atoms helping cannot by itself establish why stacking deteriorates.
+
+Execution note: corrected library08e7da4a passed98 native/regression tests.
+Job `lm-m8-active-count-3090-20261110-01` then stopped before learning because
+the prior live driver.log appended its COMPACT line after its manifest was
+frozen. Failed compact65482939650b5845439020a79be52fef751bb5b30c31131d2615296cc492ce84
+is preserved. Verify the immutable control compact5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858,
+all86 payloads and2178 source files; relaunch as `lm-m8-active-count-3090-20261110-02`.
+Training source bb0e9319b9fce066aa22f7a1c227b3d1dd7e9abd and library08e7da4ae832a30b8361d799e3dde91981baf42b
+remain frozen. This orchestration correction changes neither training nor numerical tolerances.
