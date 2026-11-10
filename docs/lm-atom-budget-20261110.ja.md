@@ -55,3 +55,5 @@ allocated/reservedは別に記録し、reservedにはobserver履歴が残る。�
 固定前検証: library CPU2288合格/2677任意skip、research CPU241合格/61skip。Ruff/registry/diffも合格。最初のresearch全件実行はPYTHONPATHにscriptsがなく14 import errorだったが、コードを変えずに実行経路を直して全合格した。
 
 実行記録: joint snapshot e77a8b6ed48d24a8dc44600f3f6459d44774391194b44b858665c27d5abd5a07（追跡2237file）、consumer9b9e2eb1e4579fe035ca2442b36bad99f1df029d/library0bed48655b1d988e0c59b4442005aaec8c463a31を実機確認済み4090で実行中。native前にruntime278fileの一致、通常guard/packed AST、共有学習/監査body一致に合格した。作業checkoutに後処理/記録を追加しても実行snapshotは不変。
+
+完了: [検証済みvalidation結果](lm-atom-budget-20261110-results.ja.md)。c128まで固定pilot基準を満たすCST条件はなく、中間点/confirmationは実行しなかった。

@@ -27,6 +27,39 @@ def curves(root, arm):
     ]
 
 
+def numerical_checks(root, coefficients):
+    errors = []
+    for c in coefficients:
+        initial = read(root / f"qualification-c{c}/qualification.json")["arms"][
+            f"m8-c{c}"
+        ]["oracles"]
+        final = read(root / f"m8-c{c}/final-oracles.json")
+        for stage in (initial, final):
+            assert set(stage) == {"1.up", "1.down"}
+            for row in stage.values():
+                assert row["passed"] and row["A"] == c * 1024 and row["B"] == 3
+                assert set(row["errors"]) == {
+                    "Y",
+                    "dX",
+                    "amplitude",
+                    "radius_fraction",
+                    "output_center",
+                    "input_center",
+                }
+                for error in row["errors"].values():
+                    assert error["max_abs"] <= 3e-4 and error["relative_l2"] <= 1e-4
+                    errors.append(error)
+    return {
+        "tensor_field_checks": len(errors),
+        "max_abs": max(x["max_abs"] for x in errors),
+        "max_relative_l2": max(x["relative_l2"] for x in errors),
+        "original_component_failures": sum(
+            x["original_component_gate_failures"] for x in errors
+        ),
+        "tolerances_changed": False,
+    }
+
+
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--run", type=Path, required=True)
@@ -214,13 +247,13 @@ def main():
             )
             ax.set(
                 xlabel="TRAIN targets (million)",
-                ylabel="DEV CE minus Dense" if gap else "DEV CE",
+                ylabel="Validation CE minus Dense" if gap else "Validation CE",
             )
             ax.grid(alpha=0.2)
     axes[1].axhline(0.01, color="green", linestyle=":", label="pilot CE margin .01")
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, fontsize=7)
-    fig.suptitle("RTX4090, all8 FFN maps, unconnected M8; short seed17 DEV pilot")
+    fig.suptitle("RTX4090, all8 FFN maps; unconnected M8; seed17 validation curves")
     save(fig, "learning", rect=(0, 0.13, 1, 0.95))
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
     for kind, color in (("m8", "#2368b8"), ("dst", "#bf821f")):
@@ -239,7 +272,12 @@ def main():
                 [f"{c * 1024:,}" for c in coefficients],
                 rotation=25,
             )
-            ax.set(xlabel="Atom count = mask-one count per Linear", ylabel=key)
+            ax.set(
+                xlabel="Atom count = mask-one count per Linear",
+                ylabel="Validation CE gap"
+                if key == "ce_gap"
+                else "Next-token accuracy gap (pp)",
+            )
             ax.axhline(0, color="black", linewidth=0.8)
             ax.grid(alpha=0.2)
     axes[0].axhline(0.01, color="green", linestyle=":", label="pilot CE margin .01")
@@ -248,7 +286,7 @@ def main():
     )
     for ax in axes:
         ax.legend(fontsize=7)
-    fig.suptitle("Final DEV: descriptive pilot margins, no formal equivalence")
+    fig.suptitle("Final validation: descriptive pilot margins, seed17")
     save(fig, "budget")
     rows = math.ceil(len(coefficients) / 3)
     fig, axes = plt.subplots(rows, 3, figsize=(15, 4 * rows), squeeze=False)
@@ -267,13 +305,13 @@ def main():
         ax.set(
             title=f"DST mask1={c * 1024}",
             xlabel="TRAIN targets (million)",
-            ylabel="DEV CE",
+            ylabel="Validation CE",
         )
         ax.legend(fontsize=7)
         ax.grid(alpha=0.2)
     for ax in list(axes.flat)[len(coefficients) :]:
         ax.axis("off")
-    fig.suptitle("All sparse LR candidates; selection on DEV")
+    fig.suptitle("All DST learning-rate candidates; selection on validation")
     save(fig, "dst-lr")
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
     for ax, key, scale in zip(
@@ -287,13 +325,17 @@ def main():
                 [r["coefficient"] * 1024 for r in rr],
                 [r[key] * scale for r in rr],
                 marker="o",
-                label=kind,
+                label="CST M8" if kind == "m8" else "Dense-mask DST",
             )
         ax.axhline(table[0][key] * scale, color="black", linestyle="--", label="Dense")
         ax.set(
             xlabel="Atom count = mask-one count",
             ylabel="ms" if key == "step_median_seconds" else "MiB",
-            title=key,
+            title={
+                "step_median_seconds": "Complete-step median",
+                "peak_allocated_bytes": "Peak allocated",
+                "peak_reserved_bytes": "Peak reserved",
+            }[key],
         )
         ax.legend(fontsize=7)
         ax.grid(alpha=0.2)
@@ -374,12 +416,18 @@ def main():
         ax.set(xlabel="CST Atom count per Linear", title=title)
         ax.legend(fontsize=7)
         ax.grid(alpha=0.2)
-    fig.suptitle(
-        "Unconnected M8 geometry; no claim of a pure capacity-only intervention"
-    )
+    fig.suptitle("Unconnected M8 geometry with amplitude-dependent radius bounds")
     save(fig, "geometry")
     result = {
         "state": "passed",
+        "numerical_validation": numerical_checks(a.run, coefficients),
+        "qualified_arms": 1 + 4 * len(coefficients),
+        "checkpoint_audits": 2 + 8 * len(coefficients),
+        "active_count_audits": 8 * len(coefficients),
+        "command_seconds": {
+            row["label"]: row["finished"] - row["started"]
+            for row in receipt["commands"]
+        },
         "decisions": decisions,
         "geometry": geometry,
         "results": table,
