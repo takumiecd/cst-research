@@ -8,6 +8,8 @@ starting with a small language model. We record reproducible conditions, learnin
 behavior, failures and fixes, and distinguish observations from hypotheses.
 Licensed under [Apache-2.0](LICENSE).
 
+**Experiments are paused at the owner's request (2026-11-11).** Read the [research summary](docs/cst-research-summary-20261111.md) for the initialisation, attention, composition and stopped width-study findings. All three widths completed CST learning; final width2048 DST remains incomplete.
+
 ## Relationship to torchcst
 
 | Repository | Responsibility |

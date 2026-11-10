@@ -3,7 +3,7 @@
   "id": "lm-width-scale-20261110",
   "title": "Fixed-c64 M8 FFN width and duration pilot",
   "status": "STOPPED",
-  "status_note": "Owner paused allCST experiments. All24short arms and8of9long arms complete; final2048DST was interrupted and its retry was stopped by owner. No active owned process; evidence/checkpoints retained. No further execution until explicit resume.",
+  "status_note": "Owner paused CST experiments. All24short and8of9long arms completed; final2048DST interrupted,retry stopped. Verified392payloads/64checkpoint audits/108tensor-field checks. Linear-c64 allFFN recipe did not reach descriptive Dense margins at5M; no additional experiments.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/165",
@@ -91,6 +91,15 @@
     "recovery_remaining_owned_processes": 0,
     "resource_state": "GPUidle0percent40MiB; no server shutdown",
     "original_interruption_cause": "unknown; supervisor and finalDST child vanished without final exception",
-    "artifacts_retained": true
-  }
+    "artifacts_retained": true,
+    "checkpoint_audits": 64,
+    "tensor_field_checks": 108,
+    "max_abs": 2.3409137575924888e-05,
+    "max_relative_l2": 4.597226532553932e-07,
+    "original_component_failures": 0,
+    "verified_payloads": 392,
+    "verified_through_CST_compact_sha256": "f9dad5782c797f6f191195723361709f969f20ef5532e97e3e16b5bd6d4d6b8f",
+    "all_CST_long_arms_complete": true
+  },
+  "results_source_path": "docs/cst-research-summary-20261111.md"
 }
