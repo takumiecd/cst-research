@@ -2,7 +2,7 @@
 
 [English](lm-geometry-epsilon-capacity-20261110.md) | 日本語
 
-状態はRTX3090のdurable job起動済みで、学習結果ではない。consumerは
+状態は8条件の短期比較完了。[結果](lm-geometry-epsilon-capacity-20261110-results.ja.md)。consumerは
 `76e80b6816269f63b02ff85ad262746f14754726`に固定。
 [draft PR38](https://github.com/takumiecd/cst-research/pull/38)。CPUは234件合格・61件optional skip。
 実機GPUの正しさ・qualificationを通過してから学習する。全FFN置換時の劣化について、容量と小さな

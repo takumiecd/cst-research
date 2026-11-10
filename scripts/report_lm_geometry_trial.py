@@ -135,6 +135,35 @@ def main():
     for suffix in ("png", "svg"):
         fig.savefig(a.output / ("development." + suffix), dpi=150)
     plt.close(fig)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
+    dense_ce = {
+        v["step"]: v["development"]["ce"] for v in curves["dense"] if "development" in v
+    }
+    for arm, label, color in zip(ARMS, LABELS, COLORS):
+        rows = [v for v in curves[arm] if "development" in v and v["step"] >= 200]
+        x = [v["seen_tokens"] / 1e6 for v in rows]
+        y = [v["development"]["ce"] for v in rows]
+        style = "--" if "c16" in arm else "-"
+        axes[0].plot(x, y, label=label, color=color, marker="o", linestyle=style)
+        axes[1].plot(
+            x,
+            [v["development"]["ce"] - dense_ce[v["step"]] for v in rows],
+            label=label,
+            color=color,
+            marker="o",
+            linestyle=style,
+        )
+    axes[0].set(ylabel="DEV CE", title="After warmup")
+    axes[1].set(ylabel="DEV CE minus Dense", title="Paired checkpoint gap")
+    for ax in axes:
+        ax.set_xlabel("TRAIN targets (million)")
+        ax.grid(alpha=0.2)
+    axes[0].legend(fontsize=8)
+    fig.suptitle("RTX3090, all-FFN short pilot; identical data order, seed17")
+    fig.tight_layout()
+    for suffix in ("png", "svg"):
+        fig.savefig(a.output / ("development-detail." + suffix), dpi=150)
+    plt.close(fig)
     fig, ax = plt.subplots(figsize=(11, 5))
     for arm, label, color in zip(ARMS, LABELS, COLORS):
         rows = [v for v in curves[arm] if "train_ce" in v]
@@ -166,7 +195,9 @@ def main():
         axes[index].set_xticks(
             range(len(ARMS)), LABELS, rotation=70, ha="right", fontsize=8
         )
-        axes[index].set_title(metric.replace("_", " "))
+        axes[index].set_title(
+            ("Complete-step median", "Peak allocated", "Peak reserved")[index]
+        )
         axes[index].set_ylabel("MiB" if "bytes" in metric else "ms")
     fig.suptitle(
         "Synchronized complete training steps; first10 excluded; DST uses dense storage"

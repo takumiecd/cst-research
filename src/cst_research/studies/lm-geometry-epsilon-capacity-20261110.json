@@ -5,8 +5,8 @@
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
   "id": "lm-geometry-epsilon-capacity-20261110",
   "title": "All-FFN CST capacity versus Adam epsilon pilot",
-  "status": "RUNNING",
-  "status_note": "After user3090 restart, synchronized and asynchronous exact qualification-prefix reproductions passed;36 paired CPU degree/connection records retrieved and verified. A new identical-source attempt02 is running initial GPU gates before learning. First failed attempt retained. No quality result yet.",
+  "status": "COMPLETED",
+  "status_note": "Eight short3090 arms completed and retrieved;84 native tests,120 numerical checks,8 exact resume/observer qualifications,16 checkpoint audits,86 payloads and2178 source hashes verified. Capacity improves short loss more than epsilon; M8/M16 geometry differs despite similar loss. Unique depth cause and remedy remain unestablished.",
   "runner_entrypoint": "cst_research.experiments.lm_geometry_trial_run",
   "protocol_source_path": "docs/lm-geometry-epsilon-capacity-20261110.md",
   "evidence": {
@@ -45,7 +45,7 @@
     "public_default_adopted": false,
     "local_CPU_passed": 234,
     "local_optional_skipped": 61,
-    "learning_started": false,
+    "learning_started": true,
     "failed_compact_sha256": "5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501",
     "failed_payloads_verified": 7,
     "source_unchanged_before_failure": true,
@@ -56,6 +56,18 @@
     "reproduction_payloads_verified": 12,
     "synchronized_and_asynchronous_next_update_exact": true,
     "paired_CPU_profile_records": 36,
-    "restarted_attempt_native_validation": "pending"
-  }
+    "restarted_attempt_native_validation": "84 passed",
+    "learning_complete": true,
+    "native_tests_passed": 84,
+    "qualified_arms": 8,
+    "checkpoint_audits": 16,
+    "numerical_tensor_field_checks": 120,
+    "original_component_failures_retained": 2,
+    "main_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "retrieval_verified": true,
+    "payloads_verified": 86,
+    "source_files_verified": 2178,
+    "resource_state": "owned commands finished; Hub left running"
+  },
+  "results_source_path": "docs/lm-geometry-epsilon-capacity-20261110-results.md"
 }
