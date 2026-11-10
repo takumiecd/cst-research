@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "lm-atom-budget-20261110",
+  "title": "Adaptive M8 Atom-budget pilot toward Dense task quality",
+  "status": "PLANNED",
+  "status_note": "Prespecified4090 coarse16/32/64/128 plus one midpoint after first descriptive pass; fresh Dense, nnz=A dense-mask DST; no M16 learning, no COO/CSR.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0bed48655b1d988e0c59b4442005aaec8c463a31",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/164",
+  "runner_entrypoint": "cst_research.experiments.lm_atom_budget_run",
+  "protocol_source_path": "docs/lm-atom-budget-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-atom-budget-4090-20261110-01"
+  },
+  "protocol": {
+    "seed": 17,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "coarse_coefficients": [
+      16,
+      32,
+      64,
+      128
+    ],
+    "midpoint_rule": "one midpoint between prior failing coarse count and first passing coarse count above16",
+    "near_dense_ce_margin": 0.01,
+    "near_dense_top1_margin": 0.005,
+    "formal_equivalence": false,
+    "confirmation_evaluated": false,
+    "dst_matching": "mask-one count equals Atom count per Linear",
+    "dst_storage": "dense weight plus boolean mask; no COO/CSR",
+    "dst_sparse_lrs": [
+      0.003,
+      0.01,
+      0.03
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "closed_M16_implementation_PRs": [
+      159,
+      160,
+      161,
+      162
+    ],
+    "resource": "one reserved RTX4090,24GB class,CC8.9; no3090 process to migrate"
+  }
+}
