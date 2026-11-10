@@ -69,3 +69,5 @@ is preserved. Verify the immutable control compact5e4cc94f8aea2cbfd38ccb4a4dcc8d
 all86 payloads and2178 source files; relaunch as `lm-m8-active-count-3090-20261110-02`.
 Training source bb0e9319b9fce066aa22f7a1c227b3d1dd7e9abd and library08e7da4ae832a30b8361d799e3dde91981baf42b
 remain frozen. This orchestration correction changes neither training nor numerical tolerances.
+
+Execution complete: see [verified results](lm-m8-active-count-20261110-results.md).

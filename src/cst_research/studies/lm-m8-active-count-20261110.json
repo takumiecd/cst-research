@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-m8-active-count-20261110",
   "title": "M8 capacity versus masked DST with active count equal to Atom count",
-  "status": "RUNNING",
-  "status_note": "Frozen sources launched on RTX3090, unchanged numeric gates. First attempt passed98 native tests then stopped before learning on appended live control log; relaunch uses verified immutable archive/source view. Dense-mask DST nnz=A; no COO/CSR.",
+  "status": "COMPLETED",
+  "status_note": "Seven fresh arms complete;75 payloads/2213 source hashes verified,14 checkpoint+14 active-count audits passed. nnz=A dense-mask DST; both grid-selected LR.01, confirmation unused. One-seed short DEV pilot; no default adoption.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "08e7da4ae832a30b8361d799e3dde91981baf42b",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/163",
@@ -38,5 +38,26 @@
       "training_started": false,
       "native_tests_passed": 98
     }
+  },
+  "results_source_path": "docs/lm-m8-active-count-20261110-results.md",
+  "validation": {
+    "native_tests_passed": 98,
+    "exact_resume_and_observer_arms": 7,
+    "checkpoint_audits": 14,
+    "active_count_audits": 14,
+    "full_A_tensor_field_checks": 24,
+    "max_abs": 3.814697265625e-06,
+    "max_relative_l2": 2.949799556086146e-07,
+    "original_component_failures": 0,
+    "tolerances_changed": false,
+    "job": "lm-m8-active-count-3090-20261110-02",
+    "source_archive_sha256": "48843d03f2d1116d8e21e379f0587f6331464938bda77d157e43d9a56d840fe4",
+    "final_compact_sha256": "23e5017e804a8ce3d013f032474995557fa7c8dfb37a59d495810f0de5d2ec18",
+    "prior_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "payloads_verified": 75,
+    "source_files_verified": 2213,
+    "raw_checkpoints": "retained remote",
+    "resource_state": "owned commands finished; GPU idle; Hub remains running",
+    "public_default_adopted": false
   }
 }

@@ -49,6 +49,13 @@ def main():
     )
     counts = read(a.run / "audit/active-count-audit.json")
     assert counts["state"] == "passed"
+    assert len(q["arms"]) == len(counts["arms"]) == 7
+    assert all(
+        row["serialized_resume_and_probe_next_update_exact"]
+        for row in q["arms"].values()
+    )
+    for records in counts["arms"].values():
+        assert {r["step"] for r in records} == {256, 976}
     selection = read(a.run / "selection/selection.json")
     assert selection["state"] == "passed" and selection["selection_on_development"]
     for c in (8, 16):
@@ -239,8 +246,48 @@ def main():
             ax.set(xlabel="updates", ylabel=key)
             ax.grid(alpha=0.2)
     axes[0].legend()
-    fig.suptitle("CST-only geometry; same M8/radius/LR/epsilon")
+    fig.suptitle("CST-only geometry; same M8/radius policy/LR/epsilon")
     save(fig, "geometry")
+    sites = [f"{i}.{direction}" for i in range(4) for direction in ("up", "down")]
+    signals = {}
+    for arm in arms:
+        signals[arm] = {}
+        for clock in (0, 256, 976):
+            records = read(directories[arm] / f"signals-{clock}.json")["records"]
+            assert [r["offset"] for r in records] == [0, 4096, 8192, 12288]
+            signals[arm][clock] = {
+                site: {
+                    "output_rms": statistics.mean(
+                        r["layers"][site]["output_rms"] for r in records
+                    ),
+                    "output_gradient_rms": statistics.mean(
+                        r["layers"][site]["output_gradient_rms"] for r in records
+                    ),
+                    "stable_rank": statistics.mean(
+                        r["layers"][site]["output_features"]["stable_rank"]
+                        for r in records
+                    ),
+                }
+                for site in sites
+            }
+    fig, axes = plt.subplots(2, 3, figsize=(16, 8))
+    for row, clock in zip(axes, (256, 976)):
+        for ax, key in zip(row, ("output_rms", "output_gradient_rms", "stable_rank")):
+            for arm, color in zip(arms, colors):
+                values = [
+                    signals[arm][clock][site][key] / signals["dense"][clock][site][key]
+                    for site in sites
+                ]
+                ax.plot(sites, values, marker="o", color=color, label=labels[arm])
+            if key != "stable_rank":
+                ax.set_yscale("log")
+            ax.set(title=f"{clock} updates: {key} / Dense", xlabel="FFN map")
+            ax.grid(alpha=0.2)
+    axes[0, 0].legend(fontsize=7)
+    fig.suptitle(
+        "Mean across four fixed TRAIN contexts; each model's own inputs/gradients"
+    )
+    save(fig, "layers")
     write = {
         "state": "passed",
         "primary_matching": "CST Atom count equals DST mask-one count per Linear",
@@ -251,6 +298,8 @@ def main():
         "results": table,
         "dst_selection": selection,
         "geometry": geometry,
+        "layer_signal_means": signals,
+        "layer_signal_scope": "four fixed TRAIN contexts; each model's own inputs/gradients, not a causal or shared-input map comparison",
     }
     (a.output / "results.json").write_text(json.dumps(write, indent=2) + "\n")
 

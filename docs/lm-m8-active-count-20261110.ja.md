@@ -54,3 +54,5 @@ COMPACT行が追記されていたため学習前に停止した。失敗compact
 86 payload・2178 source fileを全検証し、`lm-m8-active-count-3090-20261110-02`で再実行する。
 学習source bb0e9319b9fce066aa22f7a1c227b3d1dd7e9abdとlibrary08e7da4ae832a30b8361d799e3dde91981baf42b
 は固定のまま。実行管理の修正であり、学習や数値許容差を変更しない。
+
+実行完了: [検証済み結果](lm-m8-active-count-20261110-results.ja.md)を参照。
