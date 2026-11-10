@@ -70,3 +70,5 @@ failures. Frozen snapshots are immutable. GPU reservation remains running after
 owned commands finish. No merge/default adoption or unmeasured speed claim.
 
 Pre-freeze checks:library CPU2288 passed/2677 optional skips,research CPU241 passed/61 skips;Ruff/registry/diff checks pass. The first full research invocation omitted scripts from PYTHONPATH and had14 import errors; the corrected invocation passes without a code change.
+
+Execution note: joint snapshot e77a8b6ed48d24a8dc44600f3f6459d44774391194b44b858665c27d5abd5a07 (2237 tracked files),consumer9b9e2eb1e4579fe035ca2442b36bad99f1df029d/library0bed48655b1d988e0c59b4442005aaec8c463a31 is running on verifiedRTX4090. Runtime278-file identity,ordinary guard/packed AST and shared training/audit body checks passed before native tests. This checkout may gain postprocessing/notes;the running snapshot stays immutable.

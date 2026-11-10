@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-atom-budget-20261110",
   "title": "Adaptive M8 Atom-budget pilot toward Dense task quality",
-  "status": "PLANNED",
-  "status_note": "Prespecified4090 coarse16/32/64/128 plus one midpoint after first descriptive pass; fresh Dense, nnz=A dense-mask DST; no M16 learning, no COO/CSR.",
+  "status": "RUNNING",
+  "status_note": "Frozen joint snapshot launched on verifiedRTX4090/24GB/CC8.9. Source/loop identity checks passed; native123 tests running. Adaptive DEV pilot only,not an Atom lower bound or equivalence claim.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0bed48655b1d988e0c59b4442005aaec8c463a31",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/164",
@@ -43,6 +43,22 @@
       161,
       162
     ],
-    "resource": "one reserved RTX4090,24GB class,CC8.9; no3090 process to migrate"
+    "resource": "one reserved RTX4090,24GB class,CC8.9; no3090 process to migrate",
+    "consumer_source_commit": "9b9e2eb1e4579fe035ca2442b36bad99f1df029d"
+  },
+  "validation": {
+    "local_library_CPU_passed": 2288,
+    "local_library_optional_skipped": 2677,
+    "local_research_CPU_passed": 241,
+    "local_research_optional_skipped": 61,
+    "source_archive_sha256": "e77a8b6ed48d24a8dc44600f3f6459d44774391194b44b858665c27d5abd5a07",
+    "source_files": 2237,
+    "runtime_files_unchanged": 278,
+    "ordinary_preprocessed_guard_preserved": true,
+    "default_packed_AST_preserved": true,
+    "shared_train_audit_body_preserved": true,
+    "GPU_qualification_complete": false,
+    "learning_complete": false,
+    "public_default_adopted": false
   }
 }
