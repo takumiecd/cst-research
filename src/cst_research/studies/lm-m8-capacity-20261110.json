@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "lm-m8-capacity-20261110",
+  "title": "M8-only all-FFN Atom capacity follow-up",
+  "status": "PLANNED",
+  "status_note": "Prepared one fresh c16 M8 arm against verified prior c8/Dense/DST controls; no new learning result.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "7a7dc11689d6905f905965ecdac3b41a839548e8",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/163",
+  "runner_entrypoint": "cst_research.experiments.lm_m8_capacity_run",
+  "protocol_source_path": "docs/lm-m8-capacity-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-m8-capacity-3090-20261110-01"
+  },
+  "protocol": {
+    "fresh_arms": [
+      "m8-c16"
+    ],
+    "reference_job": "lm-geometry-epsilon-capacity-3090-20261110-02",
+    "reference_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "seed": 17,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  }
+}
