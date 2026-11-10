@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-m8-capacity-20261110",
   "title": "M8-only all-FFN Atom capacity follow-up",
-  "status": "PLANNED",
-  "status_note": "Prepared one fresh c16 M8 arm against verified prior c8/Dense/DST controls; no new learning result.",
+  "status": "STOPPED",
+  "status_note": "First attempt stopped before learning: C++ guard rejected c16 (8 failures/88 passes), evidence retained. The owner changed the primary DST criterion to nnz=A and explicitly keeps dense-mask storage; superseded by lm-m8-active-count-20261110.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "7a7dc11689d6905f905965ecdac3b41a839548e8",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/163",
@@ -25,5 +25,11 @@
     "schedule_tokens": 20000000,
     "confirmation_evaluated": false,
     "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "execution": {
+    "failed_job": "lm-m8-capacity-3090-20261110-01",
+    "failed_compact_sha256": "f99dd0bf295ee5533003b351d88add72f244ba984dbe62718d47a9a5396a1bfd",
+    "failed_payloads_verified": 5,
+    "learning_started": false
   }
 }

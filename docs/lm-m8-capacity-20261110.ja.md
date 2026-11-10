@@ -42,3 +42,7 @@ epsilon/LR/raw/通常重み/予算も必須。終端全A oracle、有限FP32 mom
 正確なdata SHA・`--previous-run`・qualification receipt・未使用outputを渡す。
 1seed短期の改善はこの条件での容量効果を支持するが、多層化の主因や十分なAtom数の証明にはならない。
 短期改善がなくても容量の限界を確定したことにはならない。
+
+## 停止した実行と主比較基準の変更
+
+最初の実行は旧C++ c8 guardで学習前に停止した（8失敗・88合格）。失敗compact f99dd0bf295ee5533003b351d88add72f244ba984dbe62718d47a9a5396a1bfdを保全し5payloadを検証済み。その後ユーザーはDSTのマスク1の数=Atom数を主比較とし、dense-mask保存を維持しCOO/CSR化しないと指定した。[active-count protocol](lm-m8-active-count-20261110.ja.md)で継続し、旧4A DSTは主比較ではなく補助にする。

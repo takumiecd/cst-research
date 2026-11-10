@@ -54,3 +54,7 @@ data SHA, `--previous-run`, qualification receipt and unused output directories.
 A single-seed short improvement supports a capacity effect in this protocol;
 it does not uniquely establish why stacking CST is worse or prove sufficient
 Atoms. Lack of short improvement also does not establish a capacity ceiling.
+
+## Stopped attempt and revised primary criterion
+
+The initial attempt failed before learning at the old C++ c8 guard (8 failures,88 passes). Failed compact f99dd0bf295ee5533003b351d88add72f244ba984dbe62718d47a9a5396a1bfd is retained with5 verified payloads. The owner subsequently specified DST mask-one count=Atom count, keeping dense-mask storage and no COO/CSR conversion. Continue under [the active-count protocol](lm-m8-active-count-20261110.md); prior4A DST is auxiliary, not the primary comparison.

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "lm-m8-active-count-20261110",
+  "title": "M8 capacity versus masked DST with active count equal to Atom count",
+  "status": "PLANNED",
+  "status_note": "Owner criterion nnz=A with dense-mask DST, no COO/CSR; one M8 arm and six DST LR trials prepared. Earlier4A criteria remain auxiliary.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "08e7da4ae832a30b8361d799e3dde91981baf42b",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/163",
+  "runner_entrypoint": "cst_research.experiments.lm_m8_active_count_run",
+  "protocol_source_path": "docs/lm-m8-active-count-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-m8-active-count-3090-20261110-01"
+  },
+  "protocol": {
+    "primary_matching": "CST Atom count A equals DST mask-one count per Linear",
+    "dst_storage": "dense weight plus boolean mask; no COO/CSR",
+    "dst_sparse_lr_candidates": [
+      0.001,
+      0.003,
+      0.01
+    ],
+    "selection": "minimum final DEV CE within each nnz; tie smaller sparse LR; retain all candidates",
+    "seed": 17,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "reference_job": "lm-geometry-epsilon-capacity-3090-20261110-02",
+    "reference_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "old4A_dst": "auxiliary only"
+  }
+}
