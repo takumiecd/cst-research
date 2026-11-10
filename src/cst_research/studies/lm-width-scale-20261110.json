@@ -2,11 +2,11 @@
   "schema_version": 1,
   "id": "lm-width-scale-20261110",
   "title": "Fixed-c64 M8 FFN width and duration pilot",
-  "status": "PLANNED",
-  "status_note": "Owner authorized512/1024/2048 Dense/CST/DST and long learning; private cohort admission and GPU gates precede training. No quality result yet.",
+  "status": "RUNNING",
+  "status_note": "Durable4090 driver launched; source transfer and CPU checks complete. GPU/native/task qualification pending; no learning result yet.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
-  "source_pull_request": "https://github.com/takumiecd/torchcst/tree/kernel/m8-lm-width",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/165",
   "runner_entrypoint": "cst_research.experiments.lm_width_run",
   "protocol_source_path": "docs/lm-width-scale-20261110.md",
   "evidence": {
@@ -55,6 +55,14 @@
     "confirmation_evaluated": false,
     "formal_equivalence": false,
     "resource": "one owner-reserved RTX4090 CC8.9; no new GPU allocation",
-    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "consumer_source_commit": "09aeff15101be220de33e01fbde9553cee2cba99",
+    "source_archive_sha256": "faec6fe8437c0100ae00173ef30a07124536a179466b2fd0001346bbb2bd0f16",
+    "external_driver_sha256": "500e400380c8d5eb5c1ec60d72ba2a9d59cea7c3441a3188054a383cdc812aee",
+    "source_files": 2265,
+    "library_CPU_passed": 2300,
+    "library_CPU_optional_skipped": 2690,
+    "research_CPU_passed": 244,
+    "research_CPU_optional_skipped": 61
   }
 }
