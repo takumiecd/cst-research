@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "lm-width-scale-20261110",
+  "title": "Fixed-c64 M8 FFN width and duration pilot",
+  "status": "STOPPED",
+  "status_note": "Owner paused CST experiments. All24short and8of9long arms completed; final2048DST interrupted,retry stopped. Verified392payloads/64checkpoint audits/108tensor-field checks. Linear-c64 allFFN recipe did not reach descriptive Dense margins at5M; no additional experiments.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/165",
+  "runner_entrypoint": "cst_research.experiments.lm_width_run",
+  "protocol_source_path": "docs/lm-width-scale-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-width-scale-4090-20261110-01"
+  },
+  "protocol": {
+    "widths": [
+      512,
+      1024,
+      2048
+    ],
+    "coefficient": 64,
+    "atoms_per_map": [
+      65536,
+      131072,
+      262144
+    ],
+    "dense_peak_lrs": [
+      0.0001,
+      0.0003,
+      0.001
+    ],
+    "dst_sparse_peak_lrs": [
+      0.0003,
+      0.001,
+      0.003,
+      0.01
+    ],
+    "dst_ordinary_peak_lr": 0.0003,
+    "cst_atom_lr_multiplier": 32,
+    "steps": [
+      976,
+      4882
+    ],
+    "training_targets": [
+      999424,
+      4999168
+    ],
+    "schedule_tokens": 20000000,
+    "topology_tokens": 20000000,
+    "selection": "minimum short DEV CE,tie smaller LR; selected controls and CST extended at every width",
+    "seed": 17,
+    "shuffle_seed": 905,
+    "matching": "CST A=DST Boolean mask-one count per Linear,no COO/CSR",
+    "confirmation_evaluated": false,
+    "formal_equivalence": false,
+    "resource": "one owner-reserved RTX4090 CC8.9; no new GPU allocation",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "consumer_source_commit": "09aeff15101be220de33e01fbde9553cee2cba99",
+    "source_archive_sha256": "faec6fe8437c0100ae00173ef30a07124536a179466b2fd0001346bbb2bd0f16",
+    "external_driver_sha256": "500e400380c8d5eb5c1ec60d72ba2a9d59cea7c3441a3188054a383cdc812aee",
+    "source_files": 2265,
+    "library_CPU_passed": 2300,
+    "library_CPU_optional_skipped": 2690,
+    "research_CPU_passed": 244,
+    "research_CPU_optional_skipped": 61
+  },
+  "validation": {
+    "native_tests_passed": 148,
+    "task_qualified_widths": [
+      512,
+      1024,
+      2048
+    ],
+    "task_qualified_arms_width512": 8,
+    "initial_width512_max_abs": 3.814697265625e-06,
+    "initial_width512_max_relative_l2": 3.742967834257146e-07,
+    "initial_width512_original_component_failures": 0,
+    "qualified_compact_sha256": "ff8180c77e50c979c50e892b5d3eeb98f9fb49825447a0fe24bcafe14f3c101d",
+    "qualified_payloads_verified": 6,
+    "ordinary_host_guard_unchanged_without_width_macro": true,
+    "unchanged_preexisting_runtime_files": 281,
+    "learning_complete": false,
+    "formal_equivalence": false,
+    "public_default_adopted": false,
+    "task_qualified_arms": 24,
+    "short_training_complete": true,
+    "long_completed_arms": 8,
+    "long_planned_arms": 9,
+    "stopped_by_owner": true,
+    "recovery_remaining_owned_processes": 0,
+    "resource_state": "GPUidle0percent40MiB; no server shutdown",
+    "original_interruption_cause": "unknown; supervisor and finalDST child vanished without final exception",
+    "artifacts_retained": true,
+    "checkpoint_audits": 64,
+    "tensor_field_checks": 108,
+    "max_abs": 2.3409137575924888e-05,
+    "max_relative_l2": 4.597226532553932e-07,
+    "original_component_failures": 0,
+    "verified_payloads": 392,
+    "verified_through_CST_compact_sha256": "f9dad5782c797f6f191195723361709f969f20ef5532e97e3e16b5bd6d4d6b8f",
+    "all_CST_long_arms_complete": true
+  },
+  "results_source_path": "docs/cst-research-summary-20261111.md"
+}
