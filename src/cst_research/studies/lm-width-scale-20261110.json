@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-width-scale-20261110",
   "title": "Fixed-c64 M8 FFN width and duration pilot",
-  "status": "RUNNING",
-  "status_note": "Source-frozen4090 job running. Native148passed; width512 full-A and all8serialized-next-update qualifications passed,short learning started. Wider task qualifications and long comparisons pending; no completed quality conclusion.",
+  "status": "STOPPED",
+  "status_note": "Owner paused allCST experiments. All24short arms and8of9long arms complete; final2048DST was interrupted and its retry was stopped by owner. No active owned process; evidence/checkpoints retained. No further execution until explicit resume.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/165",
@@ -68,7 +68,9 @@
   "validation": {
     "native_tests_passed": 148,
     "task_qualified_widths": [
-      512
+      512,
+      1024,
+      2048
     ],
     "task_qualified_arms_width512": 8,
     "initial_width512_max_abs": 3.814697265625e-06,
@@ -80,6 +82,15 @@
     "unchanged_preexisting_runtime_files": 281,
     "learning_complete": false,
     "formal_equivalence": false,
-    "public_default_adopted": false
+    "public_default_adopted": false,
+    "task_qualified_arms": 24,
+    "short_training_complete": true,
+    "long_completed_arms": 8,
+    "long_planned_arms": 9,
+    "stopped_by_owner": true,
+    "recovery_remaining_owned_processes": 0,
+    "resource_state": "GPUidle0percent40MiB; no server shutdown",
+    "original_interruption_cause": "unknown; supervisor and finalDST child vanished without final exception",
+    "artifacts_retained": true
   }
 }
