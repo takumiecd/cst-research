@@ -3,7 +3,7 @@
   "id": "lm-width-scale-20261110",
   "title": "Fixed-c64 M8 FFN width and duration pilot",
   "status": "RUNNING",
-  "status_note": "Durable4090 driver launched; source transfer and CPU checks complete. GPU/native/task qualification pending; no learning result yet.",
+  "status_note": "Source-frozen4090 job running. Native148passed; width512 full-A and all8serialized-next-update qualifications passed,short learning started. Wider task qualifications and long comparisons pending; no completed quality conclusion.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/165",
@@ -64,5 +64,22 @@
     "library_CPU_optional_skipped": 2690,
     "research_CPU_passed": 244,
     "research_CPU_optional_skipped": 61
+  },
+  "validation": {
+    "native_tests_passed": 148,
+    "task_qualified_widths": [
+      512
+    ],
+    "task_qualified_arms_width512": 8,
+    "initial_width512_max_abs": 3.814697265625e-06,
+    "initial_width512_max_relative_l2": 3.742967834257146e-07,
+    "initial_width512_original_component_failures": 0,
+    "qualified_compact_sha256": "ff8180c77e50c979c50e892b5d3eeb98f9fb49825447a0fe24bcafe14f3c101d",
+    "qualified_payloads_verified": 6,
+    "ordinary_host_guard_unchanged_without_width_macro": true,
+    "unchanged_preexisting_runtime_files": 281,
+    "learning_complete": false,
+    "formal_equivalence": false,
+    "public_default_adopted": false
   }
 }
