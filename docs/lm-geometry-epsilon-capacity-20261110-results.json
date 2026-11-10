@@ -1,0 +1,3897 @@
+{
+  "state": "passed",
+  "scope": "single-seed short DEV pilot, not convergence/equivalence",
+  "source_commits": {
+    "torchcst": "95f647f97749f61f5f5c15ac29932f908fb334ce",
+    "cst-research": "76e80b6816269f63b02ff85ad262746f14754726"
+  },
+  "results": [
+    {
+      "arm": "dense",
+      "active_ffn_scalars": 8398848,
+      "final_development": {
+        "ce": 3.3089795112609863,
+        "perplexity": 27.357193514290785,
+        "tokens": 8192,
+        "correct_next_tokens": 3068,
+        "next_token_top1_accuracy": 0.37451171875
+      },
+      "complete_step_median_seconds": 0.029765318999125157,
+      "peak_allocated_bytes": 994830848,
+      "peak_reserved_bytes": 1505755136
+    },
+    {
+      "arm": "dst-c8",
+      "active_ffn_scalars": 272384,
+      "final_development": {
+        "ce": 3.3589183539152145,
+        "perplexity": 28.758067998649345,
+        "tokens": 8192,
+        "correct_next_tokens": 3032,
+        "next_token_top1_accuracy": 0.3701171875
+      },
+      "complete_step_median_seconds": 0.029830884501279797,
+      "peak_allocated_bytes": 1044195840,
+      "peak_reserved_bytes": 1562378240
+    },
+    {
+      "arm": "m16-c8-e8",
+      "active_ffn_scalars": 272384,
+      "final_development": {
+        "ce": 3.3902525305747986,
+        "perplexity": 29.67344477635124,
+        "tokens": 8192,
+        "correct_next_tokens": 3026,
+        "next_token_top1_accuracy": 0.369384765625
+      },
+      "complete_step_median_seconds": 0.1161831275021541,
+      "peak_allocated_bytes": 997331456,
+      "peak_reserved_bytes": 1518338048
+    },
+    {
+      "arm": "m16-c8-e10",
+      "active_ffn_scalars": 272384,
+      "final_development": {
+        "ce": 3.388709641993046,
+        "perplexity": 29.627697257961604,
+        "tokens": 8192,
+        "correct_next_tokens": 3024,
+        "next_token_top1_accuracy": 0.369140625
+      },
+      "complete_step_median_seconds": 0.11574685550294816,
+      "peak_allocated_bytes": 997331456,
+      "peak_reserved_bytes": 1518338048
+    },
+    {
+      "arm": "m16-c16-e8",
+      "active_ffn_scalars": 534528,
+      "final_development": {
+        "ce": 3.354932263493538,
+        "perplexity": 28.643663903268127,
+        "tokens": 8192,
+        "correct_next_tokens": 3044,
+        "next_token_top1_accuracy": 0.37158203125
+      },
+      "complete_step_median_seconds": 0.14035825649625622,
+      "peak_allocated_bytes": 1240898048,
+      "peak_reserved_bytes": 1818230784
+    },
+    {
+      "arm": "m16-c16-e10",
+      "active_ffn_scalars": 534528,
+      "final_development": {
+        "ce": 3.3441343680024147,
+        "perplexity": 28.33603646737691,
+        "tokens": 8192,
+        "correct_next_tokens": 3042,
+        "next_token_top1_accuracy": 0.371337890625
+      },
+      "complete_step_median_seconds": 0.1404903835064033,
+      "peak_allocated_bytes": 1240898048,
+      "peak_reserved_bytes": 1818230784
+    },
+    {
+      "arm": "legacy-m8",
+      "active_ffn_scalars": 272384,
+      "final_development": {
+        "ce": 3.392872653901577,
+        "perplexity": 29.75129480499665,
+        "tokens": 8192,
+        "correct_next_tokens": 3027,
+        "next_token_top1_accuracy": 0.3695068359375
+      },
+      "complete_step_median_seconds": 0.2124790324960486,
+      "peak_allocated_bytes": 1016450560,
+      "peak_reserved_bytes": 1157627904
+    },
+    {
+      "arm": "dst-c16",
+      "active_ffn_scalars": 534528,
+      "final_development": {
+        "ce": 3.32354174554348,
+        "perplexity": 27.758490172019577,
+        "tokens": 8192,
+        "correct_next_tokens": 3016,
+        "next_token_top1_accuracy": 0.3681640625
+      },
+      "complete_step_median_seconds": 0.02995807050319854,
+      "peak_allocated_bytes": 1044195840,
+      "peak_reserved_bytes": 1562378240
+    }
+  ],
+  "geometry": {
+    "m16-c8-e8": [
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 7934,
+          "radius_mean": 0.9285165186811355,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.92075729370117
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005041593103669584,
+          "active_amplitude_rms": 0.2687167206310235
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7481,
+          "radius_mean": 1.5730354848055867,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9986572265625
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002673439448699355,
+          "active_amplitude_rms": 0.09766913939879684
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 7930,
+          "radius_mean": 0.9798116745660082,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9942626953125
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005044136196374893,
+          "active_amplitude_rms": 0.2679508950985318
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7509,
+          "radius_mean": 1.63240387354017,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.998817443847656
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.000532694102730602,
+          "active_amplitude_rms": 0.09768047455254965
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 7960,
+          "radius_mean": 0.875757135625463,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99315643310547
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005025125574320555,
+          "active_amplitude_rms": 0.26836702664792095
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7501,
+          "radius_mean": 1.5237777847287362,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999996185302734
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 0.9999999403953552,
+          "active_both_near_grid_share": 0.0005332622095011175,
+          "active_amplitude_rms": 0.09760621704286794
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 7944,
+          "radius_mean": 0.9542173341978923,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999515533447266
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00037764350418001413,
+          "active_amplitude_rms": 0.26906061309835116
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7504,
+          "radius_mean": 1.6661509701880277,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99998474121094
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005330490530468524,
+          "active_amplitude_rms": 0.09765127964644787
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 8006,
+          "radius_mean": 1.0699458345479798,
+          "radius_quantiles": [
+            0.5,
+            0.5067621767520905,
+            0.5920147895812988,
+            0.7273562848567963,
+            49.92998504638672
+          ],
+          "fraction_mean": 0.057822778820991516,
+          "fraction_at_zero": 0.17626953125,
+          "active_sharp_share": 0.5281039476394653,
+          "active_both_near_grid_share": 0.005745690781623125,
+          "active_amplitude_rms": 0.29906381626301537,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0218586060454659,
+            0.08418685985510867,
+            0.08718461154134399
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0007494379215588309,
+            0.002623032725455908
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0218586060454659,
+            0.08418685985510867,
+            0.08718461154134399
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7906,
+          "radius_mean": 1.2259093232787563,
+          "radius_quantiles": [
+            0.5,
+            0.5044905245304108,
+            0.5795896053314209,
+            0.7144401520490646,
+            49.981597900390625
+          ],
+          "fraction_mean": 0.052317939698696136,
+          "fraction_at_zero": 0.1885986328125,
+          "active_sharp_share": 0.5621047019958496,
+          "active_both_near_grid_share": 0.0035416139289736748,
+          "active_amplitude_rms": 0.16366450034900387,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.021755628636478622,
+            0.07842145206172527,
+            0.08651656969390335
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.002023779408044523,
+            0.001644320769036175
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.021755628636478622,
+            0.07842145206172527,
+            0.08651656969390335
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 8056,
+          "radius_mean": 0.9332763029815396,
+          "radius_quantiles": [
+            0.5,
+            0.5037031173706055,
+            0.5777517855167389,
+            0.7042330801486969,
+            49.999473571777344
+          ],
+          "fraction_mean": 0.05118953809142113,
+          "fraction_at_zero": 0.1912841796875,
+          "active_sharp_share": 0.5568520426750183,
+          "active_both_near_grid_share": 0.0022343595046550035,
+          "active_amplitude_rms": 0.3005745004138332,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.033391261171797415,
+            0.11432472691161867,
+            0.10873882820258192
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012413108242303873,
+            0.00484111221449851,
+            0.004344587884806355
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.033391261171797415,
+            0.11432472691161867,
+            0.10873882820258192
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7939,
+          "radius_mean": 1.1087796518404502,
+          "radius_quantiles": [
+            0.5,
+            0.5049324035644531,
+            0.5789124965667725,
+            0.7097833156585693,
+            49.99594497680664
+          ],
+          "fraction_mean": 0.05126701295375824,
+          "fraction_at_zero": 0.1854248046875,
+          "active_sharp_share": 0.5612797737121582,
+          "active_both_near_grid_share": 0.0020153671503067017,
+          "active_amplitude_rms": 0.15917175232792946,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.024814208338581688,
+            0.0939664945207205,
+            0.09459629676281649
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0018894067262879457,
+            0.0027711298652223202
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.024814208338581688,
+            0.0939664945207205,
+            0.09459629676281649
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 8013,
+          "radius_mean": 1.0514432754935115,
+          "radius_quantiles": [
+            0.5,
+            0.5036879628896713,
+            0.5747228264808655,
+            0.702682763338089,
+            49.9997673034668
+          ],
+          "fraction_mean": 0.04968336969614029,
+          "fraction_at_zero": 0.1905517578125,
+          "active_sharp_share": 0.563709020614624,
+          "active_both_near_grid_share": 0.0011231749085709453,
+          "active_amplitude_rms": 0.30071976055532607,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03182328715836766,
+            0.11381505054286785,
+            0.1216772744290528
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0041183077499064025,
+            0.005865468613503058
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.03182328715836766,
+            0.11381505054286785,
+            0.1216772744290528
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7885,
+          "radius_mean": 1.2279130568203982,
+          "radius_quantiles": [
+            0.5,
+            0.5050926059484482,
+            0.5822165906429291,
+            0.7145865708589554,
+            49.98981857299805
+          ],
+          "fraction_mean": 0.052513740956783295,
+          "fraction_at_zero": 0.1767578125,
+          "active_sharp_share": 0.5542168617248535,
+          "active_both_near_grid_share": 0.002029169350862503,
+          "active_amplitude_rms": 0.15445103329621881,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.028154724159797084,
+            0.09955611921369689,
+            0.0963855421686747
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.003804692454026633,
+            0.0019023462270133164
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.028154724159797084,
+            0.09955611921369689,
+            0.0963855421686747
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 8026,
+          "radius_mean": 1.00845065604517,
+          "radius_quantiles": [
+            0.5,
+            0.5041599422693253,
+            0.5747831463813782,
+            0.6989566832780838,
+            49.97822189331055
+          ],
+          "fraction_mean": 0.0493694469332695,
+          "fraction_at_zero": 0.185302734375,
+          "active_sharp_share": 0.5652878284454346,
+          "active_both_near_grid_share": 0.0009967605583369732,
+          "active_amplitude_rms": 0.2936780020693023,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03314228756541241,
+            0.11275853476202342,
+            0.12596561176177423
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.004360827311238475,
+            0.00672813356591079
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.03314228756541241,
+            0.11275853476202342,
+            0.12596561176177423
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7891,
+          "radius_mean": 1.224547045021609,
+          "radius_quantiles": [
+            0.5,
+            0.5054728835821152,
+            0.5821866989135742,
+            0.7087296396493912,
+            49.999691009521484
+          ],
+          "fraction_mean": 0.05080241709947586,
+          "fraction_at_zero": 0.1767578125,
+          "active_sharp_share": 0.5582308769226074,
+          "active_both_near_grid_share": 0.0007603599224239588,
+          "active_amplitude_rms": 0.14687222408154318,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.02787986313521734,
+            0.10112786719047016,
+            0.10923837282980611
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.004181979470282601,
+            0.0035483462172094795
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.02787986313521734,
+            0.10112786719047016,
+            0.10923837282980611
+          ]
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 8071,
+          "radius_mean": 1.4069587554040481,
+          "radius_quantiles": [
+            0.5,
+            0.5033633857965469,
+            0.5412212610244751,
+            1.2056428492069244,
+            49.99894714355469
+          ],
+          "fraction_mean": 0.10516679286956787,
+          "fraction_at_zero": 0.1710205078125,
+          "active_sharp_share": 0.5606492757797241,
+          "active_both_near_grid_share": 0.15053898096084595,
+          "active_amplitude_rms": 0.39509465405210387,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.00024780076818238137,
+            0.25102217816875233,
+            0.36909924420765705,
+            0.37170115227357203
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.011522735720480733,
+            0.01610704993185479
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.00024780076818238137,
+            0.25102217816875233,
+            0.36909924420765705,
+            0.37170115227357203
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 8059,
+          "radius_mean": 1.378637972251454,
+          "radius_quantiles": [
+            0.5,
+            0.5032134652137756,
+            0.5303935706615448,
+            1.1738739907741547,
+            49.9920654296875
+          ],
+          "fraction_mean": 0.1023450717329979,
+          "fraction_at_zero": 0.1712646484375,
+          "active_sharp_share": 0.5809653997421265,
+          "active_both_near_grid_share": 0.1694999486207962,
+          "active_amplitude_rms": 0.31655573548757837,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.27931505149522273,
+            0.3883856557885594,
+            0.3980642759647599
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.013028911775654548,
+            0.013152996649708402
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.27931505149522273,
+            0.3883856557885594,
+            0.3980642759647599
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 8061,
+          "radius_mean": 1.2812901961879106,
+          "radius_quantiles": [
+            0.5,
+            0.5022185146808624,
+            0.5255686342716217,
+            1.1389108896255493,
+            49.99374008178711
+          ],
+          "fraction_mean": 0.09547964483499527,
+          "fraction_at_zero": 0.1722412109375,
+          "active_sharp_share": 0.5960798859596252,
+          "active_both_near_grid_share": 0.12169706076383591,
+          "active_amplitude_rms": 0.3883272762501342,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3309763056692718,
+            0.43146011661084227,
+            0.43071579208534916
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.029524872844560224,
+            0.031881900508621754
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3309763056692718,
+            0.43146011661084227,
+            0.43071579208534916
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 8057,
+          "radius_mean": 1.370067565694626,
+          "radius_quantiles": [
+            0.5,
+            0.5026660412549973,
+            0.5302212238311768,
+            1.1571349501609802,
+            49.998722076416016
+          ],
+          "fraction_mean": 0.10067448765039444,
+          "fraction_at_zero": 0.1685791015625,
+          "active_sharp_share": 0.5792478322982788,
+          "active_both_near_grid_share": 0.12634974718093872,
+          "active_amplitude_rms": 0.28905573159179176,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.32319721980886185,
+            0.41479458855653467,
+            0.4242273799180836
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012411567580985477,
+            0.030532456249224273,
+            0.027926027057217324
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.32319721980886185,
+            0.41479458855653467,
+            0.4242273799180836
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 8074,
+          "radius_mean": 1.2146822499926202,
+          "radius_quantiles": [
+            0.5,
+            0.5022681802511215,
+            0.5250005722045898,
+            1.1109759211540222,
+            49.9920539855957
+          ],
+          "fraction_mean": 0.09284880757331848,
+          "fraction_at_zero": 0.17138671875,
+          "active_sharp_share": 0.5910329222679138,
+          "active_both_near_grid_share": 0.10416150838136673,
+          "active_amplitude_rms": 0.3795687684356591,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0006192717364379489,
+            0.3524894723804805,
+            0.4437701263314342,
+            0.4448848154570225
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012385434728758978,
+            0.037032449838989345,
+            0.04099578895219222
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0006192717364379489,
+            0.3524894723804805,
+            0.4437701263314342,
+            0.4448848154570225
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 8053,
+          "radius_mean": 1.3553199454181595,
+          "radius_quantiles": [
+            0.5,
+            0.5027488172054291,
+            0.5341643691062927,
+            1.1919855773448944,
+            49.996917724609375
+          ],
+          "fraction_mean": 0.10201413929462433,
+          "fraction_at_zero": 0.15673828125,
+          "active_sharp_share": 0.5702223181724548,
+          "active_both_near_grid_share": 0.10480566322803497,
+          "active_amplitude_rms": 0.2779671790497279,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3392524525021731,
+            0.4202160685458835,
+            0.42195455109896934
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.03986092139575314,
+            0.03315534583385074
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3392524525021731,
+            0.4202160685458835,
+            0.42195455109896934
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 8066,
+          "radius_mean": 1.3014042289723875,
+          "radius_quantiles": [
+            0.5,
+            0.5021626502275467,
+            0.5260748565196991,
+            1.1286143362522125,
+            49.9461784362793
+          ],
+          "fraction_mean": 0.0950743779540062,
+          "fraction_at_zero": 0.1641845703125,
+          "active_sharp_share": 0.5891396403312683,
+          "active_both_near_grid_share": 0.09385073930025101,
+          "active_amplitude_rms": 0.37446072201272806,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.35184726010414086,
+            0.4413587899826432,
+            0.43763947433672207
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0402925861641458,
+            0.04351599305727746
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.35184726010414086,
+            0.4413587899826432,
+            0.43763947433672207
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 8027,
+          "radius_mean": 1.3532836181402672,
+          "radius_quantiles": [
+            0.5,
+            0.5024888515472412,
+            0.5331804156303406,
+            1.1835123002529144,
+            49.99977111816406
+          ],
+          "fraction_mean": 0.10093355923891068,
+          "fraction_at_zero": 0.1597900390625,
+          "active_sharp_share": 0.5700759887695312,
+          "active_both_near_grid_share": 0.08969727158546448,
+          "active_amplitude_rms": 0.27229061181953934,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.33574187118475146,
+            0.4230721315559985,
+            0.4241933474523483
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00024915908807773764,
+            0.03849507910801046,
+            0.03662638594742743
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.33574187118475146,
+            0.4230721315559985,
+            0.4241933474523483
+          ]
+        }
+      }
+    ],
+    "m16-c8-e10": [
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 7934,
+          "radius_mean": 0.9285165186811355,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.92075729370117
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005041593103669584,
+          "active_amplitude_rms": 0.2687167206310235
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7481,
+          "radius_mean": 1.5730354848055867,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9986572265625
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002673439448699355,
+          "active_amplitude_rms": 0.09766913939879684
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 7930,
+          "radius_mean": 0.9798116745660082,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9942626953125
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005044136196374893,
+          "active_amplitude_rms": 0.2679508950985318
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7509,
+          "radius_mean": 1.63240387354017,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.998817443847656
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.000532694102730602,
+          "active_amplitude_rms": 0.09768047455254965
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 7960,
+          "radius_mean": 0.875757135625463,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99315643310547
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005025125574320555,
+          "active_amplitude_rms": 0.26836702664792095
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7501,
+          "radius_mean": 1.5237777847287362,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999996185302734
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 0.9999999403953552,
+          "active_both_near_grid_share": 0.0005332622095011175,
+          "active_amplitude_rms": 0.09760621704286794
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 7944,
+          "radius_mean": 0.9542173341978923,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999515533447266
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00037764350418001413,
+          "active_amplitude_rms": 0.26906061309835116
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7504,
+          "radius_mean": 1.6661509701880277,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99998474121094
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005330490530468524,
+          "active_amplitude_rms": 0.09765127964644787
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 8021,
+          "radius_mean": 1.0108620591636281,
+          "radius_quantiles": [
+            0.5,
+            0.506959080696106,
+            0.5938681662082672,
+            0.7325196862220764,
+            49.99898910522461
+          ],
+          "fraction_mean": 0.05854395404458046,
+          "fraction_at_zero": 0.1795654296875,
+          "active_sharp_share": 0.523251473903656,
+          "active_both_near_grid_share": 0.0061089638620615005,
+          "active_amplitude_rms": 0.29835905151310993,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.018576237376885674,
+            0.07629971325271162,
+            0.07929185887046503
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.001745418277022815,
+            0.0031168183518264555
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.001745418277022815,
+            0.0031168183518264555
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7913,
+          "radius_mean": 1.202545814201585,
+          "radius_quantiles": [
+            0.5,
+            0.5045464336872101,
+            0.5829911231994629,
+            0.7215736210346222,
+            49.99143600463867
+          ],
+          "fraction_mean": 0.05425745248794556,
+          "fraction_at_zero": 0.188232421875,
+          "active_sharp_share": 0.5551623702049255,
+          "active_both_near_grid_share": 0.006065967492759228,
+          "active_amplitude_rms": 0.16345742475627092,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.01604953873372931,
+            0.07683558700871984,
+            0.07948944774421839
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0015164918488563125,
+            0.0021483634525464425
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0015164918488563125,
+            0.0021483634525464425
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 8041,
+          "radius_mean": 0.980243253565277,
+          "radius_quantiles": [
+            0.5,
+            0.5043279081583023,
+            0.5814767181873322,
+            0.7079949229955673,
+            49.991180419921875
+          ],
+          "fraction_mean": 0.05255696177482605,
+          "fraction_at_zero": 0.19091796875,
+          "active_sharp_share": 0.5457032918930054,
+          "active_both_near_grid_share": 0.008829748257994652,
+          "active_amplitude_rms": 0.3007138689426337,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0320855614973262,
+            0.11006093769431662,
+            0.1040915309041164
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.006839945280437756,
+            0.006218132073125233
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.006839945280437756,
+            0.006218132073125233
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7919,
+          "radius_mean": 1.1367789106225246,
+          "radius_quantiles": [
+            0.5,
+            0.5042589902877808,
+            0.5821217000484467,
+            0.7114295959472656,
+            49.99700164794922
+          ],
+          "fraction_mean": 0.05205643177032471,
+          "fraction_at_zero": 0.1920166015625,
+          "active_sharp_share": 0.5541103482246399,
+          "active_both_near_grid_share": 0.0063139284029603004,
+          "active_amplitude_rms": 0.15946356876459297,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.023614092688470766,
+            0.09230963505493117,
+            0.09117312792019194
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.003914635686324031,
+            0.0029044071221113778
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.003914635686324031,
+            0.0029044071221113778
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 8040,
+          "radius_mean": 0.9584756797703449,
+          "radius_quantiles": [
+            0.5,
+            0.5041444599628448,
+            0.5763417482376099,
+            0.7070474028587341,
+            49.99119567871094
+          ],
+          "fraction_mean": 0.05092601478099823,
+          "fraction_at_zero": 0.1923828125,
+          "active_sharp_share": 0.5625622272491455,
+          "active_both_near_grid_share": 0.007462686859071255,
+          "active_amplitude_rms": 0.30018497406843414,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.033457711442786066,
+            0.11206467661691541,
+            0.11890547263681592
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.008333333333333333,
+            0.010199004975124378
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.008333333333333333,
+            0.010199004975124378
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7889,
+          "radius_mean": 1.321481490820588,
+          "radius_quantiles": [
+            0.5,
+            0.5051406770944595,
+            0.583145260810852,
+            0.7175412625074387,
+            49.99982833862305
+          ],
+          "fraction_mean": 0.05291379615664482,
+          "fraction_at_zero": 0.183349609375,
+          "active_sharp_share": 0.555330216884613,
+          "active_both_near_grid_share": 0.0082393204793334,
+          "active_amplitude_rms": 0.15460254354482914,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.02585879072125745,
+            0.09747750031689695,
+            0.09570287742426163
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.006084421346178223,
+            0.004943592343769806
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.006084421346178223,
+            0.004943592343769806
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 8015,
+          "radius_mean": 0.985771882798872,
+          "radius_quantiles": [
+            0.5,
+            0.5038154721260071,
+            0.5740969479084015,
+            0.698210746049881,
+            49.95947265625
+          ],
+          "fraction_mean": 0.04933115839958191,
+          "fraction_at_zero": 0.1927490234375,
+          "active_sharp_share": 0.5669370293617249,
+          "active_both_near_grid_share": 0.007485964335501194,
+          "active_amplitude_rms": 0.29367023962641475,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03505926388022458,
+            0.11391141609482222,
+            0.1258889582033687
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.00960698689956332,
+            0.012601372426699939
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.00960698689956332,
+            0.012601372426699939
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7884,
+          "radius_mean": 1.3221609694955987,
+          "radius_quantiles": [
+            0.5,
+            0.5052118450403214,
+            0.5819067060947418,
+            0.7113506197929382,
+            49.999900817871094
+          ],
+          "fraction_mean": 0.05132818594574928,
+          "fraction_at_zero": 0.18212890625,
+          "active_sharp_share": 0.5570775866508484,
+          "active_both_near_grid_share": 0.0059614405035972595,
+          "active_amplitude_rms": 0.14665342693817487,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.028538812785388126,
+            0.1019786910197869,
+            0.10553018772196854
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.008244545915778792,
+            0.007102993404363267
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.008244545915778792,
+            0.007102993404363267
+          ]
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 8078,
+          "radius_mean": 1.400531153747579,
+          "radius_quantiles": [
+            0.5,
+            0.5004041939973831,
+            0.5604990124702454,
+            1.212106853723526,
+            49.988582611083984
+          ],
+          "fraction_mean": 0.1085418164730072,
+          "fraction_at_zero": 0.235107421875,
+          "active_sharp_share": 0.5441941022872925,
+          "active_both_near_grid_share": 0.08702648431062698,
+          "active_amplitude_rms": 0.3931273983986585,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.00037137905422134196,
+            0.14186679871255262,
+            0.27581084426838326,
+            0.28360980440703143
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012379301807378064,
+            0.003094825451844516,
+            0.007427581084426839
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00012379301807378064,
+            0.003094825451844516,
+            0.007427581084426839
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 8062,
+          "radius_mean": 1.4331150615034858,
+          "radius_quantiles": [
+            0.5,
+            0.5001068711280823,
+            0.5494615137577057,
+            1.191634327173233,
+            49.961544036865234
+          ],
+          "fraction_mean": 0.10596714913845062,
+          "fraction_at_zero": 0.2454833984375,
+          "active_sharp_share": 0.5591664910316467,
+          "active_both_near_grid_share": 0.0859588235616684,
+          "active_amplitude_rms": 0.3156330268271968,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.15988588439593152,
+            0.2976928801786157,
+            0.30637558918382535
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0064500124038700075,
+            0.0027288514016373107
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0064500124038700075,
+            0.0027288514016373107
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 8089,
+          "radius_mean": 1.2519968359338236,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5368294715881348,
+            1.1347418427467346,
+            49.993282318115234
+          ],
+          "fraction_mean": 0.09553821384906769,
+          "fraction_at_zero": 0.25732421875,
+          "active_sharp_share": 0.5826430916786194,
+          "active_both_near_grid_share": 0.09543824940919876,
+          "active_amplitude_rms": 0.3870369212154724,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2219062924959822,
+            0.3515885770799852,
+            0.35146495240449993
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0006181233774261343,
+            0.011126220793670417,
+            0.019038200024724936
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0006181233774261343,
+            0.011126220793670417,
+            0.019038200024724936
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 8045,
+          "radius_mean": 1.3583142849311116,
+          "radius_quantiles": [
+            0.5,
+            0.5001984685659409,
+            0.5454253256320953,
+            1.1797117590904236,
+            49.98999786376953
+          ],
+          "fraction_mean": 0.10222426056861877,
+          "fraction_at_zero": 0.242919921875,
+          "active_sharp_share": 0.5679303407669067,
+          "active_both_near_grid_share": 0.09011808037757874,
+          "active_amplitude_rms": 0.2892828696597991,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.21963952765692976,
+            0.3405842137973897,
+            0.34394033561218146
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0002486016159105034,
+            0.018396519577377254,
+            0.009944064636420136
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0002486016159105034,
+            0.018396519577377254,
+            0.009944064636420136
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 8075,
+          "radius_mean": 1.2639636914027506,
+          "radius_quantiles": [
+            0.5,
+            0.5000013411045074,
+            0.5426076352596283,
+            1.134125530719757,
+            49.92685317993164
+          ],
+          "fraction_mean": 0.09581160545349121,
+          "fraction_at_zero": 0.250732421875,
+          "active_sharp_share": 0.5788235068321228,
+          "active_both_near_grid_share": 0.08569659292697906,
+          "active_amplitude_rms": 0.379191831151808,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0001238390092879257,
+            0.24111455108359134,
+            0.3614860681114551,
+            0.3653250773993808
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0008668730650154799,
+            0.015232198142414862,
+            0.02501547987616099
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0008668730650154799,
+            0.015232198142414862,
+            0.02501547987616099
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 8042,
+          "radius_mean": 1.4355296576977707,
+          "radius_quantiles": [
+            0.5,
+            0.5000225007534027,
+            0.548298180103302,
+            1.1806211471557617,
+            49.999267578125
+          ],
+          "fraction_mean": 0.10279274731874466,
+          "fraction_at_zero": 0.2490234375,
+          "active_sharp_share": 0.5611788034439087,
+          "active_both_near_grid_share": 0.0912708267569542,
+          "active_amplitude_rms": 0.2785223398554267,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.23700571997015668,
+            0.3541407610047252,
+            0.35650335737378763
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0002486943546381497,
+            0.02051728425764735,
+            0.01255906490922656
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0002486943546381497,
+            0.02051728425764735,
+            0.01255906490922656
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 8073,
+          "radius_mean": 1.278186363138957,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5352668464183807,
+            1.1576623320579529,
+            50.0
+          ],
+          "fraction_mean": 0.0971394032239914,
+          "fraction_at_zero": 0.2532958984375,
+          "active_sharp_share": 0.5825591087341309,
+          "active_both_near_grid_share": 0.09054873883724213,
+          "active_amplitude_rms": 0.3749969443924024,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.25814443205747556,
+            0.3765638548247244,
+            0.38003220611916266
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0006193484454354019,
+            0.019571410875758703,
+            0.02886163755728973
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0006193484454354019,
+            0.019571410875758703,
+            0.02886163755728973
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 8051,
+          "radius_mean": 1.3571038581430912,
+          "radius_quantiles": [
+            0.5,
+            0.5000913143157959,
+            0.5519382059574127,
+            1.19489187002182,
+            49.98451232910156
+          ],
+          "fraction_mean": 0.10407370328903198,
+          "fraction_at_zero": 0.246337890625,
+          "active_sharp_share": 0.5570736527442932,
+          "active_both_near_grid_share": 0.08433735370635986,
+          "active_amplitude_rms": 0.27111180804247154,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2394733573469134,
+            0.35784374611849457,
+            0.3556079990063346
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00037262451869333,
+            0.02422059371506645,
+            0.014283939883244317
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00037262451869333,
+            0.02422059371506645,
+            0.014283939883244317
+          ]
+        }
+      }
+    ],
+    "m16-c16-e8": [
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 15684,
+          "radius_mean": 1.0745639084525465,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.982147216796875
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005100739654153585,
+          "active_amplitude_rms": 0.19109879310116282
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 14422,
+          "radius_mean": 2.092126982035552,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99961471557617
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 0.9999999403953552,
+          "active_both_near_grid_share": 0.00020801552454940975,
+          "active_amplitude_rms": 0.07034411546546716
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 15710,
+          "radius_mean": 1.0844790817936882,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99713134765625
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00031826860504224896,
+          "active_amplitude_rms": 0.1908957424812812
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 14478,
+          "radius_mean": 1.9913765162527852,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99940490722656
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 6.907031638547778e-05,
+          "active_amplitude_rms": 0.0700809122620225
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 15727,
+          "radius_mean": 0.9826960872633208,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99660110473633
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005722643109038472,
+          "active_amplitude_rms": 0.19132793356333053
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 14398,
+          "radius_mean": 2.02987493800174,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999996185302734
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002083622821373865,
+          "active_amplitude_rms": 0.07022823133568735
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 15673,
+          "radius_mean": 1.0682096561067738,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999759674072266
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002552159712649882,
+          "active_amplitude_rms": 0.1904696350151283
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 14396,
+          "radius_mean": 2.0796848458958266,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99999237060547
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00013892748393118382,
+          "active_amplitude_rms": 0.0702412734896235
+        }
+      },
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 15853,
+          "radius_mean": 1.2388153305982996,
+          "radius_quantiles": [
+            0.5,
+            0.506600022315979,
+            0.5951116681098938,
+            0.7306989133358002,
+            49.999900817871094
+          ],
+          "fraction_mean": 0.05725398659706116,
+          "fraction_at_zero": 0.17266845703125,
+          "active_sharp_share": 0.5255156755447388,
+          "active_both_near_grid_share": 0.00290165888145566,
+          "active_amplitude_rms": 0.2195956098718893,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.024601021888601526,
+            0.08591433798019303,
+            0.0874913265627957
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.001703147669210875,
+            0.001955465842427301
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.024601021888601526,
+            0.08591433798019303,
+            0.0874913265627957
+          ]
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 15597,
+          "radius_mean": 1.4281490601206315,
+          "radius_quantiles": [
+            0.5,
+            0.5059586465358734,
+            0.5909596681594849,
+            0.7254617363214493,
+            49.99995803833008
+          ],
+          "fraction_mean": 0.05489397421479225,
+          "fraction_at_zero": 0.1771240234375,
+          "active_sharp_share": 0.5404885411262512,
+          "active_both_near_grid_share": 0.0019234467763453722,
+          "active_amplitude_rms": 0.13111500275215754,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.019298583060845035,
+            0.08341347695069565,
+            0.08264409822401744
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.002308136180034622,
+            0.0008334936205680579
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.019298583060845035,
+            0.08341347695069565,
+            0.08264409822401744
+          ]
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 15866,
+          "radius_mean": 1.2055104777318775,
+          "radius_quantiles": [
+            0.5,
+            0.5049494057893753,
+            0.5797548890113831,
+            0.709331750869751,
+            49.99365234375
+          ],
+          "fraction_mean": 0.05139265954494476,
+          "fraction_at_zero": 0.1839599609375,
+          "active_sharp_share": 0.5584898591041565,
+          "active_both_near_grid_share": 0.0015756965149194002,
+          "active_amplitude_rms": 0.2255976370019813,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.030820622715240133,
+            0.10884911130719778,
+            0.10840791629900415
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.003340476490608849,
+            0.004601033656876339
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.030820622715240133,
+            0.10884911130719778,
+            0.10840791629900415
+          ]
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 15646,
+          "radius_mean": 1.405750075893593,
+          "radius_quantiles": [
+            0.5,
+            0.5056587159633636,
+            0.5853679478168488,
+            0.7139559984207153,
+            49.999961853027344
+          ],
+          "fraction_mean": 0.05214496701955795,
+          "fraction_at_zero": 0.17767333984375,
+          "active_sharp_share": 0.554135262966156,
+          "active_both_near_grid_share": 0.0014061102410778403,
+          "active_amplitude_rms": 0.13044017107033187,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.02550172568068516,
+            0.0976607439601176,
+            0.09791640035791896
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.002748306276364566,
+            0.0026843921769142275
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.02550172568068516,
+            0.0976607439601176,
+            0.09791640035791896
+          ]
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 15946,
+          "radius_mean": 1.1185709702185704,
+          "radius_quantiles": [
+            0.5,
+            0.5048802196979523,
+            0.5796767473220825,
+            0.7061540335416794,
+            49.966636657714844
+          ],
+          "fraction_mean": 0.050522349774837494,
+          "fraction_at_zero": 0.18115234375,
+          "active_sharp_share": 0.5541828870773315,
+          "active_both_near_grid_share": 0.0011288097593933344,
+          "active_amplitude_rms": 0.22832213769575588,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03148124921610435,
+            0.11438605292863416,
+            0.12228772105857269
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.004577950583218362,
+            0.005894895271541453
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.03148124921610435,
+            0.11438605292863416,
+            0.12228772105857269
+          ]
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 15647,
+          "radius_mean": 1.3933644807511882,
+          "radius_quantiles": [
+            0.5,
+            0.5055809020996094,
+            0.5827370285987854,
+            0.7077527940273285,
+            49.999977111816406
+          ],
+          "fraction_mean": 0.05041443556547165,
+          "fraction_at_zero": 0.17340087890625,
+          "active_sharp_share": 0.5619608163833618,
+          "active_both_near_grid_share": 0.00140602036844939,
+          "active_amplitude_rms": 0.13076505176594277,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.025052725762126925,
+            0.10436505400396243,
+            0.10442896401866172
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0027481306320700453,
+            0.0020451204703777082
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.025052725762126925,
+            0.10436505400396243,
+            0.10442896401866172
+          ]
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 15904,
+          "radius_mean": 1.1663985513259831,
+          "radius_quantiles": [
+            0.5,
+            0.5049896389245987,
+            0.573951005935669,
+            0.6971964985132217,
+            49.999412536621094
+          ],
+          "fraction_mean": 0.04722193256020546,
+          "fraction_at_zero": 0.178955078125,
+          "active_sharp_share": 0.5709255337715149,
+          "active_both_near_grid_share": 0.0006916498532518744,
+          "active_amplitude_rms": 0.22180543671559183,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03502263581488934,
+            0.1302816901408451,
+            0.1312877263581489
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.007168008048289739,
+            0.007356639839034206
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.03502263581488934,
+            0.1302816901408451,
+            0.1312877263581489
+          ]
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 15568,
+          "radius_mean": 1.463702193199424,
+          "radius_quantiles": [
+            0.5,
+            0.5063107758760452,
+            0.5876035392284393,
+            0.7121926099061966,
+            49.999820709228516
+          ],
+          "fraction_mean": 0.05121155455708504,
+          "fraction_at_zero": 0.17071533203125,
+          "active_sharp_share": 0.5517086386680603,
+          "active_both_near_grid_share": 0.0010919836349785328,
+          "active_amplitude_rms": 0.12410014087930826,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.02864850976361768,
+            0.1117677286742035,
+            0.11215313463514903
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0041752312435765675,
+            0.0045606372045220965
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.02864850976361768,
+            0.1117677286742035,
+            0.11215313463514903
+          ]
+        }
+      },
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 16042,
+          "radius_mean": 1.651562230719719,
+          "radius_quantiles": [
+            0.5,
+            0.5047001838684082,
+            0.5722113251686096,
+            1.3177724182605743,
+            49.999942779541016
+          ],
+          "fraction_mean": 0.12146767973899841,
+          "fraction_at_zero": 0.15289306640625,
+          "active_sharp_share": 0.5307941436767578,
+          "active_both_near_grid_share": 0.13645431399345398,
+          "active_amplitude_rms": 0.31957280076785793,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2722229148485226,
+            0.3635456925570377,
+            0.3621119561151976
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            6.233636703652911e-05,
+            0.017703528238374268,
+            0.01764119187133774
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.2722229148485226,
+            0.3635456925570377,
+            0.3621119561151976
+          ]
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 16015,
+          "radius_mean": 1.6537631695864548,
+          "radius_quantiles": [
+            0.5,
+            0.5040762275457382,
+            0.5563460886478424,
+            1.302434891462326,
+            49.985076904296875
+          ],
+          "fraction_mean": 0.11947453022003174,
+          "fraction_at_zero": 0.15447998046875,
+          "active_sharp_share": 0.545988142490387,
+          "active_both_near_grid_share": 0.139306902885437,
+          "active_amplitude_rms": 0.27836592630501183,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3047143303153294,
+            0.38876053699656576,
+            0.393755853886981
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00018732438339057135,
+            0.02216671870121761,
+            0.021604745551045895
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3047143303153294,
+            0.38876053699656576,
+            0.393755853886981
+          ]
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 16065,
+          "radius_mean": 1.538678223711031,
+          "radius_quantiles": [
+            0.5,
+            0.5028552114963531,
+            0.5381395816802979,
+            1.254690945148468,
+            50.0
+          ],
+          "fraction_mean": 0.11048373579978943,
+          "fraction_at_zero": 0.156005859375,
+          "active_sharp_share": 0.5626516938209534,
+          "active_both_near_grid_share": 0.09741674363613129,
+          "active_amplitude_rms": 0.32475718757199257,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.33383131030189855,
+            0.41531279178338004,
+            0.41419234360410834
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012449424214130097,
+            0.03734827264239029,
+            0.03772175536881419
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.33383131030189855,
+            0.41531279178338004,
+            0.41419234360410834
+          ]
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 15985,
+          "radius_mean": 1.592799266523798,
+          "radius_quantiles": [
+            0.5,
+            0.5031628906726837,
+            0.5498760044574738,
+            1.2702819108963013,
+            49.99675750732422
+          ],
+          "fraction_mean": 0.11414237320423126,
+          "fraction_at_zero": 0.1485595703125,
+          "active_sharp_share": 0.5500156283378601,
+          "active_both_near_grid_share": 0.09765404462814331,
+          "active_amplitude_rms": 0.26475183700462834,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3356271504535502,
+            0.4120738192055051,
+            0.413700344072568
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            6.255864873318736e-05,
+            0.03872380356584298,
+            0.03784798248357835
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3356271504535502,
+            0.4120738192055051,
+            0.413700344072568
+          ]
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 16064,
+          "radius_mean": 1.4922585508975317,
+          "radius_quantiles": [
+            0.5,
+            0.5025332570075989,
+            0.5338035225868225,
+            1.229095846414566,
+            49.99868392944336
+          ],
+          "fraction_mean": 0.10658743977546692,
+          "fraction_at_zero": 0.15557861328125,
+          "active_sharp_share": 0.5687873959541321,
+          "active_both_near_grid_share": 0.08291833102703094,
+          "active_amplitude_rms": 0.32804863898465497,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3532121513944223,
+            0.4323954183266932,
+            0.4303411354581673
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0001245019920318725,
+            0.046875,
+            0.04556772908366534
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3532121513944223,
+            0.4323954183266932,
+            0.4303411354581673
+          ]
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 16021,
+          "radius_mean": 1.5603256821268587,
+          "radius_quantiles": [
+            0.5,
+            0.5028169602155685,
+            0.5386362969875336,
+            1.2588537335395813,
+            50.0
+          ],
+          "fraction_mean": 0.11137673258781433,
+          "fraction_at_zero": 0.15228271484375,
+          "active_sharp_share": 0.5603270530700684,
+          "active_both_near_grid_share": 0.08570002019405365,
+          "active_amplitude_rms": 0.2619440836534982,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3525372948005742,
+            0.4244429186692466,
+            0.4292491105424131
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00018725422882466764,
+            0.043567817239872665,
+            0.0445665064602709
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3525372948005742,
+            0.4244429186692466,
+            0.4292491105424131
+          ]
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 16044,
+          "radius_mean": 1.4114100239567051,
+          "radius_quantiles": [
+            0.5,
+            0.5020401477813721,
+            0.5309480130672455,
+            1.198285847902298,
+            50.0
+          ],
+          "fraction_mean": 0.10301770269870758,
+          "fraction_at_zero": 0.1619873046875,
+          "active_sharp_share": 0.5753552913665771,
+          "active_both_near_grid_share": 0.06662926822900772,
+          "active_amplitude_rms": 0.32282205370769873,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3605709299426577,
+            0.44134879082523065,
+            0.4405385190725505
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00018698578908002991,
+            0.04961356270256794,
+            0.04930191972076789
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3605709299426577,
+            0.44134879082523065,
+            0.4405385190725505
+          ]
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 15997,
+          "radius_mean": 1.5503755508034374,
+          "radius_quantiles": [
+            0.5,
+            0.5024633407592773,
+            0.5475853979587555,
+            1.255244106054306,
+            50.0
+          ],
+          "fraction_mean": 0.11169862747192383,
+          "fraction_at_zero": 0.153564453125,
+          "active_sharp_share": 0.5509783625602722,
+          "active_both_near_grid_share": 0.0628867968916893,
+          "active_amplitude_rms": 0.25646806483168405,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.3432518597236982,
+            0.41976620616365573,
+            0.42164155779208606
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0001250234418953554,
+            0.04613365005938614,
+            0.0423204350815778
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.3432518597236982,
+            0.41976620616365573,
+            0.42164155779208606
+          ]
+        }
+      }
+    ],
+    "m16-c16-e10": [
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 15684,
+          "radius_mean": 1.0745639084525465,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.982147216796875
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005100739654153585,
+          "active_amplitude_rms": 0.19109879310116282
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 14422,
+          "radius_mean": 2.092126982035552,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99961471557617
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 0.9999999403953552,
+          "active_both_near_grid_share": 0.00020801552454940975,
+          "active_amplitude_rms": 0.07034411546546716
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 15710,
+          "radius_mean": 1.0844790817936882,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99713134765625
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00031826860504224896,
+          "active_amplitude_rms": 0.1908957424812812
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 14478,
+          "radius_mean": 1.9913765162527852,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99940490722656
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 6.907031638547778e-05,
+          "active_amplitude_rms": 0.0700809122620225
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 15727,
+          "radius_mean": 0.9826960872633208,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99660110473633
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005722643109038472,
+          "active_amplitude_rms": 0.19132793356333053
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 14398,
+          "radius_mean": 2.02987493800174,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999996185302734
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002083622821373865,
+          "active_amplitude_rms": 0.07022823133568735
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 15673,
+          "radius_mean": 1.0682096561067738,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999759674072266
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002552159712649882,
+          "active_amplitude_rms": 0.1904696350151283
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 14396,
+          "radius_mean": 2.0796848458958266,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99999237060547
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00013892748393118382,
+          "active_amplitude_rms": 0.0702412734896235
+        }
+      },
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 15913,
+          "radius_mean": 1.1749251182191074,
+          "radius_quantiles": [
+            0.5,
+            0.506821408867836,
+            0.595658540725708,
+            0.7306715399026871,
+            50.0
+          ],
+          "fraction_mean": 0.057529516518116,
+          "fraction_at_zero": 0.1768798828125,
+          "active_sharp_share": 0.5216490030288696,
+          "active_both_near_grid_share": 0.006912587210536003,
+          "active_amplitude_rms": 0.2193280290901557,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.021931753911895936,
+            0.07980896122667003,
+            0.08188273738452838
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0022623012631182056,
+            0.0020109344561050715
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0022623012631182056,
+            0.0020109344561050715
+          ]
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 15586,
+          "radius_mean": 1.4503442393324804,
+          "radius_quantiles": [
+            0.5,
+            0.5065436512231827,
+            0.5930546522140503,
+            0.728550598025322,
+            49.99999237060547
+          ],
+          "fraction_mean": 0.05557188391685486,
+          "fraction_at_zero": 0.18243408203125,
+          "active_sharp_share": 0.5407416820526123,
+          "active_both_near_grid_share": 0.005517772398889065,
+          "active_amplitude_rms": 0.13107481812547822,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.018157320672398305,
+            0.0787244963428718,
+            0.07602977030668548
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0028872064673424866,
+            0.0021814448864365455
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0028872064673424866,
+            0.0021814448864365455
+          ]
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 15912,
+          "radius_mean": 1.1920600211669807,
+          "radius_quantiles": [
+            0.5,
+            0.5047733634710312,
+            0.5826271772384644,
+            0.7141224890947342,
+            49.9998893737793
+          ],
+          "fraction_mean": 0.05260557681322098,
+          "fraction_at_zero": 0.1912841796875,
+          "active_sharp_share": 0.5520990490913391,
+          "active_both_near_grid_share": 0.007918552495539188,
+          "active_amplitude_rms": 0.2251697733509387,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03154851684263449,
+            0.10363247863247863,
+            0.1051407742584213
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.006598793363499245,
+            0.0070387129210658615
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.006598793363499245,
+            0.0070387129210658615
+          ]
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 15641,
+          "radius_mean": 1.472631835982611,
+          "radius_quantiles": [
+            0.5,
+            0.5058850795030594,
+            0.584499180316925,
+            0.7147775143384933,
+            49.99721145629883
+          ],
+          "fraction_mean": 0.052334219217300415,
+          "fraction_at_zero": 0.18023681640625,
+          "active_sharp_share": 0.5525861382484436,
+          "active_both_near_grid_share": 0.006777060218155384,
+          "active_amplitude_rms": 0.13039431335401128,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.026341026788568502,
+            0.0979477015536091,
+            0.09826737420881017
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.004922958890096541,
+            0.004091809986573748
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.004922958890096541,
+            0.004091809986573748
+          ]
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 15931,
+          "radius_mean": 1.1613015172770247,
+          "radius_quantiles": [
+            0.5,
+            0.5044499784708023,
+            0.5801218152046204,
+            0.7052246779203415,
+            49.991004943847656
+          ],
+          "fraction_mean": 0.05071558803319931,
+          "fraction_at_zero": 0.188720703125,
+          "active_sharp_share": 0.5572155117988586,
+          "active_both_near_grid_share": 0.006402611266821623,
+          "active_amplitude_rms": 0.2280960878918154,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.035026049839934716,
+            0.11913878601468833,
+            0.12152407256292762
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            6.277069863787583e-05,
+            0.008222961521561734,
+            0.00991777038478438
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            6.277069863787583e-05,
+            0.008222961521561734,
+            0.00991777038478438
+          ]
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 15584,
+          "radius_mean": 1.4730131278702174,
+          "radius_quantiles": [
+            0.5,
+            0.5055647641420364,
+            0.5839765071868896,
+            0.7124189883470535,
+            49.99201965332031
+          ],
+          "fraction_mean": 0.0515114888548851,
+          "fraction_at_zero": 0.1806640625,
+          "active_sharp_share": 0.5579440593719482,
+          "active_both_near_grid_share": 0.005903490819036961,
+          "active_amplitude_rms": 0.13086232910751028,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.027977412731006162,
+            0.1064553388090349,
+            0.10741786447638604
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.005582648870636551,
+            0.005903490759753593
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.005582648870636551,
+            0.005903490759753593
+          ]
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 15909,
+          "radius_mean": 1.0996508550342696,
+          "radius_quantiles": [
+            0.5,
+            0.5045813769102097,
+            0.5753419399261475,
+            0.6939606815576553,
+            49.99988555908203
+          ],
+          "fraction_mean": 0.04741830751299858,
+          "fraction_at_zero": 0.18902587890625,
+          "active_sharp_share": 0.5689861178398132,
+          "active_both_near_grid_share": 0.007794329896569252,
+          "active_amplitude_rms": 0.22185235687988367,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.04180023885850776,
+            0.13432648186561064,
+            0.13570934691055375
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012571500408573762,
+            0.011691495379973599,
+            0.01320007542900245
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00012571500408573762,
+            0.011691495379973599,
+            0.01320007542900245
+          ]
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 15594,
+          "radius_mean": 1.4517271994409384,
+          "radius_quantiles": [
+            0.5,
+            0.5062710642814636,
+            0.5865362882614136,
+            0.7084131836891174,
+            49.99980163574219
+          ],
+          "fraction_mean": 0.05049176141619682,
+          "fraction_at_zero": 0.17498779296875,
+          "active_sharp_share": 0.5534821152687073,
+          "active_both_near_grid_share": 0.0063485954888165,
+          "active_amplitude_rms": 0.12434540921592142,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.03276901372322688,
+            0.11446710273181993,
+            0.11421059381813518
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.008593048608439144,
+            0.008593048608439144
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.008593048608439144,
+            0.008593048608439144
+          ]
+        }
+      },
+      {
+        "0.up": {
+          "A": 16384,
+          "active_atoms": 16032,
+          "radius_mean": 1.6191222228189872,
+          "radius_quantiles": [
+            0.5,
+            0.5008669197559357,
+            0.5851849317550659,
+            1.3058191537857056,
+            49.99754333496094
+          ],
+          "fraction_mean": 0.12088319659233093,
+          "fraction_at_zero": 0.226318359375,
+          "active_sharp_share": 0.5219560861587524,
+          "active_both_near_grid_share": 0.08046407252550125,
+          "active_amplitude_rms": 0.3199909586557336,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.1681636726546906,
+            0.28480538922155685,
+            0.28786177644710575
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.003181137724550898,
+            0.00592564870259481
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.003181137724550898,
+            0.00592564870259481
+          ]
+        },
+        "0.down": {
+          "A": 16384,
+          "active_atoms": 16041,
+          "radius_mean": 1.6535686519855517,
+          "radius_quantiles": [
+            0.5,
+            0.5004567801952362,
+            0.573171466588974,
+            1.3084342777729034,
+            50.0
+          ],
+          "fraction_mean": 0.12078288197517395,
+          "fraction_at_zero": 0.2315673828125,
+          "active_sharp_share": 0.532261073589325,
+          "active_both_near_grid_share": 0.08334891498088837,
+          "active_amplitude_rms": 0.27838001268968443,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.18421544791471856,
+            0.30079172121438813,
+            0.3105791409513123
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0065457265756498975,
+            0.003927435945389938
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0065457265756498975,
+            0.003927435945389938
+          ]
+        },
+        "1.up": {
+          "A": 16384,
+          "active_atoms": 16034,
+          "radius_mean": 1.5602130936349567,
+          "radius_quantiles": [
+            0.5,
+            0.5002534538507462,
+            0.56405970454216,
+            1.2654485404491425,
+            49.99915313720703
+          ],
+          "fraction_mean": 0.11400885879993439,
+          "fraction_at_zero": 0.23907470703125,
+          "active_sharp_share": 0.5443432927131653,
+          "active_both_near_grid_share": 0.08263690024614334,
+          "active_amplitude_rms": 0.32532551069434873,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2310714731196208,
+            0.3448297368092803,
+            0.3440813271797431
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00031183734564051396,
+            0.01365847573905451,
+            0.016901584133715855
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00031183734564051396,
+            0.01365847573905451,
+            0.016901584133715855
+          ]
+        },
+        "1.down": {
+          "A": 16384,
+          "active_atoms": 16012,
+          "radius_mean": 1.5977075172231707,
+          "radius_quantiles": [
+            0.5,
+            0.5002546161413193,
+            0.5642845928668976,
+            1.287619948387146,
+            50.0
+          ],
+          "fraction_mean": 0.11621755361557007,
+          "fraction_at_zero": 0.23931884765625,
+          "active_sharp_share": 0.541281521320343,
+          "active_both_near_grid_share": 0.08412440866231918,
+          "active_amplitude_rms": 0.26485409690886264,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2396952285785661,
+            0.35179865101174124,
+            0.35279790157381963
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.017299525355983014,
+            0.01380214838870847
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.017299525355983014,
+            0.01380214838870847
+          ]
+        },
+        "2.up": {
+          "A": 16384,
+          "active_atoms": 16077,
+          "radius_mean": 1.5185971576902375,
+          "radius_quantiles": [
+            0.5,
+            0.5002908557653427,
+            0.5566493272781372,
+            1.2285702228546143,
+            50.0
+          ],
+          "fraction_mean": 0.10982358455657959,
+          "fraction_at_zero": 0.23724365234375,
+          "active_sharp_share": 0.5545189380645752,
+          "active_both_near_grid_share": 0.08633451908826828,
+          "active_amplitude_rms": 0.3267477435575507,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.25552030851527024,
+            0.3622566399203831,
+            0.36661068607327235
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00024880263730795544,
+            0.018224793182807737,
+            0.024071655159544687
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00024880263730795544,
+            0.018224793182807737,
+            0.024071655159544687
+          ]
+        },
+        "2.down": {
+          "A": 16384,
+          "active_atoms": 16005,
+          "radius_mean": 1.5707057724430342,
+          "radius_quantiles": [
+            0.5,
+            0.5003497302532196,
+            0.5615991950035095,
+            1.2720953524112701,
+            49.99987030029297
+          ],
+          "fraction_mean": 0.11408080160617828,
+          "fraction_at_zero": 0.23809814453125,
+          "active_sharp_share": 0.5471414923667908,
+          "active_both_near_grid_share": 0.08834739029407501,
+          "active_amplitude_rms": 0.261144049757277,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.26416744767260236,
+            0.3644486098094346,
+            0.3750702905342081
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.00012496094970321776,
+            0.024867228990940335,
+            0.016994689159637616
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00012496094970321776,
+            0.024867228990940335,
+            0.016994689159637616
+          ]
+        },
+        "3.up": {
+          "A": 16384,
+          "active_atoms": 16066,
+          "radius_mean": 1.4541166336057358,
+          "radius_quantiles": [
+            0.5,
+            0.5000046938657761,
+            0.5475503504276276,
+            1.2019295394420624,
+            49.999725341796875
+          ],
+          "fraction_mean": 0.10505066812038422,
+          "fraction_at_zero": 0.2503662109375,
+          "active_sharp_share": 0.5672227144241333,
+          "active_both_near_grid_share": 0.08913233131170273,
+          "active_amplitude_rms": 0.322988591790353,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.2747416905265779,
+            0.38453877754263666,
+            0.38590812896800697
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0004979459728619445,
+            0.025768704095605627,
+            0.030872650317440558
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0004979459728619445,
+            0.025768704095605627,
+            0.030872650317440558
+          ]
+        },
+        "3.down": {
+          "A": 16384,
+          "active_atoms": 16033,
+          "radius_mean": 1.5116818450733263,
+          "radius_quantiles": [
+            0.5,
+            0.5003374367952347,
+            0.561051219701767,
+            1.2576720416545868,
+            49.99104309082031
+          ],
+          "fraction_mean": 0.11171811074018478,
+          "fraction_at_zero": 0.23785400390625,
+          "active_sharp_share": 0.5454375147819519,
+          "active_both_near_grid_share": 0.08781886845827103,
+          "active_amplitude_rms": 0.25675080057488,
+          "actual_atom_epsilon": 1e-10,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.27037984157674794,
+            0.37385392627705355,
+            0.3754755816129233
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0007484563088629701,
+            0.030686708663381773,
+            0.025884114014844382
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0007484563088629701,
+            0.030686708663381773,
+            0.025884114014844382
+          ]
+        }
+      }
+    ],
+    "legacy-m8": [
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 7934,
+          "radius_mean": 0.9285165186811355,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.92075729370117
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005041593103669584,
+          "active_amplitude_rms": 0.2687167206310235
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7481,
+          "radius_mean": 1.5730354848055867,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9986572265625
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0002673439448699355,
+          "active_amplitude_rms": 0.09766913939879684
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 7930,
+          "radius_mean": 0.9798116745660082,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.9942626953125
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005044136196374893,
+          "active_amplitude_rms": 0.2679508950985318
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7509,
+          "radius_mean": 1.63240387354017,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.998817443847656
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.000532694102730602,
+          "active_amplitude_rms": 0.09768047455254965
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 7960,
+          "radius_mean": 0.875757135625463,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99315643310547
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005025125574320555,
+          "active_amplitude_rms": 0.26836702664792095
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7501,
+          "radius_mean": 1.5237777847287362,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999996185302734
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 0.9999999403953552,
+          "active_both_near_grid_share": 0.0005332622095011175,
+          "active_amplitude_rms": 0.09760621704286794
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 7944,
+          "radius_mean": 0.9542173341978923,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.999515533447266
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.00037764350418001413,
+          "active_amplitude_rms": 0.26906061309835116
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7504,
+          "radius_mean": 1.6661509701880277,
+          "radius_quantiles": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            49.99998474121094
+          ],
+          "fraction_mean": 0.0,
+          "fraction_at_zero": 1.0,
+          "active_sharp_share": 1.0,
+          "active_both_near_grid_share": 0.0005330490530468524,
+          "active_amplitude_rms": 0.09765127964644787
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 7950,
+          "radius_mean": 1.361909412946261,
+          "radius_quantiles": [
+            0.5,
+            0.5063707828521729,
+            0.6234106421470642,
+            0.8541373163461685,
+            49.99753189086914
+          ],
+          "fraction_mean": 0.06752342730760574,
+          "fraction_at_zero": 0.20947265625,
+          "active_sharp_share": 0.47559747099876404,
+          "active_both_near_grid_share": 0.003144653979688883,
+          "active_amplitude_rms": 0.29972798383227034,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.000880503144654088,
+            0.002264150943396226
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.00012578616352201257
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.000880503144654088,
+            0.002264150943396226
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7752,
+          "radius_mean": 1.7424881277620443,
+          "radius_quantiles": [
+            0.5,
+            0.5040850043296814,
+            0.6146007478237152,
+            0.8514068275690079,
+            49.999916076660156
+          ],
+          "fraction_mean": 0.06445232033729553,
+          "fraction_at_zero": 0.2218017578125,
+          "active_sharp_share": 0.5009030103683472,
+          "active_both_near_grid_share": 0.0036119711585342884,
+          "active_amplitude_rms": 0.16297890123225536,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0023219814241486067,
+            0.001418988648090815
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0023219814241486067,
+            0.001418988648090815
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 7963,
+          "radius_mean": 1.272240064034122,
+          "radius_quantiles": [
+            0.5,
+            0.5043599456548691,
+            0.6048291325569153,
+            0.8187539577484131,
+            49.99648666381836
+          ],
+          "fraction_mean": 0.06229715421795845,
+          "fraction_at_zero": 0.2213134765625,
+          "active_sharp_share": 0.5058395266532898,
+          "active_both_near_grid_share": 0.0037674244958907366,
+          "active_amplitude_rms": 0.304027106117496,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.003265101092553058,
+            0.0030139394700489765
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.003265101092553058,
+            0.0030139394700489765
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7780,
+          "radius_mean": 1.6024755231046584,
+          "radius_quantiles": [
+            0.5,
+            0.5039510726928711,
+            0.6024533808231354,
+            0.8264096081256866,
+            49.99399185180664
+          ],
+          "fraction_mean": 0.06064140051603317,
+          "fraction_at_zero": 0.224853515625,
+          "active_sharp_share": 0.5201799869537354,
+          "active_both_near_grid_share": 0.0034704371355473995,
+          "active_amplitude_rms": 0.16091337909749087,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.002185089974293059,
+            0.002056555269922879
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.00012853470437017994,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.002185089974293059,
+            0.002056555269922879
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 7958,
+          "radius_mean": 1.1944715118734166,
+          "radius_quantiles": [
+            0.5,
+            0.5024967640638351,
+            0.5997891128063202,
+            0.8054079860448837,
+            49.999813079833984
+          ],
+          "fraction_mean": 0.059539489448070526,
+          "fraction_at_zero": 0.226806640625,
+          "active_sharp_share": 0.5131942629814148,
+          "active_both_near_grid_share": 0.0025131944566965103,
+          "active_amplitude_rms": 0.30327957674420014,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0032671525508921836,
+            0.0050263885398341285
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0032671525508921836,
+            0.0050263885398341285
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7760,
+          "radius_mean": 1.7014991969699622,
+          "radius_quantiles": [
+            0.5,
+            0.505069226026535,
+            0.6110913157463074,
+            0.8293759673833847,
+            49.99359893798828
+          ],
+          "fraction_mean": 0.061831094324588776,
+          "fraction_at_zero": 0.2135009765625,
+          "active_sharp_share": 0.5061855912208557,
+          "active_both_near_grid_share": 0.0050257733091712,
+          "active_amplitude_rms": 0.15646700126413796,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0032216494845360827,
+            0.0028350515463917525
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0032216494845360827,
+            0.0028350515463917525
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 7975,
+          "radius_mean": 1.2399689952217159,
+          "radius_quantiles": [
+            0.5,
+            0.5023627281188965,
+            0.6006108224391937,
+            0.7984769642353058,
+            49.99976348876953
+          ],
+          "fraction_mean": 0.05837316811084747,
+          "fraction_at_zero": 0.2294921875,
+          "active_sharp_share": 0.5114733576774597,
+          "active_both_near_grid_share": 0.0031347961630672216,
+          "active_amplitude_rms": 0.2941208919042684,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0027586206896551726,
+            0.00664576802507837
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.00012539184952978057
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0027586206896551726,
+            0.00664576802507837
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7715,
+          "radius_mean": 1.794393135322025,
+          "radius_quantiles": [
+            0.5,
+            0.5060606300830841,
+            0.6095443069934845,
+            0.8244893997907639,
+            49.99946975708008
+          ],
+          "fraction_mean": 0.05998741090297699,
+          "fraction_at_zero": 0.2159423828125,
+          "active_sharp_share": 0.5108230710029602,
+          "active_both_near_grid_share": 0.0028515879530459642,
+          "active_amplitude_rms": 0.14771389746457192,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 256,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0032404406999351917,
+            0.0020738820479585226
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0032404406999351917,
+            0.0020738820479585226
+          ]
+        }
+      },
+      {
+        "0.up": {
+          "A": 8192,
+          "active_atoms": 8031,
+          "radius_mean": 1.8097870572746615,
+          "radius_quantiles": [
+            0.5,
+            0.5067014694213867,
+            0.7587570250034332,
+            1.3529893159866333,
+            50.0
+          ],
+          "fraction_mean": 0.1372785121202469,
+          "fraction_at_zero": 0.2333984375,
+          "active_sharp_share": 0.38538163900375366,
+          "active_both_near_grid_share": 0.017681483179330826,
+          "active_amplitude_rms": 0.39649747306447547,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.0014942099364960778,
+            0.003361972357116175
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.0014942099364960778,
+            0.003361972357116175
+          ]
+        },
+        "0.down": {
+          "A": 8192,
+          "active_atoms": 7972,
+          "radius_mean": 2.024132675564033,
+          "radius_quantiles": [
+            0.5,
+            0.500425785779953,
+            0.7419574856758118,
+            1.4273339807987213,
+            50.0
+          ],
+          "fraction_mean": 0.14117097854614258,
+          "fraction_at_zero": 0.2454833984375,
+          "active_sharp_share": 0.4076768755912781,
+          "active_both_near_grid_share": 0.018314098939299583,
+          "active_amplitude_rms": 0.31617863454338185,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0001254390366281987,
+            0.004641244355243351,
+            0.0018815855494229803
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0001254390366281987,
+            0.004641244355243351,
+            0.0018815855494229803
+          ]
+        },
+        "1.up": {
+          "A": 8192,
+          "active_atoms": 8044,
+          "radius_mean": 1.7432366114953766,
+          "radius_quantiles": [
+            0.5,
+            0.5074274688959122,
+            0.7544347047805786,
+            1.3751161396503448,
+            50.0
+          ],
+          "fraction_mean": 0.13649588823318481,
+          "fraction_at_zero": 0.2330322265625,
+          "active_sharp_share": 0.38736945390701294,
+          "active_both_near_grid_share": 0.016285428777337074,
+          "active_amplitude_rms": 0.3913290523485961,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.006091496767777225,
+            0.010939830929885628
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.00012431626056688214
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.006091496767777225,
+            0.010939830929885628
+          ]
+        },
+        "1.down": {
+          "A": 8192,
+          "active_atoms": 7958,
+          "radius_mean": 1.965765510314668,
+          "radius_quantiles": [
+            0.5,
+            0.501614972949028,
+            0.7532287240028381,
+            1.4752900302410126,
+            49.99803161621094
+          ],
+          "fraction_mean": 0.1418285071849823,
+          "fraction_at_zero": 0.2431640625,
+          "active_sharp_share": 0.40424731373786926,
+          "active_both_near_grid_share": 0.01595878414809704,
+          "active_amplitude_rms": 0.29089788111862236,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.009173159085197285,
+            0.0050263885398341285
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.009173159085197285,
+            0.0050263885398341285
+          ]
+        },
+        "2.up": {
+          "A": 8192,
+          "active_atoms": 8005,
+          "radius_mean": 1.7609994743979769,
+          "radius_quantiles": [
+            0.5,
+            0.5061151534318924,
+            0.7579801380634308,
+            1.381340742111206,
+            50.0
+          ],
+          "fraction_mean": 0.13484826683998108,
+          "fraction_at_zero": 0.2320556640625,
+          "active_sharp_share": 0.39312928915023804,
+          "active_both_near_grid_share": 0.013491567224264145,
+          "active_amplitude_rms": 0.3863860775558933,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.00024984384759525296,
+            0.006620861961274204,
+            0.010368519675202997
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.00024984384759525296,
+            0.006620861961274204,
+            0.010368519675202997
+          ]
+        },
+        "2.down": {
+          "A": 8192,
+          "active_atoms": 7934,
+          "radius_mean": 2.0510850764039787,
+          "radius_quantiles": [
+            0.5,
+            0.5028697699308395,
+            0.7685530781745911,
+            1.5084100663661957,
+            49.99816131591797
+          ],
+          "fraction_mean": 0.14477744698524475,
+          "fraction_at_zero": 0.2396240234375,
+          "active_sharp_share": 0.39879000186920166,
+          "active_both_near_grid_share": 0.01865389384329319,
+          "active_amplitude_rms": 0.27990634268186815,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0,
+            0.00806654902949332,
+            0.004663473657675826
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0,
+            0.00806654902949332,
+            0.004663473657675826
+          ]
+        },
+        "3.up": {
+          "A": 8192,
+          "active_atoms": 8018,
+          "radius_mean": 1.8167073537697433,
+          "radius_quantiles": [
+            0.5,
+            0.5098621398210526,
+            0.7770603001117706,
+            1.4697266519069672,
+            49.99585723876953
+          ],
+          "fraction_mean": 0.14226721227169037,
+          "fraction_at_zero": 0.2261962890625,
+          "active_sharp_share": 0.38376155495643616,
+          "active_both_near_grid_share": 0.01596408151090145,
+          "active_amplitude_rms": 0.3752075457086621,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0001247193813918683,
+            0.007233724120728362,
+            0.010725866799700674
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0001247193813918683,
+            0.007233724120728362,
+            0.010725866799700674
+          ]
+        },
+        "3.down": {
+          "A": 8192,
+          "active_atoms": 7929,
+          "radius_mean": 2.1632928959515993,
+          "radius_quantiles": [
+            0.5,
+            0.507088840007782,
+            0.7919421195983887,
+            1.6146333515644073,
+            50.0
+          ],
+          "fraction_mean": 0.1515873372554779,
+          "fraction_at_zero": 0.235107421875,
+          "active_sharp_share": 0.38630345463752747,
+          "active_both_near_grid_share": 0.017656702548265457,
+          "active_amplitude_rms": 0.2698109682607515,
+          "actual_atom_epsilon": 1e-08,
+          "adam_updates": 976,
+          "active_moment_scale_below_1e8_share": [
+            0.0,
+            0.0001261193088661874,
+            0.011981334342287804,
+            0.005170891663513684
+          ],
+          "active_moment_scale_below_1e10_share": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "active_moment_scale_below_used_epsilon_share": [
+            0.0,
+            0.0001261193088661874,
+            0.011981334342287804,
+            0.005170891663513684
+          ]
+        }
+      }
+    ]
+  },
+  "integrity": {
+    "state": "passed",
+    "compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "payloads_verified": 86,
+    "source_files_verified": 2178,
+    "qualified_arms": 8,
+    "audited_checkpoints": 16
+  },
+  "terminal_geometry_weighted_by_active_atoms": [
+    {
+      "arm": "m16-c8-e8",
+      "active_atoms": 64468,
+      "active_sharp_share": 0.5796829535628013,
+      "active_both_near_grid_share": 0.12009059080447598,
+      "active_moment_scale_below_1e_minus8_share": [
+        0.00010858100142706458,
+        0.3204690699261649,
+        0.41651672147421975,
+        0.4191692002233666
+      ]
+    },
+    {
+      "arm": "m16-c8-e10",
+      "active_atoms": 64515,
+      "active_sharp_share": 0.5667054047438929,
+      "active_both_near_grid_share": 0.0888010526530541,
+      "active_moment_scale_below_1e_minus8_share": [
+        6.200108501898783e-05,
+        0.21486476013330233,
+        0.3394559404789584,
+        0.34285049988374794
+      ]
+    },
+    {
+      "arm": "m16-c16-e8",
+      "active_atoms": 128233,
+      "active_sharp_share": 0.5556214129082622,
+      "active_both_near_grid_share": 0.0961219047139059,
+      "active_moment_scale_below_1e_minus8_share": [
+        0.0,
+        0.3319972238035451,
+        0.41221058541872996,
+        0.4131931718044497
+      ]
+    },
+    {
+      "arm": "m16-c16-e10",
+      "active_atoms": 128300,
+      "active_sharp_share": 0.5442790357483985,
+      "active_both_near_grid_share": 0.08527669558744363,
+      "active_moment_scale_below_1e_minus8_share": [
+        0.0,
+        0.23600155884645363,
+        0.3459236165237724,
+        0.34980514419329695
+      ]
+    },
+    {
+      "arm": "legacy-m8",
+      "active_atoms": 63891,
+      "active_sharp_share": 0.3933104831501519,
+      "active_both_near_grid_share": 0.016747272243904227,
+      "active_moment_scale_below_1e_minus8_share": [
+        0.0,
+        7.825828363932322e-05,
+        0.006902380616988308,
+        0.006526740855519557
+      ]
+    }
+  ],
+  "numerical_admission": {
+    "tensor_field_checks": 120,
+    "max_abs": 0.00010254370863549411,
+    "max_relative_l2": 1.5618633328139226e-05,
+    "original_component_gate_failures_retained": 2,
+    "predeclared_each_tensor_field_max_abs": 0.0003,
+    "predeclared_each_tensor_field_relative_l2": 0.0001
+  },
+  "report_script_sha256": "fe9a67ba03940d30c2e89de0bf6c2461d26db3bc3aa1fbd28c433546e178fda3",
+  "assets_sha256": {
+    "development-detail.svg": "05b6fc8f07ad8584596f813a583e5fc3fbefb7da8bda0984961c6d1f1cab1be9",
+    "time-memory.svg": "59e01fdd75ab9fd067b5a867e3696e295b6b4d87211a92d80fcfbee9e5df8716",
+    "time-memory.png": "34ecd6976291fda034de5fcb99ae461b96b8db61feff4ed13ac5c09030dcf44a",
+    "development-detail.png": "f5ff8306f23094135d2c84dddb392d79666d8e6eba8282d81b6a13ccf1b7b789",
+    "profile-sensitivity.png": "a26af1dfa18324ddacf2b6f46642fbcb54865ae8e57a5f494a94a0c3d564872d",
+    "training.svg": "07d29f146ec1990479d1aaff11eab5b37d04f0b0e54978c5ea439222313a7a48",
+    "geometry.svg": "4a29940acf953ec1b3aa05515ea82f309e0dd2868a487630577db3ec6694183a",
+    "development.png": "6318191ce11dc30ca7aca90f7561f0c756ce47eeeb3e65a081f8c447ace6fc51",
+    "development.svg": "a8f9ffdadefc4d6c4bc21abeab0951a22541dc7112079afed5175fc184c52041",
+    "geometry.png": "35f05931696e21c44fbd8ca9e747c79f7cdcb999684718297186c132a14336df",
+    "training.png": "e1ee4308745a9dadb92ba8442900d76952ee59567d65cee47930c8801940b69e",
+    "profile-sensitivity.svg": "8f7297bc7f18c3dc5d9e649c62ff14ed7b7bb32722876a3d5c2be7d4a0950e65"
+  }
+}

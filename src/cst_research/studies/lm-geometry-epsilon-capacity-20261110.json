@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "95f647f97749f61f5f5c15ac29932f908fb334ce",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/162",
+  "id": "lm-geometry-epsilon-capacity-20261110",
+  "title": "All-FFN CST capacity versus Adam epsilon pilot",
+  "status": "COMPLETED",
+  "status_note": "Eight short3090 arms completed and retrieved;84 native tests,120 numerical checks,8 exact resume/observer qualifications,16 checkpoint audits,86 payloads and2178 source hashes verified. Capacity improves short loss more than epsilon; M8/M16 geometry differs despite similar loss. Unique depth cause and remedy remain unestablished.",
+  "runner_entrypoint": "cst_research.experiments.lm_geometry_trial_run",
+  "protocol_source_path": "docs/lm-geometry-epsilon-capacity-20261110.md",
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-geometry-epsilon-capacity-3090-20261110-02"
+  },
+  "protocol": {
+    "seed": 17,
+    "steps": 976,
+    "training_tokens": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "coefficients": [
+      8,
+      16
+    ],
+    "atom_epsilons": [
+      1e-08,
+      1e-10
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "execution": {
+    "job": "lm-geometry-epsilon-capacity-3090-20261110-02",
+    "consumer_commit": "76e80b6816269f63b02ff85ad262746f14754726",
+    "consumer_pull_request": "https://github.com/takumiecd/cst-research/pull/38",
+    "source_archive_sha256": "e0342a39b6367a899a528b85a0d69d8995a772a99c6f4b54571060bb20f920d6",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "memory_bytes": 25307578368,
+    "compute_capability": [
+      8,
+      6
+    ],
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "public_default_adopted": false,
+    "local_CPU_passed": 234,
+    "local_optional_skipped": 61,
+    "learning_started": true,
+    "failed_compact_sha256": "5166cfe813cd7284c4d8b0a775613e00832d78d0a4b3560be65114287d767501",
+    "failed_payloads_verified": 7,
+    "source_unchanged_before_failure": true,
+    "first_failed_job": "lm-geometry-epsilon-capacity-3090-20261110-01",
+    "first_attempt_native_tests_passed": 84,
+    "reproduction_job": "lm-geometry-probe-3090-20261110-01",
+    "reproduction_compact_sha256": "57967c2ebe8aa83491f57a74d7346e93711cbe0f6c92316dca10577dc41552e0",
+    "reproduction_payloads_verified": 12,
+    "synchronized_and_asynchronous_next_update_exact": true,
+    "paired_CPU_profile_records": 36,
+    "restarted_attempt_native_validation": "84 passed",
+    "learning_complete": true,
+    "native_tests_passed": 84,
+    "qualified_arms": 8,
+    "checkpoint_audits": 16,
+    "numerical_tensor_field_checks": 120,
+    "original_component_failures_retained": 2,
+    "main_compact_sha256": "5e4cc94f8aea2cbfd38ccb4a4dcc8d7dc7487f55ff0039bc81e1e730678c0858",
+    "retrieval_verified": true,
+    "payloads_verified": 86,
+    "source_files_verified": 2178,
+    "resource_state": "owned commands finished; Hub left running"
+  },
+  "results_source_path": "docs/lm-geometry-epsilon-capacity-20261110-results.md"
+}
