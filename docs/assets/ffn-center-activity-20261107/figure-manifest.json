@@ -1,0 +1,48 @@
+{
+  "source_commits": {
+    "torchcst": "1cb4bec3ae2f1a859a077bf1c664888082ccc7ab",
+    "cst-research": "ac64f6db4fdf616870c41fed779e1119ecc5e441"
+  },
+  "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+  "archive_sha256": "19ad6885fa0d2c5a989b03e2b322be8cfa32272e575c59dc56a345c3dff3769d",
+  "plot_script_sha256": "505d64f8b4486b974008b608c2ff05b0cc851a0aa415fe97186feb28b61be17b",
+  "matplotlib": "3.11.1",
+  "source_files": {
+    "center-g64/geometry.jsonl": "6103a594e88e0e0ece9ca5ef62802e6e80c0e068a920d0fef0ad6891cc2bb4b0",
+    "center-g64/summary.json": "cab7c6e94680e3fe19c1f3fe0c9db149e631c4544d5c8ba5f1d88fe5dba3be12",
+    "center-g64/curves.jsonl": "59db2ddf2b5e9982c03b7b9eb30c3b5b108df1db7f18017d9e0b5373924f8a44",
+    "center-g1/geometry.jsonl": "07e0e7b00021f1e34dde2431a2c9b8d09072d69c720950271547c1086d881910",
+    "center-g1/summary.json": "4d954b3a95852674dbea77ecd152decafc218a20c6201662437462e7af2646ae",
+    "center-g1/curves.jsonl": "33e8b000e13350afdb968c9d206009a17c3291d825b1c2e3edef1f97b0b5934a",
+    "center-g4096/geometry.jsonl": "4c7636a7da3c7baf60183299a66e3640f47afbfc8656dd53d39965c3733b90f9",
+    "center-g4096/summary.json": "7cf0f5c50a27818f02f087886cd0535461c5c284439f59b5d7ceb07646581860",
+    "center-g4096/curves.jsonl": "e492d32fc6eb7224263ca3626e430f3b1eee9ee3f731fcb76de7d487867822c5",
+    "amplitude-g1/geometry.jsonl": "7a246c4d5361ab7a5ffc14c40158d61de95d804bad0e2e95bbcb73a82185dea7",
+    "amplitude-g1/summary.json": "34a6e598bc5c27d149fa21e856c6aec996368cbe243a64322dd013cf7bcf344a",
+    "amplitude-g1/curves.jsonl": "5f54ea796eee32cd6d7e4ce26d8ac1fe50f4704402f3bb476f78acfa5d090d7e",
+    "amplitude-g1-qualification/qualification.json": "b6d3f578ab43c52ec7698f95ab709cc899588753000c4b6f222498456f092d7d",
+    "dense/geometry.jsonl": "cd91f8f45a886493a3b8fafada7f548c0e0ce2e3344652a373b325cec6945b81",
+    "dense/summary.json": "e13da4fe996c8aa696a890b2a0dbc5e72e086381e2ddd40d53a8fb24703d9d85",
+    "dense/curves.jsonl": "f9630c966daed0ee1f5842c108a09da30a190c555f43d9b4b6c7bee1c2d3d843",
+    "center-g1-qualification/qualification.json": "0401c8ea84be50048ee94ce3e89d2e3b703a156cf99ec1e212af7c4b3817e542",
+    "center-g64-qualification/qualification.json": "a0a0935800bb43d46b4bd58908fab77aadc360745a57ca193bde70f3c7ebc7e8",
+    "center-g4096-qualification/qualification.json": "34367c45cb83422c6227011ed979d55b8ddab3b7315597f5961f20ac3491deba"
+  },
+  "historical_files": {},
+  "figures": {
+    "activity-and-radius.svg": "7b54e4a23cf125318d312a487d030e482e8e5039d701eabc69614093bb1d46f5",
+    "learning-curves.png": "9b628b8c1c4021477cd9421643277abea991947115d4cb03994ff9ba5bb92098",
+    "learning-curves.svg": "d9813ff9860d0b93913eae2693df748f504535142f9d66ecb52ba743f794541e",
+    "activity-and-radius.png": "b8e69f7dc2afdf6f5933c72d0b6e099e0cf5f777e3ce27bc7621b2784d8cc34b",
+    "learning-curves-tail.png": "1aed9ef94df3a6022be2127d351d6d69bd63263fb30c5890ee04facb5dc496fb",
+    "center-motion.png": "e36f2d5e1b3dd96ca52649fd30cd38819f70feac535960b98734664a62326428",
+    "geometry-ffn-down.png": "6a75c81640852644d63c7722948deccb20fda3bf26f17066fbeea44e4c8ff602",
+    "envelope-shape.svg": "a81ff6fe3808c40d1f0db9585cccc7763f2c2b78ca07f4162b63887a942e3278",
+    "geometry-ffn-up.svg": "51de99c0654458684fe59b15d04812e4f0cfeed48b6b6b5768d80b58a8bf39e2",
+    "geometry-ffn-up.png": "21fc48a67b9dd04d2b487fa20faa4851c4c685162ad4a7fcde400fcae31982d1",
+    "envelope-shape.png": "e49cc8ce772c1ec17104b1ab6adfe740b139696a21e20a34cecfcdf973081bf2",
+    "geometry-ffn-down.svg": "9b7d5a07bcad39467762335a68443cbf779ab690eb5815243fa869ba4f607a11",
+    "center-motion.svg": "759498a7953a8cc80204d90fceb7d3fe5fba8b142137c81500454e50d4e1f0f6",
+    "learning-curves-tail.svg": "3282d8d8a84c252d95b5357e9aad84cdab2dfdfc1f3d9da7ab09f87f3c827f3f"
+  }
+}

@@ -206,6 +206,7 @@ def qualify_case(
     amplitude_max=1.0,
     w_c=0.3,
     radius_birth=4.0,
+    update_backend="native",
     **envelope_settings,
 ):
     began = time.monotonic()
@@ -256,6 +257,7 @@ def qualify_case(
         "radius_birth": radius_birth,
         **envelope_settings,
         "input_noncontiguous": not xx.is_contiguous(),
+        **({"update_backend": update_backend} if update_backend != "native" else {}),
         "initialization": report,
         "checks": metrics,
         "all_atoms_checked": True,
@@ -321,6 +323,7 @@ def optimizer_and_resume_check(
     atom_lr_multiplier=1.0,
     coefficient=8,
     std=0.02,
+    update_backend="native",
     **envelope_settings,
 ):
     from torchcst import CSTOptimizer
@@ -358,6 +361,7 @@ def optimizer_and_resume_check(
     )
     optimizer = cst_optimizer(
         live,
+        update_backend=update_backend,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
         betas=(0.9, 0.95),
@@ -397,6 +401,7 @@ def optimizer_and_resume_check(
     configure_native(resumed)
     other = cst_optimizer(
         resumed,
+        update_backend=update_backend,
         atom_lr_multiplier=atom_lr_multiplier,
         lr=0.0003,
         betas=(0.9, 0.95),
@@ -433,6 +438,7 @@ def task_step_and_resume_check(
     coefficient=8,
     full_task=False,
     ffn_kind="cst",
+    update_backend="native",
     **envelope_settings,
 ):
     from .ffn_contract import ModelConfig
@@ -451,6 +457,7 @@ def task_step_and_resume_check(
         feature_order=feature_order,
         atom_lr_multiplier=atom_lr_multiplier,
         coefficient=coefficient,
+        update_backend=update_backend,
         **envelope_settings,
     )
     model = LanguageModel(config, ffn_kind, seed=17 if full_task else 251).cuda()

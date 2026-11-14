@@ -168,8 +168,8 @@ python -m unittest discover -s tests -v
 python -m pip install -e '.[ffn]'
 ```
 
-ライブラリはmerge済みの[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)の
-`7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`に固定しています。
+ライブラリはmerge済みの[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)を拡張した[中心活動PR153](https://github.com/takumiecd/torchcst/pull/153)の
+`1cb4bec3ae2f1a859a077bf1c664888082ccc7ab`に固定しています。
 統合済みの長方形演算・初期化・field別LR APIに加え、明示指定の実験用半径包絡と
 Torch2.6のAdamW互換修正を含みます。この固定はconsumerの包絡引数を利用可能にするためで、
 これらの実験設定は明示指定の機能のままで、実装のmergeによって公開デフォルトを変更するものではありません。
@@ -217,3 +217,5 @@ cst-research --config research.local.toml show higgs-alpha-confirmation-20261105
 [実施結果と終了範囲](docs/ffn-campaign-disposition-20261107.ja.md)に、所有者が停止した3seed系列も含め、要件と証拠を対応付けています。
 
 [半径の事後確認](docs/ffn-radius-review-20261107.ja.md)では振幅別・同じAtom IDで調べ、弱い・弱まったAtomの半径が広がることを確認しました。ただし現在の低q・弱Atom追加拡張なしの設定では、弱いAtomも半径4付近にとどまります。
+
+[中心活動型FFNパイロット](docs/ffn-center-activity-20261107.ja.md)は、A100のfresh5条件を各400更新し、学習後監査・回収と照合まで完了しました。[結果と全曲線](docs/ffn-center-activity-20261107-results.ja.md)はDense CE4.135901、振幅活動4.248089、中心活動gain1/64/4096が4.247539/4.250420/4.262914です。`(s,t)`・選択済みL/U・一致した初期化を保ち、pは中心移動に応答しますが、品質改善は示せていません。clip/smoothstep目標policyは別の提案のままです。現在のFFN依存は実験用pinで、新しいmain統合やデフォルト採用ではありません。

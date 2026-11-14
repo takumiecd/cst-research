@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
 import hashlib
 import json
-from pathlib import Path
 import platform
+from dataclasses import asdict
+from itertools import pairwise
+from pathlib import Path
 
 import torch
 
@@ -46,10 +47,10 @@ def envelope_snapshot(model):
     or model writes. Diagnostics are excluded from synchronized update samples.
     """
     from torchcst import CSTLinear
+    from torchcst._backends.torch.parameterizations.polar_amp_width import _width_bounds
     from torchcst._backends.torch.parameterizations.radius_cell_mass import (
         decoded_values,
     )
-    from torchcst._backends.torch.parameterizations.polar_amp_width import _width_bounds
 
     result = {}
     for name, layer in model.named_modules():
@@ -70,7 +71,7 @@ def envelope_snapshot(model):
                 "high": high,
                 **summarize((a.abs() >= low) & (a.abs() < high), a, ri, ro, q, lo, hi),
             }
-            for low, high in zip(EDGES[:-1], EDGES[1:])
+            for low, high in pairwise(EDGES)
         ]
         assert sum(b["count"] for b in bins) == len(a)
         result[name] = {"all": summarize(all_rows, a, ri, ro, q, lo, hi), "bins": bins}
@@ -83,8 +84,8 @@ def main(argv=None):
     from .ffn_model import parameter_seed
     from .ffn_qualification import (
         independent_quadrature_check,
-        qualify_case,
         optimizer_and_resume_check,
+        qualify_case,
         task_step_and_resume_check,
     )
 
@@ -98,6 +99,15 @@ def main(argv=None):
     )
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     parser.add_argument("--radius-birth", type=float, default=4.0)
+    parser.add_argument(
+        "--activity-mode",
+        choices=("finite_chord", "time_energy", "center_chord"),
+        default="finite_chord",
+    )
+    parser.add_argument("--activity-gain", type=float, default=1.0)
+    parser.add_argument(
+        "--update-backend", choices=("native", "radius_eager"), default="native"
+    )
     parser.add_argument(
         "--expected-gpu",
         choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
@@ -115,14 +125,19 @@ def main(argv=None):
         atom_lr_multiplier=16,
         zero_opening_scale=args.zero_opening_scale,
         radius_birth=args.radius_birth,
+        activity_mode=args.activity_mode,
+        activity_gain=args.activity_gain,
+        update_backend=args.update_backend,
     )
-    envelope = dict(
-        radius_envelope=args.radius_envelope,
-        closed_lower_power=4.0,
-        closed_upper_power=1.0,
-        zero_opening_scale=args.zero_opening_scale,
-        radius_birth=args.radius_birth,
-    )
+    envelope = {
+        "activity_mode": args.activity_mode,
+        "activity_gain": args.activity_gain,
+        "radius_envelope": args.radius_envelope,
+        "closed_lower_power": 4.0,
+        "closed_upper_power": 1.0,
+        "zero_opening_scale": args.zero_opening_scale,
+        "radius_birth": args.radius_birth,
+    }
     result = {
         "state": "running",
         "cohort": "recipe",
@@ -167,17 +182,26 @@ def main(argv=None):
                     q=args.q,
                     std=std,
                     seed=parameter_seed(17, "block0.up" if ni < no else "block0.down"),
+                    update_backend=args.update_backend,
                     **envelope,
                 )
             )
             save()
             print(f"PASS all-Atom native VJP {ni}->{no}", flush=True)
         result["optimizer"] = optimizer_and_resume_check(
-            q=args.q, atom_lr_multiplier=16, std=0.001, **envelope
+            q=args.q,
+            atom_lr_multiplier=16,
+            std=0.001,
+            update_backend=args.update_backend,
+            **envelope,
         )
         save()
         result["task_step"] = task_step_and_resume_check(
-            q=args.q, atom_lr_multiplier=16, full_task=True, **envelope
+            q=args.q,
+            atom_lr_multiplier=16,
+            full_task=True,
+            update_backend=args.update_backend,
+            **envelope,
         )
         save()
         result["state"] = "passed"

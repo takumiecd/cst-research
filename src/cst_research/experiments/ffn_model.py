@@ -35,6 +35,8 @@ def make_cst(
     closed_lower_power=4.0,
     closed_upper_power=1.0,
     zero_opening_scale=0.03,
+    activity_mode="finite_chord",
+    activity_gain=1.0,
 ):
     from torchcst import (
         ChebyshevSpec,
@@ -75,6 +77,8 @@ def make_cst(
                     closed_lower_power=closed_lower_power,
                     closed_upper_power=closed_upper_power,
                     zero_opening_scale=zero_opening_scale,
+                    activity_mode=activity_mode,
+                    activity_gain=activity_gain,
                 ),
             ),
         )
@@ -102,12 +106,31 @@ def configure_native(model):
             layer.selector = FixedSelector(plan, registry=make_algorithm_registry())
 
 
-def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
+def cst_optimizer(model, *, atom_lr_multiplier=1.0, update_backend=None, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
     from torchcst import CSTAdamW, CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.polar_update.plans import (
         RADIUS_FLAT_TORUS_FUSED,
     )
+
+    if update_backend is None:
+        update_backend = getattr(
+            getattr(model, "config", None), "update_backend", "native"
+        )
+    registry = make_algorithm_registry()
+    update_plan = RADIUS_FLAT_TORUS_FUSED
+    if update_backend == "radius_eager":
+        from torchcst._backends.schema import DefaultRecipe, ExecutionPlan
+        from torchcst._backends.torch.algorithms.polar_update.radius_eager import (
+            RadiusEagerPolarUpdateAlgorithm,
+        )
+
+        registry.register(RadiusEagerPolarUpdateAlgorithm())
+        update_plan = ExecutionPlan(
+            "torch_radius_eager_polar_update", "v1", DefaultRecipe()
+        )
+    elif update_backend != "native":
+        raise ValueError("unknown update_backend")
 
     parameters = model.parameters()
     if atom_lr_multiplier != 1.0:
@@ -133,9 +156,7 @@ def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     return CSTAdamW(
         parameters,
         model=model,
-        update_selector=FixedSelector(
-            RADIUS_FLAT_TORUS_FUSED, registry=make_algorithm_registry()
-        ),
+        update_selector=FixedSelector(update_plan, registry=registry),
         **options,
     )
 
@@ -158,6 +179,8 @@ class Projection(nn.Module):
                 closed_lower_power=config.closed_lower_power,
                 closed_upper_power=config.closed_upper_power,
                 zero_opening_scale=config.zero_opening_scale,
+                activity_mode=config.activity_mode,
+                activity_gain=config.activity_gain,
             )
         else:
             self.map = nn.Linear(ni, no, bias=False)

@@ -208,8 +208,8 @@ For current FFN work, use the separately pinned research library extra:
 python -m pip install -e '.[ffn]'
 ```
 
-The exact library commit is `7be68e4faf1813dd4b1a677ee432da5e3a8da9bd`,
-from merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
+The exact library commit is `1cb4bec3ae2f1a859a077bf1c664888082ccc7ab`,
+from [center-activity PR153](https://github.com/takumiecd/torchcst/pull/153), extending merged [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152). It includes
 the merged rectangular/initializer/field-LR APIs, experimental opt-in radius
 envelopes and the Torch2.6 AdamW compatibility fix. This pin makes the consumer's
 envelope arguments available; these experimental settings remain explicit
@@ -263,3 +263,5 @@ requirement to its evidence, including the owner-stopped three-seed family.
 A [post-hoc radius review](docs/ffn-radius-review-20261107.md) conditions on physical
 amplitude and matches Atom IDs: weaker/decreased Atoms do widen, but weak support
 stays near4 under the current low-q/default-no-dormant-expansion recipe.
+
+The [center-activity FFN pilot](docs/ffn-center-activity-20261107.md) is complete: five fresh A100 learners, 400 updates each, with trained audits and verified retrieval. [Results and all curves](docs/ffn-center-activity-20261107-results.md): Dense CE4.135901; amplitude activity4.248089; center gain1/64/4096 gives4.247539/4.250420/4.262914. The `(s,t)` representation, selected L/U and matched initialization are preserved. p responds to center motion, but a quality improvement is not established. Clip/smoothstep target policies remain separate proposals. The current FFN dependency is an experimental pin, not a new main/default adoption.
