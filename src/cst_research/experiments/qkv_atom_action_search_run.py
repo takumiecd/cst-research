@@ -88,6 +88,18 @@ def evaluate(model, batch):
     return result
 
 
+def snapshot_initial_state(model):
+    """Freeze tensors and preserve PyTorch and CST checkpoint metadata."""
+    state = model.state_dict()
+    for name, value in state.items():
+        state[name] = (
+            value.detach().to(device="cpu", copy=True)
+            if isinstance(value, torch.Tensor)
+            else deepcopy(value)
+        )
+    return state
+
+
 def rollout(
     model, train, state, optimizer_state, parameters, changes, batches, hold, step
 ):
@@ -344,10 +356,7 @@ def main():
                 assert (
                     train.parameter_digest(model) == record["initial_parameters_sha256"]
                 )
-                state = {
-                    name: tensor.detach().cpu()
-                    for name, tensor in model.state_dict().items()
-                }
+                state = snapshot_initial_state(model)
                 optimizer_state = None
                 expected = record["initial_development"]
             train.set_tau(model, train.tau_at(step))
