@@ -101,13 +101,21 @@ def snapshot_initial_state(model):
 
 
 def rollout(
-    model, train, state, optimizer_state, parameters, changes, batches, hold, step
+    model,
+    train,
+    state,
+    optimizer,
+    optimizer_state,
+    parameters,
+    changes,
+    batches,
+    hold,
+    step,
 ):
     """Branch from the same weights and Adam state, then run matched updates."""
     model.load_state_dict(state)
-    optimizer = train.optimizer_for(model)
-    if optimizer_state is not None:
-        optimizer.load_state_dict(deepcopy(optimizer_state))
+    train.set_tau(model, train.tau_at(step))
+    optimizer.load_state_dict(deepcopy(optimizer_state))
     if changes is not None:
         masks, candidate = changes
         with torch.no_grad():
@@ -126,7 +134,19 @@ def rollout(
         model.eval()
 
 
-def collect(model, train, data, state, optimizer_state, step, pair, budget, horizon):
+def collect(
+    model,
+    train,
+    data,
+    state,
+    optimizer,
+    optimizer_state,
+    step,
+    pair,
+    budget,
+    horizon,
+    save_immediate,
+):
     sites = train.projections(model)
     parameters = tuple(p.map.atoms.p for p in sites.values())
     offsets = torch.tensor(
@@ -224,6 +244,23 @@ def collect(model, train, data, state, optimizer_state, step, pair, budget, hori
     if distant is not None:
         rollout_families.add(distant)
     branches = []
+    for family in ranking:
+        delta, group, index, masks, raw, rows = selected[family]
+        with replace_rows(parameters, masks, raw, rows):
+            confirmation = evaluate(model, hold) - confirmation_baseline
+        branches.append(
+            {
+                "family": family,
+                "group": group,
+                "index": index,
+                "delta_exploration": delta,
+                "delta_confirmation": confirmation,
+                "confirmation_after_updates": None,
+                "delta_after_updates": None,
+                "proposed_raw": torch.cat(rows).cpu(),
+            }
+        )
+    save_immediate(branches)
     rollout_batches = []
     for update in range(horizon):
         start = 2_000_000 + (pair * horizon + update) * 1024
@@ -240,6 +277,7 @@ def collect(model, train, data, state, optimizer_state, step, pair, budget, hori
             model,
             train,
             state,
+            optimizer,
             optimizer_state,
             parameters,
             None,
@@ -250,37 +288,25 @@ def collect(model, train, data, state, optimizer_state, step, pair, budget, hori
         if horizon
         else None
     )
-    for family in ranking:
-        delta, group, index, masks, raw, rows = selected[family]
-        with replace_rows(parameters, masks, raw, rows):
-            confirmation = evaluate(model, hold) - confirmation_baseline
-        after = (
-            rollout(
-                model,
-                train,
-                state,
-                optimizer_state,
-                parameters,
-                (masks, rows),
-                rollout_batches,
-                hold,
-                step,
-            )
-            if horizon and family in rollout_families
-            else None
+    for branch in branches:
+        family = branch["family"]
+        if after_control is None or family not in rollout_families:
+            continue
+        _, _, _, masks, _, rows = selected[family]
+        after = rollout(
+            model,
+            train,
+            state,
+            optimizer,
+            optimizer_state,
+            parameters,
+            (masks, rows),
+            rollout_batches,
+            hold,
+            step,
         )
-        branches.append(
-            {
-                "family": family,
-                "group": group,
-                "index": index,
-                "delta_exploration": delta,
-                "delta_confirmation": confirmation,
-                "confirmation_after_updates": after,
-                "delta_after_updates": None if after is None else after - after_control,
-                "proposed_raw": torch.cat(rows).cpu(),
-            }
-        )
+        branch["confirmation_after_updates"] = after
+        branch["delta_after_updates"] = after - after_control
     return {
         "step": step,
         "pair": pair,
@@ -356,25 +382,39 @@ def main():
                 assert (
                     train.parameter_digest(model) == record["initial_parameters_sha256"]
                 )
-                state = snapshot_initial_state(model)
-                optimizer_state = None
                 expected = record["initial_development"]
             train.set_tau(model, train.tau_at(step))
+            optimizer = train.optimizer_for(model)
+            if not step:
+                # Binding Adam gives AtomState its permanent checkpoint schema.
+                state = snapshot_initial_state(model)
+                optimizer_state = deepcopy(optimizer.state_dict())
             observed = train.development(model, data["development"])
             assert abs(observed["ce"] - expected["ce"]) <= 1e-6
             assert observed["correct_next_tokens"] == expected["correct_next_tokens"]
             print("CHECKPOINT_VERIFIED", step, observed["ce"], flush=True)
             for pair in range(args.pairs):
+                immediate = args.output / f"step-{step}-pair-{pair}-immediate.json"
+
+                def save_immediate(branches, *, path=immediate, step=step, pair=pair):
+                    rows = [
+                        {k: v for k, v in branch.items() if k != "proposed_raw"}
+                        for branch in branches
+                    ]
+                    train.write(path, {"step": step, "pair": pair, "shortlist": rows})
+
                 payload = collect(
                     model,
                     train,
                     data,
                     state,
+                    optimizer,
                     optimizer_state,
                     step,
                     pair,
                     args.actions,
                     args.horizon,
+                    save_immediate,
                 )
                 target = args.output / f"step-{step}-pair-{pair}.pt"
                 tmp = target.with_suffix(".tmp")
@@ -399,7 +439,7 @@ def main():
                 report["parts"].append(record_part)
                 write()
                 print(json.dumps(record_part, allow_nan=False), flush=True)
-            del state, optimizer_state
+            del state, optimizer_state, optimizer
         report["state"] = "completed"
     except BaseException as exc:
         report.update(state="failed", error=f"{type(exc).__name__}: {exc}")
