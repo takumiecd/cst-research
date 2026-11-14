@@ -19,6 +19,16 @@ def parameter_seed(seed, name):
     ) % (2**63 - 1)
 
 
+def parameter_digest(model):
+    """Exact named Parameter bytes, independent of optimizer/config metadata."""
+    digest = hashlib.sha256()
+    for name, p in model.named_parameters():
+        digest.update(name.encode())
+        digest.update(str((p.dtype, tuple(p.shape))).encode())
+        digest.update(p.detach().cpu().contiguous().numpy().tobytes())
+    return digest.hexdigest()
+
+
 def make_cst(
     d_in,
     d_out,
@@ -81,29 +91,80 @@ def make_cst(
     report = init.variance_scaling_(
         layer,
         variance=std**2,
-        q=q,
+        radius_fraction=q,
         generator=torch.Generator().manual_seed(seed + 1),
     )
     layer.initialization_report = asdict(report)
     return layer
 
 
-def configure_native(model):
+def configure_native(model, *, linear_backend=None):
     from torchcst import CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.linear.radius_cell_mass import plans
 
+    backend = linear_backend or getattr(
+        getattr(model, "config", None), "linear_backend", "native"
+    )
+    if backend not in ("native", "levels", "levels_stream64", "levels_wide_amplitude"):
+        raise ValueError("unknown explicit Linear backend")
+    registry = make_algorithm_registry()
+    if backend != "native":
+        from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.lm_multirow import (
+            LM_LEVELS,
+            LM_LEVELS_STREAM64,
+            RadiusLMLevelsAlgorithm,
+            RadiusLMLevelsStream64Algorithm,
+        )
+
+        registry.register(RadiusLMLevelsAlgorithm())
+        registry.register(RadiusLMLevelsStream64Algorithm())
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") == "envelope":
+        from .ffn_radius_fraction import configure_native as configure_envelope
+
+        return configure_envelope(model)
+    if any(
+        getattr(m, "independent_radius_mode", None) is not None for m in model.modules()
+    ):
+        from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.lm_multirow import (
+            LM_PHYSICAL_LEVELS,
+            RadiusLMPhysicalLevelsAlgorithm,
+        )
+
+        registry.register(RadiusLMPhysicalLevelsAlgorithm())
     for layer in model.modules():
         if isinstance(layer, CSTLinear):
+            if getattr(layer, "independent_radius_mode", None) is not None:
+                layer.selector = FixedSelector(LM_PHYSICAL_LEVELS, registry=registry)
+                continue
             plan = (
                 plans.GLOBAL_ACTIVE_GRAD4_NATIVE_RECTANGULAR_2048
                 if max(layer.in_features, layer.out_features) > 1024
                 else plans.GLOBAL_ACTIVE_GRAD4_NATIVE
             )
-            layer.selector = FixedSelector(plan, registry=make_algorithm_registry())
+            if backend != "native":
+                plan = LM_LEVELS if backend == "levels" else LM_LEVELS_STREAM64
+            layer.selector = FixedSelector(plan, registry=registry)
 
 
 def cst_optimizer(model, *, atom_lr_multiplier=1.0, **options):
     """Explicit GPU coordinate-update Plan; default radius reference is CPU-only."""
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") == "envelope":
+        from .ffn_radius_fraction import optimizer
+
+        return optimizer(model, atom_lr_multiplier=atom_lr_multiplier, **options)
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") in (
+        "polar_live",
+        "polar_detached",
+    ):
+        from .ffn_polar_radius import optimizer
+
+        return optimizer(model, atom_lr_multiplier=atom_lr_multiplier, **options)
+    if getattr(getattr(model, "config", None), "radius_mode", "polar") != "polar":
+        from .ffn_radius import physical_optimizer
+
+        return physical_optimizer(
+            model, atom_lr_multiplier=atom_lr_multiplier, **options
+        )
     from torchcst import CSTAdamW, CSTLinear, FixedSelector, make_algorithm_registry
     from torchcst._backends.cuda.algorithms.polar_update.plans import (
         RADIUS_FLAT_TORUS_FUSED,
@@ -144,21 +205,26 @@ class Projection(nn.Module):
     def __init__(self, ni, no, *, config, kind, std, seed):
         super().__init__()
         if kind == "cst":
-            self.map = make_cst(
-                ni,
-                no,
-                coefficient=config.coefficient,
-                std=std,
-                q=config.q,
-                seed=seed,
-                amplitude_max=config.amplitude_max,
-                w_c=config.w_c,
-                radius_birth=config.radius_birth,
-                radius_envelope=config.radius_envelope,
-                closed_lower_power=config.closed_lower_power,
-                closed_upper_power=config.closed_upper_power,
-                zero_opening_scale=config.zero_opening_scale,
-            )
+            if config.radius_mode == "envelope":
+                from .ffn_radius_fraction import make_layer
+
+                self.map = make_layer(ni, no, config=config, std=std, seed=seed)
+            else:
+                self.map = make_cst(
+                    ni,
+                    no,
+                    coefficient=config.coefficient,
+                    std=std,
+                    q=config.q,
+                    seed=seed,
+                    amplitude_max=config.amplitude_max,
+                    w_c=config.w_c,
+                    radius_birth=config.radius_birth,
+                    radius_envelope=config.radius_envelope,
+                    closed_lower_power=config.closed_lower_power,
+                    closed_upper_power=config.closed_upper_power,
+                    zero_opening_scale=config.zero_opening_scale,
+                )
         else:
             self.map = nn.Linear(ni, no, bias=False)
         self.bias = nn.Parameter(torch.zeros(no))
@@ -282,12 +348,23 @@ class Block(nn.Module):
         self.norm1 = nn.LayerNorm(config.width)
         self.qkv = (
             CSTAllQKVProjection(config, seed, index)
-            if config.attention_kind == "cst_qkv"
+            if config.attention_kind in ("cst_qkv", "cst_qkvo")
             else CSTAttentionProjection(config, seed, index)
             if config.attention_kind != "dense"
             else nn.Linear(config.width, config.width * 3)
         )
-        self.attention_out = nn.Linear(config.width, config.width)
+        self.attention_out = (
+            Projection(
+                config.width,
+                config.width,
+                config=config,
+                kind="cst",
+                std=config.init_std / math.sqrt(2 * config.layers),
+                seed=parameter_seed(seed, f"block{index}.attention.o"),
+            )
+            if config.attention_kind == "cst_qkvo"
+            else nn.Linear(config.width, config.width)
+        )
         self.norm2 = nn.LayerNorm(config.width)
         self.ffn = FeedForward(config, kind, seed, index)
 
@@ -361,6 +438,15 @@ class LanguageModel(nn.Module):
                     getattr(block.qkv, block.qkv.dense_name).weight.copy_(
                         packed[remaining]
                     )
+
+        if config.radius_mode in ("polar_live", "polar_detached") and kind == "cst":
+            from .ffn_polar_radius import convert_ffn
+
+            convert_ffn(self)
+        elif config.radius_mode not in ("polar", "envelope") and kind == "cst":
+            from .ffn_radius import convert_ffn
+
+            convert_ffn(self)
 
     def forward(self, tokens, targets=None):
         if tokens.ndim != 2 or not 1 <= tokens.shape[1] <= self.config.context:

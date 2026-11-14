@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "ffn-polar-radius-gradient-20261108",
+  "title": "Matched Polar radius-live versus detached FFN projected-Adam pilot",
+  "status": "COMPLETED",
+  "status_note": "Both paired modes completed976updates/999424tokens; DEV CE detached3.42403589/live3.42238586, difference\u2212.00165004 with overlapping curves. Mean q.078821/.068468, radius2.058201/1.622871. Full trained audits passed;29 compact files/1775 source files hash-verified and8 recorded PIDs inactive. Source99a1d03; public Polar/default unchanged. One development seed, not superiority/noninferiority or convergence.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.ffn_polar_radius_qualification",
+  "protocol_source_path": "docs/ffn-polar-radius-gradient-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "atoms_per_ffn_map": 8192,
+    "cst_sites": 8,
+    "seed": 17,
+    "arms": [
+      "polar_detached",
+      "polar_live"
+    ],
+    "optimizer": "Cartesian AdamW + post-step annulus projection; same in both arms; no tangent removal/activity clock",
+    "latent_norm_bounds": [
+      1,
+      2
+    ],
+    "projection_storage_tolerance": 5e-07,
+    "radius_mode": "loss-radius chain on/off",
+    "q": 0,
+    "linear_backend": "levels",
+    "attention_kind": "dense",
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001,
+    "atom_lr_multiplier": 16,
+    "base_lr": 0.0003,
+    "updates": 976,
+    "token_budget": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "expected_gpu": "NVIDIA RTX 6000 Ada Generation",
+    "runtime_change": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-polar-radius-gradient-20261108"
+  },
+  "execution": {
+    "job_id": "ffn-polar-radius-gradient-6000ada-20261108-01",
+    "consumer_commit": "99a1d033d19c2c3b6285cef46dd10a81cfe7b651",
+    "operator_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+    "request_sha256": "837c5d917716da25d83809cfb6e7f60ab7d526bb592906478624db4446b7a890",
+    "compact_archive_sha256": "c333107b820bd9dd4e1de4d8ab7a680b3999356a5157fd91649a16dc765db853",
+    "files_verified": 29,
+    "source_files_verified": 1775,
+    "recorded_processes_inactive": 8,
+    "results_document": "docs/ffn-polar-radius-gradient-20261108-results.md",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false,
+    "precision_scope": "FP32 Parameters/physical Tensor/Linear response storage; eager Python map and retained map intermediates may be FP64"
+  }
+}

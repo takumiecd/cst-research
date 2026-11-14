@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/analyze_lm_tangent_history.py",
+  "id": "lm-tangent-history-20261109",
+  "title": "Analysis-only local tangent, Adam history and finite-response attribution",
+  "status": "COMPLETED",
+  "status_note": "All primary/extended21observations and field/Atom9observations completed, audited and compact retrieval verified. Deterministic FP64 CPU routing witness confirms expansion/shrinkage discontinuity and amplitude scaling. Analysis only; no improvements or adoption.",
+  "protocol_source_path": "docs/lm-tangent-history-20261109.md",
+  "protocol": {
+    "objective": "Separate numerically resolved local Atom geometry, Adam first/second-moment history and finite-response effects. Original task gradients only.",
+    "checkpoint_step": 4882,
+    "model_sites": {
+      "dense": [
+        "1.up",
+        "1.down"
+      ],
+      "dst-all": [
+        "1.up",
+        "1.down"
+      ],
+      "cst-up": [
+        "1.up"
+      ],
+      "cst-all": [
+        "1.up",
+        "1.down"
+      ]
+    },
+    "batch_offsets": [
+      0,
+      32,
+      64
+    ],
+    "tokens_per_batch": 1024,
+    "records": 21,
+    "projection_batch_offset": 0,
+    "history_factorial": [
+      "historical_m_historical_v",
+      "current_g_historical_v",
+      "historical_m_current_g2",
+      "current_g_current_g2",
+      "current_gradient"
+    ],
+    "linearization_epsilons": [
+      1.0,
+      0.1,
+      0.01
+    ],
+    "cgls_max_iterations": 256,
+    "cgls_normal_residual_target": 0.0001,
+    "numerical_column_cutoff": 1e-10,
+    "svd_relative_singular_cutoff": 1e-07,
+    "native_consistency_relative_L2": 0.005,
+    "native_finite_delta_relative_L2": 0.01,
+    "training_updates": 0,
+    "improvement_experiments": false,
+    "learning_rate_or_kernel_changes": false,
+    "confirmation_evaluated": false,
+    "limitations": [
+      "One checkpoint/seed; native/current learned states only",
+      "Unconstrained tangent ignores one-sided bounds",
+      "Nonconverged projection is not a structural ceiling",
+      "Analysis uses task gradients, not Dense weight/output reconstruction"
+    ],
+    "post_hoc_analysis_extension": {
+      "reason": "Primary CGLS nonconvergence and within-batch history effects also in Dense",
+      "max_cgls_iterations": 2048,
+      "additional_finite_epsilons": [
+        0.001,
+        0.0001
+      ],
+      "changed_route_defect_partition": true,
+      "cross_batch_offsets": [
+        0,
+        32,
+        64
+      ],
+      "training_updates": 0,
+      "model_or_kernel_changes": false
+    },
+    "post_hoc_field_atom_analysis": {
+      "records": 9,
+      "fields": [
+        "amplitude",
+        "radius_fraction",
+        "output_center",
+        "input_center"
+      ],
+      "atom_score": "task inner product, not individual loss change",
+      "training_updates": 0
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-tangent-history-4090-20261109-01"
+  },
+  "execution": {
+    "state": "completed_locally_verified",
+    "primary_job": "lm-tangent-history-4090-20261109-01",
+    "primary_consumer_commit": "c242a75ce80fb3432c70b3e9b5ce1bd6729c0beb",
+    "primary_compact_sha256": "82062bc33179d000d864056df5f3e8588d484ef6e15bd813d29448cfefb552fd",
+    "primary_records": 21,
+    "training_updates": 0,
+    "improvement_experiments": false,
+    "public_default_adopted": false,
+    "extension_compact_sha256": "4e0ea6c0bd62c591a56450b0f2e9c042a7210f8f6352aa51fecb9bbf8c8134a0",
+    "extension_job": "lm-tangent-history-4090-20261109-02",
+    "extension_consumer_commit": "a3b07fc7ebdc4a44962723287f30d0c839887327",
+    "field_job": "lm-tangent-history-4090-20261109-03",
+    "field_consumer_commit": "80a31ac6f146c1e9924ff51f1739631b64777809",
+    "field_compact_sha256": "5bf11aec807005bd667e64095f67133cc30a56e6aad8155543e981ad93a03c6e",
+    "field_records": 9,
+    "cpu_witness": "Single-Atom FP64/FP32, both radius directions, amplitudes0.1/1/10",
+    "fresh_native_tests_per_job": 68,
+    "local_tests": 272,
+    "local_passed": 211,
+    "local_skipped": 61,
+    "cpu_coordinate_witness": "FP64 output/input center boundary switches at4 fixed radii,6 displacement scales; K/tile unchanged, first tile changes; no optimizer."
+  },
+  "results_source_path": "docs/lm-tangent-history-20261109-results.md"
+}

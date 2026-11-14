@@ -45,3 +45,95 @@ class FFNContractTests(unittest.TestCase):
         for kwargs in ({"width": 129}, {"context": 0}, {"q": 1.1}):
             with self.assertRaises(ValueError):
                 ModelConfig(**kwargs)
+
+
+class RadiusFractionContractTests(unittest.TestCase):
+    def test_tau_and_fraction_are_part_of_exact_qualification_recipe(self):
+        from dataclasses import replace
+
+        from cst_research.experiments.ffn_contract import qualification_covers_model
+
+        config = ModelConfig(
+            width=512,
+            heads=8,
+            radius_mode="envelope",
+            linear_backend="levels",
+            atom_lr_multiplier=16.0,
+        )
+        recipe = config.recipe()
+        self.assertEqual(recipe["tau"], 0.03)
+        self.assertEqual(recipe["radius_fraction"], 0.0)
+        receipt = {
+            "task_model_configs": [__import__("dataclasses").asdict(config)],
+            "task_recipes": [recipe],
+            "cases": [
+                {**recipe, "in": ni, "out": no, "atoms": 8192}
+                for ni, no in [(512, 2048), (2048, 512)]
+            ],
+        }
+        self.assertTrue(qualification_covers_model(receipt, config, ffn_kind="cst"))
+        self.assertFalse(
+            qualification_covers_model(
+                receipt, replace(config, tau=0.1), ffn_kind="cst"
+            )
+        )
+        self.assertFalse(
+            qualification_covers_model(
+                receipt,
+                replace(config, radius_fraction_lr_multiplier=2.0),
+                ffn_kind="cst",
+            )
+        )
+        for kwargs in [
+            {"tau": 0.0},
+            {"tau": True},
+            {"radius_fraction": 1.01},
+            {"radius_fraction_lr_multiplier": 0.0},
+            {"width": 256},
+        ]:
+            values = {
+                "width": 512,
+                "heads": 8,
+                "radius_mode": "envelope",
+                "linear_backend": "levels",
+                **kwargs,
+            }
+            with self.assertRaises(ValueError):
+                ModelConfig(**values)
+
+    def test_wide_amplitude_requires_its_explicit_envelope_route(self):
+        ModelConfig(
+            width=512,
+            heads=8,
+            radius_mode="envelope",
+            linear_backend="levels_wide_amplitude",
+            amplitude_max=32.0,
+            radius_fraction=1.0,
+        )
+        for values in [
+            dict(radius_mode="polar", linear_backend="levels_wide_amplitude"),
+            dict(radius_mode="envelope", linear_backend="levels", amplitude_max=32.0),
+            dict(
+                radius_mode="envelope",
+                linear_backend="levels_wide_amplitude",
+                amplitude_max=33.0,
+            ),
+        ]:
+            with self.assertRaises(ValueError):
+                ModelConfig(width=512, heads=8, **values)
+
+    def test_probe_initialization_is_a_separate_qualification_recipe(self):
+        from dataclasses import replace
+
+        config = ModelConfig(
+            width=512,
+            heads=8,
+            radius_mode="envelope",
+            linear_backend="levels_wide_amplitude",
+            amplitude_max=32.0,
+        )
+        calibrated = replace(config, initialization_mode="probe_rms")
+        self.assertNotEqual(config.recipe(), calibrated.recipe())
+        self.assertEqual(calibrated.recipe()["initialization_mode"], "probe_rms")
+        with self.assertRaises(ValueError):
+            ModelConfig(initialization_mode="probe_rms")

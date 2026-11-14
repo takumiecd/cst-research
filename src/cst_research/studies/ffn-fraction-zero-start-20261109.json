@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "id": "ffn-fraction-zero-start-20261109",
+  "title": "Initial fraction0 versus.5 with all CST fields at32x",
+  "status": "COMPLETED",
+  "status_note": "All3 runs completed at976updates,6 final/prefix audits and4 observer net-change reproductions passed. DEV CE fraction0=3.393048,fraction.5=3.432772,Dense=3.308982. Common32x CST field rates; one seed,no RMS calibration/confirmation/default adoption.",
+  "protocol_source_path": "docs/ffn-fraction-zero-start-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "tau": 0.003,
+    "amplitude_max": 32.0,
+    "initialization_mode": "moments",
+    "seed": 17,
+    "updates": 976,
+    "observation_updates": [
+      256
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false,
+    "non_atom_lr_multiplier": 1.0,
+    "initial_fractions": [
+      0.0,
+      0.5
+    ],
+    "cst_field_lr_multiplier": 32.0
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-fraction-zero-start-6000ada-20261109-01"
+  },
+  "execution": {
+    "job_id": "ffn-fraction-zero-start-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "46a1d70072ca739ede5f70b86c97e1dd54c6e88a",
+    "source_archive_sha256": "fbf662b6ca8ef9125784a8cf39f14277e619a6467b8ad27e5fb4e16be58b6230",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false,
+    "qualification_sha256": "55bd09b1ffa775d77e59e86b3561da616c3def8da99dcf226a0518443a29182d",
+    "initial_cst_parameter_sha256_by_fraction": {
+      "0.0": "479bb6666233e250a4c748ce649d3869f0265b081271b5bcc12d52d0806fdc70",
+      "0.5": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634"
+    },
+    "compact_archive_sha256": "d06b94db5a6bf605542d272f341e136e18f958345a1076c2959ac9bb769ff746",
+    "compact_files_verified": 28,
+    "source_files_verified": 1885,
+    "checkpoints_hash_verified": 9,
+    "audited_checkpoints": 6,
+    "observer_snapshots_reproduced": 4,
+    "owned_processes_inactive": 7,
+    "results_source_path": "docs/ffn-fraction-zero-start-20261109-results.md"
+  }
+}

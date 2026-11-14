@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "kernel-taylor-continuity-20261109",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/compare_kernel_taylor.py",
+  "title": "CPU Gaussian and Fourier-window first-order response continuity",
+  "status": "COMPLETED",
+  "status_note": "Completed152CPU fixture/profile/dtype records and1216finite displacements; Gaussian controls agree with derivatives, M suppresses sampled center jumps but not all hierarchy-radius jumps. No learning, optimizer, GPU or production change.",
+  "protocol_source_path": "docs/kernel-taylor-continuity-20261109.md",
+  "protocol": {
+    "device": "CPU",
+    "profiles": [
+      "wrapped_gaussian_fixed_cells",
+      "chebyshev_M4",
+      "chebyshev_M8",
+      "chebyshev_M16",
+      "chebyshev_M32",
+      "chebyshev_M64"
+    ],
+    "fixtures": 19,
+    "records": 152,
+    "finite_displacements": 1216,
+    "primary_dtype": "FP64",
+    "secondary_dtype": "FP32 Gaussian/current M8",
+    "images": [
+      -4,
+      4
+    ],
+    "training_updates": 0,
+    "production_kernel_changes": false,
+    "speed_measurement": false,
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "kernel-taylor-continuity-cpu-20261109-01"
+  },
+  "results_source_path": "docs/kernel-taylor-continuity-20261109-results.md",
+  "execution": {
+    "state": "completed_locally_verified",
+    "consumer_commit": "73d8ec20dc576d1174f630f0e971a9c0b5eb981b",
+    "runner_sha256": "e40b373ed6c618cd53473b090c864097bcaa477c02ac351e264c7f122af03734",
+    "summary_sha256": "f9975160b3fc820523d4c0e21e8e7a8a052c1ea272b6a78513127476d9ac5a6e",
+    "source_archive_sha256": "e21a226b468f6a30cd043295ee0d333a8969241067a153d35d6533fb3326fbff",
+    "source_files_verified": 2003,
+    "torch": "2.13.0",
+    "python": "3.11.15",
+    "device": "CPU",
+    "records": 152,
+    "finite_displacements": 1216,
+    "independent_gaussian_tests": 5,
+    "local_tests": 277,
+    "local_passed": 216,
+    "local_skipped": 61,
+    "training_updates": 0,
+    "public_default_adopted": false
+  }
+}

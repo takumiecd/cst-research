@@ -22,12 +22,62 @@ private interfaces, record those dependencies, the exact source commit and the
 scope of independent validation. Use within an experiment and adoption into a
 public API are separate decisions.
 
+The [verified5M-token site-count comparison](docs/ffn-site-count-20261109-results.md) is complete: one/two paired middle blocks remain close to Dense in this seed, while all8 CST maps show a larger gap. All11 arms,33 checkpoints,96 trained map oracles and local evidence retrieval passed. The [distributed-versus-paired follow-up and signal diagnostics](docs/lm-composition-20261109-results.md) also completed: all17 task models and51 checkpoints are audited, and102 read-only TRAIN probes are preserved. Equal-count placement changes performance in this seed; larger residual signals and smaller cotangents do not establish gradient death.
+
+The [20M-token RTX4090 comparison](docs/ffn-long-horizon-20261109.md) finished training, but its container-home evidence disappeared on a Hub stop before verified local retrieval. It is not scientifically admitted or a completed accuracy result. Source/protocol copies and the captured rounded status metrics remain preserved; no old20M prefix is borrowed.
+
+The [zero-start tau sweep with a matched DST reference](docs/ffn-zero-start-tau-dst-20261109-results.md) is complete: tau.0003/.001/.003/.01 gave DEV CE3.3964/3.3987/3.3930/3.3954; tuned RigL-style DST3.3507,Dense3.3090 (976steps,seed17). Smaller tau did not close the gap. Learning-curve comparisons now include a verified DST reference; all four DST LR candidates are retained.
+
+A [matched initial fraction0/.5 comparison at common CST LR32×](docs/ffn-fraction-zero-start-20261109-results.md) gave DEV CE3.3930/3.4328 versus Dense3.3090 at976updates/seed17. Zero start learns(mean fraction0→.1406) and improves this pilot; mean radius remains smaller. No RMS calibration or default adoption.
+
+An [all-CST-field LR extension to16/32/64/128×](docs/ffn-all-fields-lr-20261109-results.md) completed at initial fraction=.5: DEV CE3.4864/3.4328/3.4696/3.5136 versus Dense3.3090 (976updates,seed17).32× was best in this pilot; higher rates increased fraction motion and endpoint occupancy. The128× CLI rejection and separate source-qualified recovery are preserved.
+
+A [fixed initial fraction=.5 LR comparison](docs/ffn-fraction-lr-20261109-results.md) completed on RTX6000 Ada: at976updates/seed17, fraction LR1/4/16× gave DEV CE3.5828/3.5594/3.4864 versus Dense3.3090. Per-Atom fractions move despite a nearly unchanged mean; higher LR helped this pilot, with no RMS calibration or default change.
+
+A [fixed-state FFN probe](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.md)
+measured21–22% envelope overhead over the physical core at width512/256 rows;
+this is a bounded operator result, not LM throughput or an advantage over Dense.
+An [explicit prepared-map candidate](https://github.com/takumiecd/torchcst/pull/157) reduced the old envelope step by about3–4% in one paired pilot; it is not a public default. The optional `ffn` install now pins the operator used by the new study.
+
+The [task-update behavior analysis](docs/lm-task-update-behavior-20261109-results.md) adds36 restored TRAIN probes: useful update alignment differs even at a singleton CST map, while immediate finite-step layer interference is not unusually large on the sampled states. This is descriptive analysis; no optimizer/kernel/default recommendation is adopted.
+
+The [local tangent/history and Atom attribution](docs/lm-tangent-history-20261109-results.md) is complete. In9 CST field observations, radius-fraction displacements differ sharply from derivative predictions at discrete window changes; amplitude and centers largely follow predictions. A no-optimizer FP64 single-Atom witness reproduces jumps in both radius directions. Adam-history effects also occur in Dense/DST. No repair or improvement experiment has been performed.
+
+The [CPU Gaussian/Fourier continuity diagnostic](docs/kernel-taylor-continuity-20261109-results.md) completed152 cases and1216 finite displacements. Gaussian fixed-cell integrals agree with derivatives across the tested center/width boundaries; current Fourier same-branch controls also agree. Increasing M suppresses sampled center jumps but leaves large hierarchy-radius discontinuities. No Gaussian adoption, CUDA change, speed result or learning experiment.
+
+The [compact-profile boundary diagnostic](docs/compact-boundary-20261109-results.md) completed240 CPU cases/1920 displacements. Triweight support edges join zero with vanishing first/second derivatives; sampled L2 normalization adds a separate floor kink and zero-gradient regimes. An independent fixed-cell Triweight control is not a new public backend. Polynomial-moment acceleration is a derived possibility only, without timing or training evidence.
+
+The [two-bank Fourier connection proposal](docs/fourier-scale-connection-20261109-results.md) derives C2 position/radius glue with padding, at most2 banks/4 fixed windows per axis, and full connection-weight derivatives. Its140 CPU cases/1120 displacements pass; the illustrative M8 tail screen still leaks up to0.65%, and narrower bands increase derivative stiffness. The helper-bank radius/tile ratio must relax beyond[.5,1]. This is a new mathematical definition, with no runtime, initialization, training or speed adoption.
+
 ## Current direction: FFN and Attention feasibility
 
 **Atom-count lower-bound and Big-Ω research is stopped. The priority is to
 establish practical use in FFNs and Attention.** This direction was adopted on
 2026-11-06. FFN and Attention development pilots are now complete, including
 combined QKV and QKV+FFN substitutions in all four blocks.
+
+The [RTX6000 Ada independent-radius FFN pilot](docs/ffn-independent-radius-20261108-results.md)
+also completed with matched initial physical values and8192 Atoms per map.
+At width512/seed17/999424 tokens, DEV CE was3.42441 for Polar,3.42438 for direct
+radius learning and3.42865 for a physical fixed-radius control. All eight maps
+had live radius gradients; mean radius grew0.975→1.048 while12.59% reached0.5.
+This is a bounded development observation, not noninferiority or an optimum.
+The report retains learning/radius/gradient overlays, numerical gates and
+verified evidence. [Gradient/update equations](docs/radius-coordinate-gradient-discussion-20261108.md)
+separate a proposed radius-live Polar contract from coordinate-motion control.
+
+The subsequent [matched full-chain Polar pair](docs/ffn-polar-radius-gradient-20261108-results.md)
+keeps L/U and uses the same projected Cartesian Adam in both arms. At the same
+short width512 budget, detached/live DEV CE was3.42404/3.42239; the curves largely
+overlap. Live radius gradients reached the s/t radial direction and changed
+mean radius2.058→1.623 relative to the detached control (both grew from0.975).
+This qualified research composition uses the existing physical Linear Plan;
+public Polar is unchanged and the Python-map precision/overhead is documented.
+
+[Established relations and latent-coordinate design](docs/polar-relations-20261108.md)
+separate exact cell-mass identities, measured behavior and radius-control
+hypotheses. A reproducible CPU audit distinguishes mass amplitude from Atom
+norm and records a proposed energy-amplitude chart; no new chart is adopted.
 
 The approved [FFN feasibility plan](docs/ffn-feasibility.md) uses
 `A=ceil(8*sqrt(d_in*d_out))`, first at width256, then width128/512. It checks

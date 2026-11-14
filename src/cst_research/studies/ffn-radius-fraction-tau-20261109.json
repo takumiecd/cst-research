@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "ffn-radius-fraction-tau-20261109",
+  "title": "Public radius-envelope tau screening and longer TinyStories FFN follow-up",
+  "status": "COMPLETED",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "protocol_source_path": "docs/ffn-radius-fraction-tau-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "atoms_per_map": 8192,
+    "tau": [
+      0.003,
+      0.01,
+      0.03,
+      0.1,
+      0.3
+    ],
+    "fraction_init": 0.0,
+    "fraction_lr_multiplier": 1.0,
+    "atom_lr_multiplier": 16.0,
+    "short_updates": 256,
+    "long_updates": 976,
+    "short_seed": 17,
+    "long_seeds": [
+      17,
+      29,
+      43
+    ],
+    "schedule_tokens": 20000000,
+    "selection": "two finite lowest short final development CE, smaller tau breaks ties",
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-radius-fraction-tau-20261109"
+  },
+  "status_note": "All6 short runs and9 longer runs completed. Long3seed DEV CE mean/sampleSD: Dense3.299212/.008959, tau.0033.406136/.010409, tau.013.415709/.017727. Tau.003 is lower than.01 in all3 seeds, with a.106924 mean gap to Dense. Radius fractions learn but stay small; no convergence, noninferiority or universal-optimum claim. All9 trained audits passed;79 compact/1814 frozen source files and15 remote checkpoint hashes verified;19 owned training/audit processes inactive.",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/157",
+  "execution": {
+    "job_id": "ffn-radius-fraction-tau-6000ada-20261109-02",
+    "consumer_commit": "539af8e648031ccf2324eea28aeed3802dcde487",
+    "operator_commit": "443ee84ca861dcf4d629d29ce5d5b76ac7775c28",
+    "source_archive_sha256": "8501aa1c1d6c3fbe622b2709aacf386a5c752df329cc0e334b31c8ae1590f9a5",
+    "qualification_sha256": "6e78fafcbce9f22c94b5a07c50bb072681a9462205fa3269deb236e21f81e61a",
+    "prior_failed_attempt": "ffn-radius-fraction-tau-6000ada-20261109-01",
+    "prior_failed_archive_sha256": "b04f1fa64da9ebaa9be836aaa9ebee4ca7348717f337e5c4708266956a7c83a5",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false,
+    "compact_archive_sha256": "b464081160e67309d4dc6187e9f88ebd07c8208ea640a7dd00997f9d65e065c1",
+    "files_verified": 79,
+    "source_files_verified": 1814,
+    "checkpoints_verified": 15,
+    "trained_audit_models": 9,
+    "owned_processes_inactive": 19,
+    "selected_taus": [
+      0.003,
+      0.01
+    ],
+    "results_document": "docs/ffn-radius-fraction-tau-20261109-results.md"
+  }
+}

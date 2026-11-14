@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "compact-boundary-20261109",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/inspect_compact_boundaries.py",
+  "title": "CPU Triweight support and normalization boundary analysis",
+  "status": "COMPLETED",
+  "status_note": "240CPU cases/1920displacements completed. Triweight supports join zero smoothly; L2 floor has a derivative kink and sampled profiles can have zero-gradient regions. No learning, GPU, production change or speed claim.",
+  "protocol_source_path": "docs/compact-boundary-20261109.md",
+  "protocol": {
+    "fixtures": 24,
+    "records": 240,
+    "finite_displacements": 1920,
+    "device": "CPU",
+    "primary_dtype": "FP64",
+    "secondary_dtype": "FP32",
+    "normalization_floor": 1e-06,
+    "profiles": [
+      "triweight-point",
+      "triweight-l2",
+      "triweight-cell-control",
+      "gaussian-cell-control",
+      "biweight-point",
+      "wendland-c2-point"
+    ],
+    "training_updates": 0,
+    "confirmation_evaluated": false,
+    "production_kernel_changes": false,
+    "speed_measurement": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "compact-boundary-cpu-20261109-01"
+  },
+  "results_source_path": "docs/compact-boundary-20261109-results.md",
+  "execution": {
+    "state": "completed_locally_verified",
+    "consumer_commit": "4420a2943348964ce447dd76870771068fe6de69",
+    "runner_sha256": "c44437334444cb1880f1a608a5cbb7209c901ef4aa06c8f8c117496a88724ef6",
+    "gaussian_helper_sha256": "e40b373ed6c618cd53473b090c864097bcaa477c02ac351e264c7f122af03734",
+    "summary_sha256": "ea47b1629087be4be8bd57c9a0f34b3b4d18ddc395e9be47239b2196f7b50b4e",
+    "source_archive_sha256": "24f1530d31f5ee6b5f758da36defe929f63095de2caa0b953460ec69db126abd",
+    "source_files_verified": 2015,
+    "device": "CPU",
+    "torch": "2.13.0",
+    "python": "3.11.15",
+    "records": 240,
+    "finite_displacements": 1920,
+    "independent_tests": 3,
+    "local_tests": 280,
+    "local_passed": 219,
+    "local_skipped": 61,
+    "training_updates": 0,
+    "public_default_adopted": false
+  }
+}

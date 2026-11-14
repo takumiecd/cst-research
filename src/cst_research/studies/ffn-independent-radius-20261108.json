@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "ffn-independent-radius-20261108",
+  "title": "Matched physical radius gradient FFN pilot on RTX6000 Ada",
+  "status": "COMPLETED",
+  "status_note": "Three arms completed976updates/999424tokens, trained audits passed and38 compact files/1758 source files independently hash-verified;10 recorded processes inactive. DEV CE Polar3.42440987, learned3.42437524, fixed3.42864565. Learned mean radius.975274\u21921.048464,12.586975% at lower.5; all8 final radius gradients nonzero. Single seed/development only. Four prelearning failures retained,17 recorded processes inactive;231 identical-operator/same-runtime regressions reused from04 after receipt-only fix.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.ffn_radius_qualification",
+  "protocol_source_path": "docs/ffn-independent-radius-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "atoms_per_ffn_map": 8192,
+    "cst_sites": 8,
+    "seed": 17,
+    "arms": [
+      "polar",
+      "learned",
+      "fixed"
+    ],
+    "attention_kind": "dense",
+    "ffn_kind": "cst",
+    "linear_backend": "levels",
+    "q": 0,
+    "radius_envelope": "rational_zero_opening",
+    "zero_opening_scale": 0.001,
+    "radius_birth": 0.5,
+    "physical_radius_bounds": [
+      0.5,
+      50
+    ],
+    "physical_amplitude_bounds": [
+      -1,
+      1
+    ],
+    "forward_radius_clamp": false,
+    "post_adam_projection": true,
+    "atom_lr_multiplier": 16,
+    "base_lr": 0.0003,
+    "updates": 976,
+    "token_budget": 999424,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "gradient_scope": "fixed probe after update; unclipped; excluded from update timer",
+    "dense_reference": "Historical only; no new Dense run",
+    "expected_gpu": "NVIDIA RTX 6000 Ada Generation"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-independent-radius-20261108"
+  },
+  "execution": {
+    "job_id": "ffn-independent-radius-6000ada-20261108-05",
+    "consumer_commit": "40df1a94349fccb5134413a5659eed69c83f108c",
+    "operator_commit": "88c2e8a7c4aa312f4f096c5169d712ace49ac979",
+    "request_sha256": "e577067d8b4ba697c2bce409b040e04576685cbfaaef4780aa8e2b6330ec595a",
+    "compact_archive_sha256": "dcae47ec745b72c548b35c4cccdf849f6de103d48b018eadba2994263d6b8c3f",
+    "files_verified": 38,
+    "source_files_verified": 1758,
+    "recorded_processes_inactive": 10,
+    "results_document": "docs/ffn-independent-radius-20261108-results.md",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false
+  }
+}

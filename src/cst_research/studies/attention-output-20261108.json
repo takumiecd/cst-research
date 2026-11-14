@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "attention-output-20261108",
+  "title": "Full CST Attention output and FFN width512 feasibility",
+  "status": "RUNNING",
+  "status_note": "Functional admission retrieved/verified for all24CST sites and stream64. Attempt04 with explicit receipt defaults passed five levels requalifications/admissions; last observed stream64 qualification. Hub503 prevents later learning-state verification; durable job not stopped/restarted. No quality claim.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "df24415afe442b9916e902d0f590fa5207016f66",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/155",
+  "runner_entrypoint": "cst_research.experiments.attention_qualification",
+  "protocol_source_path": "docs/attention-output-20261108.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "heads": 8,
+    "context": 128,
+    "expansion": 4,
+    "coefficient": 8,
+    "seed": 17,
+    "arms": [
+      "dense",
+      "cst-ffn",
+      "cst-qkv",
+      "cst-qkv-ffn",
+      "cst-qkvo",
+      "cst-qkvo-ffn"
+    ],
+    "ffn_kind": [
+      "dense",
+      "cst"
+    ],
+    "cst_projection": "All blocks,FFN/QKV/QKVO crossed with Dense/CST FFN",
+    "q": 0.0,
+    "token_budget": 999424,
+    "updates": 976,
+    "schedule_tokens": 20000000,
+    "confirmation_evaluated": false,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "cst_sites": [
+      0,
+      8,
+      12,
+      20,
+      16,
+      24
+    ],
+    "atoms_per_square_projection": 4096,
+    "atoms_per_rectangular_projection": 8192,
+    "linear_backend": "levels",
+    "radius_envelope": "rational_zero_opening",
+    "radius_birth": 0.5,
+    "zero_opening_scale": 0.001
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "attention-output-20261108-04"
+  },
+  "execution": {
+    "consumer_commit": "91ef5a6e4633ce358119130d9fc2bf1649729887",
+    "source_archive_sha256": "72e570b766e53b68c6b99ceda35b2fde7851e30fde1a64a3461b7e8af7c5ecc2",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "torch": "2.6.0+cu126",
+    "attempt": "attention-output-20261108-04",
+    "qualification_or_learning_is_complete": false,
+    "first_failed_attempt": {
+      "id": "attention-output-20261108-02",
+      "before_learning": true,
+      "passed_GPU_cases": 32,
+      "failed_GPU_cases": 1,
+      "reason": "FP32 positive periodic wrapping lost fractional center bits",
+      "archive_sha256": "c53f64e369bd5eaac9d9f804cddc80e48a99b9943024e646427733179cb8a7d8"
+    },
+    "pretraining_provenance_failure": {
+      "id": "attention-output-20261108-03",
+      "GPU_regressions_passed": 223,
+      "model_qualifications_passed": 6,
+      "learning_started": false,
+      "reason": "Receipt omitted default closed_lower_power and closed_upper_power; strict admission refused learner before construction"
+    },
+    "last_observed_phase": "stream64-qualification",
+    "learning_start_or_completion_observed": false,
+    "supervision": "Hub503 after execution ReadTimeout; VPN visibly connected, server not restarted",
+    "admission_document": "docs/attention-output-20261108-admission.md"
+  }
+}

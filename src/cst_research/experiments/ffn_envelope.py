@@ -45,6 +45,10 @@ def envelope_snapshot(model):
     Compute only after a complete update. There are no RNG, optimizer, gradient
     or model writes. Diagnostics are excluded from synchronized update samples.
     """
+    if getattr(getattr(model, "config", None), "radius_mode", None) == "envelope":
+        from .ffn_radius_fraction import snapshot
+
+        return snapshot(model)
     from torchcst import CSTLinear
     from torchcst._backends.torch.parameterizations.radius_cell_mass import (
         decoded_values,

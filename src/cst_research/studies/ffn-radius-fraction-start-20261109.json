@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "ffn-radius-fraction-start-20261109",
+  "title": "Smaller tau and broad initial radius fractions with matched Dense moments",
+  "status": "COMPLETED",
+  "status_note": "All12 runs and12 trained audits completed. Initial actual FFN RMS can be4x Dense at fraction.5 and42x at1 despite matching expected Atom energy. Broad-start quality is confounded by this output-scale mismatch; preserve as diagnostic and rerun with actual probe-RMS initialization under a new source/protocol.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "protocol_source_path": "docs/ffn-radius-fraction-start-20261109.md",
+  "protocol": {
+    "amplitude_max": 32.0,
+    "tau_fraction_cases": [
+      [
+        0.003,
+        0.0
+      ],
+      [
+        0.001,
+        0.0
+      ],
+      [
+        0.0003,
+        0.0
+      ],
+      [
+        0.003,
+        0.25
+      ],
+      [
+        0.003,
+        0.5
+      ],
+      [
+        0.003,
+        1.0
+      ]
+    ],
+    "seed": 17,
+    "short_updates": 256,
+    "long_updates": 976,
+    "width": 512,
+    "blocks": 4,
+    "atoms_per_map": 8192,
+    "long_selection": "best smaller tau, best broader fraction, common baseline and Dense",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-radius-fraction-start-20261109"
+  },
+  "execution": {
+    "job_id": "ffn-fraction-start-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "733526706aac650fe7b89917230ce1bdc7aff44c",
+    "source_archive_sha256": "24d576b9da54e2b539453425e661cfacd42a8d950b53413977d48db6796c321a",
+    "qualification_sha256": "0922e491faee295d5cdaf4bcea827e3686d7572f0d2f86ab0344b5760c023514",
+    "confirmation_evaluated": false,
+    "public_default_adopted": false,
+    "compact_archive_sha256": "44da9684ce4b0502f32a56ea94d82715bfca3060f064e6fb528358cb3266bedf",
+    "files_verified": 70,
+    "source_files_verified": 1837,
+    "checkpoints_verified": 12,
+    "trained_audit_models": 12,
+    "owned_processes_inactive": 17,
+    "diagnostic_record": "docs/ffn-radius-fraction-start-20261109-diagnostic.json"
+  }
+}

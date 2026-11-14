@@ -15,7 +15,7 @@ import numpy as np
 import torch
 
 from .ffn_contract import ModelConfig, learning_rate, qualification_covers_model
-from .ffn_model import LanguageModel, configure_native, cst_optimizer
+from .ffn_model import LanguageModel, configure_native, cst_optimizer, parameter_digest
 
 
 def sha(path):
@@ -70,7 +70,16 @@ def probe(model, x, y):
     model.zero_grad(set_to_none=True)
     activations, handles = {}, []
     for name, module in model.named_modules():
-        if name.endswith((".ffn.up", ".ffn.down", ".qkv.value")):
+        if name.endswith(
+            (
+                ".ffn.up",
+                ".ffn.down",
+                ".qkv.query",
+                ".qkv.key",
+                ".qkv.value",
+                ".attention_out",
+            )
+        ):
 
             def capture(_module, _inputs, output, name=name):
                 activations[name] = float(
@@ -83,7 +92,9 @@ def probe(model, x, y):
         loss.backward()
         gradients = {}
         for name, p in model.named_parameters():
-            if (".ffn." in name or ".qkv." in name) and p.grad is not None:
+            if (
+                ".ffn." in name or ".qkv." in name or ".attention_out." in name
+            ) and p.grad is not None:
                 if not bool(torch.isfinite(p.grad).all()):
                     raise FloatingPointError("nonfinite FFN gradient: " + name)
                 gradients[name] = {
@@ -144,23 +155,35 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--attention-kind",
-        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv"),
+        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo"),
         default="dense",
     )
     parser.add_argument("--kind", choices=("dense", "cst", "none"), required=True)
     parser.add_argument("--width", type=int, choices=(128, 256, 512), default=256)
+    parser.add_argument("--heads", type=int, default=4)
+    parser.add_argument(
+        "--linear-backend",
+        choices=("native", "levels", "levels_stream64", "levels_wide_amplitude"),
+        default="native",
+    )
     parser.add_argument("--expansion", type=int, choices=(1, 4, 16), default=4)
     parser.add_argument("--coefficient", type=int, choices=(8, 16, 32), default=8)
     parser.add_argument(
         "--expected-gpu",
-        choices=("NVIDIA GeForce RTX 4090", "NVIDIA A100 80GB PCIe MIG 3g.40gb"),
+        choices=(
+            "NVIDIA GeForce RTX 4090",
+            "NVIDIA GeForce RTX 3090",
+            "NVIDIA RTX 6000 Ada Generation",
+            "NVIDIA A100 80GB PCIe MIG 3g.40gb",
+            "NVIDIA L4",
+        ),
         default="NVIDIA GeForce RTX 4090",
     )
     parser.add_argument(
         "--q", type=float, choices=(0.0, 0.25, 0.5, 0.75, 1.0), default=0.0
     )
     parser.add_argument(
-        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0), default=1.0
+        "--amplitude-max", type=float, choices=(1.0, 2.0, 4.0, 32.0), default=1.0
     )
     parser.add_argument("--w-c", type=float, choices=(0.3, 0.6, 1.2), default=0.3)
     parser.add_argument(
@@ -170,7 +193,10 @@ def main(argv=None):
         "--feature-order", choices=("contiguous", "permuted"), default="contiguous"
     )
     parser.add_argument(
-        "--atom-lr-multiplier", type=float, choices=(1.0, 16.0, 32.0, 64.0), default=1.0
+        "--atom-lr-multiplier",
+        type=float,
+        choices=(1.0, 16.0, 32.0, 64.0, 128.0),
+        default=1.0,
     )
     parser.add_argument(
         "--field-lr-arm",
@@ -201,6 +227,27 @@ def main(argv=None):
     parser.add_argument("--closed-lower-power", type=float, default=4.0)
     parser.add_argument("--closed-upper-power", type=float, default=1.0)
     parser.add_argument("--track-envelope", action="store_true")
+    parser.add_argument(
+        "--radius-mode",
+        choices=(
+            "polar",
+            "learned",
+            "fixed",
+            "polar_detached",
+            "polar_live",
+            "envelope",
+        ),
+        default="polar",
+    )
+    parser.add_argument("--tau", type=float, default=0.03)
+    parser.add_argument("--radius-fraction", type=float, default=0.0)
+    parser.add_argument("--radius-fraction-lr-multiplier", type=float, default=1.0)
+    parser.add_argument(
+        "--initialization-mode", choices=("moments", "probe_rms"), default="moments"
+    )
+    parser.add_argument("--track-fraction-updates", action="store_true")
+    parser.add_argument("--observe-update", type=int, action="append", default=[])
+    parser.add_argument("--track-radius", action="store_true")
     parser.add_argument("--development-only", action="store_true")
     parser.add_argument("--zero-opening-scale", type=float, default=0.03)
     args = parser.parse_args(argv)
@@ -238,6 +285,8 @@ def main(argv=None):
             parser.error("model source differs from qualified source")
     requested = ModelConfig(
         width=args.width,
+        heads=args.heads,
+        linear_backend=args.linear_backend,
         expansion=args.expansion,
         coefficient=args.coefficient,
         q=args.q,
@@ -251,7 +300,42 @@ def main(argv=None):
         closed_upper_power=args.closed_upper_power,
         zero_opening_scale=args.zero_opening_scale,
         attention_kind=args.attention_kind,
+        radius_mode=args.radius_mode,
+        tau=args.tau,
+        radius_fraction=args.radius_fraction,
+        radius_fraction_lr_multiplier=args.radius_fraction_lr_multiplier,
+        initialization_mode=args.initialization_mode,
     )
+    if args.track_fraction_updates:
+        name = "ffn_fraction_updates.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("fraction update observer differs from qualification")
+    if args.initialization_mode == "probe_rms":
+        name = "ffn_probe_initialization.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("probe initialization source differs from qualification")
+    if args.radius_mode == "envelope":
+        name = "ffn_radius_fraction.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("radius fraction source differs from qualification")
+    if args.radius_mode != "polar" or args.track_radius:
+        name = "ffn_radius.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("independent radius source differs from qualification")
+    if args.radius_mode in ("polar_live", "polar_detached"):
+        name = "ffn_polar_radius.py"
+        if sha(Path(__file__).parent / name) != qualification["source_sha256"].get(
+            name
+        ):
+            parser.error("mapped Polar source differs from qualification")
     if not qualification_covers_model(qualification, requested, ffn_kind=args.kind):
         parser.error(
             "qualification does not cover both dimensions, Atom count, kernel scalars and model feature ordering"
@@ -314,8 +398,15 @@ def main(argv=None):
         else config.ffn_parameter_budget()[args.kind + "_parameters"]
     )
     assert actual_ffn_parameters == expected_ffn_parameters
+    calibration = None
     if args.kind == "cst" or config.attention_kind != "dense":
         configure_native(model)
+        if config.initialization_mode == "probe_rms":
+            from .ffn_probe_initialization import calibrate_model
+
+            calibration_x, _ = token_batch(data["train"], [0], config.context, "cuda")
+            second_x, _ = token_batch(data["train"], [128], config.context, "cuda")
+            calibration = calibrate_model(model, calibration_x, second_probe=second_x)
         if field_recipe is not None:
             from .ffn_field_lr import FieldRateOptimizer
 
@@ -357,6 +448,11 @@ def main(argv=None):
         from .ffn_center_motion import CenterMotion
 
         center_motion = CenterMotion(model)
+    fraction_updates = None
+    if args.track_fraction_updates:
+        from .ffn_fraction_updates import FractionUpdates
+
+        fraction_updates = FractionUpdates(model)
     tokens_per_update = args.batch * config.context * args.accumulation
     updates = args.tokens // tokens_per_update
     horizon_updates = args.schedule_tokens // tokens_per_update
@@ -364,6 +460,9 @@ def main(argv=None):
     order = np.random.default_rng(args.seed + 888).permutation(windows)
     total_microbatches = updates * args.accumulation
     assert total_microbatches * args.batch <= len(order)
+    observation_updates = set(args.observe_update)
+    if any(n < 1 or n > updates for n in observation_updates):
+        parser.error("observation updates must lie inside the run")
     milestones = {
         n // tokens_per_update for n in (1000000, 5000000, 10000000, 20000000)
     }
@@ -379,7 +478,9 @@ def main(argv=None):
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
         "gpu": torch.cuda.get_device_name(0),
+        "initial_parameter_sha256": parameter_digest(model),
         "initialization_reports": model.initialization_reports(),
+        "initial_probe_calibration": calibration,
         "ffn_budget": config.ffn_parameter_budget(),
         "total_parameters": sum(p.numel() for p in model.parameters()),
         "actual_ffn_parameters": actual_ffn_parameters,
@@ -389,11 +490,22 @@ def main(argv=None):
         "scheduled_updates": updates,
         "learning_rate_horizon_updates": horizon_updates,
         "data_order_horizon_tokens": args.schedule_tokens,
+        "data_order_sha256": hashlib.sha256(order.tobytes()).hexdigest(),
         "milestone_checkpoint_sha256": {},
         "scheduled_tokens": updates * tokens_per_update,
         "completed_updates": 0,
         "completed_tokens": 0,
-        "optimizer": "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config",
+        "optimizer": (
+            "Ordinary torch.optim.AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0 global clip1"
+            if args.kind == "dense"
+            else f"Public CSTAdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0 clip1; amplitude/centers{config.atom_lr_multiplier:g}x, radius_fraction{config.radius_fraction_lr_multiplier:g}x with same schedule; full bound-radius gradient"
+            if config.radius_mode == "envelope"
+            else "Cartesian AdamW, baseLR3e-4 betas(.9,.95) eps1e-8 decay0, clip1; post-step latent norm projection[1,2], Atom LR from config; no tangent projection"
+            if config.radius_mode in ("polar_live", "polar_detached")
+            else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; physical fields, post-step amplitude/radius projection; Atom group multiplier from config"
+            if config.radius_mode != "polar"
+            else "AdamW baseLR3e-4 betas(.9,.95) eps1e-8 decay0, global clip1; CST coordinate policy, Atom group multiplier from config"
+        ),
         "measurement": "synchronized full optimizer update including accumulation/data transfer; no probes/evaluation in timed samples; eager FP32 TF32off",
         "atom_motion_diagnostics": "CPU copy after each update; instrumented wall time includes sampling. Use separate uninstrumented runs for primary time/memory claims."
         if motion is not None
@@ -409,8 +521,29 @@ def main(argv=None):
     geometry = (
         (args.output / "geometry.jsonl").open("x") if args.track_envelope else None
     )
+    radius_history = (
+        (args.output / "radius.jsonl").open("x") if args.track_radius else None
+    )
+
+    fraction_history = (
+        (args.output / "fraction-updates.jsonl").open("x")
+        if fraction_updates is not None
+        else None
+    )
 
     def log_geometry(step):
+        if fraction_history is not None:
+            fraction_history.write(
+                json.dumps(
+                    {
+                        "step": step,
+                        "seen_tokens": step * tokens_per_update,
+                        **fraction_updates.report(optimizer),
+                    }
+                )
+                + "\n"
+            )
+            fraction_history.flush()
         if geometry is not None:
             from .ffn_envelope import envelope_snapshot
 
@@ -425,6 +558,20 @@ def main(argv=None):
                 + "\n"
             )
             geometry.flush()
+        if radius_history is not None:
+            from .ffn_radius import probe_radius
+
+            radius_history.write(
+                json.dumps(
+                    {
+                        "step": step,
+                        "seen_tokens": step * tokens_per_update,
+                        **probe_radius(model, px, py),
+                    }
+                )
+                + "\n"
+            )
+            radius_history.flush()
 
     def save():
         (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -525,11 +672,18 @@ def main(argv=None):
             summary["peak_reserved_bytes"] = max(
                 summary["peak_reserved_bytes"], torch.cuda.max_memory_reserved()
             )
+            if fraction_updates is not None:
+                fraction_updates.update()
             if motion is not None:
                 motion.update()
             if center_motion is not None:
                 center_motion.update()
-            if step <= 5 or step % 20 == 0 or step == updates:
+            if (
+                step <= 5
+                or step % 20 == 0
+                or step == updates
+                or step in observation_updates
+            ):
                 log_geometry(step)
             value = float(loss_sum / args.accumulation)
             if not math.isfinite(value):
@@ -538,7 +692,12 @@ def main(argv=None):
             summary["completed_tokens"] = step * tokens_per_update
             if step > 10:
                 summary["timing_samples_seconds"].append(duration)
-            if step <= 5 or step % 20 == 0 or step == updates:
+            if (
+                step <= 5
+                or step % 20 == 0
+                or step == updates
+                or step in observation_updates
+            ):
                 log(
                     {
                         "step": step,
@@ -566,7 +725,12 @@ def main(argv=None):
             if step in (10, 100):
                 summary["diagnostics"][str(step)] = probe(model, px, py)
                 torch.cuda.empty_cache()
-            if step % 200 == 0 or step == updates or step in milestones:
+            if (
+                step % 200 == 0
+                or step == updates
+                or step in milestones
+                or step in observation_updates
+            ):
                 dev = evaluate(model, data["development"], args.batch)
                 log(
                     {
@@ -581,7 +745,7 @@ def main(argv=None):
                     summary["atom_geometry_history"][str(step)] = geometry_snapshot(
                         model
                     )
-                checkpoint(milestone=step in milestones)
+                checkpoint(milestone=step in milestones or step in observation_updates)
                 save()
         summary["diagnostics"]["final"] = probe(model, px, py)
         if center_motion is not None:
@@ -608,8 +772,12 @@ def main(argv=None):
         summary["total_elapsed_seconds"] = time.monotonic() - began
         save()
         curves.close()
+        if fraction_history is not None:
+            fraction_history.close()
         if geometry is not None:
             geometry.close()
+        if radius_history is not None:
+            radius_history.close()
 
 
 if __name__ == "__main__":

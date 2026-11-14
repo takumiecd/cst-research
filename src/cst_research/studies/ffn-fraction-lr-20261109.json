@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_run",
+  "id": "ffn-fraction-lr-20261109",
+  "title": "Fixed initial fraction .5: isolated fraction LR multipliers1/4/16",
+  "status": "COMPLETED",
+  "status_note": "All4 runs completed at976 updates; 8 final/prefix checkpoints audited with exact DEV reproduction. Verified compact retrieval and6 observer snapshots. LR16 reduced DEV CE by0.0964 versus LR1; Dense gap0.1774 remains. One seed only; no RMS calibration, confirmation evaluation or public default adoption.",
+  "protocol_source_path": "docs/ffn-fraction-lr-20261109.md",
+  "protocol": {
+    "width": 512,
+    "blocks": 4,
+    "initial_fraction": 0.5,
+    "tau": 0.003,
+    "amplitude_max": 32.0,
+    "fraction_lr_multipliers": [
+      1.0,
+      4.0,
+      16.0
+    ],
+    "amplitude_center_lr_multiplier": 16.0,
+    "initialization_mode": "moments",
+    "seed": 17,
+    "updates": 976,
+    "observation_updates": [
+      256
+    ],
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "confirmation_evaluated": false
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-fraction-lr-6000ada-20261109-01"
+  },
+  "execution": {
+    "job_id": "ffn-fraction-lr-6000ada-20261109-01",
+    "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "consumer_commit": "9b531538a90014022dcaf20a0188446cce348f53",
+    "source_archive_sha256": "5d559937bd56e04ce210a287fe59dde3a514571264403dd331c6d6c5356bf1e9",
+    "qualification_sha256": "bd3a9298eaeeb9ca7fe1ad7415b790ede61942b0db9b059c30962992c3bff8cd",
+    "initial_cst_parameter_sha256": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false,
+    "compact_archive_sha256": "d1bf5569c5803b57b8e925e682927c8fc9e698009afbfa55fdfc4ecbdfa6d999",
+    "compact_files_verified": 34,
+    "source_files_verified": 1849,
+    "checkpoints_hash_verified": 12,
+    "audited_checkpoints": 8,
+    "observer_snapshots_reproduced": 6,
+    "owned_processes_inactive": 8,
+    "results_source_path": "docs/ffn-fraction-lr-20261109-results.md"
+  }
+}

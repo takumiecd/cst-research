@@ -50,17 +50,29 @@ class ModelConfig:
     closed_upper_power: float = 1.0
     zero_opening_scale: float = 0.03
     attention_kind: str = "dense"
+    linear_backend: str = "native"
+    radius_mode: str = "polar"
+    initialization_mode: str = "moments"
+    tau: float = 0.03
+    radius_fraction: float = 0.0
+    radius_fraction_lr_multiplier: float = 1.0
 
     def __post_init__(self):
         for key, value in asdict(self).items():
             if key not in (
                 "q",
+                "tau",
+                "radius_fraction",
+                "radius_fraction_lr_multiplier",
                 "init_std",
                 "amplitude_max",
                 "w_c",
                 "radius_birth",
                 "feature_order",
                 "attention_kind",
+                "linear_backend",
+                "radius_mode",
+                "initialization_mode",
                 "atom_lr_multiplier",
                 "radius_envelope",
                 "closed_lower_power",
@@ -69,6 +81,9 @@ class ModelConfig:
             ) and (type(value) is not int or value < 1):
                 raise ValueError(f"positive integer {key} required")
         for key in (
+            "tau",
+            "radius_fraction",
+            "radius_fraction_lr_multiplier",
             "q",
             "init_std",
             "amplitude_max",
@@ -95,7 +110,54 @@ class ModelConfig:
             or not 0.5 <= self.radius_birth <= 50
             or self.feature_order not in ("contiguous", "permuted")
             or self.attention_kind
-            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv")
+            not in ("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo")
+            or self.linear_backend
+            not in ("native", "levels", "levels_stream64", "levels_wide_amplitude")
+            or self.radius_mode
+            not in (
+                "polar",
+                "learned",
+                "fixed",
+                "polar_detached",
+                "polar_live",
+                "envelope",
+            )
+            or (
+                self.radius_mode in ("polar_detached", "polar_live")
+                and self.linear_backend != "levels"
+            )
+            or (self.radius_mode != "polar" and self.attention_kind != "dense")
+            or self.tau <= 0
+            or not 0 <= self.radius_fraction <= 1
+            or self.radius_fraction_lr_multiplier <= 0
+            or (
+                self.radius_mode == "envelope"
+                and (
+                    self.width != 512
+                    or self.expansion != 4
+                    or self.coefficient != 8
+                    or self.linear_backend not in ("levels", "levels_wide_amplitude")
+                )
+            )
+            or (
+                self.radius_mode == "envelope"
+                and (
+                    self.amplitude_max > 32
+                    or (
+                        self.amplitude_max > 1
+                        and self.linear_backend != "levels_wide_amplitude"
+                    )
+                )
+            )
+            or (
+                self.linear_backend == "levels_wide_amplitude"
+                and self.radius_mode != "envelope"
+            )
+            or self.initialization_mode not in ("moments", "probe_rms")
+            or (
+                self.initialization_mode == "probe_rms"
+                and self.radius_mode != "envelope"
+            )
             or self.atom_lr_multiplier <= 0
             or self.radius_envelope
             not in ("rational", "closed_polynomial", "rational_zero_opening")
@@ -103,6 +165,19 @@ class ModelConfig:
             or not 1 <= self.closed_upper_power <= self.closed_lower_power
         ):
             raise ValueError("invalid head divisibility, q or initialization scale")
+
+    def envelope_settings(self):
+        """Explicit kernel constructor defaults also required in admission receipts."""
+        return {
+            key: getattr(self, key)
+            for key in (
+                "radius_envelope",
+                "radius_birth",
+                "closed_lower_power",
+                "closed_upper_power",
+                "zero_opening_scale",
+            )
+        }
 
     def recipe(self):
         result = {
@@ -127,6 +202,18 @@ class ModelConfig:
             result["zero_opening_scale"] = self.zero_opening_scale
         if self.attention_kind != "dense":
             result["attention_kind"] = self.attention_kind
+        if self.linear_backend != "native":
+            result["linear_backend"] = self.linear_backend
+        if self.radius_mode != "polar":
+            result["radius_mode"] = self.radius_mode
+        if self.radius_mode == "envelope":
+            result.update(
+                tau=self.tau,
+                radius_fraction=self.radius_fraction,
+                radius_fraction_lr_multiplier=self.radius_fraction_lr_multiplier,
+            )
+        if self.initialization_mode != "moments":
+            result["initialization_mode"] = self.initialization_mode
         return result
 
     @property
@@ -150,18 +237,30 @@ class ModelConfig:
 
 def qualification_covers_model(receipt, config, *, ffn_kind=None):
     """Admit both native directions and the full model's actual recipe."""
+    if (
+        config.linear_backend != "native" or config.attention_kind == "cst_qkvo"
+    ) and asdict(config) not in receipt.get("task_model_configs", []):
+        return False
     if config.recipe() not in receipt.get("task_recipes", []):
         return False
-    if ffn_kind is not None and config.attention_kind != "dense":
-        if {
+    if (
+        ffn_kind is not None
+        and config.attention_kind != "dense"
+        and {
             "ffn_kind": ffn_kind,
             "attention_kind": config.attention_kind,
-        } not in receipt.get("model_kinds", []):
-            return False
+        }
+        not in receipt.get("model_kinds", [])
+    ):
+        return False
     scalars = {
         key: getattr(config, key)
         for key in ("q", "amplitude_max", "w_c", "radius_birth")
     }
+    if config.radius_mode != "polar":
+        scalars["radius_mode"] = config.radius_mode
+    if config.linear_backend != "native":
+        scalars["linear_backend"] = config.linear_backend
     if config.radius_envelope != "rational":
         scalars.update(
             radius_envelope=config.radius_envelope,
@@ -170,6 +269,14 @@ def qualification_covers_model(receipt, config, *, ffn_kind=None):
         )
     if config.radius_envelope == "rational_zero_opening":
         scalars["zero_opening_scale"] = config.zero_opening_scale
+    if config.radius_mode == "envelope":
+        scalars.update(
+            tau=config.tau,
+            radius_fraction=config.radius_fraction,
+            radius_fraction_lr_multiplier=config.radius_fraction_lr_multiplier,
+        )
+    if config.initialization_mode != "moments":
+        scalars["initialization_mode"] = config.initialization_mode
     dimensions = (
         [(config.width, config.width)]
         if config.attention_kind != "dense"

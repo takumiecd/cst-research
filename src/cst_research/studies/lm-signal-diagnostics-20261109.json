@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "scripts/audit_lm_signals.py",
+  "id": "lm-signal-diagnostics-20261109",
+  "title": "Post-hoc task-LM output distributions and activation-cotangent diagnostics",
+  "status": "COMPLETED",
+  "status_note": "Read-only GPU observer completed51 modelstates and102 TRAIN probes. Fresh68operator tests passed; Parameters/RNG unchanged and old loss/gradient probes reproduced. Final compact retrieved and independently hash-verified after transient HTTP503; cause of Hub instability unknown. Descriptive post-hoc results, no causal remedy adopted.",
+  "protocol_source_path": "docs/lm-signal-diagnostics-20261109.md",
+  "protocol": {
+    "objective": "Diagnose task-learning output/gradient behavior without optimizing Dense reconstruction",
+    "sources": [
+      "ffn-site-count-20261109",
+      "ffn-block-placement-20261109"
+    ],
+    "models": 17,
+    "states_per_model": [
+      0,
+      976,
+      4882
+    ],
+    "model_states": 51,
+    "probe_records": 102,
+    "data": "TRAIN prefix128 targets at each state; final four separate128-row calls at offsets0/4096/8192/12288 (512targets total), within qualified R<=256; no DEV/confirmation selection",
+    "measurements": [
+      "input/output mean,std,RMS,max,exact/relative near-zero fractions,sampled absolute quantiles",
+      "input/output activation cotangent statistics at every block,norm,QKV,O,FFN up/down and residual FFN",
+      "raw parameter-gradient RMS and packed field RMS; do not compare coordinate magnitudes as identical parameterizations",
+      "centered covariance participation/stable rank on at most128 token rows; not full matrix rank",
+      "causal attention logit dispersion,entropy normalized by available keys,max probability,Q/K/V RMS"
+    ],
+    "validation": [
+      "preserve numerical Parameters and CPU/CUDA RNG",
+      "reproduce original128 TRAIN loss within1e-6 and FFN gradient RMS within atol1e-10/rtol1e-5",
+      "all underlying frozen training/audit/source controls remain unchanged",
+      "known-answer CPU uniform-attention and feature-rank tests; hooks preserve ordinary task gradients"
+    ],
+    "hypotheses": [
+      "initial attenuation versus learned signal-scale drift",
+      "layer-internal versus residual-stream gradient attenuation",
+      "realized update scale mismatch versus representation diversity/interaction"
+    ],
+    "role_followup": "Historical QKV success was width256/oldPolar and QKVO was width512/oldPolar. Matched current-recipe Q/K/V/O-only and combinations required before identifying O as the cause. This evaluator observes full-network behavior of the FFN cohorts; it is not that new attention-training study.",
+    "post_hoc": true,
+    "confirmation_evaluated": false,
+    "training_updates": 0,
+    "limitations": [
+      "observational,one seed; no causal identification",
+      "fixed TRAIN probes not the full data distribution",
+      "sample covariance rank bounded by token rows",
+      "same activation gradients comparable; parameter-coordinate gradients not directly comparable"
+    ]
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-signal-diagnostics-4090-20261109-01"
+  },
+  "execution": {
+    "state": "completed_audited_retrieved",
+    "confirmation_evaluated": false,
+    "training_updates": 0,
+    "consumer_commit": "5e3cee7ea64d2e138a75ed8f06d7ec7a70861ee0",
+    "source_archive_sha256": "ea81b5ba5ab73aaebefcb0b56e2723194ff78d7add1ac2e1b6c90bb6aef0fabe",
+    "evaluator_sha256": "2ca8b22825644cceb38db7a2e55d9d051d64edba6fe851a524ca2502f7246707",
+    "final_compact_sha256": "da623de635843ceb3ca13546191aac10f584aae2e18a53e38531c63286a1283c",
+    "model_states": 51,
+    "probe_records": 102,
+    "operator_tests_passed": 68,
+    "parameters_and_rng_unchanged": true,
+    "original_probe_consistency_passed": true,
+    "results_path": "docs/lm-composition-20261109-results.json",
+    "public_default_adopted": false
+  }
+}

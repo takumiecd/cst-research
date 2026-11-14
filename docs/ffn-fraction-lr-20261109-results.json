@@ -1,0 +1,1285 @@
+{
+  "study": {
+    "schema_version": 1,
+    "source_repository": "https://github.com/takumiecd/torchcst",
+    "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+    "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+    "runner_entrypoint": "cst_research.experiments.ffn_run",
+    "id": "ffn-fraction-lr-20261109",
+    "title": "Fixed initial fraction .5: isolated fraction LR multipliers1/4/16",
+    "status": "COMPLETED",
+    "status_note": "All4 runs completed at976 updates; 8 final/prefix checkpoints audited with exact DEV reproduction. Verified compact retrieval and6 observer snapshots. LR16 reduced DEV CE by0.0964 versus LR1; Dense gap0.1774 remains. One seed only; no RMS calibration, confirmation evaluation or public default adoption.",
+    "protocol_source_path": "docs/ffn-fraction-lr-20261109.md",
+    "protocol": {
+      "width": 512,
+      "blocks": 4,
+      "initial_fraction": 0.5,
+      "tau": 0.003,
+      "amplitude_max": 32.0,
+      "fraction_lr_multipliers": [
+        1.0,
+        4.0,
+        16.0
+      ],
+      "amplitude_center_lr_multiplier": 16.0,
+      "initialization_mode": "moments",
+      "seed": 17,
+      "updates": 976,
+      "observation_updates": [
+        256
+      ],
+      "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+      "confirmation_evaluated": false
+    },
+    "evidence": {
+      "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+      "relative_path": "ffn-fraction-lr-6000ada-20261109-01"
+    },
+    "execution": {
+      "job_id": "ffn-fraction-lr-6000ada-20261109-01",
+      "operator_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+      "consumer_commit": "9b531538a90014022dcaf20a0188446cce348f53",
+      "source_archive_sha256": "5d559937bd56e04ce210a287fe59dde3a514571264403dd331c6d6c5356bf1e9",
+      "qualification_sha256": "bd3a9298eaeeb9ca7fe1ad7415b790ede61942b0db9b059c30962992c3bff8cd",
+      "initial_cst_parameter_sha256": "75b4271cfe05d9ad4479cfbac3eaa05cae586e8beea4e2a65f1236b687cee634",
+      "confirmation_evaluated": false,
+      "rms_calibration_executed": false,
+      "public_default_adopted": false,
+      "compact_archive_sha256": "d1bf5569c5803b57b8e925e682927c8fc9e698009afbfa55fdfc4ecbdfa6d999",
+      "compact_files_verified": 34,
+      "source_files_verified": 1849,
+      "checkpoints_hash_verified": 12,
+      "audited_checkpoints": 8,
+      "observer_snapshots_reproduced": 6,
+      "owned_processes_inactive": 8,
+      "results_source_path": "docs/ffn-fraction-lr-20261109-results.md"
+    }
+  },
+  "runtime": {
+    "gpu": "NVIDIA RTX 6000 Ada Generation",
+    "torch": "2.9.1+cu128",
+    "cuda": "12.8",
+    "tf32": false
+  },
+  "metrics": {
+    "runs": [
+      {
+        "stage": "long",
+        "kind": "dense",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "dense",
+        "development_ce": 3.3089816197752953,
+        "updates": 976,
+        "peak_allocated_bytes": 998937088,
+        "peak_reserved_bytes": 1224736768,
+        "median_update_ms": 21.520957350730896,
+        "setup_seconds": 0.9731035977602005,
+        "total_wall_seconds": 33.389807558618486,
+        "ffn_parameters": 8398848,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.4517275393009186,
+          "blocks.0.ffn.down": 0.0815994068980217,
+          "blocks.1.attention_out": 0.0356425940990448,
+          "blocks.1.ffn.up": 0.45087000727653503,
+          "blocks.1.ffn.down": 0.08240608870983124,
+          "blocks.2.attention_out": 0.04506503790616989,
+          "blocks.2.ffn.up": 0.45188528299331665,
+          "blocks.2.ffn.down": 0.08035017549991608,
+          "blocks.3.attention_out": 0.04756489023566246,
+          "blocks.3.ffn.up": 0.4538961350917816,
+          "blocks.3.ffn.down": 0.08379099518060684
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.04198923334479332,
+          "blocks.0.ffn.up": 0.6830833554267883,
+          "blocks.0.ffn.down": 0.7318371534347534,
+          "blocks.1.attention_out": 0.2604719400405884,
+          "blocks.1.ffn.up": 0.9483500123023987,
+          "blocks.1.ffn.down": 0.4036603569984436,
+          "blocks.2.attention_out": 0.22883787751197815,
+          "blocks.2.ffn.up": 1.0782043933868408,
+          "blocks.2.ffn.down": 0.43058931827545166,
+          "blocks.3.attention_out": 0.2369016408920288,
+          "blocks.3.ffn.up": 0.9549332857131958,
+          "blocks.3.ffn.down": 0.5059561133384705
+        }
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "fraction-lr1",
+        "development_ce": 3.5828033313155174,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1367343104,
+        "median_update_ms": 128.93784092739224,
+        "setup_seconds": 3.6031331066042185,
+        "total_wall_seconds": 150.40302788373083,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44761624932289124,
+          "blocks.0.ffn.down": 0.15486541390419006,
+          "blocks.1.attention_out": 0.03792014345526695,
+          "blocks.1.ffn.up": 0.8269039988517761,
+          "blocks.1.ffn.down": 0.3009496033191681,
+          "blocks.2.attention_out": 0.04527787119150162,
+          "blocks.2.ffn.up": 0.8408551812171936,
+          "blocks.2.ffn.down": 0.32249346375465393,
+          "blocks.3.attention_out": 0.04409012943506241,
+          "blocks.3.ffn.up": 0.849452793598175,
+          "blocks.3.ffn.down": 0.3154257833957672
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.10934790968894958,
+          "blocks.0.ffn.up": 0.8705657720565796,
+          "blocks.0.ffn.down": 0.44432538747787476,
+          "blocks.1.attention_out": 0.2430182695388794,
+          "blocks.1.ffn.up": 0.8242264986038208,
+          "blocks.1.ffn.down": 0.3634292185306549,
+          "blocks.2.attention_out": 0.3261862099170685,
+          "blocks.2.ffn.up": 0.7512034177780151,
+          "blocks.2.ffn.down": 0.33064115047454834,
+          "blocks.3.attention_out": 0.2969765365123749,
+          "blocks.3.ffn.up": 0.7124409675598145,
+          "blocks.3.ffn.down": 0.3304498493671417
+        },
+        "initial_radius_mean": 5.207906930401805,
+        "final_radius_mean": 5.231695272534125,
+        "final_fraction_mean": 0.4999583802859888,
+        "fraction_at_zero": 0.0,
+        "fraction_at_one": 0.0
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 4.0,
+        "seed": 17,
+        "label": "fraction-lr4",
+        "development_ce": 3.559437043964863,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1363148800,
+        "median_update_ms": 133.26085405424237,
+        "setup_seconds": 3.634627197869122,
+        "total_wall_seconds": 153.34743417426944,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44761624932289124,
+          "blocks.0.ffn.down": 0.15486541390419006,
+          "blocks.1.attention_out": 0.03792014345526695,
+          "blocks.1.ffn.up": 0.8269039988517761,
+          "blocks.1.ffn.down": 0.3009496033191681,
+          "blocks.2.attention_out": 0.04527787119150162,
+          "blocks.2.ffn.up": 0.8408551812171936,
+          "blocks.2.ffn.down": 0.32249346375465393,
+          "blocks.3.attention_out": 0.04409012943506241,
+          "blocks.3.ffn.up": 0.849452793598175,
+          "blocks.3.ffn.down": 0.3154257833957672
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.08414247632026672,
+          "blocks.0.ffn.up": 0.9146186113357544,
+          "blocks.0.ffn.down": 0.491299033164978,
+          "blocks.1.attention_out": 0.2421770989894867,
+          "blocks.1.ffn.up": 0.8662645220756531,
+          "blocks.1.ffn.down": 0.4188940227031708,
+          "blocks.2.attention_out": 0.32080528140068054,
+          "blocks.2.ffn.up": 0.8178825378417969,
+          "blocks.2.ffn.down": 0.3788360357284546,
+          "blocks.3.attention_out": 0.3130338490009308,
+          "blocks.3.ffn.up": 0.7677587270736694,
+          "blocks.3.ffn.down": 0.3782285153865814
+        },
+        "initial_radius_mean": 5.207906930401805,
+        "final_radius_mean": 5.340039225833607,
+        "final_fraction_mean": 0.5005696262967376,
+        "fraction_at_zero": 0.0,
+        "fraction_at_one": 0.0
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 16.0,
+        "seed": 17,
+        "label": "fraction-lr16",
+        "development_ce": 3.486358568072319,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1365245952,
+        "median_update_ms": 159.5860575325787,
+        "setup_seconds": 3.651442402973771,
+        "total_wall_seconds": 175.0063597485423,
+        "ffn_parameters": 272384,
+        "initial_activation_rms": {
+          "blocks.0.attention_out": 0.016648730263113976,
+          "blocks.0.ffn.up": 0.44761624932289124,
+          "blocks.0.ffn.down": 0.15486541390419006,
+          "blocks.1.attention_out": 0.03792014345526695,
+          "blocks.1.ffn.up": 0.8269039988517761,
+          "blocks.1.ffn.down": 0.3009496033191681,
+          "blocks.2.attention_out": 0.04527787119150162,
+          "blocks.2.ffn.up": 0.8408551812171936,
+          "blocks.2.ffn.down": 0.32249346375465393,
+          "blocks.3.attention_out": 0.04409012943506241,
+          "blocks.3.ffn.up": 0.849452793598175,
+          "blocks.3.ffn.down": 0.3154257833957672
+        },
+        "final_activation_rms": {
+          "blocks.0.attention_out": 0.05206923559308052,
+          "blocks.0.ffn.up": 0.976982593536377,
+          "blocks.0.ffn.down": 0.6209176182746887,
+          "blocks.1.attention_out": 0.21727657318115234,
+          "blocks.1.ffn.up": 0.9470654129981995,
+          "blocks.1.ffn.down": 0.5292317867279053,
+          "blocks.2.attention_out": 0.3048709034919739,
+          "blocks.2.ffn.up": 0.9093317985534668,
+          "blocks.2.ffn.down": 0.4795716106891632,
+          "blocks.3.attention_out": 0.31191664934158325,
+          "blocks.3.ffn.up": 0.8728200197219849,
+          "blocks.3.ffn.down": 0.4951738715171814
+        },
+        "initial_radius_mean": 5.207906930401805,
+        "final_radius_mean": 6.538342802494299,
+        "final_fraction_mean": 0.5038348280495046,
+        "fraction_at_zero": 0.000152587890625,
+        "fraction_at_one": 0.000213623046875
+      }
+    ],
+    "scope": "One development seed, fixed fraction LR family; no optimality or convergence claim"
+  },
+  "fraction_motion": {
+    "arms": [
+      {
+        "fraction_lr_multiplier": 1.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": -1.132075340137817e-07,
+            "mean_absolute": 5.330489875632338e-05,
+            "rms": 6.622981928421418e-05
+          },
+          "net_fraction_delta": {
+            "mean_signed": -3.811329133895924e-05,
+            "mean_absolute": 0.0038433077670561033,
+            "rms": 0.004873882570585555
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.009857616269982827,
+            "mean_absolute": 0.009857616269982827,
+            "rms": 0.010032823331001871
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.08913115820178064,
+            "mean_absolute": 0.5574616416051867,
+            "rms": 4.001437057751483
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.0002532453218009323,
+            "mean_absolute": 0.08832290129794274,
+            "rms": 0.11217301339153618
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.0888779128799797,
+            "mean_absolute": 0.4701335206264048,
+            "rms": 3.996013650296099
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -1.1329695217199787e-07,
+            "mean_absolute": 5.3304867685919144e-05,
+            "rms": 6.62297665517077e-05
+          },
+          "fraction_increased": 0.5032501220703125,
+          "fraction_decreased": 0.4967498779296875,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.0,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.00029999440927754175,
+          "net_to_path_ratio": 0.389882062944493,
+          "outward_momentum_at_boundary": 0.0
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": -6.446202860388439e-07,
+            "mean_absolute": 5.0933992952195695e-05,
+            "rms": 6.318742075607854e-05
+          },
+          "net_fraction_delta": {
+            "mean_signed": -4.1619714011176256e-05,
+            "mean_absolute": 0.008555744721434166,
+            "rms": 0.01080242141232723
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.04595464177464237,
+            "mean_absolute": 0.04595464177464237,
+            "rms": 0.04609182300170452
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.023788342132320395,
+            "mean_absolute": 0.6195928745910351,
+            "rms": 3.8158181984818516
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.004915213085041614,
+            "mean_absolute": 0.19672286005152273,
+            "rms": 0.24898804342852476
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.01887312904727878,
+            "mean_absolute": 0.4256182474709931,
+            "rms": 3.7991689033976908
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -6.446416243568616e-07,
+            "mean_absolute": 5.093397296593986e-05,
+            "rms": 6.318741048637837e-05
+          },
+          "fraction_increased": 0.502471923828125,
+          "fraction_decreased": 0.497528076171875,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.0,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.00029892788185324114,
+          "net_to_path_ratio": 0.18617803101133518,
+          "outward_momentum_at_boundary": 0.0
+        }
+      },
+      {
+        "fraction_lr_multiplier": 4.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 3.4386403058306314e-07,
+            "mean_absolute": 0.00020727485798488487,
+            "rms": 0.00025841830878723466
+          },
+          "net_fraction_delta": {
+            "mean_signed": -0.00010611058723952738,
+            "mean_absolute": 0.015192837292943295,
+            "rms": 0.019246311648335405
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.039218126099967776,
+            "mean_absolute": 0.039218126099967776,
+            "rms": 0.03989412071653153
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.12046746721534873,
+            "mean_absolute": 0.8276001025551523,
+            "rms": 4.088051843523597
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.016494029401656007,
+            "mean_absolute": 0.349326560874033,
+            "rms": 0.44408573016682296
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.10397343781369273,
+            "mean_absolute": 0.4820488309196662,
+            "rms": 4.048699516856493
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": 3.4401479031795815e-07,
+            "mean_absolute": 0.00020727483092840857,
+            "rms": 0.0002584183046549156
+          },
+          "fraction_increased": 0.50469970703125,
+          "fraction_decreased": 0.49530029296875,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.0,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.001199977637110167,
+          "net_to_path_ratio": 0.3873932490863142,
+          "outward_momentum_at_boundary": 0.0
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": -1.878881221273332e-06,
+            "mean_absolute": 0.00020682325907728227,
+            "rms": 0.00025671892208952595
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.0005696262967376242,
+            "mean_absolute": 0.032790352842539505,
+            "rms": 0.0410591731184574
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.1836402346605155,
+            "mean_absolute": 0.1836402346605155,
+            "rms": 0.1841633311650826
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.13213229543180205,
+            "mean_absolute": 1.1895407244446687,
+            "rms": 4.002114639771492
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.10100833573233103,
+            "mean_absolute": 0.763388907413173,
+            "rms": 0.9759163506150448
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.031123959699471015,
+            "mean_absolute": 0.43775982014631154,
+            "rms": 3.852464147630684
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": -1.8788553378322236e-06,
+            "mean_absolute": 0.00020682334546468005,
+            "rms": 0.00025671899622037195
+          },
+          "fraction_increased": 0.5083465576171875,
+          "fraction_decreased": 0.4916534423828125,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.0,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.0011957115274129646,
+          "net_to_path_ratio": 0.17855756339648027,
+          "outward_momentum_at_boundary": 0.0
+        }
+      },
+      {
+        "fraction_lr_multiplier": 16.0,
+        "frames": 56,
+        "at256": {
+          "last_fraction_delta": {
+            "mean_signed": 2.635882765389397e-06,
+            "mean_absolute": 0.0008306751471991447,
+            "rms": 0.0010347656763046522
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.0007663013124101781,
+            "mean_absolute": 0.055212110918205326,
+            "rms": 0.0691336183169202
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.15152603075068782,
+            "mean_absolute": 0.15152603075068782,
+            "rms": 0.15376621814959093
+          },
+          "net_radius_delta": {
+            "mean_signed": 0.3539849107291957,
+            "mean_absolute": 1.7518571649452497,
+            "rms": 4.342638802008477
+          },
+          "radius_fraction_component": {
+            "mean_signed": 0.2693398508381506,
+            "mean_absolute": 1.303972919809894,
+            "rms": 1.6925427158840602
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.0846450598910451,
+            "mean_absolute": 0.46447158137743827,
+            "rms": 3.957855050432175
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": 2.635807774978334e-06,
+            "mean_absolute": 0.0008306752775284227,
+            "rms": 0.0010347658114434261
+          },
+          "fraction_increased": 0.5124969482421875,
+          "fraction_decreased": 0.4875030517578125,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.0,
+          "at_one": 0.0,
+          "effective_fraction_lr": 0.004799910548440668,
+          "net_to_path_ratio": 0.36437376894698803,
+          "outward_momentum_at_boundary": 0.0
+        },
+        "final": {
+          "last_fraction_delta": {
+            "mean_signed": 2.3304048955008483e-06,
+            "mean_absolute": 0.0007965465246317915,
+            "rms": 0.0009924205228857242
+          },
+          "net_fraction_delta": {
+            "mean_signed": 0.003834828049504635,
+            "mean_absolute": 0.11374311345484611,
+            "rms": 0.14162268012195467
+          },
+          "fraction_path_length": {
+            "mean_signed": 0.7302954494391355,
+            "mean_absolute": 0.7302954494391355,
+            "rms": 0.7321563750954333
+          },
+          "net_radius_delta": {
+            "mean_signed": 1.3304358720924938,
+            "mean_absolute": 3.4658571263425983,
+            "rms": 6.240069915060914
+          },
+          "radius_fraction_component": {
+            "mean_signed": 1.2586344120791182,
+            "mean_absolute": 3.0432888203358743,
+            "rms": 4.700064182698156
+          },
+          "radius_amplitude_component": {
+            "mean_signed": 0.07180146001337562,
+            "mean_absolute": 0.4738519909005845,
+            "rms": 3.989415779757886
+          },
+          "analytic_adam_fraction_delta": {
+            "mean_signed": 2.4427216480302976e-06,
+            "mean_absolute": 0.0007968445469298377,
+            "rms": 0.000992622386693046
+          },
+          "fraction_increased": 0.5030975341796875,
+          "fraction_decreased": 0.4969024658203125,
+          "fraction_unchanged": 0.0,
+          "at_zero": 0.000152587890625,
+          "at_one": 0.000213623046875,
+          "effective_fraction_lr": 0.004782846109651858,
+          "net_to_path_ratio": 0.15574944844884417,
+          "outward_momentum_at_boundary": 0.0003662109375
+        }
+      }
+    ],
+    "scope": "Equal Atom counts per site. Means/RMS aggregate all Atoms; path statistics reduce every per-Atom update, full individual trajectories are not saved. Algebraic radius components do not identify causal training effects."
+  },
+  "retrieval": {
+    "state": "passed",
+    "archive_sha256": "d1bf5569c5803b57b8e925e682927c8fc9e698009afbfa55fdfc4ecbdfa6d999",
+    "files_verified": 34,
+    "source_files_verified": 1849,
+    "checkpoints_verified_remotely": 12,
+    "audited_checkpoints": 8,
+    "observer_snapshots_reproduced": 6,
+    "training_processes_inactive": 6,
+    "audit_processes_inactive": 2,
+    "gpu_after": "NVIDIA RTX 6000 Ada Generation, 0 %, 39 MiB"
+  },
+  "checkpoint_audits": {
+    "state": "passed",
+    "audit_source_sha256": "9d333be89bba8d7337ca80442032f3a25f99e218022cd9e1915e9be1baf70815",
+    "models": [
+      {
+        "stage": "long",
+        "kind": "dense",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "dense",
+        "development_ce": 3.3089816197752953,
+        "updates": 976,
+        "peak_allocated_bytes": 998937088,
+        "peak_reserved_bytes": 1224736768,
+        "checkpoint_sha256": "0fa9b96ea9b56a3d0757f0d21091c25411f20da101a9354f6ebdfc3e5bad61ea",
+        "checkpoint_filename": "checkpoint.pt",
+        "milestone": false,
+        "reproduced_development_ce": 3.3089816197752953,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": []
+      },
+      {
+        "stage": "long",
+        "kind": "dense",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "dense",
+        "development_ce": 3.3089816197752953,
+        "updates": 256,
+        "peak_allocated_bytes": 998937088,
+        "peak_reserved_bytes": 1224736768,
+        "checkpoint_sha256": "39c3aa286279d0ba7fbdf8a7eed3c2fce996b4c99260daf5f55db09a18c2a77f",
+        "checkpoint_filename": "checkpoint-262144-tokens.pt",
+        "milestone": true,
+        "reproduced_development_ce": 4.148382440209389,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": []
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "fraction-lr1",
+        "development_ce": 3.5828033313155174,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1367343104,
+        "checkpoint_sha256": "407d849f8beff3ac96df18e74f2491c3dd1c5cf0c87b77aa31d7afb5162672fc",
+        "checkpoint_filename": "checkpoint.pt",
+        "milestone": false,
+        "reproduced_development_ce": 3.5828033313155174,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              8.809191791581128e-07,
+              1.4153694918306314e-06,
+              5.7220458984375e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              6.749279508611039e-07,
+              3.900849467886047e-07,
+              2.86102294921875e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -0.0009446777148696128,
+            "mean_absolute": 0.00849581639704411,
+            "p90_absolute": 0.017582672834396365,
+            "maximum_absolute": 0.044971585273742676,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0004898700281046331,
+            "mean_absolute": 0.007967265701154247,
+            "p90_absolute": 0.016544711589813233,
+            "maximum_absolute": 0.041097015142440796,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0002153125351469498,
+            "mean_absolute": 0.007963915722939419,
+            "p90_absolute": 0.01648320555686951,
+            "maximum_absolute": 0.04704231023788452,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 8.990943024400622e-05,
+            "mean_absolute": 0.008378925384022295,
+            "p90_absolute": 0.017367705702781677,
+            "maximum_absolute": 0.041233718395233154,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 2.1326955902623013e-05,
+            "mean_absolute": 0.00860068619294907,
+            "p90_absolute": 0.0176732748746872,
+            "maximum_absolute": 0.04225853085517883,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.00021598004605039023,
+            "mean_absolute": 0.008712289567483822,
+            "p90_absolute": 0.01804267466068268,
+            "maximum_absolute": 0.04617449641227722,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.00019874316058121622,
+            "mean_absolute": 0.009013571529067121,
+            "p90_absolute": 0.01864202618598938,
+            "maximum_absolute": 0.05072891712188721,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0003603179029596504,
+            "mean_absolute": 0.009313487276813248,
+            "p90_absolute": 0.01897165775299072,
+            "maximum_absolute": 0.05681601166725159,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 1.0,
+        "seed": 17,
+        "label": "fraction-lr1",
+        "development_ce": 3.5828033313155174,
+        "updates": 256,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1367343104,
+        "checkpoint_sha256": "2f6a14490383f0bcd701fb9d6410a9121efaa3061706c1ad5739a064340c37e8",
+        "checkpoint_filename": "checkpoint-262144-tokens.pt",
+        "milestone": true,
+        "reproduced_development_ce": 4.505803555250168,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              1.000869021217099e-06,
+              1.7483481720148575e-06,
+              5.245208740234375e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              5.029012947188605e-07,
+              2.942538182004739e-07,
+              2.1457672119140625e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -0.00024095368280541152,
+            "mean_absolute": 0.0040151349967345595,
+            "p90_absolute": 0.008399039506912233,
+            "maximum_absolute": 0.02191460132598877,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0002279213149449788,
+            "mean_absolute": 0.00400351455755299,
+            "p90_absolute": 0.008219444751739503,
+            "maximum_absolute": 0.019544363021850586,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 6.0254387790337205e-06,
+            "mean_absolute": 0.0034693715133471414,
+            "p90_absolute": 0.007203060388565064,
+            "maximum_absolute": 0.01780569553375244,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -9.819289334700443e-05,
+            "mean_absolute": 0.004040699339384446,
+            "p90_absolute": 0.008405846357345582,
+            "maximum_absolute": 0.020099550485610962,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -1.2839489500038326e-05,
+            "mean_absolute": 0.003593603294575587,
+            "p90_absolute": 0.007572060823440556,
+            "maximum_absolute": 0.017346352338790894,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 4.1755527490749955e-05,
+            "mean_absolute": 0.004074010910699144,
+            "p90_absolute": 0.008473640680313112,
+            "maximum_absolute": 0.020701199769973755,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.00010896224557654932,
+            "mean_absolute": 0.0035247304986114614,
+            "p90_absolute": 0.007385310530662538,
+            "maximum_absolute": 0.018381953239440918,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.00011825783803942613,
+            "mean_absolute": 0.004025397025543498,
+            "p90_absolute": 0.008423307538032531,
+            "maximum_absolute": 0.02179175615310669,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 4.0,
+        "seed": 17,
+        "label": "fraction-lr4",
+        "development_ce": 3.559437043964863,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1363148800,
+        "checkpoint_sha256": "aef2bc1dffbb3386650360b3cc237767f254e8519e2c07afabc73b07476513cf",
+        "checkpoint_filename": "checkpoint.pt",
+        "milestone": false,
+        "reproduced_development_ce": 3.559437043964863,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              1.0357220761036956e-06,
+              1.5529009269599214e-06,
+              6.198883056640625e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              5.885922629289553e-07,
+              4.33873602712076e-07,
+              2.0265579223632812e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -0.0030877306453476194,
+            "mean_absolute": 0.033524595160997706,
+            "p90_absolute": 0.06870335638523102,
+            "maximum_absolute": 0.16192567348480225,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0014997757825767621,
+            "mean_absolute": 0.03151197206170764,
+            "p90_absolute": 0.0634944260120392,
+            "maximum_absolute": 0.15176934003829956,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0016487802167830523,
+            "mean_absolute": 0.03043101144794491,
+            "p90_absolute": 0.061686784029006965,
+            "maximum_absolute": 0.15417706966400146,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0008395923505304381,
+            "mean_absolute": 0.03232781690894626,
+            "p90_absolute": 0.06638550162315372,
+            "maximum_absolute": 0.17093276977539062,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0010168297558266204,
+            "mean_absolute": 0.03276385521530756,
+            "p90_absolute": 0.0653905212879181,
+            "maximum_absolute": 0.1415919065475464,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0015733858199382666,
+            "mean_absolute": 0.033173119689308805,
+            "p90_absolute": 0.06709964871406555,
+            "maximum_absolute": 0.1935412883758545,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0016024733740778174,
+            "mean_absolute": 0.03370070283199311,
+            "p90_absolute": 0.06781387329101562,
+            "maximum_absolute": 0.16633272171020508,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0024634552846691804,
+            "mean_absolute": 0.03488974942411005,
+            "p90_absolute": 0.0696665465831757,
+            "maximum_absolute": 0.2635786682367325,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 4.0,
+        "seed": 17,
+        "label": "fraction-lr4",
+        "development_ce": 3.559437043964863,
+        "updates": 256,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1363148800,
+        "checkpoint_sha256": "3ea17d7713c35a5aea23493177f2482155034897074f58e0ddc3861ce1196d98",
+        "checkpoint_filename": "checkpoint-262144-tokens.pt",
+        "milestone": true,
+        "reproduced_development_ce": 4.485625550150871,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              8.114470597675449e-07,
+              1.5430099074009718e-06,
+              7.62939453125e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              4.920787171069918e-07,
+              3.9166296894599384e-07,
+              2.384185791015625e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -0.0009000093341455795,
+            "mean_absolute": 0.0161045391796506,
+            "p90_absolute": 0.03354577124118805,
+            "maximum_absolute": 0.08376723527908325,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0008817709749564528,
+            "mean_absolute": 0.0159095704293577,
+            "p90_absolute": 0.03250393867492676,
+            "maximum_absolute": 0.07960748672485352,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 4.8136258556041867e-05,
+            "mean_absolute": 0.013691464941075537,
+            "p90_absolute": 0.02859212160110474,
+            "maximum_absolute": 0.06554484367370605,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0004229139340168331,
+            "mean_absolute": 0.015917369400995085,
+            "p90_absolute": 0.03302624821662903,
+            "maximum_absolute": 0.0783311128616333,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 6.59514989820309e-05,
+            "mean_absolute": 0.01414878945070086,
+            "p90_absolute": 0.029585170745849612,
+            "maximum_absolute": 0.06611394882202148,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.00023361193598248065,
+            "mean_absolute": 0.016046617442043498,
+            "p90_absolute": 0.03327296972274781,
+            "maximum_absolute": 0.09376493096351624,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0005309224179654848,
+            "mean_absolute": 0.013946921510068933,
+            "p90_absolute": 0.029094994068145752,
+            "maximum_absolute": 0.07311853766441345,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0004771874337166082,
+            "mean_absolute": 0.015777425989654148,
+            "p90_absolute": 0.032829880714416504,
+            "maximum_absolute": 0.08156031370162964,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 16.0,
+        "seed": 17,
+        "label": "fraction-lr16",
+        "development_ce": 3.486358568072319,
+        "updates": 976,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1365245952,
+        "checkpoint_sha256": "a8a473d913d2c36c27ec20baf99630bad3fe45aec91e104f3662f7075a1c970b",
+        "checkpoint_filename": "checkpoint.pt",
+        "milestone": false,
+        "reproduced_development_ce": 3.486358568072319,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              1.6377270819489809e-06,
+              2.0853505748874568e-06,
+              5.7220458984375e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              9.023318505718692e-07,
+              6.807673524900082e-07,
+              2.5033950805664062e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -0.008178692400846899,
+            "mean_absolute": 0.11685477871172623,
+            "p90_absolute": 0.2369929015636445,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.004504818396577903,
+            "mean_absolute": 0.11514656546938262,
+            "p90_absolute": 0.23450319766998298,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.005799878383641044,
+            "mean_absolute": 0.10546660479076309,
+            "p90_absolute": 0.21696584522724152,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0026492687308490304,
+            "mean_absolute": 0.11591928609534818,
+            "p90_absolute": 0.2380077034235001,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.007284864818302594,
+            "mean_absolute": 0.10861214389433371,
+            "p90_absolute": 0.22314506471157075,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.007858088901670612,
+            "mean_absolute": 0.11690474580292687,
+            "p90_absolute": 0.23947026133537294,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.009970230845283368,
+            "mean_absolute": 0.11192523039608204,
+            "p90_absolute": 0.22873553633689883,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.009799803513715233,
+            "mean_absolute": 0.11911555247820615,
+            "p90_absolute": 0.244951206445694,
+            "maximum_absolute": 0.5,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      },
+      {
+        "stage": "long",
+        "kind": "cst",
+        "tau": 0.003,
+        "fraction": 0.5,
+        "amplitude_max": 32.0,
+        "linear_backend": "levels_wide_amplitude",
+        "initialization_mode": "moments",
+        "fraction_lr_multiplier": 16.0,
+        "seed": 17,
+        "label": "fraction-lr16",
+        "development_ce": 3.486358568072319,
+        "updates": 256,
+        "peak_allocated_bytes": 1023047168,
+        "peak_reserved_bytes": 1365245952,
+        "checkpoint_sha256": "06361c6a6a6a8b02a5e8c2775aa75abbef1e8808da1170f35409df1146e814dd",
+        "checkpoint_filename": "checkpoint-262144-tokens.pt",
+        "milestone": true,
+        "reproduced_development_ce": 4.417609080672264,
+        "ce_absolute_difference": 0.0,
+        "optimizer_states_checked": 52,
+        "linear_oracles": [
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              9.041674293719382e-07,
+              2.0858038052296024e-06,
+              4.76837158203125e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          },
+          {
+            "rows": 7,
+            "noncontiguous_input": true,
+            "max_abs_y_dx_dp": [
+              8.693945916515844e-07,
+              4.600723610970192e-07,
+              2.5033950805664062e-06
+            ],
+            "atol": 0.0001,
+            "rtol": 0.004,
+            "reference": "FP64 factored physical kernels, retaining original FP32 physical-row encoding and complete map VJP"
+          }
+        ],
+        "fraction_changes": [
+          {
+            "mean_signed": -1.3018630852457136e-05,
+            "mean_absolute": 0.060539348087331746,
+            "p90_absolute": 0.12044134736061098,
+            "maximum_absolute": 0.2657326012849808,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0017314632605121005,
+            "mean_absolute": 0.057599518422648543,
+            "p90_absolute": 0.11614043414592748,
+            "maximum_absolute": 0.30199751257896423,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0010680681043595541,
+            "mean_absolute": 0.05089729559767875,
+            "p90_absolute": 0.10108703970909119,
+            "maximum_absolute": 0.24359235167503357,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": -0.0013031137405050686,
+            "mean_absolute": 0.056390307951005525,
+            "p90_absolute": 0.11320591568946842,
+            "maximum_absolute": 0.307642862200737,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0024744164184085093,
+            "mean_absolute": 0.051857314007065725,
+            "p90_absolute": 0.10398925840854646,
+            "maximum_absolute": 0.24404561519622803,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0007681665802010684,
+            "mean_absolute": 0.057115667376820056,
+            "p90_absolute": 0.11625780165195465,
+            "maximum_absolute": 0.37768181413412094,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.003153912224661326,
+            "mean_absolute": 0.05165091372691677,
+            "p90_absolute": 0.10183006525039673,
+            "maximum_absolute": 0.2655341327190399,
+            "changed_fraction": 1.0
+          },
+          {
+            "mean_signed": 0.0017134428035205929,
+            "mean_absolute": 0.055646522176175495,
+            "p90_absolute": 0.11346099972724916,
+            "maximum_absolute": 0.32146839797496796,
+            "changed_fraction": 1.0
+          }
+        ],
+        "observer_net_statistics_reproduced": true
+      }
+    ],
+    "confirmation_evaluated": false,
+    "torch": "2.9.1+cu128",
+    "gpu": "NVIDIA RTX 6000 Ada Generation"
+  },
+  "assets_sha256": {
+    "adam-fraction-updates.png": "77d01164d809ab4e4cf626547e461e408458043bee28bd84598106570a8df36b",
+    "fraction-movement.png": "5defc106e881a3a621151b6db1ce6c7ffffacd9a382c73781a38c3aa29062aae",
+    "long-activation-rms.png": "dca992a349d264aa4cd2e22b7c19fc4a06fcf997423803ce0fa44c7338ed0e2d",
+    "long-amplitude-radius.png": "72e549fdffe1b10893cdd9f210b6ae2e2e76a9da26e4fde5e3ae60257d521b12",
+    "long-amplitude-radius_fraction.png": "83115a9aca4f47618513d01da3f45e0286f41dd484b36b979ce1f2ca3c9dcb8f",
+    "long-field-gradients.png": "b788bbcae9edd8f0b992f82f08076a07cd11fafab505834abff9f4dcc7debd50",
+    "long-fraction_change-layers.png": "cb2e27d1094e75843ba4ffad0ebfea18ee27436aaacd4e3819d60ef88a4be537",
+    "long-learning-curves.png": "df62d2412f7c5db349361a84b1bd913f68711384a173fa0d9c64d1ba3b7316a9",
+    "long-radius-layers.png": "1576012cc1a8c8917f88284ae6a2d6da67a7bfbe53ad77f273696b9a0e24482d",
+    "long-radius_fraction-layers.png": "9cfe2df62e89549d2c3c54e1a903bd80149194178a851de18290cfbe9ef3a995",
+    "radius-update-components.png": "f223f6e43ead30bb760b75007b9ae1c7735ef23914b89b13f1e7467135a22461"
+  }
+}

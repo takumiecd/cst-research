@@ -19,11 +19,59 @@ CSTをニューラルネットワークで使えるようにするための研�
 公開APIだけでは不足する実験用Graph adapterは、そのprivateな依存先・対象commit・
 独立検証範囲を明示し、公開APIへの採用と実験内の利用を別に判断します。
 
+[検証済み5M-token置換箇所数比較](docs/ffn-site-count-20261109-results.ja.md)を完了。このseedでは中央1/2ブロックの上下CSTはDenseに近く、全8写像で差が増えました。11条件・33checkpoint・学習済み96写像oracle・ローカル証拠回収すべて成功。[分散配置とFFN内連続の比較・信号診断](docs/lm-composition-20261109-results.ja.md)も完了。全17タスクモデル・51checkpointを監査し、読み取り専用TRAIN probe102回も保全しました。同数でも配置で性能が変わり、残差出力増大とcotangent低下だけでは勾配消失とは判断できません。
+
+[RTX4090の20M-token比較](docs/ffn-long-horizon-20261109.ja.md)は学習終了を確認しましたが、検証済みローカル回収前のHub停止でcontainer-homeの証拠が見つからなくなりました。科学的検証完了・正答率の完了結果とは扱いません。source/protocolと丸めたstatus観測値は保全し、旧20M prefixを借用しません。
+
+[0スタートのtau探索と同条件DST対照](docs/ffn-zero-start-tau-dst-20261109-results.ja.md)も完了。tau.0003/.001/.003/.01のDEV CEは3.3964/3.3987/3.3930/3.3954、LR調整したRigL-style DST3.3507、Dense3.3090(976step・seed17)。小tauでは差は埋まりませんでした。学習曲線の比較には検証済みDSTを含め、DSTの全4LR候補も残します。
+
+[共通CST LR32倍で初期fraction0/.5を揃えた比較](docs/ffn-fraction-zero-start-20261109-results.ja.md)は976更新・seed17でDEV CE3.3930/3.4328、Dense3.3090でした。0スタートでも平均fractionは0→.1406へ学習し、この短期比較では改善。平均半径も小さい状態で、RMS校正・default採用はしていません。
+
+[全CST field LRを16/32/64/128倍へ拡張した比較](docs/ffn-all-fields-lr-20261109-results.ja.md)も完了。初期fraction=.5、976更新・seed17でDEV CEは3.4864/3.4328/3.4696/3.5136、Dense3.3090。今回の最良は32倍で、高LRほどfractionの変化と端点の割合が増えました。128倍のCLI拒否と別sourceでの復旧も保全しています。
+
+[初期fraction=.5固定のLR比較](docs/ffn-fraction-lr-20261109-results.ja.md)もRTX6000 Adaで完了。976更新・seed17でfraction LR1/4/16倍のDEV CEは3.5828/3.5594/3.4864、Denseは3.3090でした。平均がほぼ一定でも各Atomのfractionは動いており、この短期比較では高いLRで改善。RMS校正やdefault変更はしていません。
+
+[固定状態のFFN測定](https://github.com/takumiecd/torchcst/blob/feat/radius-envelope/docs/radius-fraction-speed-20261109.ja.md)では、
+幅512・256行でphysical本体に対し21〜22%の追加コストでした。
+限定した演算の結果であり、LM throughputやDenseに対する優位性ではありません。
+[定数を準備する明示候補](https://github.com/takumiecd/torchcst/pull/157)は、同条件の1ジョブで旧写像より
+約3〜4%短縮しました。公開デフォルトには採用していません。任意の`ffn`インストールも新実験のoperatorへ固定しました。
+
+[タスク更新の癖の分析](docs/lm-task-update-behavior-20261109-results.ja.md)では36組の復元型TRAIN probeを追加。単独CST写像にも有効な更新方向の一致度の差があり、今回の状態では即時の有限step層間干渉だけが極端に大きくありません。挙動の記述であり、optimizer/kernel/既定値の推奨・採用はしません。
+
+[局所接線・履歴・Atom別分析](docs/lm-tangent-history-20261109-results.ja.md)を完了。CSTフィールド9観測では、半径の割合の変位が離散的な区間切替で微分予測から大きく外れ、振幅と座標は概ね予測通りでした。optimizerを使わないFP64の1 Atom試験で、半径の拡大・縮小の両方の跳びを再現。Adam履歴の影響はDense/DSTにもあります。修正・改善実験は実施していません。
+
+[CPU Gaussian・Fourier連続性診断](docs/kernel-taylor-continuity-20261109-results.ja.md)152条件・1216変位を完了。Gaussianの固定cell積分は、調べた中心・幅の境界で微分と一致し、現行Fourierも同じ枝内では一致しました。Mを増やすと座標の跳びは減りましたが、階層による半径の大きな不連続は残りました。Gaussian採用・CUDA変更・速度結果・学習実験はありません。
+
+[Compact profile境界診断](docs/compact-boundary-20261109-results.ja.md)CPU240条件・1920変位を完了。Triweightの支持端は一次・二次微分もゼロでつながりますが、点評価L2正規化には別のfloorの折れと勾配ゼロの領域があります。独立した固定cell Triweight対照は新public backendではありません。多項式momentによる高速化は導出上の可能性だけで、時間・学習の証拠はありません。
+
+[Fourierの2bank接続案](docs/fourier-scale-connection-20261109-results.ja.md)で、余白・最大2bank/4固定窓・接続weightの完全な微分を含むC2の座標/半径接続を導出しました。CPU140条件・1120変位を確認しましたが、例のM8の裾は最大約0.65%で、狭い帯では勾配が急になります。補助bankの半径/tile比は[.5,1]から緩和が必要です。新しい数学定義案で、runtime・初期化・学習・速度の採用はありません。
+
 ## 現在の方針：FFNとAttentionで使えるかを確かめる
 
 **Atom数の下限・Big-Ωを求める研究は停止し、FFNとAttentionでの実用を確かめることを優先します。**
 2026-11-06に採用した研究方針です。FFN・Attentionの開発パイロットを完了し、
 4ブロックすべてのQKV同時置換、QKV+FFN同時置換まで確認しました。
+
+[RTX6000 Adaの独立半径FFN比較](docs/ffn-independent-radius-20261108-results.ja.md)も、
+初期の物理値と各射影8192Atomを揃えて完了しました。幅512・seed17・999424tokenで、
+DEV CEはPolar3.42441、直接の半径学習3.42438、物理表現の半径固定3.42865でした。
+8射影すべてで半径勾配が非ゼロとなり、平均半径は0.975→1.048、12.59%は下限0.5に達しました。
+短期開発実験の観測であり、非劣性や最適値は主張しません。学習・半径・勾配の重ね描き、
+数値検査と検証済み証拠を保存しました。[勾配と更新則の数式](docs/radius-coordinate-gradient-discussion-20261108.ja.md)では、
+半径微分を通すPolar案と座標の移動量を使う制御を分けて記録しています。
+
+その後の[完全なPolar連鎖律の同条件比較](docs/ffn-polar-radius-gradient-20261108-results.ja.md)では、
+L/Uを保ち、両条件で同じCartesian Adam＋射影を使いました。同じ幅512の短期予算で、
+DEV CEはdetach/liveが3.42404/3.42239で、曲線はほぼ重なります。
+半径の勾配はs/tの半径方向へ届き、平均半径はなし側2.058に対してあり側1.623でした
+（両方とも初期0.975からは広がっています）。既存のphysical Linear Planを使う
+検証済み研究用合成であり、公開Polarは変更していません。Python写像の精度形式と
+overheadも結果に明記しています。
+
+[確定した関係と内部座標の設計](docs/polar-relations-20261108.ja.md)では、cell-massの恒等式、
+観測結果、半径制御の仮説を分けて整理しています。再現可能なCPU検査で質量としての振幅と
+Atomのノルムを区別し、エネルギー振幅を使う写像を候補として記録しました。新しい写像は未採用です。
 
 合意した[FFN検証計画](docs/ffn-feasibility.ja.md)は`A=ceil(8*sqrt(d_in*d_out))`を使い、
 幅256から始めて128/512も確認します。線形Atom予算での有効性と限定した縦横比の変更を調べ、

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0d277ae6dc0ae14fe515c7559f39535ed0238950",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/158",
+  "runner_entrypoint": "cst_research.experiments.ffn_selective_run",
+  "id": "ffn-block-placement-20261109",
+  "title": "Task-trained distributed single CST maps versus paired FFN CST maps",
+  "status": "COMPLETED",
+  "status_note": "All6 task-learning arms completed,18 trained checkpoint audits passed, and final compact independently verified locally. Hub stopped after5 completed arms; only unfinished DST mixed arm recovered under unchanged source/protocol and exact initial identity. See bilingual composition results.",
+  "protocol_source_path": "docs/ffn-block-placement-20261109.md",
+  "protocol": {
+    "network_depth_blocks": 4,
+    "width": 512,
+    "context": 128,
+    "heads": 8,
+    "expansion": 4,
+    "seed": 17,
+    "tokens": 5000000,
+    "actual_tokens": 4999168,
+    "steps": 4882,
+    "schedule_tokens": 20000000,
+    "dst_topology_tokens": 20000000,
+    "milestone_steps": [
+      256,
+      976,
+      4882
+    ],
+    "selected_sites_zero_based": {
+      "scattered_up": [
+        "0.up",
+        "1.up",
+        "2.up",
+        "3.up"
+      ],
+      "scattered_down": [
+        "0.down",
+        "1.down",
+        "2.down",
+        "3.down"
+      ],
+      "scattered_mixed": [
+        "0.up",
+        "1.down",
+        "2.up",
+        "3.down"
+      ]
+    },
+    "arms": "CST and matched DST at3 distributed site sets,6 fresh5M arms; verified previous cohort supplies fresh Dense/single/paired/all controls",
+    "cst": {
+      "atoms_per_selected_map": 8192,
+      "tau": 0.003,
+      "initial_fraction": 0.0,
+      "amplitude_max": 32.0,
+      "all_field_lr_multiplier": 32.0,
+      "radius_limits": [
+        0.5,
+        50.0
+      ],
+      "initialization": "same public moments; no RMS calibration"
+    },
+    "dst": {
+      "active_slots_per_selected_map": 32768,
+      "sparse_peak_lr": 0.003,
+      "ordinary_peak_lr": 0.0003,
+      "topology_events_before_step4882": [
+        250,
+        500,
+        750,
+        1000,
+        1250,
+        1500,
+        1750,
+        2000,
+        2250,
+        2500,
+        2750,
+        3000,
+        3250,
+        3500,
+        3750,
+        4000,
+        4250,
+        4500,
+        4750
+      ],
+      "final_adam_updates": 4863
+    },
+    "ordinary_peak_lr": 0.0003,
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "diagnostics": [
+      "Fixed TRAIN prefix input/output RMS and output cotangent RMS at all4 blocks and8 FFN projections",
+      "Raw FFN parameter gradients; per-Atom field gradients, amplitude/radius/fraction distribution",
+      "Realized one-step linear projection action changes on fixed7 Gaussian inputs, plus wrapped per-field coordinate changes",
+      "Preclip global norm, actual optimizer clocks and field learning rates",
+      "TRAIN CE, DEV CE/perplexity/top1 on same8192 targets"
+    ],
+    "validation": [
+      "all8 selective factory state bit-equals historical full CST/DST models",
+      "unreplaced ordinary initial Parameters exact Dense match, RNG unchanged",
+      "matched active FFN scalar budgets within each CST/DST pair",
+      "initial/trained independent encoded-row FP64 map oracles",
+      "serialized regular/topology updates exact; instrumentation has no update effect",
+      "all18 milestone checkpoint CE/top1/counter/moment audits and hash-verified retrieval"
+    ],
+    "timing": "synchronized uninstrumented steps after10; actual-action probes excluded; setup/total separately, no paired speed claim against historical job",
+    "no_new_hpo": true,
+    "confirmation_evaluated": false,
+    "limitations": [
+      "single seed5M task-learning diagnosis, no confirmation or universal depth claim",
+      "all-up/all-down comparisons change map-direction composition; mixed4-map comparison matches2up/2down counts",
+      "placement and local pairing change together; reverse mixed/individual-position followups not automatic",
+      "activation/cotangent/action diagnostics support hypotheses, not proof of a unique cause"
+    ],
+    "evidence_storage": "Persistent NFS plus periodic verified local compact retrieval; old20M container-home artifacts disappeared on server stop, so oldall8 prefixes are not borrowed",
+    "objective": "Learn original TinyStories next-token targets. Dense is an evaluation control, not a teacher or weight-reconstruction target.",
+    "key_comparisons": [
+      "one up map versus one up in each block",
+      "one down map versus one down in each block",
+      "one CST per block versus both FFN maps in every block",
+      "four distributed mixed maps (2up/2down) versus four paired maps in two blocks (2up/2down), same active scalar budget and shape counts"
+    ],
+    "historical_context": "HIGGS also showed single-versus-multiple replacement differences; do not assume the same cause after initialization/task/architecture changes",
+    "controls_source_policy": "Do not mutate the live prior snapshot. Validate source core/model/data/runtime/order/seed/budget and unchanged existing factory arms; only site-catalog extension and explicit qualification-family selection differ."
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "ffn-block-placement-4090-20261109-recovery01"
+  },
+  "execution": {
+    "state": "completed_audited_retrieved",
+    "confirmation_evaluated": false,
+    "rms_calibration_executed": false,
+    "public_default_adopted": false,
+    "consumer_commit": "dc0dca16e6589de50368d2ea32626f92579fff4d",
+    "source_archive_sha256": "1d78e7f960c4084418e16efac0ae39bb9bd2ce5f3f63d29a8551dd3648af6bc4",
+    "qualified_arms": 6,
+    "parent_audited_arms": 11,
+    "first_local_snapshot_sha256": "770039e8c898330b1fd566151f169e4f0a46604b321e4de90aa78ca0028ae8ee",
+    "completed_arms": 6,
+    "audited_checkpoint_count": 18,
+    "final_compact_sha256": "f98ef8a15acf91101dceebf51ef2004c3a12479dc205c4ac81ff65c8fec18425",
+    "results_path": "docs/lm-composition-20261109-results.json",
+    "recovery": {
+      "original_receipt_sha256": "272475e3906dabdf1135b69b54aeacc83124b26b8d3ff0014ff26ec7fc053925",
+      "retained_arms": 5,
+      "unfinished_arm": "dst-scattered_mixed",
+      "reason": "Hub stopped externally; owner confirmed reservation active and no manual stop; unfinished arm had no completed summary/checkpoint"
+    }
+  }
+}

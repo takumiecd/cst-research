@@ -206,6 +206,7 @@ def qualify_case(
     amplitude_max=1.0,
     w_c=0.3,
     radius_birth=4.0,
+    linear_backend="native",
     **envelope_settings,
 ):
     began = time.monotonic()
@@ -229,7 +230,7 @@ def qualify_case(
     dy = torch.randn(2, rows, no, generator=torch.Generator().manual_seed(seed + 2))
     expected = reference_vjp(layer, x, dy)
     live = copy.deepcopy(layer).cuda()
-    configure_native(live)
+    configure_native(live, linear_backend=linear_backend)
     xx = base.cuda()[..., ::2].requires_grad_()
     torch.cuda.reset_peak_memory_stats()
     y = live(xx)
@@ -255,6 +256,7 @@ def qualify_case(
         "w_c": w_c,
         "radius_birth": radius_birth,
         **envelope_settings,
+        **({"linear_backend": linear_backend} if linear_backend != "native" else {}),
         "input_noncontiguous": not xx.is_contiguous(),
         "initialization": report,
         "checks": metrics,
@@ -433,6 +435,7 @@ def task_step_and_resume_check(
     coefficient=8,
     full_task=False,
     ffn_kind="cst",
+    task_config=None,
     **envelope_settings,
 ):
     from .ffn_contract import ModelConfig
@@ -453,6 +456,8 @@ def task_step_and_resume_check(
         coefficient=coefficient,
         **envelope_settings,
     )
+    if task_config is not None:
+        config = task_config
     model = LanguageModel(config, ffn_kind, seed=17 if full_task else 251).cuda()
     configure_native(model)
     optimizer = cst_optimizer(

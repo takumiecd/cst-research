@@ -30,12 +30,14 @@ def shared_initialization(config, ffn_kind="dense"):
     target = dict(value.named_parameters())
     checked = 0
     for name, parameter in dense.named_parameters():
-        if ".qkv." in name:
+        if ".qkv." in name or (
+            config.attention_kind == "cst_qkvo" and ".attention_out." in name
+        ):
             continue
         assert torch.equal(parameter, target[name]), name
         checked += 1
     for a, b in zip(dense.blocks, value.blocks):
-        if config.attention_kind == "cst_qkv":
+        if config.attention_kind in ("dense", "cst_qkv", "cst_qkvo"):
             continue
         rows = [
             row
@@ -47,7 +49,15 @@ def shared_initialization(config, ffn_kind="dense"):
         assert torch.equal(a.qkv.bias[rows], getattr(b.qkv, b.qkv.dense_name).bias)
     reports = value.initialization_reports()
     expected = config.layers * (
-        (3 if config.attention_kind == "cst_qkv" else 1)
+        (
+            4
+            if config.attention_kind == "cst_qkvo"
+            else 3
+            if config.attention_kind == "cst_qkv"
+            else 0
+            if config.attention_kind == "dense"
+            else 1
+        )
         + (2 if ffn_kind == "cst" else 0)
     )
     assert len(reports) == expected and all(
@@ -57,7 +67,9 @@ def shared_initialization(config, ffn_kind="dense"):
         "shared_parameters_exact": checked,
         "complementary_projection_weights_and_biases_exact": True,
         "complementary_dense_maps": 0
-        if config.attention_kind == "cst_qkv"
+        if config.attention_kind in ("cst_qkv", "cst_qkvo")
+        else 3 * config.layers
+        if config.attention_kind == "dense"
         else 2 * config.layers,
         **(
             {"all_QK_weights_and_biases_exact": True}
@@ -96,10 +108,16 @@ def causal_and_manual_attention_check(config, ffn_kind="dense"):
     cotangent = torch.randn_like(live)
     fields = (
         ("query", "key", "value")
-        if config.attention_kind == "cst_qkv"
+        if config.attention_kind in ("cst_qkv", "cst_qkvo")
+        else ()
+        if config.attention_kind == "dense"
         else (block.qkv.cst_name,)
     )
-    inputs = (x, *(getattr(block.qkv, field).map.atoms.p for field in fields))
+    parameters = [getattr(block.qkv, field).map.atoms.p for field in fields]
+    if config.attention_kind == "cst_qkvo":
+        fields = (*fields, "output")
+        parameters.append(block.attention_out.map.atoms.p)
+    inputs = (x, *parameters)
     ga = torch.autograd.grad(live, inputs, cotangent, retain_graph=True)
     gb = torch.autograd.grad(reference, inputs, cotangent, retain_graph=True)
     result = {
@@ -118,18 +136,52 @@ def main(argv=None):
     p.add_argument("--output", type=Path, required=True)
     p.add_argument(
         "--attention-kind",
-        choices=("cst_v", "cst_q", "cst_k", "cst_qkv"),
+        choices=("dense", "cst_v", "cst_q", "cst_k", "cst_qkv", "cst_qkvo"),
         default="cst_v",
     )
     p.add_argument("--ffn-kind", choices=("dense", "cst"), default="dense")
+    p.add_argument("--width", type=int, choices=(256, 512), default=256)
+    p.add_argument("--heads", type=int, default=4)
+    p.add_argument(
+        "--linear-backend",
+        choices=("native", "levels", "levels_stream64"),
+        default="native",
+    )
+    p.add_argument(
+        "--radius-envelope",
+        choices=("rational", "rational_zero_opening"),
+        default="rational",
+    )
+    p.add_argument("--radius-birth", type=float, default=4.0)
+    p.add_argument("--zero-opening-scale", type=float, default=0.03)
+    p.add_argument(
+        "--expected-gpu",
+        choices=(
+            "NVIDIA GeForce RTX 4090",
+            "NVIDIA GeForce RTX 3090",
+            "NVIDIA RTX 6000 Ada Generation",
+            "NVIDIA A100 80GB PCIe MIG 3g.40gb",
+            "NVIDIA L4",
+        ),
+        default="NVIDIA GeForce RTX 4090",
+    )
     args = p.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    assert torch.cuda.get_device_name(0) == "NVIDIA GeForce RTX 4090"
-    dense = ModelConfig(atom_lr_multiplier=16)
-    config = ModelConfig(atom_lr_multiplier=16, attention_kind=args.attention_kind)
+    assert torch.cuda.get_device_name(0) == args.expected_gpu
+    settings = {
+        "width": args.width,
+        "heads": args.heads,
+        "atom_lr_multiplier": 16,
+        "linear_backend": args.linear_backend,
+        "radius_envelope": args.radius_envelope,
+        "radius_birth": args.radius_birth,
+        "zero_opening_scale": args.zero_opening_scale,
+    }
+    dense = ModelConfig(**settings)
+    config = ModelConfig(**settings, attention_kind=args.attention_kind)
     r = {
         "state": "running",
         "cohort": "recipe",
@@ -140,6 +192,7 @@ def main(argv=None):
         "python": platform.python_version(),
         "cases": [],
         "task_recipes": [dense.recipe(), config.recipe()],
+        "task_model_configs": [asdict(dense), asdict(config)],
         "model_kinds": [
             {"ffn_kind": "dense", "attention_kind": "dense"},
             {"ffn_kind": args.ffn_kind, "attention_kind": args.attention_kind},
@@ -162,27 +215,54 @@ def main(argv=None):
     try:
         r["shared_initialization"] = shared_initialization(config, args.ffn_kind)
         save()
-        r["quadrature"] = independent_quadrature_check(q=0.0, std=0.001)
+        envelope = config.envelope_settings()
+        r["quadrature"] = independent_quadrature_check(q=0.0, std=0.001, **envelope)
         save()
         cases = [
-            (256, 1024, 0.02, "block0.up"),
-            (1024, 256, 0.02 / (8**0.5), "block0.down"),
+            (config.width, config.intermediate, config.init_std, "block0.up"),
+            (
+                config.intermediate,
+                config.width,
+                config.init_std / (8**0.5),
+                "block0.down",
+            ),
         ]
         roles = (
             ("q", "k", "v")
-            if args.attention_kind == "cst_qkv"
+            if args.attention_kind in ("cst_qkv", "cst_qkvo")
+            else ()
+            if args.attention_kind == "dense"
             else ({"cst_v": "v", "cst_q": "q", "cst_k": "k"}[args.attention_kind],)
         )
-        cases += [(256, 256, 0.02, "block0.attention." + role) for role in roles]
+        cases += [
+            (config.width, config.width, config.init_std, "block0.attention." + role)
+            for role in roles
+        ]
+        if config.attention_kind == "cst_qkvo":
+            cases.append(
+                (
+                    config.width,
+                    config.width,
+                    config.init_std / (8**0.5),
+                    "block0.attention.o",
+                )
+            )
         for ni, no, std, seed_name in cases:
             r["cases"].append(
                 qualify_case(
-                    ni, no, 128, q=0.0, std=std, seed=parameter_seed(17, seed_name)
+                    ni,
+                    no,
+                    128,
+                    q=0.0,
+                    std=std,
+                    seed=parameter_seed(17, seed_name),
+                    linear_backend=config.linear_backend,
+                    **envelope,
                 )
             )
             save()
         r["optimizer"] = optimizer_and_resume_check(
-            q=0.0, atom_lr_multiplier=16, std=0.001
+            q=0.0, atom_lr_multiplier=16, std=0.001, **envelope
         )
         save()
         r["attention"] = causal_and_manual_attention_check(config, args.ffn_kind)
@@ -190,12 +270,20 @@ def main(argv=None):
         r["task_step"] = task_step_and_resume_check(
             full_task=True,
             ffn_kind=args.ffn_kind,
-            attention_kind=args.attention_kind,
+            task_config=config,
             atom_lr_multiplier=16,
         )
         save()
         assert r["task_step"]["cst_projections"] == config.layers * (
-            (3 if args.attention_kind == "cst_qkv" else 1)
+            (
+                4
+                if args.attention_kind == "cst_qkvo"
+                else 3
+                if args.attention_kind == "cst_qkv"
+                else 0
+                if args.attention_kind == "dense"
+                else 1
+            )
             + (2 if args.ffn_kind == "cst" else 0)
         )
         r["state"] = "passed"

@@ -36,6 +36,17 @@ Use a new study ID when changing the existing HIGGS design. Its training current
 runs in torchcst. Registration or CLI validation here does not constitute runner
 migration, a rerun or adoption of its results.
 
+## LM learning-curve controls
+
+At the owner's request,include Dense and a source-qualified DST reference in
+new LM learning-curve comparisons. Match data,model/ordinary initialization,
+training-token budget and active FFN scalar budget. Record the DST algorithm,
+mask/update rules and LR tuning; retain every candidate and label DEV selection.
+Use the plotting --dst-run input and its compatibility checks. Do not substitute
+HIGGS curves or incompatible task/source budgets. Radius/fraction diagnostics
+remain CST-specific. A dense-storage DST accuracy reference does not establish
+sparse-kernel speed or memory efficiency.
+
 ## Experiments and evidence
 
 Freeze source, data and configuration identities before execution. Before using
