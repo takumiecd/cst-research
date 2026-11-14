@@ -1,11 +1,11 @@
 """Collect TinyStories QKV loss responses from the frozen rational-L run."""
 
 import argparse
-from contextlib import contextmanager
 import importlib.util
-from itertools import combinations, product
 import json
 import os
+from contextlib import contextmanager
+from itertools import combinations, product
 from pathlib import Path
 
 import torch
@@ -36,9 +36,45 @@ def actions():
                 yield tuple(values)
 
 
-def run(args):
+@contextmanager
+def transform_physical(projections, callback):
+    """Intercept prepared rows at the site that owns them."""
+    from torchcst._backends.torch.parameterizations import radius_envelope
+
+    original = radius_envelope.prepared_physical_parameters
+    sites = []
+    handles = []
+
+    def enter(_module, _args, name):
+        sites.append(name)
+
+    def leave(_module, _args, _output):
+        sites.pop()
+
+    def wrapped(rows, constants):
+        return callback(sites[-1], original(rows, constants))
+
+    try:
+        for name, projection in projections.items():
+            handles.append(
+                projection.map.register_forward_pre_hook(
+                    lambda module, inputs, name=name: enter(module, inputs, name)
+                )
+            )
+            handles.append(
+                projection.map.register_forward_hook(leave, always_call=True)
+            )
+        radius_envelope.prepared_physical_parameters = wrapped
+        yield
+    finally:
+        radius_envelope.prepared_physical_parameters = original
+        for handle in handles:
+            handle.remove()
+
+
+def load_reference(reference_probe):
     # The probe supplies the archived checkpoint, data and source verification.
-    probe = load_script(args.reference_probe.resolve())
+    probe = load_script(reference_probe.resolve())
     train = load_script(probe.BASE / "train.py")
     record = probe.read(probe.BASE / probe.ARM / "result.json")
     assert record["state"] == "completed"
@@ -59,42 +95,18 @@ def run(args):
     model = train.model_for()
     assert train.parameter_digest(model) == record["initial_parameters_sha256"]
     radius_envelope.USE_RATIONAL_LOWER = True
-    model.cuda().eval()
-    params = {site: p.map.atoms.p for site, p in train.projections(model).items()}
-    original = radius_envelope.prepared_physical_parameters
+    return probe, train, record, data, model.cuda().eval()
+
+
+def run(args):
+    probe, train, record, data, model = load_reference(args.reference_probe)
+    projections = train.projections(model)
+    params = {site: p.map.atoms.p for site, p in projections.items()}
     names = tuple(params)
-    handles = []
     args.output.mkdir()
 
-    @contextmanager
     def transform_rows(callback):
-        # Match the physical rows to the actual Linear being evaluated.
-        site_stack = []
-
-        def enter(_module, _args, name):
-            site_stack.append(name)
-
-        def leave(_module, _args, _output):
-            site_stack.pop()
-
-        def wrapped(rows, constants):
-            return callback(site_stack[-1], original(rows, constants))
-
-        try:
-            for name, p in train.projections(model).items():
-                handles.append(
-                    p.map.register_forward_pre_hook(
-                        lambda module, inputs, name=name: enter(module, inputs, name)
-                    )
-                )
-                handles.append(p.map.register_forward_hook(leave, always_call=True))
-            radius_envelope.prepared_physical_parameters = wrapped
-            yield
-        finally:
-            radius_envelope.prepared_physical_parameters = original
-            for handle in handles:
-                handle.remove()
-            handles.clear()
+        return transform_physical(projections, callback)
 
     def loss(batch):
         return model(*batch)[1]
