@@ -94,6 +94,8 @@ following [PR31](https://github.com/takumiecd/cst-research/pull/31). Library
 envelopes were merged through
 [torchcst PR152](https://github.com/takumiecd/torchcst/pull/152) as explicit opt-ins.
 
+The [width-1024 QKV study](docs/lm-c64-qkv-20261114.md) compares rational Polar with the task-trained radius envelope and Dense. It records the evidence for prioritizing QKV and measuring O and FFN separately.
+
 ### Research sequence
 
 1. **FFN first.** Check rectangular input/output dimensions, multiple tokens,

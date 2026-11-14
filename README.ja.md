@@ -75,6 +75,8 @@ QKVはこの条件でDenseに近い一方、FFNを含めると差が残ります
 ライブラリの包絡変更は[torchcst PR152](https://github.com/takumiecd/torchcst/pull/152)で
 明示指定の機能としてmergeしました。
 
+[幅1024のQKV比較](docs/lm-c64-qkv-20261114.ja.md)では有理式Polar、半径比率を学習した現行式、Denseを比較し、QKVを優先してOとFFNを個別に調べる根拠を記録しています。
+
 ### 研究の順序
 
 1. **まずFFN。** 長方形の入出力、多トークン、forward/backwardの正しさ、optimizerを含む更新を確認します。
