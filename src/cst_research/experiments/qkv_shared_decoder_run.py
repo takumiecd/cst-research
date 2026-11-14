@@ -202,7 +202,7 @@ def batches_for(train, data, order, clock):
 
 
 def train_run(args, train, record, protocol):
-    from .ffn_contract import learning_rate
+    from cst_research.experiments.ffn_contract import learning_rate
     from torchcst._backends.torch.parameterizations import radius_envelope
 
     assert torch.cuda.get_device_name() == record["gpu"]
