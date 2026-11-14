@@ -1,6 +1,7 @@
 """Search QKV Atom updates and confirm selected actions on disjoint batches."""
 
 import argparse
+import gc
 import json
 import math
 import time
@@ -440,6 +441,7 @@ def main():
                 write()
                 print(json.dumps(record_part, allow_nan=False), flush=True)
             del state, optimizer_state, optimizer
+            gc.collect()  # CST optimizer hooks can retain the previous updater.
         report["state"] = "completed"
     except BaseException as exc:
         report.update(state="failed", error=f"{type(exc).__name__}: {exc}")
