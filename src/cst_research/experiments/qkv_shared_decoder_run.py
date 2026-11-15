@@ -246,6 +246,37 @@ def save_function_snapshot(output, decoder, projections, clock, development):
     return sha(artifact)
 
 
+def restore_run(directory, model, optimizer, record, amplitude_scale):
+    """Restore model and Adam state from an intact physical decoder checkpoint."""
+    report_path = directory / "result.json"
+    old = read(report_path)
+    assert old["transform"] == "direct physical"
+    assert old["data_manifest_sha256"] == record["data_manifest_sha256"]
+    assert old["data_order_sha256"] == record["data_order_sha256"]
+    step = max(map(int, old["checkpoints"]))
+    path = directory / f"decoder-{step}.pt"
+    digest = sha(path)
+    assert digest == old["checkpoints"][str(step)]
+    saved = torch.load(path, weights_only=True, map_location="cpu", mmap=True)
+    assert saved["step"] == step and saved["amplitude_scale"] == amplitude_scale
+    assert saved["data_manifest_sha256"] == record["data_manifest_sha256"]
+    assert saved["data_order_sha256"] == record["data_order_sha256"]
+    model.load_state_dict(saved["model"])
+    optimizer.load_state_dict(saved["optimizer"])
+    assert all(int(state["step"]) == step for state in optimizer.state.values())
+    with (directory / "curve.jsonl").open() as curve:
+        first_replay = next(
+            (row for line in curve if (row := json.loads(line))["step"] == step + 1),
+            None,
+        )
+    return step, {
+        "checkpoint": str(path),
+        "checkpoint_sha256": digest,
+        "source_result_sha256": sha(report_path),
+        "first_replay": first_replay,
+    }
+
+
 def train_run(args, train, record, protocol):
     from torchcst._backends.torch.parameterizations import radius_envelope
 
@@ -330,14 +361,21 @@ def train_run(args, train, record, protocol):
     peak_allocated = 0
     peak_reserved = 0
     started = time.monotonic()
-    if args.physical_decoder:
+    start_step = 0
+    if args.resume_from:
+        start_step, resume = restore_run(args.resume_from, model, opt, record, scale)
+        assert start_step < args.steps
+        report["resume"] = resume
+        report["completed_steps"] = start_step
+        print("RESTORED", start_step, resume["checkpoint_sha256"], flush=True)
+    elif args.physical_decoder:
         report["function_checkpoints"][0] = save_function_snapshot(
             args.output, model.decoder, projections, 0, initial["ce"]
         )
     train.write(path, report)
     try:
         with (args.output / "curve.jsonl").open("x") as curve:
-            for clock in range(1, args.steps + 1):
+            for clock in range(start_step + 1, args.steps + 1):
                 model.train()
                 opt.zero_grad(set_to_none=True)
                 for group in opt.param_groups:
@@ -387,6 +425,20 @@ def train_run(args, train, record, protocol):
                     "core_grad_norm": float(core_norm),
                     "shared_grad_norm": float(shared_norm),
                 }
+                if args.resume_from and clock == start_step + 1:
+                    expected = resume["first_replay"]
+                    if expected is not None:
+                        errors = {
+                            name: abs(row[name] - expected[name])
+                            for name in (
+                                "train_ce",
+                                "core_grad_norm",
+                                "shared_grad_norm",
+                            )
+                        }
+                        report["resume"]["first_replay_absolute_errors"] = errors
+                        print("REPLAY", clock, errors, flush=True)
+                        assert max(errors.values()) <= 2e-4
                 if clock in train.EVAL_STEPS or clock == args.steps:
                     row["development"] = train.development(model, data["development"])
                     row["decoded_radius_by_amplitude"] = decoded_geometry(projections)
@@ -458,7 +510,10 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--steps", type=int, default=4882)
     parser.add_argument("--physical-decoder", action="store_true")
+    parser.add_argument("--resume-from", type=Path)
     args = parser.parse_args()
+    if args.resume_from and not args.physical_decoder:
+        parser.error("--resume-from requires --physical-decoder")
     train, record, protocol = load_reference(args)
     for module, name in (
         ("torchcst", "torchcst"),
