@@ -145,6 +145,8 @@ def train_arm(
     joint,
     warm,
 ):
+    from cst_research.experiments.ffn_run import evaluate
+
     root = args.output / name
     root.mkdir(exist_ok=True)
     result_file = root / "result.json"
@@ -262,7 +264,7 @@ def train_arm(
         abs(restored["ce"] - arm["evaluations"][str(args.steps)]["development"]["ce"])
         <= 1e-6
     )
-    confirmation = train.development(model, data["confirmation"])
+    confirmation = evaluate(model, data["confirmation"], batch=2)
     snapshot = args.output / f"function-{name}.pt"
     arm.update(
         state="completed",
