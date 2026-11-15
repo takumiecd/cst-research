@@ -13,7 +13,7 @@ else:
 
 
 @torch.no_grad()
-def plot(reference, trained, samples, units, output):
+def plot(reference, trained, samples, units, output, terminal=False):
     import matplotlib.pyplot as plt
 
     t = torch.linspace(-1, 1, 65, dtype=samples.dtype)
@@ -23,7 +23,11 @@ def plot(reference, trained, samples, units, output):
         left=0.106, right=0.98, top=0.87, bottom=0.125, wspace=0.39, hspace=0.37
     )
     fig.suptitle(
-        "How 32-update reward changes the shared QKV Atom decoder",
+        (
+            "Terminal-CE reward versus ordinary Adam"
+            if terminal
+            else "How 32-update reward changes the shared QKV Atom decoder"
+        ),
         x=0.106,
         y=0.96,
         ha="left",
@@ -33,7 +37,11 @@ def plot(reference, trained, samples, units, output):
     fig.text(
         0.106,
         0.915,
-        "ES response minus ordinary Adam response at the same latent inputs",
+        (
+            "Terminal-CE reward (purple) and ordinary Adam (green)"
+            if terminal
+            else "ES response minus ordinary Adam response at the same latent inputs"
+        ),
         fontsize=11,
         color="#465262",
     )
@@ -49,10 +57,23 @@ def plot(reference, trained, samples, units, output):
             difference, samples.new_tensor([0.1, 0.5, 0.9]), dim=1
         )
         changes.append(mid[-1].tolist())
+        if terminal:
+            quantiles = samples.new_tensor([0.1, 0.5, 0.9])
+            a_quantiles = torch.quantile(a, quantiles, dim=1)
+            b_quantiles = torch.quantile(b, quantiles, dim=1)
         for i in range(4):
             ax = axes[i, j]
-            ax.fill_between(t, low[:, i], high[:, i], color="#66558a", alpha=0.18)
-            ax.plot(t, mid[:, i], color="#554187", lw=1.6)
+            if terminal:
+                for values, color in (
+                    (a_quantiles, "#277568"),
+                    (b_quantiles, "#554187"),
+                ):
+                    lo, median, hi = values[:, :, i]
+                    ax.fill_between(t, lo, hi, color=color, alpha=0.12)
+                    ax.plot(t, median, color=color, lw=1.6)
+            else:
+                ax.fill_between(t, low[:, i], high[:, i], color="#66558a", alpha=0.18)
+                ax.plot(t, mid[:, i], color="#554187", lw=1.6)
             ax.axhline(0, color="#9eabb6", ls="--", lw=0.8, zorder=0)
             ax.set_xlim(-1, 1)
             ax.spines[["top", "right"]].set_visible(False)
@@ -73,18 +94,28 @@ def plot(reference, trained, samples, units, output):
     return torch.tensor(changes).T.tolist()
 
 
-def run(directory, dest):
+def run(directory, dest, terminal=False):
     report = json.loads((directory / "result.json").read_text())
     if report["state"] != "completed":
         raise ValueError("expected a finished reward experiment")
-    original, a, summary_a = inspect(directory / "function-joint_adam_32.pt")
-    trained, b, summary_b = inspect(directory / "function-trained_es.pt")
-    for name, summary in (("joint_adam_32", summary_a), ("trained_es", summary_b)):
+    ordinary_name, reward_name = (
+        ("ordinary_adam", "reward_updated_fixed")
+        if terminal
+        else ("joint_adam_32", "trained_es")
+    )
+    original, a, summary_a = inspect(directory / f"function-{ordinary_name}.pt")
+    trained, b, summary_b = inspect(directory / f"function-{reward_name}.pt")
+    for name, summary in ((ordinary_name, summary_a), (reward_name, summary_b)):
         assert report["function_snapshots"][name] == summary["snapshot_sha256"]
     assert torch.equal(a, b)
     assert summary_a["units"] == summary_b["units"]
     value = plot(
-        original, trained, a, a.new_tensor(summary_a["units"]), dest.with_suffix(".png")
+        original,
+        trained,
+        a,
+        a.new_tensor(summary_a["units"]),
+        dest.with_suffix(".png"),
+        terminal,
     )
     dest.with_suffix(".json").write_text(
         json.dumps(
@@ -106,9 +137,10 @@ def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("directory", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--terminal", action="store_true")
     args = parser.parse_args()
     torch.set_num_threads(4)
-    run(args.directory, args.output)
+    run(args.directory, args.output, args.terminal)
 
 
 if __name__ == "__main__":
