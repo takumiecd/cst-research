@@ -11,6 +11,7 @@ import platform
 import subprocess
 import time
 from copy import deepcopy
+from functools import cache
 from pathlib import Path
 
 import torch
@@ -29,7 +30,9 @@ def sha(path):
 
 
 def digest(tensor):
-    return hashlib.sha256(tensor.detach().contiguous().numpy().tobytes()).hexdigest()
+    return hashlib.sha256(
+        tensor.detach().cpu().contiguous().numpy().tobytes()
+    ).hexdigest()
 
 
 class DecoderLayer(nn.Module):
@@ -96,6 +99,21 @@ class DecoderLayer(nn.Module):
         )
 
     def forward(self, x, decoder):
+        if x.is_cuda:
+            from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.plans import (
+                GLOBAL_ACTIVE_GRAD4_NATIVE,
+            )
+            from torchcst.operators.execution import LinearBinding, LinearInputs
+
+            binding = LinearBinding(
+                self.cst.execution_declaration(), self.physical(decoder)
+            )
+            return (
+                cuda_dispatcher().run(
+                    binding, LinearInputs(x), plan=GLOBAL_ACTIVE_GRAD4_NATIVE
+                )
+                + self.bias
+            )
         from torchcst._backends.torch.operators.linear import factors
 
         inputs, outputs = factors(self.cst.operator, self.physical(decoder))
@@ -115,6 +133,19 @@ class Classifier(nn.Module):
     def forward(self, x):
         hidden, output = self.layers
         return output(F.gelu(hidden(x, self.decoder)), self.decoder)
+
+
+@cache
+def cuda_dispatcher():
+    from torchcst import Dispatcher
+    from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.algorithm import (
+        RadiusCellMassAlgorithm,
+    )
+    from torchcst._backends.registry import Registry
+
+    registry = Registry()
+    registry.register(RadiusCellMassAlgorithm())
+    return Dispatcher(registry=registry)
 
 
 def stats(tensor):
@@ -144,7 +175,10 @@ def first_gradients(model, loss):
 
 @torch.no_grad()
 def evaluate(model, x, y):
-    logits = model(x)
+    if x.is_cuda and isinstance(model, Classifier):
+        logits = torch.cat([model(batch) for batch in x.split(BATCH_SIZE)])
+    else:
+        logits = model(x)
     return {
         "ce": float(F.cross_entropy(logits, y)),
         "accuracy": float((logits.argmax(1) == y).float().mean()),
@@ -166,7 +200,7 @@ def factored_oracle(model, inputs):
     torch.testing.assert_close(model(inputs), expected, rtol=1e-5, atol=2e-6)
 
 
-def train(name, model, x, y, indices, val_x, val_y):
+def train(name, model, x, y, orders, val_x, val_y):
     with_fifth = isinstance(model, Classifier) and model.layers[0].fifth is not None
     if isinstance(model, Classifier):
         atoms = [layer.cst.atoms.p for layer in model.layers]
@@ -182,41 +216,84 @@ def train(name, model, x, y, indices, val_x, val_y):
         weights = {}
     optimizer = torch.optim.Adam(groups, lr=0.003)
     assert not optimizer.state
-    accumulated, first = 0.0, []
-    started = time.perf_counter()
-    for step, idx in enumerate(indices.split(BATCH_SIZE), 1):
-        optimizer.zero_grad(set_to_none=True)
-        loss = F.cross_entropy(model(x[idx]), y[idx])
-        loss.backward()
-        optimizer.step()
-        accumulated += loss.detach().item() * len(idx)
-        if step == 1 and with_fifth:
-            first = [
-                {
-                    "gradient": stats(layer.fifth.grad),
-                    "after_update": stats(layer.fifth),
-                }
-                for layer in model.layers
-            ]
-            assert all(d["after_update"]["nonzero"] > 0 for d in first)
-        if step % 50 == 0:
-            print(name, "step", step, "train CE", float(loss.detach()), flush=True)
-    epoch_seconds = time.perf_counter() - started
+    first, curves, step = [], [], 0
+    if x.is_cuda:
+        torch.cuda.synchronize()
+        torch.cuda.reset_peak_memory_stats()
+    for epoch, indices in enumerate(orders, 1):
+        accumulated = x.new_zeros(())
+        started = time.perf_counter()
+        for idx in indices.split(BATCH_SIZE):
+            step += 1
+            optimizer.zero_grad(set_to_none=True)
+            loss = F.cross_entropy(model(x[idx]), y[idx])
+            loss.backward()
+            optimizer.step()
+            accumulated += loss.detach() * len(idx)
+            if step == 1 and with_fifth:
+                first = [
+                    {
+                        "gradient": stats(layer.fifth.grad),
+                        "after_update": stats(layer.fifth),
+                    }
+                    for layer in model.layers
+                ]
+                assert all(d["after_update"]["nonzero"] > 0 for d in first)
+        if x.is_cuda:
+            torch.cuda.synchronize()
+        epoch_seconds = time.perf_counter() - started
+        result = {
+            "epoch": epoch,
+            "steps": step,
+            "train_ce": float(accumulated) / len(indices),
+            "epoch_seconds": epoch_seconds,
+            "validation": evaluate(model, val_x, val_y),
+        }
+        curves.append(result)
+        print(name, json.dumps(result, allow_nan=False), flush=True)
     assert all(int(s["step"]) == step for s in optimizer.state.values())
     if weights:
         for n, param in model.decoder.named_parameters():
             assert torch.equal(param, weights[n]) and param.grad is None
     fifth = [stats(layer.fifth) for layer in model.layers] if with_fifth else []
-    result = {
+    return {
         "steps": step,
-        "train_ce": accumulated / len(indices),
-        "epoch_seconds": epoch_seconds,
-        "validation": evaluate(model, val_x, val_y),
+        "epochs": curves,
+        "training_seconds": sum(row["epoch_seconds"] for row in curves),
+        "validation": curves[-1]["validation"],
         "fifth_first_step": first,
         "fifth_final": fifth,
+        "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated()
+        if x.is_cuda
+        else None,
+        "peak_cuda_reserved_bytes": torch.cuda.max_memory_reserved()
+        if x.is_cuda
+        else None,
     }
-    print(name, json.dumps(result, allow_nan=False), flush=True)
-    return result
+
+
+def cuda_oracle(cpu, cuda, x, y):
+    gpu_x = x.cuda().requires_grad_()
+    cpu_x = x.clone().requires_grad_()
+    cpu_logits, gpu_logits = cpu(cpu_x), cuda(gpu_x)
+    torch.testing.assert_close(gpu_logits.cpu(), cpu_logits, rtol=2e-4, atol=3e-6)
+    inputs = [
+        [v, *(p for p in m.parameters() if p.requires_grad)]
+        for v, m in ((cpu_x, cpu), (gpu_x, cuda))
+    ]
+    reference = torch.autograd.grad(F.cross_entropy(cpu_logits, y), inputs[0])
+    actual = torch.autograd.grad(F.cross_entropy(gpu_logits, y.cuda()), inputs[1])
+    for a, b in zip(actual, reference, strict=True):
+        torch.testing.assert_close(a.cpu(), b, rtol=5e-4, atol=3e-6)
+    return {
+        "max_logit_difference": float(
+            (gpu_logits.detach().cpu() - cpu_logits.detach()).abs().max()
+        ),
+        "max_gradient_difference": max(
+            float((a.cpu() - b).abs().max())
+            for a, b in zip(actual, reference, strict=True)
+        ),
+    }
 
 
 def main():
@@ -229,7 +306,21 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--threads", type=int, default=6)
+    parser.add_argument("--epochs", type=int, default=1)
+    parser.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
+    parser.add_argument(
+        "--torchcst-commit", help="Verified source commit for an exported checkout"
+    )
     args = parser.parse_args()
+    if args.epochs < 1:
+        parser.error("epochs must be positive")
+    if args.device == "cuda":
+        if (
+            not torch.cuda.is_available()
+            or torch.cuda.get_device_name() != "NVIDIA GeForce RTX 4090"
+        ):
+            parser.error("CUDA pilot requires the RTX 4090")
+        torch.backends.cuda.matmul.allow_tf32 = False
     if args.output.exists():
         parser.error("output already exists")
     torch.set_num_threads(args.threads)
@@ -241,9 +332,12 @@ def main():
     # The official test set remains untouched during candidate selection.
     split = torch.randperm(60_000, generator=torch.Generator().manual_seed(19))
     train_indices, val_indices = split.split((TRAIN_COUNT, 60_000 - TRAIN_COUNT))
-    order = train_indices[
-        torch.randperm(TRAIN_COUNT, generator=torch.Generator().manual_seed(args.seed))
+    generator = torch.Generator().manual_seed(args.seed)
+    orders = [
+        train_indices[torch.randperm(TRAIN_COUNT, generator=generator)]
+        for _ in range(args.epochs)
     ]
+    order = orders[0]
     x = data["train_x"].float().div_(255)
     y = data["train_y"]
     train_x = x[train_indices]
@@ -274,17 +368,44 @@ def main():
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(args.seed)
         dense = nn.Sequential(nn.Linear(784, 128), nn.GELU(), nn.Linear(128, 10))
+    cuda_validation = None
+    if args.device == "cuda":
+        print("QUALIFYING_CUDA_REFERENCE", flush=True)
+        cuda_validation = cuda_oracle(
+            five,
+            Classifier(decoder, extra_latent=True, seed=args.seed).cuda(),
+            first_x[:16],
+            first_y[:16],
+        )
+        print("CUDA_REFERENCE_PASSED", cuda_validation, flush=True)
+        four, five, dense = four.cuda(), five.cuda(), dense.cuda()
+        x, y, val_x, val_y = x.cuda(), y.cuda(), val_x.cuda(), val_y.cuda()
+        orders = [idx.cuda() for idx in orders]
+        with torch.no_grad():
+            for a, b in zip(four.layers, five.layers, strict=True):
+                assert torch.equal(a.physical(four.decoder), b.physical(five.decoder))
+            torch.testing.assert_close(
+                four(first_x.cuda()), five(first_x.cuda()), rtol=2e-6, atol=2e-7
+            )
+        initial_val = evaluate(four, val_x, val_y)
     source = Path(torchcst.__file__).resolve().parents[2]
+    source_commit = (
+        args.torchcst_commit
+        or subprocess.check_output(
+            ["git", "-C", str(source), "rev-parse", "HEAD"], text=True
+        ).strip()
+    )
     receipt = {
         "protocol": {
             "widths": WIDTHS,
-            "epochs": 1,
+            "epochs": args.epochs,
             "batch_size": BATCH_SIZE,
             "seed": args.seed,
             "split_seed": 19,
             "train_examples": len(order),
             "val_examples": len(val_indices),
             "train_order_sha256": digest(order),
+            "epoch_order_sha256": [digest(idx) for idx in orders],
             "validation_indices_sha256": digest(val_indices),
             "data_sha256": data_receipt["sha256"],
             "normalization": {"mean": mean, "std": std},
@@ -292,11 +413,13 @@ def main():
             "bias_and_dense_lr": 0.003,
             "warm_decoder_sha256": sha(args.warm_function),
             "runner_sha256": sha(Path(__file__)),
-            "torchcst_commit": subprocess.check_output(
-                ["git", "-C", str(source), "rev-parse", "HEAD"], text=True
-            ).strip(),
+            "torchcst_commit": source_commit,
             "torch": torch.__version__,
-            "device": "cpu",
+            "cuda": torch.version.cuda if args.device == "cuda" else None,
+            "device": torch.cuda.get_device_name() if args.device == "cuda" else "cpu",
+            "execution": "cuda_radius_cell_mass/global_active_grad4_native"
+            if args.device == "cuda"
+            else "torch_materialized_from_factors",
             "platform": platform.platform(),
             "threads": args.threads,
             "timing": "batches, forward, backward and Adam; excludes validation",
@@ -304,13 +427,14 @@ def main():
         "initial_geometry": initial_geometries,
         "initial_validation_cst": initial_val,
         "factored_oracle": "passed",
+        "cuda_oracle": cuda_validation,
         "initial_logits_and_common_gradients": "exact",
         "preparation_seconds": time.perf_counter() - started,
         "arms": {},
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     for name, model in (("four", four), ("five", five), ("dense", dense)):
-        receipt["arms"][name] = train(name, model, x, y, order, val_x, val_y)
+        receipt["arms"][name] = train(name, model, x, y, orders, val_x, val_y)
         temporary = args.output.with_suffix(".tmp")
         temporary.write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
         temporary.replace(args.output)
