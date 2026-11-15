@@ -23,6 +23,7 @@ from .physical_atom_decoder import PhysicalAtomDecoder
 WIDTHS = (784, 128, 10)
 BATCH_SIZE = 256
 TRAIN_COUNT = 55_000
+DEFAULT_COUPLING = (1.0, -1.0, 0.0, 0.0)
 
 
 def sha(path):
@@ -38,7 +39,7 @@ def digest(tensor):
 class DecoderLayer(nn.Module):
     """Evaluate the physical Atom sum after decoding rectangular chart coordinates."""
 
-    def __init__(self, inputs, outputs, extra_latent):
+    def __init__(self, inputs, outputs, extra_latent, fifth_coupling):
         from torchcst import CSTLinear, chart_presets, kernels
 
         super().__init__()
@@ -48,6 +49,7 @@ class DecoderLayer(nn.Module):
             base, merge = layouts[size]
             return kernels.cell_mass(base_tile_sites=base, merge_factor=merge)
 
+        self.fifth_coupling = fifth_coupling
         self.bounds = (outputs, inputs)
         self.max_radius = min(self.bounds) / 2
         self.cst = CSTLinear(
@@ -83,9 +85,19 @@ class DecoderLayer(nn.Module):
         amp, log_r, out, inp = common.unbind(1)
         if self.fifth is not None:
             extra = self.fifth.tanh()
+            wa, wr, wo, wi = self.fifth_coupling
             amplitude_scale = decoder.amplitude_scale
-            amp = amp + extra * amplitude_scale * (amp / amplitude_scale).tanh()
-            log_r = log_r - extra
+            if wa:
+                amp = (
+                    amp
+                    + (wa * extra) * amplitude_scale * (amp / amplitude_scale).tanh()
+                )
+            if wr:
+                log_r = log_r + wr * extra
+            if wo:
+                out = out + wo * extra * scale[0]
+            if wi:
+                inp = inp + wi * extra * scale[1]
         return torch.stack(
             (
                 amp.clamp(-32, 32),
@@ -121,13 +133,14 @@ class DecoderLayer(nn.Module):
 
 
 class Classifier(nn.Module):
-    def __init__(self, decoder, *, extra_latent, seed):
+    def __init__(self, decoder, *, extra_latent, seed, fifth_coupling=DEFAULT_COUPLING):
         super().__init__()
         self.decoder = deepcopy(decoder).requires_grad_(False)
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(seed)
             self.layers = nn.ModuleList(
-                DecoderLayer(i, o, extra_latent) for i, o in itertools.pairwise(WIDTHS)
+                DecoderLayer(i, o, extra_latent, fifth_coupling)
+                for i, o in itertools.pairwise(WIDTHS)
             )
 
     def forward(self, x):
@@ -200,7 +213,7 @@ def factored_oracle(model, inputs):
     torch.testing.assert_close(model(inputs), expected, rtol=1e-5, atol=2e-6)
 
 
-def train(name, model, x, y, orders, val_x, val_y):
+def train(name, model, x, y, orders, val_x, val_y, *, resume=None, on_epoch=None):
     with_fifth = isinstance(model, Classifier) and model.layers[0].fifth is not None
     if isinstance(model, Classifier):
         atoms = [layer.cst.atoms.p for layer in model.layers]
@@ -217,10 +230,17 @@ def train(name, model, x, y, orders, val_x, val_y):
     optimizer = torch.optim.Adam(groups, lr=0.003)
     assert not optimizer.state
     first, curves, step = [], [], 0
+    if resume is not None:
+        model.load_state_dict(resume["model"])
+        optimizer.load_state_dict(resume["optimizer"])
+        curves = list(resume["epochs"])
+        first = resume["fifth_first_step"]
+        step = curves[-1]["steps"]
+        assert all(int(s["step"]) == step for s in optimizer.state.values())
     if x.is_cuda:
         torch.cuda.synchronize()
         torch.cuda.reset_peak_memory_stats()
-    for epoch, indices in enumerate(orders, 1):
+    for epoch, indices in enumerate(orders[len(curves) :], len(curves) + 1):
         accumulated = x.new_zeros(())
         started = time.perf_counter()
         for idx in indices.split(BATCH_SIZE):
@@ -251,6 +271,15 @@ def train(name, model, x, y, orders, val_x, val_y):
         }
         curves.append(result)
         print(name, json.dumps(result, allow_nan=False), flush=True)
+        if on_epoch is not None:
+            on_epoch(
+                {
+                    "model": model.state_dict(),
+                    "optimizer": optimizer.state_dict(),
+                    "epochs": curves,
+                    "fifth_first_step": first,
+                }
+            )
     assert all(int(s["step"]) == step for s in optimizer.state.values())
     if weights:
         for n, param in model.decoder.named_parameters():
