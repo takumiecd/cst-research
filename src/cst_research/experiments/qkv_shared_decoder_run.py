@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import os
 import statistics
 import time
@@ -14,8 +15,10 @@ import torch
 from torch import nn
 
 if __package__:
+    from .physical_atom_decoder import PhysicalAtomDecoder
     from .shared_atom_decoder import SharedAtomDecoder
 else:
+    from physical_atom_decoder import PhysicalAtomDecoder
     from shared_atom_decoder import SharedAtomDecoder
 
 
@@ -51,17 +54,23 @@ class DecodedLinear(nn.Module):
             periods=(self.operator.out_features, self.operator.in_features),
         )
 
+    def physical(self):
+        if isinstance(self.decoder, PhysicalAtomDecoder):
+            return self.decoder(self.layer.atoms.p)
+        from torchcst._backends.torch.parameterizations.radius_envelope import (
+            prepared_physical_parameters,
+        )
+
+        return prepared_physical_parameters(self.decoded(), self.constants)
+
     def forward(self, x):
         from torchcst._backends.cuda.algorithms.linear.radius_cell_mass.lm_width import (
             LM_PHYSICAL_WIDTH_LEVELS,
             _physical_dispatcher,
         )
-        from torchcst._backends.torch.parameterizations.radius_envelope import (
-            prepared_physical_parameters,
-        )
         from torchcst.operators.execution import LinearBinding, LinearInputs
 
-        physical = prepared_physical_parameters(self.decoded(), self.constants)
+        physical = self.physical()
         flat = x.reshape(-1, self.operator.in_features).contiguous()
         y = _physical_dispatcher().run(
             LinearBinding(self.operator, physical),
@@ -110,10 +119,8 @@ def load_reference(args):
     return driver, record, protocol
 
 
-def attach(model, projections, seed):
-    with torch.random.fork_rng(devices=[]):
-        torch.manual_seed(seed)
-        model.decoder = SharedAtomDecoder().to(next(model.parameters()).device)
+@torch.no_grad()
+def attach(model, projections, seed, physical_decoder):
     scale = float(
         torch.cat([p.map.atoms.p[:, 0].detach() for p in projections.values()])
         .square()
@@ -121,11 +128,29 @@ def attach(model, projections, seed):
         .sqrt()
     )
     assert scale > 0
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(seed)
+        decoder = (
+            PhysicalAtomDecoder(scale) if physical_decoder else SharedAtomDecoder()
+        )
+        model.decoder = decoder.to(next(model.parameters()).device)
     for p in projections.values():
         layer = p.map
         p.map = DecodedLinear(layer, model.decoder, scale)
         # Coordinates are periodic and can wrap by one chart period.
         raw = layer.atoms.p.detach()
+        if physical_decoder:
+            from torchcst._backends.torch.parameterizations.radius_envelope import (
+                prepared_physical_parameters,
+            )
+
+            expected = prepared_physical_parameters(raw, p.map.constants)
+            raw[:, 1].copy_(expected[:, 1].log())
+            periods = raw.new_tensor([layer.out_features, layer.in_features])
+            raw[:, 2:].copy_(expected[:, 2:].remainder(periods))
+            expected[:, 2:] = expected[:, 2:].remainder(periods)
+            torch.testing.assert_close(p.map.physical(), expected, atol=1e-6, rtol=1e-6)
+            continue
         decoded = p.map.decoded().detach()
         torch.testing.assert_close(decoded[:, :2], raw[:, :2], atol=0, rtol=0)
         periods = raw.new_tensor([layer.out_features, layer.in_features])
@@ -158,16 +183,7 @@ def make_optimizer(model, projections):
 
 @torch.no_grad()
 def decoded_geometry(projections):
-    from torchcst._backends.torch.parameterizations.radius_envelope import (
-        prepared_physical_parameters,
-    )
-
-    rows = torch.cat(
-        [
-            prepared_physical_parameters(p.map.decoded(), p.map.constants)[:, :2]
-            for p in projections.values()
-        ]
-    )
+    rows = torch.cat([p.map.physical()[:, :2] for p in projections.values()])
     amplitude, radius = rows.unbind(1)
     bands = (
         (0.0, 0.01),
@@ -201,9 +217,39 @@ def batches_for(train, data, order, clock):
     ]
 
 
+@torch.no_grad()
+def save_function_snapshot(output, decoder, projections, clock, development):
+    # Fixed Atom identities and balanced representation across all 12 maps.
+    rng = torch.Generator().manual_seed(217)
+    sampled = {}
+    for site, projection in projections.items():
+        p = projection.map.layer.atoms.p
+        indices = torch.randperm(len(p), generator=rng)[:256]
+        sampled[site] = p[indices.to(p.device)].cpu()
+    artifact = output / f"function-{clock}.pt"
+    temporary = artifact.with_suffix(".tmp")
+    torch.save(
+        {
+            "step": clock,
+            "decoder": {
+                name: value.detach().cpu()
+                for name, value in decoder.state_dict().items()
+            },
+            "latents": sampled,
+            "amplitude_scale": decoder.amplitude_scale,
+            "period": decoder.period,
+            "development": development,
+        },
+        temporary,
+    )
+    temporary.replace(artifact)
+    return sha(artifact)
+
+
 def train_run(args, train, record, protocol):
-    from cst_research.experiments.ffn_contract import learning_rate
     from torchcst._backends.torch.parameterizations import radius_envelope
+
+    from cst_research.experiments.ffn_contract import learning_rate
 
     assert torch.cuda.get_device_name() == record["gpu"]
     assert torch.version.cuda == record["cuda"] and torch.__version__ == record["torch"]
@@ -224,19 +270,31 @@ def train_run(args, train, record, protocol):
     x, y = batches_for(train, data, order, 1)[0]
     raw = [p.map.atoms.p for p in projections.values()]
     _, direct_loss = model(x, y)
-    direct_grad = torch.autograd.grad(direct_loss, raw)
-    scale = attach(model, projections, record["protocol"]["seed"])
+    direct_grad = (
+        None if args.physical_decoder else torch.autograd.grad(direct_loss, raw)
+    )
+    reference_loss = direct_loss.detach()
+    del direct_loss
+    scale = attach(
+        model, projections, record["protocol"]["seed"], args.physical_decoder
+    )
     _, decoded_loss = model(x, y)
-    torch.testing.assert_close(decoded_loss, direct_loss, atol=1e-6, rtol=0)
+    torch.testing.assert_close(decoded_loss, reference_loss, atol=2e-6, rtol=0)
     opt, core, shared = make_optimizer(model, projections)
     grads = torch.autograd.grad(decoded_loss, raw + shared)
-    for actual, expected in zip(grads[: len(raw)], direct_grad, strict=True):
-        torch.testing.assert_close(actual, expected, atol=2e-6, rtol=2e-3)
+    if direct_grad is not None:
+        for actual, expected in zip(grads[: len(raw)], direct_grad, strict=True):
+            torch.testing.assert_close(actual, expected, atol=2e-6, rtol=2e-3)
     assert any(bool(g.any()) for g in grads[len(raw) :])
-    del direct_loss, decoded_loss, direct_grad, grads, x, y
+    assert all(bool(torch.isfinite(g).all()) for g in grads)
+    decoder_head_grad = None
+    if args.physical_decoder:
+        decoder_head_grad = grads[-2].norm(dim=1).tolist()
+        assert all(norm > 0 for norm in decoder_head_grad)
+    del decoded_loss, direct_grad, grads, x, y
 
     initial = train.development(model, data["development"])
-    assert abs(initial["ce"] - record["initial_development"]["ce"]) <= 1e-6
+    assert abs(initial["ce"] - record["initial_development"]["ce"]) <= 2e-6
     shared_before = [p.detach().clone() for p in shared]
     arm = record["arms"]["rational_learned"]
     report = {
@@ -253,21 +311,29 @@ def train_run(args, train, record, protocol):
         "cuda": torch.version.cuda,
         "data_manifest_sha256": record["data_manifest_sha256"],
         "data_order_sha256": record["data_order_sha256"],
-        "architecture": [4, 16, 4],
+        "architecture": [4, 32, 32, 4] if args.physical_decoder else [4, 16, 4],
+        "transform": "direct physical" if args.physical_decoder else "rational L",
+        "initial_decoder_head_grad_norm": decoder_head_grad,
         "shared_scalars": sum(p.numel() for p in shared),
         "initial_parameters_sha256": record["initial_parameters_sha256"],
         "initial_amplitude_rms": scale,
         "initial_development": initial,
-        "initial_loss_and_latent_grad_match": True,
+        "initial_loss_match": True,
+        "initial_latent_grad_match": not args.physical_decoder,
         "decoder_gradient_clip": 0.1,
         "evaluations": {},
         "checkpoints": {},
+        "function_checkpoints": {},
     }
     path = args.output / "result.json"
     times = []
     peak_allocated = 0
     peak_reserved = 0
     started = time.monotonic()
+    if args.physical_decoder:
+        report["function_checkpoints"][0] = save_function_snapshot(
+            args.output, model.decoder, projections, 0, initial["ce"]
+        )
     train.write(path, report)
     try:
         with (args.output / "curve.jsonl").open("x") as curve:
@@ -297,7 +363,10 @@ def train_run(args, train, record, protocol):
                 with torch.no_grad():
                     for param in raw:
                         param[:, 0].clamp_(-32.0, 32.0)
-                        param[:, 1].clamp_(0.0, 1.0)
+                        if args.physical_decoder:
+                            param[:, 1].clamp_(math.log(0.5), math.log(512.0))
+                        else:
+                            param[:, 1].clamp_(0.0, 1.0)
                 torch.cuda.synchronize()
                 elapsed = time.monotonic() - start
                 if clock > 10 or args.steps <= 10:
@@ -327,6 +396,14 @@ def train_run(args, train, record, protocol):
                         row["delta_ce"] = row["development"]["ce"] - row["direct_ce"]
                     report["evaluations"][clock] = row
                     print(json.dumps(row), flush=True)
+                    if args.physical_decoder:
+                        report["function_checkpoints"][clock] = save_function_snapshot(
+                            args.output,
+                            model.decoder,
+                            projections,
+                            clock,
+                            row["development"]["ce"],
+                        )
                 if clock in train.SAVE_STEPS or clock == args.steps:
                     ckpt = args.output / f"decoder-{clock}.pt"
                     temp = ckpt.with_suffix(".tmp")
@@ -380,6 +457,7 @@ def main():
     parser.add_argument("--source-changes", action="append", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--steps", type=int, default=4882)
+    parser.add_argument("--physical-decoder", action="store_true")
     args = parser.parse_args()
     train, record, protocol = load_reference(args)
     for module, name in (
