@@ -133,13 +133,21 @@ class DecoderLayer(nn.Module):
 
 
 class Classifier(nn.Module):
-    def __init__(self, decoder, *, extra_latent, seed, fifth_coupling=DEFAULT_COUPLING):
+    def __init__(
+        self,
+        decoder,
+        *,
+        extra_latent,
+        seed,
+        fifth_coupling=DEFAULT_COUPLING,
+        layer_factory=DecoderLayer,
+    ):
         super().__init__()
         self.decoder = deepcopy(decoder).requires_grad_(False)
         with torch.random.fork_rng(devices=[]):
             torch.manual_seed(seed)
             self.layers = nn.ModuleList(
-                DecoderLayer(i, o, extra_latent, fifth_coupling)
+                layer_factory(i, o, extra_latent, fifth_coupling)
                 for i, o in itertools.pairwise(WIDTHS)
             )
 
@@ -213,7 +221,19 @@ def factored_oracle(model, inputs):
     torch.testing.assert_close(model(inputs), expected, rtol=1e-5, atol=2e-6)
 
 
-def train(name, model, x, y, orders, val_x, val_y, *, resume=None, on_epoch=None):
+def train(
+    name,
+    model,
+    x,
+    y,
+    orders,
+    val_x,
+    val_y,
+    *,
+    resume=None,
+    on_epoch=None,
+    after_update=None,
+):
     with_fifth = isinstance(model, Classifier) and model.layers[0].fifth is not None
     if isinstance(model, Classifier):
         atoms = [layer.cst.atoms.p for layer in model.layers]
@@ -249,6 +269,8 @@ def train(name, model, x, y, orders, val_x, val_y, *, resume=None, on_epoch=None
             loss = F.cross_entropy(model(x[idx]), y[idx])
             loss.backward()
             optimizer.step()
+            if after_update is not None:
+                after_update()
             accumulated += loss.detach() * len(idx)
             if step == 1 and with_fifth:
                 first = [
