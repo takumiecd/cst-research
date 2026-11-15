@@ -38,7 +38,8 @@ class PhysicalAtomDecoder(nn.Module):
             -1,
         )
 
-    def forward(self, latent):
+    def preclip(self, latent):
+        """Return signed amplitude, log radius, and unwrapped centers."""
         a, r, out, inp = latent.unbind(-1)
         angles = latent[..., 2:].remainder(self.period) * (math.tau / self.period)
         features = torch.cat(
@@ -51,9 +52,10 @@ class PhysicalAtomDecoder(nn.Module):
             dim=-1,
         )
         da, dr, dout, din = self.network(features).unbind(-1)
-        return self.base(
-            torch.stack(
-                (a + self.amplitude_scale * da, r + dr, out + 8 * dout, inp + 8 * din),
-                dim=-1,
-            )
+        return torch.stack(
+            (a + self.amplitude_scale * da, r + dr, out + 8 * dout, inp + 8 * din),
+            dim=-1,
         )
+
+    def forward(self, latent):
+        return self.base(self.preclip(latent))
