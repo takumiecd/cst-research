@@ -45,3 +45,29 @@ python scripts/run_lm_rational_projection.py \
 The runner verifies the input files and both original initialization digests
 before using the archived comparison. On interruption, use the same command with
 `--resume` to check and restore the latest recorded checkpoint.
+
+## RTX 4090 results
+
+All four arms completed 4,882 updates and the restored checkpoints reproduced
+their development evaluations. The all-Dense and QKV development CE values
+match the archived runs exactly. The final QKV parameter digest also matches.
+
+| Arm | Development CE | Δ vs. Dense | Confirmation CE | Median step (ms) | Peak allocated / reserved (GiB) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Dense | 2.51733 | 0 | 2.44804 | 36.7 | 4.967 / 5.338 |
+| FFN down | 2.49768 | −0.01965 | 2.43741 | 1,402.0 | 5.884 / 6.021 |
+| Attention output | 2.52955 | +0.01222 | 2.45108 | 376.8 | 3.013 / 4.016 |
+| QKV c64 | 2.48323 | −0.03410 | 2.40701 | 1,352.3 | 3.875 / 4.588 |
+
+The maximum relative L2 errors among Y, dX and the four Atom gradients in
+the full-size FP64 comparisons were 3.35e-7 for down and 3.20e-7 for O.
+The first task update made q positive for 392,993 of 786,432 down Atoms and
+98,580 of 196,608 O Atoms, with positive q in every replaced projection.
+The first attempt passed the down checks and stopped when the harness tried
+to restore a model after attaching CSTAdamW. The completed attempt used a
+separate model copy for qualification and started all training arms from step zero.
+
+The completed evidence locator ends in `lm-rational-projection-20261116-02`.
+The retrieved result, all four curves and the final checkpoint hashes were
+verified. Checkpoints remain on the training host. See the study entry for
+the result hash and the locator of the interrupted attempt.
