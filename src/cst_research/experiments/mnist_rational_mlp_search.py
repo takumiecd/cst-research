@@ -7,6 +7,7 @@ import time
 from copy import deepcopy
 from functools import partial
 from pathlib import Path
+from statistics import mean
 
 import torch
 from torch import nn
@@ -104,11 +105,30 @@ def add_decoder(analytic, formula):
     return model
 
 
-def paired_directions(size):
-    generator = torch.Generator().manual_seed(DIRECTION_SEED)
+def paired_directions(size, *, seed=DIRECTION_SEED, anchor=None):
+    generator = torch.Generator().manual_seed(seed)
     noise = torch.randn((size, DIRECTIONS), generator=generator, dtype=torch.float64)
+    if anchor is not None:
+        noise[:, 0].copy_(anchor)
     unit, _ = torch.linalg.qr(noise)
+    if anchor is not None and float(unit[:, 0] @ anchor) < 0:
+        unit[:, 0].neg_()
     return unit.T.to(torch.float32).contiguous()
+
+
+def screening_gaps(names, scores):
+    return {
+        name: {str(seed): ce[name] - ce["origin"] for seed, ce in scores.items()}
+        for name in names
+        if name != "origin"
+    }
+
+
+def rank_by_worst_seed(gaps):
+    return sorted(
+        gaps,
+        key=lambda name: (max(gaps[name].values()), mean(gaps[name].values()), name),
+    )
 
 
 @torch.no_grad()
@@ -172,8 +192,23 @@ def run(args):
     decoder = PhysicalAtomDecoder(warm["amplitude_scale"], period=warm["period"])
     decoder.load_state_dict(warm["decoder"])
     width = 4 * (HIDDEN + 1)
-    directions = paired_directions(width)
-    scale = HEAD_RMS * math.sqrt(width)
+    prior_round = None
+    head_rms, direction_seed, finalists = HEAD_RMS, DIRECTION_SEED, FINALISTS
+    screen_seeds = SEEDS[:1]
+    anchor = None
+    if args.previous_round:
+        prior_round = json.loads(args.previous_round.read_text())
+        prior = prior_round["protocol"]
+        assert prior_round["state"] == "completed"
+        assert prior["reference_sha256"] == sha(args.reference)
+        assert prior["orders_reference_sha256"] == sha(args.orders_reference)
+        assert prior["feature_seed"] == FEATURE_SEED
+        head_rms = prior["head_rms"] / 2
+        direction_seed, finalists = 8329, 3
+        screen_seeds = SEEDS
+        anchor = torch.tensor(prior["candidates"]["dir6_plus"], dtype=torch.float64)
+    directions = paired_directions(width, seed=direction_seed, anchor=anchor)
+    scale = head_rms * math.sqrt(width)
     candidates = {"origin": torch.zeros(width)}
     for i, direction in enumerate(directions, 1):
         candidates[f"dir{i}_plus"] = scale * direction
@@ -206,17 +241,20 @@ def run(args):
             str(seed): [digest(order) for order in orders]
             for seed, orders in cpu_orders.items()
         },
-        "screen_seed": SEEDS[0],
-        "confirmation_seed": SEEDS[1],
+        "screen_seeds": list(screen_seeds),
+        "final_seeds": list(SEEDS),
+        "prior_round_sha256": sha(args.previous_round) if prior_round else None,
+        "first_direction": "previous dir6_plus" if prior_round else "random",
+        "finalist_count": finalists,
         "screen_epochs": SCREEN_EPOCHS,
         "final_epochs": FINAL_EPOCHS,
         "candidates": {name: vector.tolist() for name, vector in candidates.items()},
-        "direction_seed": DIRECTION_SEED,
+        "direction_seed": direction_seed,
         "feature_seed": FEATURE_SEED,
         "architecture": [6, HIDDEN, HIDDEN, 4],
-        "head_rms": HEAD_RMS,
+        "head_rms": head_rms,
         "correction": "multiply all four shared corrections by the Atom q",
-        "promotion": "top two non-origin candidates at epoch two including reward_update",
+        "promotion": "rank by worst paired CE gap at epoch two, then mean gap; include reward_update",
     }
     report = (
         json.loads(target.read_text())
@@ -334,49 +372,62 @@ def run(args):
             arms[name]["test"] = evaluate(model, test_x, test_y)
         write_report(target, report)
 
-    first = prepare(SEEDS[0])
-    arms = first[-1]
+    prepared = {seed: prepare(seed) for seed in screen_seeds}
     for name in candidates:
-        fit_arm(SEEDS[0], name, SCREEN_EPOCHS, first)
-        if name == "origin":
-            reference = baseline["seeds"][str(SEEDS[0])]["arms"]["cst_dense"]
-            assert all(
-                abs(a["validation"]["ce"] - b["validation"]["ce"]) <= 1e-7
-                for a, b in zip(
-                    arms[name]["epochs"],
-                    reference["epochs"][:SCREEN_EPOCHS],
-                    strict=True,
+        for seed in screen_seeds:
+            fit_arm(seed, name, SCREEN_EPOCHS, prepared[seed])
+            if name == "origin":
+                reference = baseline["seeds"][str(seed)]["arms"]["cst_dense"]
+                origin = prepared[seed][-1][name]
+                assert all(
+                    abs(a["validation"]["ce"] - b["validation"]["ce"]) <= 1e-7
+                    for a, b in zip(
+                        origin["epochs"],
+                        reference["epochs"][:SCREEN_EPOCHS],
+                        strict=True,
+                    )
                 )
-            )
     scores = {
-        name: arm["epochs"][SCREEN_EPOCHS - 1]["validation"]["ce"]
-        for name, arm in arms.items()
+        seed: {
+            name: prepared[seed][-1][name]["epochs"][SCREEN_EPOCHS - 1]["validation"][
+                "ce"
+            ]
+            for name in candidates
+        }
+        for seed in screen_seeds
     }
-    update = reward_update(directions, scores, scale)
+    average = {name: mean(ce[name] for ce in scores.values()) for name in candidates}
+    update = reward_update(directions, average, scale)
     candidates["reward_update"] = update
     report["reward_update"] = update.tolist()
-    report["paired_epoch_two_ce"] = {
-        name: scores[name] for name in candidates if name != "reward_update"
-    }
-    write_report(target, report)
-    fit_arm(SEEDS[0], "reward_update", SCREEN_EPOCHS, first)
-    ranked = sorted(
-        (name for name in candidates if name != "origin"),
-        key=lambda name: (
-            arms[name]["epochs"][SCREEN_EPOCHS - 1]["validation"]["ce"],
-            name,
-        ),
-    )
-    promoted = ranked[:FINALISTS]
+    for seed in screen_seeds:
+        fit_arm(seed, "reward_update", SCREEN_EPOCHS, prepared[seed])
+        scores[seed]["reward_update"] = prepared[seed][-1]["reward_update"]["epochs"][
+            SCREEN_EPOCHS - 1
+        ]["validation"]["ce"]
+    report["screen_ce"] = {str(seed): ce for seed, ce in scores.items()}
+    gaps = screening_gaps(candidates, scores)
+    ranked = rank_by_worst_seed(gaps)
+    promoted = ranked[:finalists]
+    report["screen_ce_gap_to_origin"] = gaps
     report["screen_rank"] = ranked
     report["promoted"] = promoted
     write_report(target, report)
     print("PROMOTED", promoted, flush=True)
-    for name in promoted:
-        fit_arm(SEEDS[0], name, FINAL_EPOCHS, first)
-    second = prepare(SEEDS[1])
-    for name in promoted:
-        fit_arm(SEEDS[1], name, FINAL_EPOCHS, second)
+    for seed in SEEDS:
+        if seed not in prepared:
+            prepared[seed] = prepare(seed)
+        for name in promoted:
+            fit_arm(seed, name, FINAL_EPOCHS, prepared[seed])
+
+    report["final_validation_ce_gap_to_rational"] = {
+        name: {
+            str(seed): prepared[seed][-1][name]["validation"]["ce"]
+            - baseline["seeds"][str(seed)]["arms"]["cst_dense"]["validation"]["ce"]
+            for seed in SEEDS
+        }
+        for name in promoted
+    }
     report["state"] = "completed"
     report["wall_seconds"] = time.perf_counter() - began
     write_report(target, report)
@@ -394,6 +445,11 @@ def main():
         "output",
     ):
         parser.add_argument(f"--{key}", type=Path, required=True)
+    parser.add_argument(
+        "--previous-round",
+        type=Path,
+        help="Screen all candidates on both seeds at half the prior perturbation scale",
+    )
     run(parser.parse_args())
 
 
