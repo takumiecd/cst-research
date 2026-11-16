@@ -166,6 +166,14 @@ def check_geometry(models):
     return errors
 
 
+@torch.no_grad()
+def project_rational_atoms(model):
+    for layer in model.layers:
+        p = layer.cst.atoms.p
+        p[:, 0].clamp_(-32, 32)
+        p[:, 1].clamp_(0, 1)
+
+
 def run(args):
     torch.set_num_threads(6)
     if (
@@ -271,10 +279,7 @@ def run(args):
 
         @torch.no_grad()
         def project_q():
-            for layer in model.layers:
-                p = layer.cst.atoms.p
-                p[:, 0].clamp_(-32, 32)
-                p[:, 1].clamp_(0, 1)
+            project_rational_atoms(model)
             if not first_q:
                 first_q.extend(
                     {
