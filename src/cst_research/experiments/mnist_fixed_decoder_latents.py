@@ -239,9 +239,13 @@ def train(
         atoms = [layer.cst.atoms.p for layer in model.layers]
         if with_fifth:
             atoms.extend(layer.fifth for layer in model.layers)
+        atom_ids = {id(p) for p in atoms}
+        ordinary = [
+            p for p in model.parameters() if p.requires_grad and id(p) not in atom_ids
+        ]
         groups = [
             {"params": atoms, "lr": 0.02},
-            {"params": [layer.bias for layer in model.layers]},
+            {"params": ordinary},
         ]
         weights = {n: p.clone() for n, p in model.decoder.named_parameters()}
     else:

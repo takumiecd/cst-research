@@ -9,6 +9,8 @@ from functools import partial
 from pathlib import Path
 
 import torch
+from torch import nn
+from torch.nn import functional as F
 
 from .match_physical_atom_init import matched_latents
 from .mnist_fifth_latent_search import (
@@ -61,6 +63,29 @@ class RationalLayer(DecoderLayer):
             tau=0.03,
             amplitude_max=32.0,
         )
+
+
+class DenseHeadClassifier(Classifier):
+    def __init__(self, rational, head):
+        nn.Module.__init__(self)
+        self.decoder = rational.decoder
+        self.layers = nn.ModuleList([rational.layers[0]])
+        self.head = deepcopy(head)
+
+    def forward(self, x):
+        return self.head(F.gelu(self.layers[0](x, self.decoder)))
+
+
+def dense_head_pair(rational, seed):
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(seed)
+        dense = nn.Sequential(nn.Linear(784, 128), nn.GELU(), nn.Linear(128, 10))
+    hybrid = DenseHeadClassifier(rational, dense[-1])
+    for actual, expected in zip(
+        hybrid.head.parameters(), dense[-1].parameters(), strict=True
+    ):
+        assert torch.equal(actual, expected)
+    return {"cst_dense": hybrid, "dense": dense}
 
 
 @torch.no_grad()
@@ -154,6 +179,14 @@ def run(args):
     formula = historical_formula(args.envelope_source, old)
     previous = json.loads(args.mnist_reference.read_text())
     manifest = previous["protocol"]
+    full_cst = None
+    if args.full_cst_reference:
+        full_cst = json.loads(args.full_cst_reference.read_text())
+        assert full_cst["state"] == "completed"
+        assert full_cst["protocol"]["mnist_reference_sha256"] == sha(
+            args.mnist_reference
+        )
+    arm_names = ("cst_dense", "dense") if full_cst else ARMS
     x, y, fit, val, test_x, test_y, data_sha = dataset(args.data)
     assert data_sha == manifest["data_sha256"]
     assert digest(val) == manifest["validation_indices_sha256"]
@@ -176,6 +209,8 @@ def run(args):
     gpu_x, gpu_y = x.cuda(), y.cuda()
     protocol = {
         "seeds": list(SEEDS),
+        "configuration": list(arm_names),
+        "full_cst_reference_sha256": sha(args.full_cst_reference) if full_cst else None,
         "epochs": len(order[SEEDS[0]]),
         "mnist_reference_sha256": sha(args.mnist_reference),
         "historical_receipt_sha256": sha(args.history),
@@ -198,7 +233,7 @@ def run(args):
         "historical_tinystories_ce": old["arms"]["rational_learned"][
             "final_development"
         ]["ce"],
-        "radius_upper": [64.0, 5.0],
+        "radius_upper": [64.0] if full_cst else [64.0, 5.0],
         "radius_lower": old["protocol"]["lower"],
         "q_start": 0.0,
         "q_project": [0.0, 1.0],
@@ -232,6 +267,7 @@ def run(args):
             else None
         )
         first_q = list(state.get("first_q", [])) if state else []
+        rational = name in ("rational_q", "cst_dense")
 
         @torch.no_grad()
         def project_q():
@@ -268,7 +304,7 @@ def run(args):
             val_y,
             resume=state,
             on_epoch=after_epoch,
-            after_update=project_q if name == "rational_q" else None,
+            after_update=project_q if rational else None,
         )
         record["arms"][name] = {
             **result,
@@ -276,42 +312,73 @@ def run(args):
             "complete": True,
             "first_q": first_q,
             "final_q": [stats(layer.cst.atoms.p[:, 1]) for layer in model.layers]
-            if name == "rational_q"
+            if rational
             else [],
         }
         write_report(destination, report)
 
     for seed, orders in order.items():
         record = report["seeds"].setdefault(str(seed), {"arms": {}})
-        if all(record["arms"].get(name, {}).get("complete") for name in ARMS):
+        if all(record["arms"].get(name, {}).get("complete") for name in arm_names):
             continue
         print("MATCHING_INITIAL_ATOMS", seed, flush=True)
         cpu, initial = matched_models(decoder, formula, seed)
+        if full_cst:
+            rational = cpu["rational_q"]
+            reference = full_cst["seeds"][str(seed)]
+            assert (
+                initial[0]["matched_radius_median"]
+                == reference["initial_geometry"][0]["matched_radius_median"]
+            )
+            assert initial[0]["atoms"] == reference["initial_geometry"][0]["atoms"]
+            cpu = dense_head_pair(rational, seed)
+            initial = initial[:1]
+            prior = reference["arms"]["rational_q"]
+            record["full_cst_reference"] = {
+                key: prior[key]
+                for key in ("epochs", "validation", "test", "training_seconds")
+            }
         gpu = deepcopy(cpu)
         for model in gpu.values():
             model.cuda()
         if seed == SEEDS[0]:
+            key = arm_names[0]
             report["cuda_oracle"] = cuda_oracle(
-                cpu["rational_q"], gpu["rational_q"], x[examples], y[examples]
+                cpu[key], gpu[key], x[examples], y[examples]
             )
         record["initial_geometry"] = initial
-        record["max_physical_error"] = check_geometry(gpu)
+        record["trainable_parameters"] = {
+            name: sum(p.numel() for p in model.parameters() if p.requires_grad)
+            for name, model in gpu.items()
+        }
         record["initial_validation"] = {
             name: evaluate(model, val_x, val_y) for name, model in gpu.items()
         }
-        assert (
-            abs(
-                record["initial_validation"]["rational_q"]["ce"]
-                - record["initial_validation"]["input_center"]["ce"]
+        if full_cst:
+            record["initial_first_layer_sha256"] = digest(
+                gpu["cst_dense"].layers[0].physical(gpu["cst_dense"].decoder)
             )
-            < 3e-6
-        )
-        print(
-            "INITIAL_GEOMETRY_CHECKED",
-            seed,
-            json.dumps(record["max_physical_error"]),
-            flush=True,
-        )
+            print(
+                "INITIAL_HYBRID",
+                seed,
+                json.dumps(record["trainable_parameters"]),
+                flush=True,
+            )
+        else:
+            record["max_physical_error"] = check_geometry(gpu)
+            assert (
+                abs(
+                    record["initial_validation"]["rational_q"]["ce"]
+                    - record["initial_validation"]["input_center"]["ce"]
+                )
+                < 3e-6
+            )
+            print(
+                "INITIAL_GEOMETRY_CHECKED",
+                seed,
+                json.dumps(record["max_physical_error"]),
+                flush=True,
+            )
         write_report(destination, report)
         cuda_orders = [batch_order.cuda() for batch_order in orders]
         for name, model in gpu.items():
@@ -334,6 +401,7 @@ def main():
         "output",
     ):
         parser.add_argument(f"--{key}", type=Path, required=True)
+    parser.add_argument("--full-cst-reference", type=Path)
     run(parser.parse_args())
 
 
