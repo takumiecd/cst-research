@@ -241,6 +241,9 @@ def timed_step(model, optimizer, batches, clock):
 
 
 def qualify(model, sites, data, order):
+    # Attaching CSTAdamW changes the AtomState checkpoint contract. Qualify
+    # an independent copy so the training model still has no attached optimizer.
+    model, sites = copy.deepcopy((model, sites))
     model.cuda()
     layer = next(iter(sites.values()))
     original = layer.atoms.p.detach()[:8].clone()
@@ -259,32 +262,18 @@ def qualify(model, sites, data, order):
     assert oracle["passed"], oracle
     with torch.no_grad():
         layer.atoms.p[:8].copy_(original)
-    initial = {
-        name: tensor.detach().cpu().clone()
-        if torch.is_tensor(tensor)
-        else copy.deepcopy(tensor)
-        for name, tensor in model.state_dict().items()
-    }
-    digest = parameter_digest(model)
     optimizer = optimizer_for(model)
     reset_rng()
     set_tau(sites, 1)
     metrics = timed_step(model, optimizer, batches_at(data, order, 1), 1)
     q_update = audit_q(sites, optimizer, 1)
     print("FIRST_Q_UPDATE", json.dumps(q_update), flush=True)
-    model.zero_grad(set_to_none=True)
-    del optimizer
-    model.cpu()
-    model.load_state_dict(initial)
-    assert parameter_digest(model) == digest
-    result = {
+    return {
         "forward_backward": oracle,
         "initial_projection_output_rms": output_rms,
         "first_step": metrics,
         "first_q_update": q_update,
     }
-    torch.cuda.empty_cache()
-    return result
 
 
 def restore_checkpoint(path, model, optimizer, clock, digest):
@@ -497,6 +486,8 @@ def run(args):
             print("INITIALIZED", arm, state["total_atoms"], digest, flush=True)
             if arm in ("down", "o") and arm not in report["qualification"]:
                 report["qualification"][arm] = qualify(model, sites, data, order)
+                assert parameter_digest(model) == digest
+                torch.cuda.empty_cache()
             save(result_path, report)
         del dense
         assert all(

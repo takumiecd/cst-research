@@ -10,10 +10,11 @@
   "runner_entrypoint": "scripts/run_lm_rational_projection.py",
   "protocol_source_path": "docs/lm-rational-projection-20261116.md",
   "protocol": {
+    "interrupted_attempt": "lm-rational-projection-20261116-01",
     "archive_torchcst_commit": "0a70a0d8c78fff63758596b3442b1eadb5c30c48",
     "archive_consumer_commit": "09aeff15101be220de33e01fbde9553cee2cba99",
     "archive_protocol_sha256": "583a73e2f105ff07fb7d926f618874a874c56d45de81ab8ed3cb706fcb724d88",
-    "runner_sha256": "689003b49fcc35038f8e3e526b28acdcea806e418f48cbf096e8b2a93ed7389f",
+    "runner_sha256": "fb543c5f2484c1ba41d434d1120edef7b1d9b797374a325a07e77fb724a1a34d",
     "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
     "data_order_sha256": "927ba5aad87c2f72f89d416c4ee33c7f7d8ec183e3419827258b1b868089a324",
     "runtime_boundary": "Public CSTLinear and CSTAdamW, frozen research-only radius envelope and private CUDA width adapter.",
@@ -42,6 +43,6 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-rational-projection-20261116-01"
+    "relative_path": "lm-rational-projection-20261116-02"
   }
 }
