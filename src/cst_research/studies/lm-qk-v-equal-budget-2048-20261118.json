@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qk-v-equal-budget-2048-20261118",
   "title": "Equal-Atom QK-only and V-only placement at width 2048",
-  "status": "PLANNED",
-  "status_note": "Six arms complete two equal-budget comparisons; V c128 extends the seed-17 V sweep.",
+  "status": "COMPLETED",
+  "status_note": "All seven matched-budget and V-only extension runs reached update 4,882 with verified curves and checkpoints.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "b515dd4345343296386715802e32e107bbbaf45c",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/173",
@@ -50,6 +50,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qk-v-equal-budget-2048-20261118-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "0e260ddb99cbdf0fcbebbde157f53d1d9fa49974a2d090e9f8c56614a50c8312"
   }
 }
