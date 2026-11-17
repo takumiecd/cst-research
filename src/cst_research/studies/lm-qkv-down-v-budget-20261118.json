@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-down-v-budget-20261118",
   "title": "Width-2048 combined QKV and FFN down with a larger QKV budget",
-  "status": "RUNNING",
-  "status_note": "One seed-17 run with increased QKV Atom count and matched FFN down versus the archived combined model.",
+  "status": "COMPLETED",
+  "status_note": "The seed-17 combined arm finished 4,882 updates with verified final checkpoint and training curve.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
@@ -39,6 +39,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-down-v-budget-20261118-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "2850900ae00f2deffc950268ea59ba0783dabd5cb3c90caa19e34de1022bc837"
   }
 }

@@ -20,7 +20,38 @@
 ## 再現方法
 
 幅2048の併用比較のソースと拡張を使い、完了済みの集計を PILOT_SUMMARY とする。
-その他の比較基準も併用比較と同じものを使い、OUTPUT には新規の出力先を指定する。
-以前のコマンドの runner に scripts/run_lm_qkv_down_v_budget.py を指定し、ソース・
-マニフェスト・比較基準の引数に加えて --pilot-summary "$PILOT_SUMMARY" を渡す。
+他の比較基準も前回と同じにする。TORCH_EXTENSIONS_DIR には前回の SM89 ビルド、
+OUTPUT には新規の出力先を指定する。
+
+~~~sh
+export PYTHONPATH="$SNAPSHOT/torchcst/src:$SNAPSHOT/torchcst:$SNAPSHOT/cst-research/src"
+python scripts/run_lm_qkv_down_v_budget.py --reference-run "$REFERENCE_RUN" \
+  --paired-anchor "$PAIR_ANCHOR" --qkv-anchor "$QKV_ANCHOR" \
+  --pilot-summary "$PILOT_SUMMARY" --source "$SNAPSHOT" \
+  --merged-manifest "$MERGED_MANIFEST" --output "$OUTPUT"
+~~~
+
 再開時は同じ入力と出力先に --resume を追加する。
+
+## RTX 4090 の結果
+
+seed 17 の (56, 56, 80) の併用条件が4,882更新を完走した。4つの down の初期値は
+前回の併用条件と一致し、12の QKV の初期値は同じ配分の QKV 単独と一致した。
+先頭 Q の出力・勾配の最大相対 L2 誤差は 2.25e-06。全16射影の初回・最終 q、
+全学習ログ、最終チェックポイントのハッシュを確認した。
+
+| down と併用した Q / K / V | 検証 CE | 確認 CE | 検証 top-1 (%) | 更新中央値 (ms) | 準備 (秒) | ピーク allocated / reserved (GiB) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 48 / 48 / 64 | 2.63859 | 2.56407 | 45.36 | 135.13 | 1.35 | 5.398 / 5.986 |
+| 56 / 56 / 80 | 2.65907 | 2.57685 | 44.76 | 136.82 | 1.55 | 5.442 / 6.025 |
+
+前回の併用条件に対して、検証 CE 差は +0.02048、確認 CE 差は
++0.01278 だった。(48, 48, 64) の QKV 単独（確認 CE 2.39050）
+からの確認 CE 差は、前回の併用で +0.17358、今回の併用で +0.18635。
+(56, 56, 80) の QKV 単独の確認 CE は 2.39101 だった。
+
+前回と同じ拡張バイナリで、実行環境は RTX 4090、PyTorch 2.9.1+cu128、
+CUDA 12.8、Triton 3.5.1。凍結した runner のコミットは `78524a819f3114b10fe54e77dd0e45ff1f2f9b5d`、
+スクリプトアーカイブの SHA-256 は `fc69b03262caaa0a99e9fbfd6c12c23a6ee2cf6ad5aa262b4bcbcbe36206119d`。
+
+照合済み集計の SHA-256 は `2850900ae00f2deffc950268ea59ba0783dabd5cb3c90caa19e34de1022bc837`。
