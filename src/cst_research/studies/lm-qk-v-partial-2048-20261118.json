@@ -3,7 +3,7 @@
   "id": "lm-qk-v-partial-2048-20261118",
   "title": "Width-2048 QK-only and V-only CST replacement",
   "status": "RUNNING",
-  "status_note": "QK-only and V-only seed-17 arms compared with verified archived Dense and full-QKV controls.",
+  "status_note": "Seed-17 pilot and paired four-arm replications at seeds 23 and 42.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
@@ -37,11 +37,24 @@
     "memory": "PyTorch peak allocated and reserved.",
     "runtime_boundary": "Private M8 dense Fourier width extension, FP32 radius decoder and GPU variance calibration.",
     "source_manifest_sha256": "0e1a0adff05b4d2b3e26530ea9e32a0a14fa8ae03ba6b61e5c66b153dce6a54f",
-    "pilot_summary_sha256": "6e45ab1380e79682da48be606f8014dc4ffa08749e7b836e74a04abf66956d22"
+    "pilot_summary_sha256": "6e45ab1380e79682da48be606f8014dc4ffa08749e7b836e74a04abf66956d22",
+    "replication_seeds": [
+      23,
+      42
+    ],
+    "replication_arms": [
+      "dense",
+      "qkv",
+      "qk-only",
+      "v-only"
+    ],
+    "replication_runner_entrypoint": "scripts/run_lm_qk_v_partial_replication.py"
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qk-v-partial-2048-20261118-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "replication_relative_path": "lm-qk-v-partial-replication-2048-20261118-01",
+    "replication_summary": "evidence/summary.json"
   }
 }
