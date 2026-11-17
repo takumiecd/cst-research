@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "lm-qkv-local-sweep-20261117",
+  "title": "Local TinyStories QKV Atom-count sweep at width 2048",
+  "status": "RUNNING",
+  "status_note": "Four nearby coefficients across three seeds and a seed-17 c64 replay.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "0532fe8227009b201c35d7af378c01fdcabeacef",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/171",
+  "runner_entrypoint": "scripts/run_lm_qkv_local_sweep.py",
+  "protocol_source_path": "docs/lm-qkv-local-sweep-20261117.md",
+  "protocol": {
+    "width": 2048,
+    "seeds": [
+      17,
+      23,
+      42
+    ],
+    "coefficients": [
+      48,
+      56,
+      72,
+      80
+    ],
+    "replay": {
+      "seed": 17,
+      "coefficient": 64
+    },
+    "steps": 4882,
+    "targets_per_update": 1024,
+    "data_order_seed": 905,
+    "ordinary_reference_lr": 0.0001,
+    "atom_reference_lr": 0.0096,
+    "development_targets": 8192,
+    "confirmation_targets": 32768,
+    "comparator": "Same-seed verified archived width-2048 c64 and Dense controls; c64 seed 17 also replayed.",
+    "runtime_boundary": "Private width extension and FP32 radius decode and calibration adapters.",
+    "timing": "Synchronized complete eager update after update 10.",
+    "memory": "PyTorch peak allocated/reserved and pre-arm allocated.",
+    "source_manifest_sha256": "d80ced2e4bbf14e57693e28becc0b24507c56d2e874711e13a0e72bfaabaae14",
+    "paired_anchor_sha256": "15ce5cc578b817fe94b39e0dfd84ac268520d6a36a615c2e4c23e8ff23fbceda",
+    "data_order_sha256": "927ba5aad87c2f72f89d416c4ee33c7f7d8ec183e3419827258b1b868089a324"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-qkv-local-sweep-20261117-01",
+    "summary": "evidence/summary.json"
+  }
+}
