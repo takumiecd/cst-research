@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-2048-20261117",
   "title": "Paired TinyStories QKV c64 and c128 at width 2048 with FP32 radius decode",
-  "status": "RUNNING",
-  "status_note": "Both QKV counts qualify before the nine matched RTX 4090 training runs.",
+  "status": "COMPLETED",
+  "status_note": "Nine arms completed through update 4,882, with verified results and final checkpoints. The c64 and c128 development mean differences versus matched Dense were +0.02854 and +0.78656.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "9c0cf9979dde545999b290f6e0ec13ff93ecf2b5",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/169",
@@ -45,6 +45,9 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-2048-20261117-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "15ce5cc578b817fe94b39e0dfd84ac268520d6a36a615c2e4c23e8ff23fbceda",
+    "terminal_oracle": "evidence/terminal-oracle.json",
+    "terminal_oracle_sha256": "6e67086add4c881d342bb2fdf60b2916b84285faa47eaf2638f043b7ca7a9b05"
   }
 }
