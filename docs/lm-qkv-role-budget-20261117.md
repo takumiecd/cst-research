@@ -32,3 +32,26 @@ Use the same torchcst source snapshot and binary as the uniform sweep.
 Run the same command from that study with
 scripts/run_lm_qkv_role_budget.py and a fresh OUTPUT. The prior width-2048
 summary is the PAIR_ANCHOR. Resume with --resume and the same inputs.
+
+## RTX 4090 results
+
+All three arms completed 4,882 updates at seed 17 and retained final
+checkpoints. The first Q check was bitwise equal for CPU versus GPU
+initialization in each arm. The maximum relative L2 error across the
+independent output and gradient checks was 2.18e-06. All twelve
+q sites per arm passed the first and terminal update audits.
+
+| (Q, K, V) | Development CE | Confirmation CE | Development top-1 (%) | Median update (ms) | Peak allocated / reserved (GiB) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| (128, 64, 64) | 2.68622 | 2.59546 | 44.57 | 118.48 | 5.752 / 6.115 |
+| (64, 128, 64) | 2.74670 | 2.64953 | 43.81 | 118.43 | 5.748 / 6.191 |
+| (64, 64, 128) | 2.46447 | 2.39321 | 47.78 | 117.27 | 5.749 / 6.111 |
+
+Allocating c128 to V gave the lowest development and confirmation CE
+at seed 17. For context, the prior same-seed
+development / confirmation CEs at their respective budgets were
+2.43763 / 2.37238 (Dense),
+2.46632 / 2.39698 (uniform c64),
+and 3.15618 / 3.00745 (uniform c128).
+
+Verified summary SHA-256 `a08b283b75c0cc52ff668e386bff8a3174c3a5c964a7aabe73985afb8fc5df6a`.

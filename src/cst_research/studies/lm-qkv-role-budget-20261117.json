@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-role-budget-20261117",
   "title": "Fixed-budget Q, K, V allocation pilot at width 2048",
-  "status": "PLANNED",
-  "status_note": "Three equal-budget allocations at seed 17 after the uniform sweep.",
+  "status": "COMPLETED",
+  "status_note": "Three equal-budget allocations reached update 4,882 at seed 17. Final checkpoints and complete training curves were verified.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0532fe8227009b201c35d7af378c01fdcabeacef",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/171",
@@ -51,6 +51,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-role-budget-20261117-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "a08b283b75c0cc52ff668e386bff8a3174c3a5c964a7aabe73985afb8fc5df6a"
   }
 }
