@@ -2,16 +2,32 @@
   "schema_version": 1,
   "id": "lm-fp32-seed-replication-20261117",
   "title": "Paired TinyStories FFN-down replication with FP32 radius decode",
-  "status": "RUNNING",
-  "status_note": "Two paired new seeds and an optimized seed-17 down replay are frozen for sequential RTX 4090 execution.",
+  "status": "COMPLETED",
+  "status_note": "Five new runs completed 4,882 updates with verified final checkpoints. The two new seed pairs split the final CE comparison on development and confirmation. Seed 17 uses the archived Dense control.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "6703a18a55cd949564be8a0ceca1ca1b813f7fc5",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/168",
   "runner_entrypoint": "scripts/run_lm_fp32_seed_replication.py",
   "protocol_source_path": "docs/lm-fp32-seed-replication-20261117.md",
   "protocol": {
-    "seeds": [23, 42, 17],
-    "arm_order": {"23": ["dense", "down"], "42": ["down", "dense"], "17": ["down"]},
+    "seeds": [
+      23,
+      42,
+      17
+    ],
+    "arm_order": {
+      "23": [
+        "dense",
+        "down"
+      ],
+      "42": [
+        "down",
+        "dense"
+      ],
+      "17": [
+        "down"
+      ]
+    },
     "width": 1024,
     "steps": 4882,
     "targets_per_update": 1024,
@@ -29,6 +45,8 @@
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
-    "relative_path": "lm-fp32-seed-replication-20261117-01"
+    "relative_path": "lm-fp32-seed-replication-20261117-01",
+    "summary": "evidence/summary.json",
+    "summary_sha256": "6a4a062cd6b7d5628b8cbdd6a0c4f823cd91d3b52b376b045c13d22661db5c41"
   }
 }
