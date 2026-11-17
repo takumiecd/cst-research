@@ -3,7 +3,7 @@
   "id": "lm-qk-v-equal-budget-2048-20261118",
   "title": "Equal-Atom QK-only and V-only placement at width 2048",
   "status": "PLANNED",
-  "status_note": "Six added arms complete two equal-budget placement comparisons across three seeds.",
+  "status_note": "Six arms complete two equal-budget comparisons; V c128 extends the seed-17 V sweep.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "b515dd4345343296386715802e32e107bbbaf45c",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/173",
@@ -40,7 +40,12 @@
     "memory": "PyTorch peak allocated and reserved.",
     "runtime_boundary": "Private M8 dense Fourier width extension, FP32 radius decoder and GPU variance calibration.",
     "source_manifest_sha256": "8a7bd80c95090353e57384ffe3237083fbe35ffc584a4825df580f857f13f849",
-    "comparison_study": "lm-qk-v-partial-2048-20261118"
+    "comparison_study": "lm-qk-v-partial-2048-20261118",
+    "seed_17_v_budget_extension": {
+      "role": "value",
+      "coefficient": 128,
+      "steps": 4882
+    }
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",

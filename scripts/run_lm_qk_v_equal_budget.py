@@ -14,13 +14,17 @@ from torchcst import init
 
 TORCHCST_COMMIT = "b515dd4345343296386715802e32e107bbbaf45c"
 MANIFEST_SHA = "8a7bd80c95090353e57384ffe3237083fbe35ffc584a4825df580f857f13f849"
-ACTIVE = {"qk-only": {"query": 32, "key": 32}, "v-only": {"value": 96}}
+ACTIVE = {
+    "qk-only": {"query": 32, "key": 32},
+    "v-only": {"value": 96},
+    "v128": {"value": 128},
+}
 COUNTS = {
     arm: sweep.WIDTH * next(iter(coefficients.values()))
     for arm, coefficients in ACTIVE.items()
 }
 SCHEDULE = (
-    (17, ("qk-only", "v-only")),
+    (17, ("qk-only", "v-only", "v128")),
     (23, ("v-only", "qk-only")),
     (42, ("qk-only", "v-only")),
 )

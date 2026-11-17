@@ -8,6 +8,9 @@ Q/K c48 arms. Add Q/K c32 and V c96 at seeds 17, 23 and 42, each to
 update 4,882. Each new placement uses the selected projections in all
 four blocks, with Dense complementary rows copied byte for byte.
 
+At seed 17, also train V c128 through update 4,882 with Dense Q and K.
+Report the V-only c64/c96/c128 response at that seed.
+
 | Atom budget per model | Q / K | V | New arm |
 | ---: | --- | --- | --- |
 | 524,288 | 32 / 32 | 64 | Q / K |
