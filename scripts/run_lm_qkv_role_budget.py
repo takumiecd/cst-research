@@ -29,26 +29,37 @@ EXPERIMENT_COUNTS = {"c64": 64 * sweep.WIDTH, "c128": 128 * sweep.WIDTH}
 SCHEDULE = ((17, ("q64-k64-v128", "q128-k64-v64", "q64-k128-v64")),)
 
 
+def cst_projection(reference, config, seed, index, role, coefficient):
+    projection_config = SimpleNamespace(
+        **(asdict(config) | {"coefficient": coefficient})
+    )
+    return reference.Projection(
+        config.width,
+        config.width,
+        config=projection_config,
+        kind="cst",
+        std=config.init_std,
+        seed=reference.parameter_seed(seed, f"block{index}.attention.{role[0]}"),
+    )
+
+
+def configure_projection(layer, coefficient, registry):
+    assert len(layer.atoms.p) == coefficient * sweep.WIDTH
+    assert not torch.count_nonzero(layer.atoms.p[:, 1])
+    assert layer.execution_declaration().kernel.parameterization.radius_max == 512
+    layer.selector = FixedSelector(
+        RADIUS_ENVELOPE_DENSE_FOURIER_WEIGHT_LM, registry=registry
+    )
+
+
 class SplitQKV(nn.Module):
     def __init__(self, reference, config, seed, index, coefficients):
         super().__init__()
         for role, coefficient in zip(ROLES, coefficients, strict=True):
-            projection_config = SimpleNamespace(
-                **(asdict(config) | {"coefficient": coefficient})
-            )
             setattr(
                 self,
                 role,
-                reference.Projection(
-                    config.width,
-                    config.width,
-                    config=projection_config,
-                    kind="cst",
-                    std=config.init_std,
-                    seed=reference.parameter_seed(
-                        seed, f"block{index}.attention.{role[0]}"
-                    ),
-                ),
+                cst_projection(reference, config, seed, index, role, coefficient),
             )
 
     def forward(self, x):
@@ -69,15 +80,7 @@ def build_model(reference, dense, arm, seed, *, allocations=ALLOCATIONS):
             block.qkv = SplitQKV(reference, model.config, seed, index, coefficients)
             for role, coefficient in zip(ROLES, coefficients, strict=True):
                 layer = getattr(block.qkv, role).map
-                assert len(layer.atoms.p) == coefficient * sweep.WIDTH
-                assert not torch.count_nonzero(layer.atoms.p[:, 1])
-                assert (
-                    layer.execution_declaration().kernel.parameterization.radius_max
-                    == 512
-                )
-                layer.selector = FixedSelector(
-                    RADIUS_ENVELOPE_DENSE_FOURIER_WEIGHT_LM, registry=registry
-                )
+                configure_projection(layer, coefficient, registry)
                 sites[f"{index}.{role}"] = layer
 
     assert len(sites) == 12

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "lm-qk-v-partial-2048-20261118",
+  "title": "Width-2048 QK-only and V-only CST replacement",
+  "status": "COMPLETED",
+  "status_note": "Two pilot runs and eight paired replication runs reached update 4,882 with verified curves and checkpoints.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
+  "runner_entrypoint": "scripts/run_lm_qk_v_partial_2048.py",
+  "protocol_source_path": "docs/lm-qk-v-partial-2048-20261118.md",
+  "protocol": {
+    "width": 2048,
+    "seed": 17,
+    "steps": 4882,
+    "qkv_control_coefficients": [
+      48,
+      48,
+      64
+    ],
+    "new_arms": {
+      "qk-only": {
+        "query": 48,
+        "key": 48
+      },
+      "v-only": {
+        "value": 64
+      }
+    },
+    "targets_per_update": 1024,
+    "data_order_seed": 905,
+    "ordinary_reference_lr": 0.0001,
+    "atom_reference_lr": 0.0096,
+    "development_targets": 8192,
+    "confirmation_targets": 32768,
+    "timing": "Synchronized complete eager update after update 10.",
+    "memory": "PyTorch peak allocated and reserved.",
+    "runtime_boundary": "Private M8 dense Fourier width extension, FP32 radius decoder and GPU variance calibration.",
+    "source_manifest_sha256": "0e1a0adff05b4d2b3e26530ea9e32a0a14fa8ae03ba6b61e5c66b153dce6a54f",
+    "pilot_summary_sha256": "6e45ab1380e79682da48be606f8014dc4ffa08749e7b836e74a04abf66956d22",
+    "replication_seeds": [
+      23,
+      42
+    ],
+    "replication_arms": [
+      "dense",
+      "qkv",
+      "qk-only",
+      "v-only"
+    ],
+    "replication_runner_entrypoint": "scripts/run_lm_qk_v_partial_replication.py"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-qk-v-partial-2048-20261118-01",
+    "summary": "evidence/summary.json",
+    "replication_relative_path": "lm-qk-v-partial-replication-2048-20261118-01",
+    "replication_summary": "evidence/summary.json",
+    "summary_sha256": "7c5ce2ddc73ef83bf3f8d22ec9d77f3d28f571f086ac4001b704684f8b4fc225",
+    "replication_summary_sha256": "f36345b8c55f0b726200fcd8309c63c7f062c0a1eaafa4c9d4420b8d393a3374"
+  }
+}
