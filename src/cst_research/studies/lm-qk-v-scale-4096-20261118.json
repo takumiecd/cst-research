@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qk-v-scale-4096-20261118",
   "title": "Width-4096 follow-up for the matched-budget partial QKV placement",
-  "status": "RUNNING",
-  "status_note": "QK-only c32/c32 and c48/c48 qualified on the RTX 4090. All three arms passed full-update timing preflight and seed-17 training is underway.",
+  "status": "COMPLETED",
+  "status_note": "Dense and both budgets of the selected placement completed and passed checkpoint verification at update 4,882.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "b515dd4345343296386715802e32e107bbbaf45c",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/173",
@@ -32,11 +32,22 @@
     "memory": "Peak PyTorch allocated and reserved.",
     "runtime_boundary": "Private M8 dense Fourier width extension, FP32 radius decoder and GPU variance calibration.",
     "source_manifest_sha256": "8a7bd80c95090353e57384ffe3237083fbe35ffc584a4825df580f857f13f849",
-    "selected_placement": "qk-only"
+    "selected_placement": "qk-only",
+    "role_coefficients": {
+      "low": {
+        "query": 32,
+        "key": 32
+      },
+      "high": {
+        "query": 48,
+        "key": 48
+      }
+    }
   },
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qk-v-scale-4096-20261118-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "cdf0ca414ad7a1820e7db7c9591d91995c32532faa67c411418916775d624262"
   }
 }
