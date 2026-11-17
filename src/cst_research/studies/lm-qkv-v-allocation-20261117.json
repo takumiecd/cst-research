@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-v-allocation-20261117",
   "title": "Width-2048 QKV allocation toward V at matched and reduced Atom budgets",
-  "status": "RUNNING",
-  "status_note": "Uniform c64, V-heavy matched-budget QKV, and reduced-budget QKV on three matched seeds.",
+  "status": "COMPLETED",
+  "status_note": "All nine runs reached update 4,882. Final checkpoints, complete curves and paired results were verified.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0532fe8227009b201c35d7af378c01fdcabeacef",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/171",
@@ -61,6 +61,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-v-allocation-20261117-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "8dcee587925476f5c03ad3b696d87f971f272b0c5ddaa7c3ae820f1ea4144224"
   }
 }

@@ -46,3 +46,48 @@ python scripts/run_lm_qkv_v_allocation.py --reference-run "$REFERENCE_RUN" \
 ~~~
 
 Resume the same output directory with the frozen inputs and --resume.
+
+## RTX 4090 results
+
+All nine runs reached update 4,882. The full training curves and final
+checkpoint hashes matched the run records. All three initial c64 hashes
+matched the original runs. Both new allocations passed the bitwise
+initializer check at the first Q. The independent output and gradient
+checks had maximum relative L2 error 2.25e-06. The first and terminal
+q audits passed at all twelve sites per run.
+
+| Seed | Q / K / V | Development CE | Confirmation CE | Development top-1 (%) | Median update (ms) | Model preparation (s) | Peak allocated / reserved (GiB) |
+| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 17 | (64, 64, 64) | 2.46175 | 2.39464 | 47.55 | 115.12 | 1.19 | 5.657 / 6.057 |
+| 17 | (56, 56, 80) | 2.44493 | 2.39101 | 47.75 | 114.99 | 1.09 | 5.662 / 6.109 |
+| 17 | (48, 48, 64) | 2.45411 | 2.38740 | 47.67 | 113.35 | 1.05 | 5.618 / 6.105 |
+| 23 | (64, 64, 64) | 2.47421 | 2.40967 | 47.09 | 115.14 | 1.10 | 5.657 / 6.057 |
+| 23 | (56, 56, 80) | 2.45187 | 2.38778 | 47.94 | 115.00 | 1.12 | 5.662 / 6.109 |
+| 23 | (48, 48, 64) | 2.47349 | 2.39716 | 46.86 | 113.36 | 1.08 | 5.618 / 6.105 |
+| 42 | (64, 64, 64) | 2.48922 | 2.41238 | 46.58 | 115.25 | 1.07 | 5.657 / 6.057 |
+| 42 | (56, 56, 80) | 2.46718 | 2.39886 | 46.88 | 115.03 | 1.14 | 5.662 / 6.109 |
+| 42 | (48, 48, 64) | 2.45460 | 2.39110 | 47.33 | 113.42 | 1.04 | 5.618 / 6.105 |
+
+The following paired differences subtract the uniform c64 replay at the
+same seed. Lower CE is better. The uniform replay's mean of median update
+times was 115.17 ms.
+
+| Seed | Q / K / V | Δ development CE | Δ confirmation CE | Δ median update (ms) |
+| ---: | --- | ---: | ---: | ---: |
+| 17 | (56, 56, 80) | -0.01681 | -0.00363 | -0.12 |
+| 17 | (48, 48, 64) | -0.00763 | -0.00724 | -1.77 |
+| 23 | (56, 56, 80) | -0.02234 | -0.02189 | -0.14 |
+| 23 | (48, 48, 64) | -0.00072 | -0.01251 | -1.79 |
+| 42 | (56, 56, 80) | -0.02204 | -0.01352 | -0.21 |
+| 42 | (48, 48, 64) | -0.03462 | -0.02127 | -1.83 |
+
+| Q / K / V | Mean Δ development CE | Seeds with lower development CE | Mean Δ confirmation CE | Seeds with lower confirmation CE | Mean Δ median update (ms) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| (56, 56, 80) | -0.02040 | 3/3 | -0.01301 | 3/3 | -0.16 |
+| (48, 48, 64) | -0.01432 | 3/3 | -0.01368 | 3/3 | -1.80 |
+
+Runtime uses PyTorch 2.9.1+cu128, CUDA 12.8 and Triton 3.5.1.
+Frozen research driver commit `dd4b3921c895359fad8aa7b01c44bea2b00ab8c4`.
+Script archive SHA-256 `2eb17a932ceb9c6f2ffbf90559ddf5bb2f338d63e82464a3e34dbc1c599ba7e9`.
+
+Verified summary SHA-256 `8dcee587925476f5c03ad3b696d87f971f272b0c5ddaa7c3ae820f1ea4144224`.
