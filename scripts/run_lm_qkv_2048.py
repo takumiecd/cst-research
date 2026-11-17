@@ -121,7 +121,7 @@ def qualify_all(reference, native, config, data, order, summary, result_path):
             started = time.monotonic()
             audit = fp32.qualify(reference, native, model, sites, data, order)
             assert audit["forward_backward"]["A"] == COUNTS[arm]
-            assert len(audit["first_q_update"]["sites"]) == 12
+            assert audit["first_q_update"]["sites"].keys() == sites.keys()
             assert (
                 reference.parameter_digest(model)
                 == metadata["initial_parameters_sha256"]
@@ -202,7 +202,7 @@ def run_seed(
     return report
 
 
-def main(args, *, extra_identity=None):
+def main(args, *, extra_identity=None, benchmark_preflight=None):
     assert torch.cuda.get_device_name() == "NVIDIA GeForce RTX 4090"
     assert torch.cuda.get_device_capability() == (8, 9)
     assert torch.__version__ == "2.9.1+cu128" and torch.version.cuda == "12.8"
@@ -279,6 +279,11 @@ def main(args, *, extra_identity=None):
                 else None
             )
             assert set(summary["qualification"]) == set(COUNTS)
+            if benchmark_preflight is not None and "preflight_timing" not in summary:
+                summary["preflight_timing"] = benchmark_preflight(
+                    reference, native, config, data, order, preflight
+                )
+                reference.save(path, summary)
             summary["state"] = "training"
             reference.save(path, summary)
             for seed, arms in SCHEDULE:
