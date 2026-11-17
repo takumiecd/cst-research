@@ -55,13 +55,13 @@ class SplitQKV(nn.Module):
         return torch.cat((self.query(x), self.key(x), self.value(x)), dim=-1)
 
 
-def build_model(reference, dense, arm, seed):
+def build_model(reference, dense, arm, seed, *, allocations=ALLOCATIONS):
     model = copy.deepcopy(dense)
     sites = {}
     if arm == "dense":
         return model, sites
 
-    coefficients = ALLOCATIONS[arm]
+    coefficients = allocations[arm]
     registry = make_algorithm_registry()
     registry.register(RadiusEnvelopeDenseFourierWeightLMAlgorithm())
     with patch.object(base.radius_envelope, "USE_RATIONAL_LOWER", False):
@@ -80,7 +80,9 @@ def build_model(reference, dense, arm, seed):
                 )
                 sites[f"{index}.{role}"] = layer
 
-    assert len(sites) == 12 and sum(len(s.atoms.p) for s in sites.values()) == 2097152
+    assert len(sites) == 12
+    expected_atoms = len(model.blocks) * sweep.WIDTH * sum(coefficients)
+    assert sum(len(site.atoms.p) for site in sites.values()) == expected_atoms
     for name, parameter in model.named_parameters():
         if ".qkv." not in name:
             assert torch.equal(parameter, dense.get_parameter(name)), name
