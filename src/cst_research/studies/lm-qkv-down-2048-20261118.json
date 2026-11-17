@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-down-2048-20261118",
   "title": "Paired width-2048 QKV and FFN down replacement",
-  "status": "RUNNING",
-  "status_note": "Seed-17 four-arm qualification and pilot, with a conditional three-seed replication.",
+  "status": "COMPLETED",
+  "status_note": "Four seed-17 pilot arms finished with verified checkpoints and curves. The screen favored an alternative to the combined arm.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
@@ -49,6 +49,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-down-2048-20261118-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "6e45ab1380e79682da48be606f8014dc4ffa08749e7b836e74a04abf66956d22"
   }
 }
