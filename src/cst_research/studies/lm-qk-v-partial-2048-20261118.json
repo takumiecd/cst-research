@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qk-v-partial-2048-20261118",
   "title": "Width-2048 QK-only and V-only CST replacement",
-  "status": "RUNNING",
-  "status_note": "Seed-17 pilot and paired four-arm replications at seeds 23 and 42.",
+  "status": "COMPLETED",
+  "status_note": "Two pilot runs and eight paired replication runs reached update 4,882 with verified curves and checkpoints.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
@@ -55,6 +55,8 @@
     "relative_path": "lm-qk-v-partial-2048-20261118-01",
     "summary": "evidence/summary.json",
     "replication_relative_path": "lm-qk-v-partial-replication-2048-20261118-01",
-    "replication_summary": "evidence/summary.json"
+    "replication_summary": "evidence/summary.json",
+    "summary_sha256": "7c5ce2ddc73ef83bf3f8d22ec9d77f3d28f571f086ac4001b704684f8b4fc225",
+    "replication_summary_sha256": "f36345b8c55f0b726200fcd8309c63c7f062c0a1eaafa4c9d4420b8d393a3374"
   }
 }
