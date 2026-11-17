@@ -2,8 +2,8 @@
   "schema_version": 1,
   "id": "lm-qkv-local-sweep-20261117",
   "title": "Local TinyStories QKV Atom-count sweep at width 2048",
-  "status": "RUNNING",
-  "status_note": "Four nearby coefficients across three seeds and a seed-17 c64 replay.",
+  "status": "COMPLETED",
+  "status_note": "Thirteen runs reached update 4,882. Final checkpoints and complete training curves were verified.",
   "source_repository": "https://github.com/takumiecd/torchcst",
   "source_commit": "0532fe8227009b201c35d7af378c01fdcabeacef",
   "source_pull_request": "https://github.com/takumiecd/torchcst/pull/171",
@@ -44,6 +44,7 @@
   "evidence": {
     "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
     "relative_path": "lm-qkv-local-sweep-20261117-01",
-    "summary": "evidence/summary.json"
+    "summary": "evidence/summary.json",
+    "summary_sha256": "7628959c08456024929199e88479a398655aad19b100ef94bc487a688fe3879f"
   }
 }

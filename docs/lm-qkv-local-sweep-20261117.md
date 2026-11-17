@@ -54,3 +54,54 @@ python scripts/run_lm_qkv_local_sweep.py --reference-run "$REFERENCE_RUN" \
 ~~~
 
 Resume the same output directory with the frozen inputs and --resume.
+
+## RTX 4090 results
+
+All 13 new runs reached update 4,882. Restored checkpoints, complete curves
+and first and terminal q updates were checked. The seed-17 forward/backward
+gates across the five shapes had maximum relative L2 error 2.25e-06.
+The four new shapes passed bitwise CPU/GPU initialization of the first Q.
+
+| Seed | Arm | Development CE | Confirmation CE | Development top-1 (%) | Median update (ms) | Peak allocated / reserved (GiB) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 17 | Dense (prior) | 2.43763 | 2.37238 | 48.16 | 96.97 | 5.754 / 6.193 |
+| 17 | c64 (prior) | 2.46632 | 2.39698 | 47.49 | 115.24 | 5.657 / 6.057 |
+| 17 | c64 (replay) | 2.47220 | 2.40649 | 47.08 | 115.25 | 5.657 / 6.057 |
+| 17 | c48 | 2.48145 | 2.40721 | 46.80 | 112.76 | 5.598 / 6.070 |
+| 17 | c56 | 2.44947 | 2.38576 | 48.22 | 114.07 | 5.626 / 6.115 |
+| 17 | c72 | 2.47923 | 2.41551 | 47.66 | 116.76 | 5.702 / 6.139 |
+| 17 | c80 | 2.56047 | 2.49119 | 46.20 | 117.85 | 5.734 / 6.109 |
+| 23 | Dense (prior) | 2.43700 | 2.37684 | 47.56 | 97.01 | 5.754 / 6.193 |
+| 23 | c64 (prior) | 2.47425 | 2.40955 | 47.44 | 115.20 | 5.657 / 6.057 |
+| 23 | c48 | 2.47953 | 2.40475 | 47.60 | 112.87 | 5.598 / 6.070 |
+| 23 | c56 | 2.48170 | 2.41120 | 47.44 | 114.22 | 5.626 / 6.115 |
+| 23 | c72 | 2.49935 | 2.42107 | 47.57 | 116.73 | 5.702 / 6.139 |
+| 23 | c80 | 2.51608 | 2.44257 | 46.72 | 117.77 | 5.734 / 6.109 |
+| 42 | Dense (prior) | 2.46177 | 2.37810 | 47.83 | 96.99 | 5.754 / 6.193 |
+| 42 | c64 (prior) | 2.48145 | 2.40921 | 46.97 | 115.18 | 5.657 / 6.057 |
+| 42 | c48 | 2.45977 | 2.39776 | 47.24 | 112.83 | 5.598 / 6.070 |
+| 42 | c56 | 2.47994 | 2.38999 | 47.13 | 114.17 | 5.626 / 6.115 |
+| 42 | c72 | 2.49000 | 2.42494 | 47.05 | 116.78 | 5.702 / 6.139 |
+| 42 | c80 | 2.63986 | 2.55832 | 44.67 | 117.89 | 5.734 / 6.109 |
+
+The three-seed means use the prior same-seed c64 and Dense controls.
+Positive CE differences indicate higher cross-entropy. The controls had
+mean median update times of 115.21 ms (c64) and 96.99 ms (Dense).
+
+| Coefficient | Δ development vs c64 | Δ confirmation vs c64 | Δ development vs Dense | Δ confirmation vs Dense | Median update, mean (ms) |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| c48 | -0.00042 | -0.00201 | +0.02812 | +0.02747 | 112.82 |
+| c56 | -0.00364 | -0.00960 | +0.02491 | +0.01988 | 114.15 |
+| c72 | +0.01552 | +0.01526 | +0.04406 | +0.04473 | 116.76 |
+| c80 | +0.09813 | +0.09212 | +0.12668 | +0.12159 | 117.83 |
+
+The c64 replay reproduced the full seed-17 initial parameter hash and
+used the same frozen batch order. Its development and confirmation CE
+differed by +0.00588 and +0.00951 from the earlier c64 run. Its model
+preparation took 1.23 seconds, compared with
+304.20 seconds previously. Model
+preparation across the new runs took 1.01–1.23 seconds.
+The seed-17 replay difference is a reference for interpreting small
+CE differences.
+
+Verified summary SHA-256 `7628959c08456024929199e88479a398655aad19b100ef94bc487a688fe3879f`.
