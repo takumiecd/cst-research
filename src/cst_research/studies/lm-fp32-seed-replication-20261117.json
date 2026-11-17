@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "lm-fp32-seed-replication-20261117",
+  "title": "Paired TinyStories FFN-down replication with FP32 radius decode",
+  "status": "COMPLETED",
+  "status_note": "Five new runs completed 4,882 updates with verified final checkpoints. The two new seed pairs split the final CE comparison on development and confirmation. Seed 17 uses the archived Dense control.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "6703a18a55cd949564be8a0ceca1ca1b813f7fc5",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/168",
+  "runner_entrypoint": "scripts/run_lm_fp32_seed_replication.py",
+  "protocol_source_path": "docs/lm-fp32-seed-replication-20261117.md",
+  "protocol": {
+    "seeds": [
+      23,
+      42,
+      17
+    ],
+    "arm_order": {
+      "23": [
+        "dense",
+        "down"
+      ],
+      "42": [
+        "down",
+        "dense"
+      ],
+      "17": [
+        "down"
+      ]
+    },
+    "width": 1024,
+    "steps": 4882,
+    "targets_per_update": 1024,
+    "lr_horizon_updates": 19531,
+    "atoms_per_down_projection": 196608,
+    "runtime_boundary": "Public CSTAdamW with private width extension, FP32 rational decode and shared-step research adapters.",
+    "source_manifest_sha256": "3e09d4ca120102c40f68faa130a444fb98014bc2da2f4ececedd7c545df4e654",
+    "data_manifest_sha256": "5b995103ca95d3c9b62a4e860039683dc734b0a0bb20e232db1b2e45aa690d01",
+    "data_order_sha256": "927ba5aad87c2f72f89d416c4ee33c7f7d8ec183e3419827258b1b868089a324",
+    "seed17_anchor_sha256": "c41e3e624e6aeb19fb7d08748d24b40dea0a5d5387602d639ed79f0f65f0e2d4",
+    "development_targets": 8192,
+    "confirmation_targets": 32768,
+    "timing": "Synchronized full eager training step after ten updates.",
+    "memory": "Per-step allocated and reserved CUDA allocator peaks."
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-fp32-seed-replication-20261117-01",
+    "summary": "evidence/summary.json",
+    "summary_sha256": "6a4a062cd6b7d5628b8cbdd6a0c4f823cd91d3b52b376b045c13d22661db5c41"
+  }
+}
