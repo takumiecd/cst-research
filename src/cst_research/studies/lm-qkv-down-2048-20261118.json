@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "lm-qkv-down-2048-20261118",
+  "title": "Paired width-2048 QKV and FFN down replacement",
+  "status": "RUNNING",
+  "status_note": "Seed-17 four-arm qualification and pilot, with a conditional three-seed replication.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "936b25bc99a1bf968c8cef34a392be563969d9a6",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/172",
+  "runner_entrypoint": "scripts/run_lm_qkv_down_2048.py",
+  "protocol_source_path": "docs/lm-qkv-down-2048-20261118.md",
+  "protocol": {
+    "width": 2048,
+    "ffn_down_in_features": 8192,
+    "down_coefficient": 96,
+    "down_atoms_per_projection": 393216,
+    "qkv_coefficients": [
+      48,
+      48,
+      64
+    ],
+    "pilot_seed": 17,
+    "conditional_replication_seeds": [
+      23,
+      42
+    ],
+    "steps": 4882,
+    "targets_per_update": 1024,
+    "data_order_seed": 905,
+    "arms": [
+      "dense",
+      "qkv",
+      "down",
+      "qkv-down"
+    ],
+    "ordinary_reference_lr": 0.0001,
+    "atom_reference_lr": 0.0096,
+    "development_targets": 8192,
+    "confirmation_targets": 32768,
+    "selection_rule": "Replicate if no alternative weakly improves both confirmation CE and update latency and strictly improves at least one.",
+    "timing": "Synchronized complete eager update. Short preflight uses 10 warmup and 24 measured steps, followed by the full arms.",
+    "memory": "PyTorch peak allocated and reserved.",
+    "runtime_boundary": "Private M8 dense Fourier extension, FP32 radius decoder and GPU variance calibration.",
+    "source_manifest_sha256": "0e1a0adff05b4d2b3e26530ea9e32a0a14fa8ae03ba6b61e5c66b153dce6a54f",
+    "paired_anchor_sha256": "15ce5cc578b817fe94b39e0dfd84ac268520d6a36a615c2e4c23e8ff23fbceda",
+    "qkv_anchor_sha256": "8dcee587925476f5c03ad3b696d87f971f272b0c5ddaa7c3ae820f1ea4144224",
+    "data_order_sha256": "927ba5aad87c2f72f89d416c4ee33c7f7d8ec183e3419827258b1b868089a324"
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-qkv-down-2048-20261118-01",
+    "summary": "evidence/summary.json"
+  }
+}

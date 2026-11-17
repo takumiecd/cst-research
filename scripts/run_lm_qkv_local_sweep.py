@@ -29,7 +29,7 @@ SCHEDULE = (
 
 
 def gpu_variance_scaling(layer, variance, *, radius_fraction=0.0, generator=None):
-    assert radius_fraction == 0 and layer.in_features == layer.out_features == WIDTH
+    assert radius_fraction == 0
     assert len(layer.atoms.p) in COUNTS.values()
     assert layer.atoms.p.grad is None
     _, evaluate = calibration.gpu_evaluator(lm_width.width_extension(), layer)
