@@ -202,7 +202,7 @@ def run_seed(
     return report
 
 
-def main(args):
+def main(args, *, extra_identity=None):
     assert torch.cuda.get_device_name() == "NVIDIA GeForce RTX 4090"
     assert torch.cuda.get_device_capability() == (8, 9)
     assert torch.__version__ == "2.9.1+cu128" and torch.version.cuda == "12.8"
@@ -256,6 +256,8 @@ def main(args):
         "targets_per_update": 1024,
         "save_steps": sorted(SAVE_STEPS),
     }
+    if extra_identity is not None:
+        identity["extension"] = extra_identity
     args.output.mkdir(parents=True, exist_ok=True)
     path = args.output / "summary.json"
     if path.exists():
