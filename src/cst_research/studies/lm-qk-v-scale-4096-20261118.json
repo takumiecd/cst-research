@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "lm-qk-v-scale-4096-20261118",
+  "title": "Width-4096 follow-up for the matched-budget partial QKV placement",
+  "status": "COMPLETED",
+  "status_note": "Dense and both budgets of the selected placement completed and passed checkpoint verification at update 4,882.",
+  "source_repository": "https://github.com/takumiecd/torchcst",
+  "source_commit": "b515dd4345343296386715802e32e107bbbaf45c",
+  "source_pull_request": "https://github.com/takumiecd/torchcst/pull/173",
+  "runner_entrypoint": "scripts/run_lm_qk_v_scale_4096.py",
+  "protocol_source_path": "docs/lm-qk-v-scale-4096-20261118.md",
+  "protocol": {
+    "width": 4096,
+    "heads": 16,
+    "head_width": 256,
+    "seed": 17,
+    "steps": 4882,
+    "selected_placement_study": "lm-qk-v-equal-budget-2048-20261118",
+    "arms": [
+      "dense",
+      "low",
+      "high"
+    ],
+    "sequences_per_microbatch": 1,
+    "targets_per_update": 1024,
+    "data_order_seed": 905,
+    "ordinary_reference_lr": 0.0001,
+    "atom_reference_lr": 0.0096,
+    "development_targets": 8192,
+    "confirmation_targets": 32768,
+    "timing": "Synchronized full eager optimizer update and a short preflight timing.",
+    "memory": "Peak PyTorch allocated and reserved.",
+    "runtime_boundary": "Private M8 dense Fourier width extension, FP32 radius decoder and GPU variance calibration.",
+    "source_manifest_sha256": "8a7bd80c95090353e57384ffe3237083fbe35ffc584a4825df580f857f13f849",
+    "selected_placement": "qk-only",
+    "role_coefficients": {
+      "low": {
+        "query": 32,
+        "key": 32
+      },
+      "high": {
+        "query": 48,
+        "key": 48
+      }
+    }
+  },
+  "evidence": {
+    "root_env": "CST_RESEARCH_EVIDENCE_ROOT",
+    "relative_path": "lm-qk-v-scale-4096-20261118-01",
+    "summary": "evidence/summary.json",
+    "summary_sha256": "cdf0ca414ad7a1820e7db7c9591d91995c32532faa67c411418916775d624262"
+  }
+}
